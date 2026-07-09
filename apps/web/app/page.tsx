@@ -1,28 +1,75 @@
+import BTCDominanceCard from "../components/BTCDominanceCard";
+import FearGreedCard from "../components/FearGreedCard";
+import Header from "../components/Header";
+import MarketOverview from "../components/MarketOverview";
+import Sidebar from "../components/Sidebar";
 import SignalCard from "../components/SignalCard";
+import { getMarket } from "../lib/binance";
 
-export default function Home() {
-  const signals = [
-    { coin: "BTCUSDT", signal: "LONG", confidence: 92 },
-    { coin: "ETHUSDT", signal: "WAIT", confidence: 61 },
-    { coin: "SOLUSDT", signal: "SHORT", confidence: 84 },
-    { coin: "XRPUSDT", signal: "LONG", confidence: 88 },
-  ] as const;
+async function getFearGreed() {
+  const res = await fetch("https://api.alternative.me/fng/", {
+    next: { revalidate: 3600 },
+  });
+
+  const data = await res.json();
+  const item = data.data[0];
+
+  return {
+    value: Number(item.value),
+    label: item.value_classification,
+  };
+}
+
+async function getBTCDominance() {
+  const res = await fetch("https://api.coingecko.com/api/v3/global", {
+    next: { revalidate: 3600 },
+  });
+
+  const data = await res.json();
+
+  return Number(data.data.market_cap_percentage.btc).toFixed(2);
+}
+
+export default async function Home() {
+  const signals = await getMarket();
+  const fearGreed = await getFearGreed();
+  const btcDominance = await getBTCDominance();
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-white p-10">
-      <h1 className="text-5xl font-bold">Genwelth AI</h1>
-      <p className="text-zinc-400 mt-2">Powered by Atlas</p>
+    <main className="flex min-h-screen bg-zinc-950 text-white">
+      <Sidebar />
 
-      <div className="mt-8 grid gap-4">
-        {signals.map((item) => (
-          <SignalCard
-            key={item.coin}
-            coin={item.coin}
-            signal={item.signal}
-            confidence={item.confidence}
+      <section className="flex-1 p-8">
+        <Header />
+
+        <div className="mb-8 grid gap-4 md:grid-cols-5">
+          <div className="md:col-span-3">
+            <MarketOverview />
+          </div>
+
+          <FearGreedCard
+            value={fearGreed.value}
+            label={fearGreed.label}
           />
-        ))}
-      </div>
+
+          <BTCDominanceCard
+            value={btcDominance}
+          />
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          {signals.map((item) => (
+            <SignalCard
+              key={item.coin}
+              coin={item.coin}
+              signal={item.signal}
+              score={item.score}
+              price={item.price}
+              change={item.change}
+            />
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
