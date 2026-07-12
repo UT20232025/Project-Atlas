@@ -4,10 +4,7 @@ import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import EMACard from "../../../components/EMACard";
 import RSICard from "../../../components/RSICard";
 import TradingViewWidget from "../../../components/TradingViewWidget";
-import {
-  getTechnicalIndicators,
-  getTicker,
-} from "../../../lib/binance";
+import { getAtlasAnalysis } from "../../../lib/analysis/atlasEngine";
 
 type Props = {
   params: Promise<{
@@ -17,41 +14,33 @@ type Props = {
 
 export default async function CoinPage({ params }: Props) {
   const { symbol } = await params;
-
-  const [data, indicators] = await Promise.all([
-    getTicker(symbol),
-    getTechnicalIndicators(symbol),
-  ]);
+  const analysis = await getAtlasAnalysis(symbol);
 
   const signalColor =
-    data.signal === "LONG"
+    analysis.signal === "LONG"
       ? "text-green-400"
-      : data.signal === "SHORT"
+      : analysis.signal === "SHORT"
         ? "text-red-400"
         : "text-yellow-400";
 
-  const changeNumber = Number(data.change);
-
   const trendScore =
-    indicators.trend === "BULLISH"
+    analysis.trend === "BULLISH"
       ? 85
-      : indicators.trend === "BEARISH"
+      : analysis.trend === "BEARISH"
         ? 20
         : 50;
 
   const momentumScore = Math.round(
-    Math.min(100, Math.max(20, indicators.rsi))
+    Math.min(100, Math.max(20, analysis.rsi))
   );
 
   const volumeScore =
-    Number(data.volume) > 1_000_000_000
-      ? 85
-      : 55;
+    analysis.volume24h > 1_000_000_000 ? 85 : 55;
 
   const riskScore =
-    Math.abs(changeNumber) > 6
+    Math.abs(analysis.change24h) > 6
       ? 80
-      : Math.abs(changeNumber) > 3
+      : Math.abs(analysis.change24h) > 3
         ? 60
         : 40;
 
@@ -67,7 +56,7 @@ export default async function CoinPage({ params }: Props) {
 
         <div className="mt-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-5xl font-bold">{data.coin}</h1>
+            <h1 className="text-5xl font-bold">{analysis.coin}</h1>
             <p className="mt-2 text-zinc-400">
               Live market analysis
             </p>
@@ -76,7 +65,7 @@ export default async function CoinPage({ params }: Props) {
           <div className="text-left md:text-right">
             <p className="text-sm text-zinc-500">Signal</p>
             <p className={`text-4xl font-bold ${signalColor}`}>
-              {data.signal}
+              {analysis.signal}
             </p>
           </div>
         </div>
@@ -85,7 +74,7 @@ export default async function CoinPage({ params }: Props) {
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
             <p className="text-zinc-400">Price</p>
             <p className="mt-4 text-5xl font-bold">
-              ${data.price}
+              ${analysis.price.toFixed(2)}
             </p>
           </div>
 
@@ -93,35 +82,35 @@ export default async function CoinPage({ params }: Props) {
             <p className="text-zinc-400">24h Change</p>
             <p
               className={`mt-4 text-5xl font-bold ${
-                changeNumber >= 0
+                analysis.change24h >= 0
                   ? "text-green-400"
                   : "text-red-400"
               }`}
             >
-              {data.change}%
+              {analysis.change24h.toFixed(2)}%
             </p>
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
             <p className="text-zinc-400">24h Volume</p>
             <p className="mt-4 text-4xl font-bold">
-              ${Number(data.volume).toLocaleString("en-US")}
+              ${analysis.volume24h.toLocaleString("en-US")}
             </p>
           </div>
 
-          <RSICard value={indicators.rsi} />
+          <RSICard value={analysis.rsi} />
 
           <EMACard
-            ema20={indicators.ema20}
-            ema50={indicators.ema50}
-            trend={indicators.trend}
+            ema20={analysis.ema20}
+            ema50={analysis.ema50}
+            trend={analysis.trend}
           />
         </div>
 
         <div className="mt-8">
           <AtlasScoreCard
-            score={data.score}
-            signal={data.signal}
+            score={analysis.confidence}
+            signal={analysis.signal}
             trend={trendScore}
             momentum={momentumScore}
             volume={volumeScore}
@@ -130,19 +119,15 @@ export default async function CoinPage({ params }: Props) {
         </div>
 
         <div className="mt-8">
-          <TradingViewWidget symbol={data.coin} />
+          <TradingViewWidget symbol={analysis.coin} />
         </div>
 
         <div className="mt-8">
           <AtlasAnalysis
-            signal={data.signal}
-            score={data.score}
-            change={data.change}
-            reasons={[
-              ...data.reason,
-              `RSI: ${indicators.rsi.toFixed(1)}`,
-              `EMA-trend: ${indicators.trend}`,
-            ]}
+            signal={analysis.signal}
+            score={analysis.confidence}
+            change={analysis.change24h.toFixed(2)}
+            reasons={analysis.reasons}
           />
         </div>
       </div>
