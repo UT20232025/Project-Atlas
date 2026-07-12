@@ -1,31 +1,27 @@
-import { calculateAtlasSignal } from "./atlas";
+import { calculateAtlasSignal } from "./analysis/atlas";
+import {
+  calculateEMA,
+  calculateEMATrend,
+} from "./analysis/ema";
+import { calculateRSI } from "./analysis/rsi";
+import {
+  fetchKlineCloses,
+  fetchTicker,
+  fetchTopMovers,
+} from "./api/binance";
+import { MARKET_SYMBOLS } from "./config/markets";
+import type { TechnicalIndicators } from "./types/market";
 
 export async function getTicker(symbol: string) {
-  const res = await fetch(
-    `https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`,
-    {
-      next: {
-        revalidate: 10,
-      },
-    }
-  );
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${symbol}`);
-  }
-
-  const data = await res.json();
+  const ticker = await fetchTicker(symbol);
 
   const atlas = calculateAtlasSignal({
-    priceChangePercent: Number(data.priceChangePercent),
-    volume: Number(data.quoteVolume),
+    priceChangePercent: Number(ticker.change),
+    volume: Number(ticker.volume),
   });
 
   return {
-    coin: symbol,
-    price: Number(data.lastPrice).toFixed(2),
-    change: Number(data.priceChangePercent).toFixed(2),
-    volume: Number(data.quoteVolume).toFixed(0),
+    ...ticker,
     signal: atlas.signal,
     score: atlas.score,
     reason: atlas.reason,
@@ -33,7 +29,33 @@ export async function getTicker(symbol: string) {
 }
 
 export async function getMarket() {
-  const symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT"];
+  return Promise.all(
+    MARKET_SYMBOLS.map((symbol) => getTicker(symbol))
+  );
+}
 
-  return Promise.all(symbols.map(getTicker));
+export async function getTopMovers() {
+  return fetchTopMovers();
+}
+
+export async function getTechnicalIndicators(
+  symbol: string
+): Promise<TechnicalIndicators> {
+  const closes = await fetchKlineCloses(symbol);
+
+  const rsi = calculateRSI(closes);
+  const ema20 = calculateEMA(closes, 20);
+  const ema50 = calculateEMA(closes, 50);
+
+  return {
+    rsi,
+    ema20,
+    ema50,
+    trend: calculateEMATrend(ema20, ema50),
+  };
+}
+
+export async function getRSI(symbol: string) {
+  const indicators = await getTechnicalIndicators(symbol);
+  return indicators.rsi;
 }

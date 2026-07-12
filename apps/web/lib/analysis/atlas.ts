@@ -1,4 +1,4 @@
-export type SignalType = "LONG" | "SHORT" | "WAIT";
+import type { SignalType } from "../types/market";
 
 type AtlasInput = {
   priceChangePercent: number;
@@ -15,7 +15,7 @@ export function calculateAtlasSignal({
   priceChangePercent,
   volume = 0,
 }: AtlasInput): AtlasResult {
-  const absChange = Math.abs(priceChangePercent);
+  const absoluteChange = Math.abs(priceChangePercent);
 
   let score = 50;
   const reason: string[] = [];
@@ -35,23 +35,21 @@ export function calculateAtlasSignal({
     reason.push("Høyt handelsvolum");
   }
 
-  if (absChange > 6) {
+  if (absoluteChange > 6) {
     score += 10;
     reason.push("Kraftig momentum");
   }
 
-  score = Math.min(95, Math.max(45, score));
-
-  const signal =
+  const signal: SignalType =
     priceChangePercent > 3
       ? "LONG"
       : priceChangePercent < -3
-      ? "SHORT"
-      : "WAIT";
+        ? "SHORT"
+        : "WAIT";
 
   return {
     signal,
-    score,
+    score: Math.min(95, Math.max(45, score)),
     reason,
   };
 }

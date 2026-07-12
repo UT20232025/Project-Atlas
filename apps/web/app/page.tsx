@@ -3,8 +3,9 @@ import FearGreedCard from "../components/FearGreedCard";
 import Header from "../components/Header";
 import MarketOverview from "../components/MarketOverview";
 import Sidebar from "../components/Sidebar";
-import SignalCard from "../components/SignalCard";
-import { getMarket } from "../lib/binance";
+import TopMovers from "../components/TopMovers";
+import WatchlistTable from "../components/WatchlistTable";
+import { getMarket, getTopMovers } from "../lib/binance";
 
 async function getFearGreed() {
   const res = await fetch("https://api.alternative.me/fng/", {
@@ -32,6 +33,7 @@ async function getBTCDominance() {
 
 export default async function Home() {
   const signals = await getMarket();
+  const topMovers = await getTopMovers();
   const fearGreed = await getFearGreed();
   const btcDominance = await getBTCDominance();
 
@@ -47,27 +49,14 @@ export default async function Home() {
             <MarketOverview />
           </div>
 
-          <FearGreedCard
-            value={fearGreed.value}
-            label={fearGreed.label}
-          />
+          <FearGreedCard value={fearGreed.value} label={fearGreed.label} />
 
-          <BTCDominanceCard
-            value={btcDominance}
-          />
+          <BTCDominanceCard value={btcDominance} />
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          {signals.map((item) => (
-            <SignalCard
-              key={item.coin}
-              coin={item.coin}
-              signal={item.signal}
-              score={item.score}
-              price={item.price}
-              change={item.change}
-            />
-          ))}
+        <div className="grid gap-6 xl:grid-cols-2">
+          <WatchlistTable items={signals} />
+          <TopMovers items={topMovers} />
         </div>
       </section>
     </main>
