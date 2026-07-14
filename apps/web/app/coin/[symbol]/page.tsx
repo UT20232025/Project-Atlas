@@ -1,10 +1,15 @@
 import Link from "next/link";
 import AtlasAnalysis from "../../../components/AtlasAnalysis";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
+import CandlestickChart from "../../../components/CandlestickChart";
 import EMACard from "../../../components/EMACard";
+import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
-import TradingViewWidget from "../../../components/TradingViewWidget";
+import RSIChart from "../../../components/RSIChart";
 import { getAtlasAnalysis } from "../../../lib/analysis/atlasEngine";
+import { getChartCandles } from "../../../lib/analysis/candles";
+import { getMACDHistory } from "../../../lib/analysis/macdHistory";
+import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 
 type Props = {
   params: Promise<{
@@ -14,7 +19,13 @@ type Props = {
 
 export default async function CoinPage({ params }: Props) {
   const { symbol } = await params;
-  const analysis = await getAtlasAnalysis(symbol);
+
+  const [analysis, candles, rsiHistory, macdHistory] = await Promise.all([
+    getAtlasAnalysis(symbol),
+    getChartCandles(symbol),
+    getRSIHistory(symbol),
+    getMACDHistory(symbol),
+  ]);
 
   const signalColor =
     analysis.signal === "LONG"
@@ -119,7 +130,15 @@ export default async function CoinPage({ params }: Props) {
         </div>
 
         <div className="mt-8">
-          <TradingViewWidget symbol={analysis.coin} />
+          <CandlestickChart candles={candles} />
+        </div>
+
+        <div className="mt-8">
+          <RSIChart values={rsiHistory} />
+        </div>
+
+        <div className="mt-8">
+          <MACDChart values={macdHistory} />
         </div>
 
         <div className="mt-8">

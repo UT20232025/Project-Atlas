@@ -6,6 +6,21 @@ import type {
 
 const BINANCE_API_URL = "https://api.binance.com/api/v3";
 
+export type BinanceKline = [
+  number,
+  string,
+  string,
+  string,
+  string,
+  string,
+  number,
+  string,
+  number,
+  string,
+  string,
+  string
+];
+
 export async function fetchTicker(
   symbol: string
 ): Promise<MarketTicker> {
@@ -30,11 +45,11 @@ export async function fetchTicker(
   };
 }
 
-export async function fetchKlineCloses(
+export async function fetchKlines(
   symbol: string,
   interval = "1h",
-  limit = 200
-): Promise<number[]> {
+  limit = 250
+): Promise<BinanceKline[]> {
   const response = await fetch(
     `${BINANCE_API_URL}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`,
     {
@@ -46,9 +61,17 @@ export async function fetchKlineCloses(
     throw new Error(`Kunne ikke hente candles for ${symbol}`);
   }
 
-  const data = (await response.json()) as unknown[][];
+  return (await response.json()) as BinanceKline[];
+}
 
-  return data.map((candle) => Number(candle[4]));
+export async function fetchKlineCloses(
+  symbol: string,
+  interval = "1h",
+  limit = 200
+): Promise<number[]> {
+  const klines = await fetchKlines(symbol, interval, limit);
+
+  return klines.map((candle) => Number(candle[4]));
 }
 
 export async function fetchTopMovers(): Promise<TopMover[]> {
