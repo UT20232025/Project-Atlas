@@ -7,6 +7,7 @@ import EMACard from "../../../components/EMACard";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
+import AtlasExplain from "../../../components/analysis/AtlasExplain";
 import { getAtlasAnalysis } from "../../../lib/analysis/atlasEngine";
 import { getChartCandles } from "../../../lib/analysis/candles";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
@@ -51,7 +52,7 @@ export default async function CoinPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-zinc-950 text-white">
-      <div className="mx-auto max-w-7xl p-8">
+      <div className="mx-auto max-w-7xl p-6 md:p-8">
         <Link
           href="/"
           className="text-zinc-400 transition hover:text-white"
@@ -120,6 +121,14 @@ export default async function CoinPage({ params }: Props) {
 
         <div className="mt-8">
           <MACDChart values={macdHistory} />
+        </div>
+
+        <div className="mt-8">
+          <AtlasExplain
+            signal={analysis.signal}
+            confidence={analysis.confidence}
+            reasons={analysis.reasons}
+          />
         </div>
 
         <div className="mt-8">
