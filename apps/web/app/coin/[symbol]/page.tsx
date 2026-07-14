@@ -2,6 +2,7 @@ import Link from "next/link";
 import AtlasAnalysis from "../../../components/AtlasAnalysis";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import CandlestickChart from "../../../components/CandlestickChart";
+import CoinHero from "../../../components/CoinHero";
 import EMACard from "../../../components/EMACard";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
@@ -26,13 +27,6 @@ export default async function CoinPage({ params }: Props) {
     getRSIHistory(symbol),
     getMACDHistory(symbol),
   ]);
-
-  const signalColor =
-    analysis.signal === "LONG"
-      ? "text-green-400"
-      : analysis.signal === "SHORT"
-        ? "text-red-400"
-        : "text-yellow-400";
 
   const trendScore =
     analysis.trend === "BULLISH"
@@ -65,30 +59,17 @@ export default async function CoinPage({ params }: Props) {
           ← Dashboard
         </Link>
 
-        <div className="mt-8 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <h1 className="text-5xl font-bold">{analysis.coin}</h1>
-            <p className="mt-2 text-zinc-400">
-              Live market analysis
-            </p>
-          </div>
-
-          <div className="text-left md:text-right">
-            <p className="text-sm text-zinc-500">Signal</p>
-            <p className={`text-4xl font-bold ${signalColor}`}>
-              {analysis.signal}
-            </p>
-          </div>
+        <div className="mt-8">
+          <CoinHero
+            coin={analysis.coin}
+            price={analysis.price}
+            signal={analysis.signal}
+            score={analysis.score}
+            confidence={analysis.confidence}
+          />
         </div>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-5">
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-            <p className="text-zinc-400">Price</p>
-            <p className="mt-4 text-5xl font-bold">
-              ${analysis.price.toFixed(2)}
-            </p>
-          </div>
-
+        <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
             <p className="text-zinc-400">24h Change</p>
             <p

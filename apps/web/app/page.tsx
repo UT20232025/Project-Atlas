@@ -1,64 +1,26 @@
-import BTCDominanceCard from "../components/BTCDominanceCard";
-import FearGreedCard from "../components/FearGreedCard";
-import Header from "../components/Header";
-import MarketOverview from "../components/MarketOverview";
-import Sidebar from "../components/Sidebar";
-import TopMovers from "../components/TopMovers";
-import WatchlistTable from "../components/WatchlistTable";
-import { getMarket, getTopMovers } from "../lib/binance";
+import ScannerTable from "../components/ScannerTable";
+import { getAtlasScanner } from "../lib/analysis/scanner";
 
-async function getFearGreed() {
-  const res = await fetch("https://api.alternative.me/fng/", {
-    next: { revalidate: 3600 },
-  });
-
-  const data = await res.json();
-  const item = data.data[0];
-
-  return {
-    value: Number(item.value),
-    label: item.value_classification,
-  };
-}
-
-async function getBTCDominance() {
-  const res = await fetch("https://api.coingecko.com/api/v3/global", {
-    next: { revalidate: 3600 },
-  });
-
-  const data = await res.json();
-
-  return Number(data.data.market_cap_percentage.btc).toFixed(2);
-}
-
-export default async function Home() {
-  const signals = await getMarket();
-  const topMovers = await getTopMovers();
-  const fearGreed = await getFearGreed();
-  const btcDominance = await getBTCDominance();
+export default async function HomePage() {
+  const scanner = await getAtlasScanner();
 
   return (
-    <main className="flex min-h-screen bg-zinc-950 text-white">
-      <Sidebar />
+    <main className="min-h-screen bg-zinc-950 text-white">
+      <div className="mx-auto max-w-7xl p-8">
 
-      <section className="flex-1 p-8">
-        <Header />
+        <div className="mb-10">
+          <h1 className="text-5xl font-bold">
+            Genwelth AI
+          </h1>
 
-        <div className="mb-8 grid gap-4 md:grid-cols-5">
-          <div className="md:col-span-3">
-            <MarketOverview />
-          </div>
-
-          <FearGreedCard value={fearGreed.value} label={fearGreed.label} />
-
-          <BTCDominanceCard value={btcDominance} />
+          <p className="mt-3 text-zinc-400">
+            AI-powered crypto trading terminal
+          </p>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-2">
-          <WatchlistTable items={signals} />
-          <TopMovers items={topMovers} />
-        </div>
-      </section>
+        <ScannerTable items={scanner} />
+
+      </div>
     </main>
   );
 }
