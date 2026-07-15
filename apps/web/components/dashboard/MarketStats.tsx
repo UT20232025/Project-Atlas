@@ -58,7 +58,7 @@ export default function MarketStats({
   const topSetup = scanner[0];
 
   return (
-    <section className="mb-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+   <section className="mb-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
         title="Market Health"
         value={marketHealth.value}

@@ -1,14 +1,15 @@
 import Link from "next/link";
 import AtlasAnalysis from "../../../components/AtlasAnalysis";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
+import AtlasExplain from "../../../components/analysis/AtlasExplain";
+import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
 import CandlestickChart from "../../../components/CandlestickChart";
 import CoinHero from "../../../components/CoinHero";
 import EMACard from "../../../components/EMACard";
+import AppLayout from "../../../components/layout/AppLayout";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
-import AtlasExplain from "../../../components/analysis/AtlasExplain";
-import AppLayout from "../../../components/layout/AppLayout";
 import { getAtlasAnalysis } from "../../../lib/analysis/atlasEngine";
 import { getChartCandles } from "../../../lib/analysis/candles";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
@@ -73,6 +74,7 @@ export default async function CoinPage({ params }: Props) {
       <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
           <p className="text-zinc-400">24h Change</p>
+
           <p
             className={`mt-4 text-5xl font-bold ${
               analysis.change24h >= 0
@@ -86,6 +88,7 @@ export default async function CoinPage({ params }: Props) {
 
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
           <p className="text-zinc-400">24h Volume</p>
+
           <p className="mt-4 text-4xl font-bold">
             ${analysis.volume24h.toLocaleString("en-US")}
           </p>
@@ -102,13 +105,17 @@ export default async function CoinPage({ params }: Props) {
 
       <div className="mt-8">
         <AtlasScoreCard
-          score={analysis.confidence}
+          score={analysis.score}
           signal={analysis.signal}
           trend={trendScore}
           momentum={momentumScore}
           volume={volumeScore}
           risk={riskScore}
         />
+      </div>
+
+      <div className="mt-8">
+        <AtlasScoreBreakdownCard score={analysis.breakdown} />
       </div>
 
       <div className="mt-8">
@@ -134,7 +141,7 @@ export default async function CoinPage({ params }: Props) {
       <div className="mt-8">
         <AtlasAnalysis
           signal={analysis.signal}
-          score={analysis.confidence}
+          score={analysis.score}
           change={analysis.change24h.toFixed(2)}
           reasons={analysis.reasons}
         />

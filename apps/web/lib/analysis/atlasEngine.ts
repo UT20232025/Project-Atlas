@@ -1,5 +1,9 @@
 import { getTechnicalIndicators, getTicker } from "../binance";
 import type { SignalType, TrendType } from "../types/market";
+import {
+  calculateAtlasScore,
+  type AtlasScoreBreakdown,
+} from "./score";
 
 export type AtlasAnalysisResult = {
   coin: string;
@@ -15,6 +19,7 @@ export type AtlasAnalysisResult = {
   score: number;
   signal: SignalType;
   confidence: number;
+  breakdown: AtlasScoreBreakdown;
   reasons: string[];
 };
 
@@ -52,6 +57,13 @@ export async function getAtlasAnalysis(
 
   confidence = Math.max(0, Math.min(100, confidence));
 
+  const breakdown = calculateAtlasScore({
+    trend: indicators.trend,
+    rsi: indicators.rsi,
+    volume24h: Number(ticker.volume),
+    confidence,
+  });
+
   return {
     coin: ticker.coin,
     price: Number(ticker.price),
@@ -63,9 +75,10 @@ export async function getAtlasAnalysis(
     ema50: indicators.ema50,
     trend: indicators.trend,
 
-    score: ticker.score,
+    score: breakdown.total,
     signal: ticker.signal,
     confidence,
+    breakdown,
     reasons,
   };
 }

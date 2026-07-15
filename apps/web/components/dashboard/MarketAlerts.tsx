@@ -71,7 +71,7 @@ export default function MarketAlerts({
   };
 
   return (
-    <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+  <section className="atlas-card rounded-2xl p-8">
       <div className="mb-5">
         <h2 className="text-2xl font-bold">Market Alerts</h2>
         <p className="mt-1 text-sm text-zinc-500">

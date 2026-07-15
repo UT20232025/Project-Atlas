@@ -28,7 +28,7 @@ export default function DailyBrief({
       : "Sentimentet er nøytralt.";
 
   return (
-    <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
+   <section className="atlas-card rounded-2xl p-8">
       <div className="mb-4 flex items-center gap-2">
         <span className="text-2xl">🤖</span>
 

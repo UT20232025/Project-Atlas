@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
 type AtlasScoreCardProps = {
   score: number;
   signal: "LONG" | "SHORT" | "WAIT";
@@ -11,7 +15,8 @@ function getSignalStyles(signal: AtlasScoreCardProps["signal"]) {
   if (signal === "LONG") {
     return {
       text: "text-green-400",
-      bg: "bg-green-500",
+      dot: "bg-green-400",
+      ring: "#22c55e",
       label: "Bullish",
     };
   }
@@ -19,14 +24,16 @@ function getSignalStyles(signal: AtlasScoreCardProps["signal"]) {
   if (signal === "SHORT") {
     return {
       text: "text-red-400",
-      bg: "bg-red-500",
+      dot: "bg-red-400",
+      ring: "#ef4444",
       label: "Bearish",
     };
   }
 
   return {
     text: "text-yellow-400",
-    bg: "bg-yellow-500",
+    dot: "bg-yellow-400",
+    ring: "#eab308",
     label: "Neutral",
   };
 }
@@ -44,12 +51,12 @@ function ScoreBar({
     <div>
       <div className="mb-2 flex items-center justify-between text-sm">
         <span className="text-zinc-400">{label}</span>
-        <span className="font-medium text-zinc-200">{safeValue}</span>
+        <span className="font-semibold text-zinc-200">{safeValue}</span>
       </div>
 
       <div className="h-2 overflow-hidden rounded-full bg-zinc-800">
         <div
-          className="h-full rounded-full bg-blue-500 transition-all duration-500"
+          className="h-full rounded-full bg-blue-500 transition-all duration-700"
           style={{ width: `${safeValue}%` }}
         />
       </div>
@@ -66,49 +73,77 @@ export default function AtlasScoreCard({
   risk = 50,
 }: AtlasScoreCardProps) {
   const styles = getSignalStyles(signal);
-  const safeScore = Math.max(0, Math.min(100, score));
+  const safeScore = Math.round(Math.max(0, Math.min(100, score)));
+  const [displayScore, setDisplayScore] = useState(0);
+
+  useEffect(() => {
+    let frameId = 0;
+    const duration = 900;
+    const startedAt = performance.now();
+
+    const animate = (now: number) => {
+      const progress = Math.min(1, (now - startedAt) / duration);
+      const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+      setDisplayScore(Math.round(safeScore * easedProgress));
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(animate);
+      }
+    };
+
+    frameId = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(frameId);
+  }, [safeScore]);
 
   return (
-    <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-      <div className="flex flex-col gap-8 md:flex-row md:items-center">
-        <div className="flex flex-1 flex-col items-center">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-zinc-500">
+    <section className="atlas-card rounded-3xl p-6 md:p-8">
+      <div className="grid gap-10 lg:grid-cols-[320px_1fr] lg:items-center">
+        <div className="flex flex-col items-center">
+          <p className="text-sm font-medium uppercase tracking-[0.24em] text-zinc-500">
             Atlas Score
           </p>
 
-          <div className="relative mt-5 flex h-40 w-40 items-center justify-center rounded-full bg-zinc-950">
+          <div className="relative mt-6 h-56 w-56">
             <div
-              className="absolute inset-0 rounded-full"
+              className="absolute inset-0 rounded-full shadow-[0_0_50px_rgba(59,130,246,0.18)]"
               style={{
-                background: `conic-gradient(rgb(59 130 246) ${
+                background: `conic-gradient(${styles.ring} ${
                   safeScore * 3.6
-                }deg, rgb(39 39 42) 0deg)`,
+                }deg, #27272a 0deg)`,
               }}
             />
 
-            <div className="absolute inset-3 rounded-full bg-zinc-950" />
+            <div className="absolute inset-[14px] rounded-full bg-zinc-950" />
 
-            <div className="relative text-center">
-              <p className="text-5xl font-bold">{safeScore}</p>
-              <p className="text-sm text-zinc-500">av 100</p>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <p className="text-7xl font-bold tracking-tight">
+                {displayScore}
+              </p>
+
+              <p className="mt-1 text-sm text-zinc-500">av 100</p>
             </div>
           </div>
 
-          <div className="mt-5 flex items-center gap-2">
-            <div className={`h-2.5 w-2.5 rounded-full ${styles.bg}`} />
-            <p className={`font-semibold ${styles.text}`}>
+          <div className="mt-6 flex items-center gap-3">
+            <span
+              className={`h-3 w-3 animate-pulse rounded-full ${styles.dot}`}
+            />
+
+            <p className={`text-lg font-semibold ${styles.text}`}>
               {styles.label} · {signal}
             </p>
           </div>
         </div>
 
-        <div className="grid flex-1 gap-5">
+        <div className="grid gap-6 md:grid-cols-2">
           <ScoreBar label="Trend" value={trend} />
           <ScoreBar label="Momentum" value={momentum} />
           <ScoreBar label="Volume" value={volume} />
           <ScoreBar label="Risk" value={risk} />
         </div>
       </div>
-    </div>
+    </section>
   );
 }
