@@ -10,7 +10,7 @@ export default async function HomePage() {
   const dashboard = await getDashboardData();
 
   return (
-    <AppLayout>
+    <AppLayout marketTicker={dashboard.marketTicker}>
       <DashboardHero />
 
       <MarketStats

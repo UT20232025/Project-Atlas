@@ -1,14 +1,11 @@
 import { getAtlasScanner } from "../analysis/scanner";
 
 export async function getFearGreed() {
-  const response = await fetch(
-    "https://api.alternative.me/fng/",
-    {
-      next: {
-        revalidate: 3600,
-      },
-    }
-  );
+  const response = await fetch("https://api.alternative.me/fng/", {
+    next: {
+      revalidate: 3600,
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch Fear & Greed");
@@ -42,24 +39,27 @@ export async function getBTCDominance() {
 }
 
 export async function getDashboardData() {
-  const [scanner, fearGreed, btcDominance] =
-    await Promise.all([
-      getAtlasScanner(),
-      getFearGreed(),
-      getBTCDominance(),
-    ]);
+  const [scanner, fearGreed, btcDominance] = await Promise.all([
+    getAtlasScanner(),
+    getFearGreed(),
+    getBTCDominance(),
+  ]);
 
   const bullish = scanner.filter(
-    (x) => x.trend === "BULLISH"
+    (item) => item.trend === "BULLISH"
   ).length;
 
   const bearish = scanner.filter(
-    (x) => x.trend === "BEARISH"
+    (item) => item.trend === "BEARISH"
   ).length;
 
   const neutral = scanner.filter(
-    (x) => x.trend === "NEUTRAL"
+    (item) => item.trend === "NEUTRAL"
   ).length;
+
+  const btc = scanner.find((item) => item.coin === "BTCUSDT");
+  const eth = scanner.find((item) => item.coin === "ETHUSDT");
+  const sol = scanner.find((item) => item.coin === "SOLUSDT");
 
   return {
     scanner,
@@ -68,5 +68,19 @@ export async function getDashboardData() {
     bullish,
     bearish,
     neutral,
+
+    marketTicker: {
+      btc: btc?.price ?? 0,
+      btcChange: btc?.change24h ?? 0,
+
+      eth: eth?.price ?? 0,
+      ethChange: eth?.change24h ?? 0,
+
+      sol: sol?.price ?? 0,
+      solChange: sol?.change24h ?? 0,
+
+      fearGreed: fearGreed.value,
+      btcDominance,
+    },
   };
 }
