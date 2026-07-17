@@ -4,6 +4,7 @@ import MarketAlerts from "../components/dashboard/MarketAlerts";
 import MarketStats from "../components/dashboard/MarketStats";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import AppLayout from "../components/layout/AppLayout";
+import Watchlist from "../components/watchlist/Watchlist";
 import { getDashboardData } from "../lib/services/dashboardService";
 
 export default async function HomePage() {
@@ -29,8 +30,9 @@ export default async function HomePage() {
         />
       </div>
 
-      <div className="mb-8">
+      <div className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]">
         <MarketAlerts items={dashboard.scanner} />
+        <Watchlist />
       </div>
 
       <ScannerSection items={dashboard.scanner} />

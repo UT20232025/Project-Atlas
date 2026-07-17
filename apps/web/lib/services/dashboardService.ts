@@ -1,41 +1,71 @@
 import { getAtlasScanner } from "../analysis/scanner";
 
-export async function getFearGreed() {
-  const response = await fetch("https://api.alternative.me/fng/", {
-    next: {
-      revalidate: 3600,
-    },
-  });
+type FearGreedData = {
+  value: number;
+  label: string;
+};
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch Fear & Greed");
-  }
-
-  const data = await response.json();
-
-  return {
-    value: Number(data.data[0].value),
-    label: data.data[0].value_classification as string,
-  };
-}
-
-export async function getBTCDominance() {
-  const response = await fetch(
-    "https://api.coingecko.com/api/v3/global",
-    {
+async function getFearGreed(): Promise<FearGreedData> {
+  try {
+    const response = await fetch("https://api.alternative.me/fng/", {
       next: {
         revalidate: 3600,
       },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Fear & Greed returned ${response.status}`);
     }
-  );
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch BTC Dominance");
+    const data = await response.json();
+    const item = data?.data?.[0];
+
+    if (!item) {
+      throw new Error("Fear & Greed response was empty");
+    }
+
+    return {
+      value: Number(item.value),
+      label: String(item.value_classification),
+    };
+  } catch (error) {
+    console.error("Fear & Greed fetch failed:", error);
+
+    return {
+      value: 50,
+      label: "Neutral",
+    };
   }
+}
 
-  const data = await response.json();
+async function getBTCDominance(): Promise<number> {
+  try {
+    const response = await fetch(
+      "https://api.coingecko.com/api/v3/global",
+      {
+        next: {
+          revalidate: 3600,
+        },
+      }
+    );
 
-  return Number(data.data.market_cap_percentage.btc);
+    if (!response.ok) {
+      throw new Error(`CoinGecko returned ${response.status}`);
+    }
+
+    const data = await response.json();
+    const dominance = Number(data?.data?.market_cap_percentage?.btc);
+
+    if (!Number.isFinite(dominance)) {
+      throw new Error("BTC dominance was missing");
+    }
+
+    return dominance;
+  } catch (error) {
+    console.error("BTC dominance fetch failed:", error);
+
+    return 0;
+  }
 }
 
 export async function getDashboardData() {
@@ -72,13 +102,10 @@ export async function getDashboardData() {
     marketTicker: {
       btc: btc?.price ?? 0,
       btcChange: btc?.change24h ?? 0,
-
       eth: eth?.price ?? 0,
       ethChange: eth?.change24h ?? 0,
-
       sol: sol?.price ?? 0,
       solChange: sol?.change24h ?? 0,
-
       fearGreed: fearGreed.value,
       btcDominance,
     },

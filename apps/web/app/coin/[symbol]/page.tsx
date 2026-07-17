@@ -7,6 +7,7 @@ import CandlestickChart from "../../../components/CandlestickChart";
 import CoinHero from "../../../components/CoinHero";
 import EMACard from "../../../components/EMACard";
 import AppLayout from "../../../components/layout/AppLayout";
+import WatchlistButton from "../../../components/watchlist/WatchlistButton";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
@@ -54,12 +55,16 @@ export default async function CoinPage({ params }: Props) {
 
   return (
     <AppLayout>
-      <Link
-        href="/"
-        className="text-zinc-400 transition hover:text-white"
-      >
-        ← Dashboard
-      </Link>
+   <div className="flex flex-wrap items-center justify-between gap-4">
+  <Link
+    href="/"
+    className="text-zinc-400 transition hover:text-white"
+  >
+    ← Dashboard
+  </Link>
+
+  <WatchlistButton symbol={analysis.coin} />
+</div>
 
       <div className="mt-8">
         <CoinHero
