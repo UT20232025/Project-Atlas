@@ -20,36 +20,63 @@ function calculateEma(values: number[], period: number) {
   const multiplier = 2 / (period + 1);
 
   return values.slice(1).reduce(
-    (ema, value) => value * multiplier + ema * (1 - multiplier),
+    (ema, value) =>
+      value * multiplier + ema * (1 - multiplier),
     values[0]
   );
 }
 
-function calculateRsi(closes: number[], period = 14) {
+function calculateWilderRsi(
+  closes: number[],
+  period = 14
+) {
   if (closes.length <= period) {
     return 50;
   }
 
-  const recentCloses = closes.slice(-(period + 1));
+  let totalGain = 0;
+  let totalLoss = 0;
 
-  let gains = 0;
-  let losses = 0;
-
-  for (let index = 1; index < recentCloses.length; index += 1) {
-    const change = recentCloses[index] - recentCloses[index - 1];
+  for (let index = 1; index <= period; index += 1) {
+    const change = closes[index] - closes[index - 1];
 
     if (change > 0) {
-      gains += change;
+      totalGain += change;
     } else {
-      losses += Math.abs(change);
+      totalLoss += Math.abs(change);
     }
   }
 
-  const averageGain = gains / period;
-  const averageLoss = losses / period;
+  let averageGain = totalGain / period;
+  let averageLoss = totalLoss / period;
+
+  for (
+    let index = period + 1;
+    index < closes.length;
+    index += 1
+  ) {
+    const change = closes[index] - closes[index - 1];
+
+    const gain = change > 0 ? change : 0;
+    const loss = change < 0 ? Math.abs(change) : 0;
+
+    averageGain =
+      (averageGain * (period - 1) + gain) / period;
+
+    averageLoss =
+      (averageLoss * (period - 1) + loss) / period;
+  }
+
+  if (averageLoss === 0 && averageGain === 0) {
+    return 50;
+  }
 
   if (averageLoss === 0) {
     return 100;
+  }
+
+  if (averageGain === 0) {
+    return 0;
   }
 
   const relativeStrength = averageGain / averageLoss;
@@ -75,17 +102,21 @@ function calculateTrend(closes: number[]) {
 }
 
 function calculateRsiScore(closes: number[]) {
-  const rsi = calculateRsi(closes);
+  const rsi = calculateWilderRsi(closes);
 
-  if (rsi >= 45 && rsi <= 65) {
-    return clamp((rsi - 45) / 20);
+  if (rsi >= 50 && rsi <= 65) {
+    return clamp((rsi - 50) / 15);
   }
 
   if (rsi > 65) {
     return clamp(1 - (rsi - 65) / 20);
   }
 
-  return clamp((rsi - 45) / 20);
+  if (rsi >= 35) {
+    return clamp((rsi - 50) / 15);
+  }
+
+  return clamp(-1 + (rsi / 35) * 0.5);
 }
 
 function calculateMacdScore(closes: number[]) {
@@ -130,7 +161,8 @@ function calculateVolumeScore(candles: AtlasCandle[]) {
   }
 
   const volumeDifference =
-    (latestCandle.volume - averageVolume) / averageVolume;
+    (latestCandle.volume - averageVolume) /
+    averageVolume;
 
   const candleDirection =
     latestCandle.close > latestCandle.open
@@ -176,7 +208,9 @@ export function calculateAtlasIndicators(
       Number.isFinite(candle.volume)
   );
 
-  const closes = validCandles.map((candle) => candle.close);
+  const closes = validCandles.map(
+    (candle) => candle.close
+  );
 
   return {
     trend: calculateTrend(closes),
