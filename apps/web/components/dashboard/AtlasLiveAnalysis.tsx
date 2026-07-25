@@ -1,5 +1,5 @@
 "use client";
-
+import AtlasFactorCard from "@/components/dashboard/AtlasFactorCard";
 import { useEffect, useState } from "react";
 
 import Section from "@/components/ui/Section";
@@ -137,34 +137,11 @@ export default function AtlasLiveAnalysis() {
             </p>
           </div>
 
-          <div className="space-y-3">
-            {data.analysis.factors.map((factor) => (
-              <div
-                key={factor.name}
-                className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-4"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <p className="font-medium text-white">
-                      {factor.label}
-                    </p>
-                    <p className="mt-1 text-sm text-zinc-500">
-                      {factor.explanation}
-                    </p>
-                  </div>
-
-                  <div className="text-right">
-                    <p className="font-semibold text-white">
-                      {factor.score}/{factor.maxScore}
-                    </p>
-                    <p className="mt-1 text-xs text-zinc-500">
-                      {factor.status}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          <div className="grid gap-3 lg:grid-cols-2">
+  {data.analysis.factors.map((factor) => (
+    <AtlasFactorCard key={factor.name} factor={factor} />
+  ))}
+</div>
 
           <p className="text-right text-xs text-zinc-600">
             Updated{" "}
