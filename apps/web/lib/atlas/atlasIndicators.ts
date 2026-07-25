@@ -12,18 +12,28 @@ function clamp(value: number, minimum = -1, maximum = 1) {
   return Math.min(Math.max(value, minimum), maximum);
 }
 
-function calculateEma(values: number[], period: number) {
+function calculateEmaSeries(values: number[], period: number) {
   if (values.length === 0) {
-    return 0;
+    return [];
   }
 
   const multiplier = 2 / (period + 1);
+  const emaValues = [values[0]];
 
-  return values.slice(1).reduce(
-    (ema, value) =>
-      value * multiplier + ema * (1 - multiplier),
-    values[0]
-  );
+  for (let index = 1; index < values.length; index += 1) {
+    const previousEma = emaValues[index - 1];
+    const nextEma =
+      values[index] * multiplier +
+      previousEma * (1 - multiplier);
+
+    emaValues.push(nextEma);
+  }
+
+  return emaValues;
+}
+
+function calculateLatestEma(values: number[], period: number) {
+  return calculateEmaSeries(values, period).at(-1) ?? 0;
 }
 
 function calculateWilderRsi(
@@ -89,8 +99,8 @@ function calculateTrend(closes: number[]) {
     return 0;
   }
 
-  const ema20 = calculateEma(closes.slice(-20), 20);
-  const ema50 = calculateEma(closes.slice(-50), 50);
+  const ema20 = calculateLatestEma(closes.slice(-20), 20);
+  const ema50 = calculateLatestEma(closes.slice(-50), 50);
 
   if (ema50 === 0) {
     return 0;
@@ -120,20 +130,57 @@ function calculateRsiScore(closes: number[]) {
 }
 
 function calculateMacdScore(closes: number[]) {
-  if (closes.length < 26) {
+  if (closes.length < 35) {
     return 0;
   }
 
-  const ema12 = calculateEma(closes.slice(-12), 12);
-  const ema26 = calculateEma(closes.slice(-26), 26);
+  const ema12Series = calculateEmaSeries(closes, 12);
+  const ema26Series = calculateEmaSeries(closes, 26);
 
-  if (ema26 === 0) {
+  const macdSeries = closes.map(
+    (_, index) => ema12Series[index] - ema26Series[index]
+  );
+
+  const signalSeries = calculateEmaSeries(macdSeries, 9);
+
+  const latestMacd = macdSeries.at(-1);
+  const latestSignal = signalSeries.at(-1);
+  const previousMacd = macdSeries.at(-2);
+  const previousSignal = signalSeries.at(-2);
+  const latestClose = closes.at(-1);
+
+  if (
+    latestMacd === undefined ||
+    latestSignal === undefined ||
+    previousMacd === undefined ||
+    previousSignal === undefined ||
+    latestClose === undefined ||
+    latestClose === 0
+  ) {
     return 0;
   }
 
-  const macdDistance = (ema12 - ema26) / ema26;
+  const histogram = latestMacd - latestSignal;
+  const previousHistogram = previousMacd - previousSignal;
 
-  return clamp(macdDistance * 60);
+  const normalizedHistogram =
+    (histogram / latestClose) * 500;
+
+  const histogramDirection =
+    histogram > previousHistogram ? 0.25 : -0.25;
+
+  const crossoverBonus =
+    previousHistogram <= 0 && histogram > 0
+      ? 0.5
+      : previousHistogram >= 0 && histogram < 0
+        ? -0.5
+        : 0;
+
+  return clamp(
+    normalizedHistogram +
+      histogramDirection +
+      crossoverBonus
+  );
 }
 
 function calculateVolumeScore(candles: AtlasCandle[]) {
