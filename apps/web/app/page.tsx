@@ -49,6 +49,10 @@ export default async function HomePage() {
       <DashboardHero />
 
       <div className="mb-8">
+        <AtlasLiveAnalysis />
+      </div>
+
+      <div className="mb-8">
         <AtlasIntelligence
           items={dashboard.scanner}
           bullish={dashboard.bullish}
