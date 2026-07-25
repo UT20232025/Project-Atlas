@@ -25,14 +25,18 @@ type BinanceKline = [
   string
 ];
 
-const BINANCE_API_URL = "https://api.binance.com/api/v3/klines";
+const BINANCE_API_URL =
+  "https://api.binance.com/api/v3/klines";
 
 export async function fetchBinanceCandles(
   symbol: MarketSymbol,
   interval: BinanceInterval = "1h",
   limit = 100
 ): Promise<AtlasCandle[]> {
-  const safeLimit = Math.min(Math.max(limit, 50), 500);
+  const safeLimit = Math.min(
+    Math.max(limit, 50),
+    500
+  );
 
   const searchParams = new URLSearchParams({
     symbol,
@@ -53,10 +57,13 @@ export async function fetchBinanceCandles(
     );
   }
 
-  const data = (await response.json()) as BinanceKline[];
+  const data =
+    (await response.json()) as BinanceKline[];
 
   if (!Array.isArray(data)) {
-    throw new Error("Invalid candlestick data received from Binance.");
+    throw new Error(
+      "Invalid candlestick data received from Binance."
+    );
   }
 
   return data.map((kline) => ({
