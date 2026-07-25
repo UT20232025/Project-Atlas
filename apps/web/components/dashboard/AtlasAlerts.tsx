@@ -1,9 +1,15 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
-import Section from "@/components/ui/Section";
+import { FormEvent, useMemo, useState } from "react";
 
-type MarketSymbol = "BTCUSDT" | "ETHUSDT" | "SOLUSDT" | "XRPUSDT";
+import { useMarket } from "@/components/providers/MarketProvider";
+import Section from "@/components/ui/Section";
+import {
+  formatMarketSymbol,
+  MARKET_SYMBOLS,
+  type LiveMarketItem,
+  type MarketSymbol,
+} from "@/lib/services/liveMarketService";
 
 type AlertRule =
   | "price_above"
@@ -19,24 +25,7 @@ type AtlasAlert = {
   enabled: boolean;
 };
 
-type MarketData = {
-  symbol: MarketSymbol;
-  price: number;
-  change24h: number;
-};
-
-const SYMBOLS: MarketSymbol[] = [
-  "BTCUSDT",
-  "ETHUSDT",
-  "SOLUSDT",
-  "XRPUSDT",
-];
-
 const STORAGE_KEY = "genwelth-atlas-alerts";
-
-function formatSymbol(symbol: MarketSymbol) {
-  return symbol.replace("USDT", "");
-}
 
 function getStoredAlerts(): AtlasAlert[] {
   if (typeof window === "undefined") {
@@ -62,12 +51,13 @@ function getRuleLabel(rule: AlertRule) {
   if (rule === "price_above") return "Price above";
   if (rule === "price_below") return "Price below";
   if (rule === "change_above") return "24h change above";
+
   return "24h change below";
 }
 
 function isAlertTriggered(
   alert: AtlasAlert,
-  marketData?: MarketData
+  marketData?: LiveMarketItem
 ) {
   if (!marketData || !alert.enabled) {
     return false;
@@ -89,68 +79,16 @@ function isAlertTriggered(
 }
 
 export default function AtlasAlerts() {
-  const [alerts, setAlerts] = useState<AtlasAlert[]>([]);
-  const [marketData, setMarketData] = useState<MarketData[]>([]);
-  const [symbol, setSymbol] = useState<MarketSymbol>("BTCUSDT");
-  const [rule, setRule] = useState<AlertRule>("price_above");
+  const { market, loading, error } = useMarket();
+
+  const [alerts, setAlerts] = useState<AtlasAlert[]>(
+    getStoredAlerts
+  );
+  const [symbol, setSymbol] =
+    useState<MarketSymbol>("BTCUSDT");
+  const [rule, setRule] =
+    useState<AlertRule>("price_above");
   const [target, setTarget] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setAlerts(getStoredAlerts());
-  }, []);
-
-  useEffect(() => {
-    async function fetchMarketData() {
-      try {
-        setError(null);
-
-        const requests = SYMBOLS.map(async (marketSymbol) => {
-          const response = await fetch(
-            `https://api.binance.com/api/v3/ticker/24hr?symbol=${marketSymbol}`,
-            {
-              cache: "no-store",
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error("Could not load market data");
-          }
-
-          const data = (await response.json()) as {
-            symbol: MarketSymbol;
-            lastPrice: string;
-            priceChangePercent: string;
-          };
-
-          return {
-            symbol: data.symbol,
-            price: Number(data.lastPrice),
-            change24h: Number(data.priceChangePercent),
-          };
-        });
-
-        const result = await Promise.all(requests);
-
-        setMarketData(result);
-      } catch {
-        setError("Could not update alert market data.");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    void fetchMarketData();
-
-    const interval = window.setInterval(() => {
-      void fetchMarketData();
-    }, 30_000);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, []);
 
   function saveAlerts(nextAlerts: AtlasAlert[]) {
     setAlerts(nextAlerts);
@@ -204,12 +142,12 @@ export default function AtlasAlerts() {
       alerts.filter((alert) =>
         isAlertTriggered(
           alert,
-          marketData.find(
+          market.find(
             (item) => item.symbol === alert.symbol
           )
         )
       ).length,
-    [alerts, marketData]
+    [alerts, market]
   );
 
   return (
@@ -228,9 +166,9 @@ export default function AtlasAlerts() {
           }
           className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none focus:border-zinc-600"
         >
-          {SYMBOLS.map((marketSymbol) => (
+          {MARKET_SYMBOLS.map((marketSymbol) => (
             <option key={marketSymbol} value={marketSymbol}>
-              {formatSymbol(marketSymbol)}
+              {formatMarketSymbol(marketSymbol)}
             </option>
           ))}
         </select>
@@ -257,7 +195,9 @@ export default function AtlasAlerts() {
           value={target}
           onChange={(event) => setTarget(event.target.value)}
           placeholder={
-            rule.startsWith("price") ? "Target price" : "Target %"
+            rule.startsWith("price")
+              ? "Target price"
+              : "Target %"
           }
           step="any"
           required
@@ -295,7 +235,7 @@ export default function AtlasAlerts() {
       )}
 
       <div className="space-y-3">
-        {isLoading && alerts.length === 0 ? (
+        {loading && alerts.length === 0 ? (
           <div className="rounded-xl border border-zinc-800 p-8 text-center text-sm text-zinc-500">
             Loading alerts...
           </div>
@@ -311,7 +251,7 @@ export default function AtlasAlerts() {
           </div>
         ) : (
           alerts.map((alert) => {
-            const coinMarketData = marketData.find(
+            const coinMarketData = market.find(
               (item) => item.symbol === alert.symbol
             );
 
@@ -336,7 +276,7 @@ export default function AtlasAlerts() {
                 <div>
                   <div className="flex items-center gap-3">
                     <p className="font-semibold text-white">
-                      {formatSymbol(alert.symbol)}
+                      {formatMarketSymbol(alert.symbol)}
                     </p>
 
                     <span

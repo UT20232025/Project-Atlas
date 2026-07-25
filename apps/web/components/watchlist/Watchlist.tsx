@@ -1,47 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+
+import { useMarket } from "@/components/providers/MarketProvider";
 import Section from "@/components/ui/Section";
-
-type MarketSymbol = "BTCUSDT" | "ETHUSDT" | "SOLUSDT" | "XRPUSDT";
-
-type WatchlistItem = {
-  symbol: MarketSymbol;
-  price: number;
-  change24h: number;
-};
+import {
+  formatMarketPrice,
+  formatMarketSymbol,
+  MARKET_SYMBOLS,
+  type MarketSymbol,
+} from "@/lib/services/liveMarketService";
 
 type SortField = "symbol" | "price" | "change24h";
 type SortDirection = "asc" | "desc";
 
-const SYMBOLS: MarketSymbol[] = [
-  "BTCUSDT",
-  "ETHUSDT",
-  "SOLUSDT",
-  "XRPUSDT",
-];
-
 const FAVORITES_STORAGE_KEY = "genwelth-watchlist-favorites";
-
-function formatSymbol(symbol: string) {
-  return symbol.replace("USDT", "");
-}
-
-function formatPrice(price: number) {
-  if (price >= 1000) {
-    return new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(price);
-  }
-
-  if (price >= 1) {
-    return price.toFixed(2);
-  }
-
-  return price.toFixed(4);
-}
 
 function getStoredFavorites(): MarketSymbol[] {
   if (typeof window === "undefined") {
@@ -63,8 +37,9 @@ function getStoredFavorites(): MarketSymbol[] {
       return [];
     }
 
-    return parsedFavorites.filter((symbol): symbol is MarketSymbol =>
-      SYMBOLS.includes(symbol)
+    return parsedFavorites.filter(
+      (symbol): symbol is MarketSymbol =>
+        MARKET_SYMBOLS.includes(symbol as MarketSymbol)
     );
   } catch {
     return [];
@@ -72,77 +47,33 @@ function getStoredFavorites(): MarketSymbol[] {
 }
 
 export default function Watchlist() {
-  const [items, setItems] = useState<WatchlistItem[]>([]);
-  const [favorites, setFavorites] = useState<MarketSymbol[]>([]);
-  const [sortField, setSortField] = useState<SortField>("change24h");
+  const {
+    market,
+    loading,
+    error,
+    lastUpdated,
+    refresh,
+  } = useMarket();
+
+  const [favorites, setFavorites] = useState<MarketSymbol[]>(
+    getStoredFavorites
+  );
+  const [sortField, setSortField] =
+    useState<SortField>("change24h");
   const [sortDirection, setSortDirection] =
     useState<SortDirection>("desc");
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [showFavoritesOnly, setShowFavoritesOnly] =
+    useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const fetchWatchlist = useCallback(async (manualRefresh = false) => {
+  async function handleRefresh() {
     try {
-      if (manualRefresh) {
-        setIsRefreshing(true);
-      }
-
-      setError(null);
-
-      const requests = SYMBOLS.map(async (symbol) => {
-        const response = await fetch(
-          `https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`,
-          {
-            cache: "no-store",
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`Could not load ${symbol}`);
-        }
-
-        const data = (await response.json()) as {
-          symbol: MarketSymbol;
-          lastPrice: string;
-          priceChangePercent: string;
-        };
-
-        return {
-          symbol: data.symbol,
-          price: Number(data.lastPrice),
-          change24h: Number(data.priceChangePercent),
-        };
-      });
-
-      const watchlistItems = await Promise.all(requests);
-
-      setItems(watchlistItems);
-      setLastUpdated(new Date());
-    } catch {
-      setError("Could not update live market data.");
+      setIsRefreshing(true);
+      await refresh();
     } finally {
-      setIsLoading(false);
       setIsRefreshing(false);
     }
-  }, []);
-
-  useEffect(() => {
-    setFavorites(getStoredFavorites());
-  }, []);
-
-  useEffect(() => {
-    void fetchWatchlist();
-
-    const interval = window.setInterval(() => {
-      void fetchWatchlist();
-    }, 30_000);
-
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, [fetchWatchlist]);
+  }
 
   function toggleFavorite(symbol: MarketSymbol) {
     setFavorites((currentFavorites) => {
@@ -176,29 +107,37 @@ export default function Watchlist() {
 
   const visibleItems = useMemo(() => {
     const filteredItems = showFavoritesOnly
-      ? items.filter((item) => favorites.includes(item.symbol))
-      : items;
+      ? market.filter((item) => favorites.includes(item.symbol))
+      : market;
 
-    return [...filteredItems].sort((firstItem, secondItem) => {
-      let comparison = 0;
+    return [...filteredItems].sort(
+      (firstItem, secondItem) => {
+        let comparison = 0;
 
-      if (sortField === "symbol") {
-        comparison = firstItem.symbol.localeCompare(secondItem.symbol);
+        if (sortField === "symbol") {
+          comparison = firstItem.symbol.localeCompare(
+            secondItem.symbol
+          );
+        }
+
+        if (sortField === "price") {
+          comparison =
+            firstItem.price - secondItem.price;
+        }
+
+        if (sortField === "change24h") {
+          comparison =
+            firstItem.change24h - secondItem.change24h;
+        }
+
+        return sortDirection === "asc"
+          ? comparison
+          : -comparison;
       }
-
-      if (sortField === "price") {
-        comparison = firstItem.price - secondItem.price;
-      }
-
-      if (sortField === "change24h") {
-        comparison = firstItem.change24h - secondItem.change24h;
-      }
-
-      return sortDirection === "asc" ? comparison : -comparison;
-    });
+    );
   }, [
     favorites,
-    items,
+    market,
     showFavoritesOnly,
     sortDirection,
     sortField,
@@ -221,7 +160,9 @@ export default function Watchlist() {
         <button
           type="button"
           onClick={() =>
-            setShowFavoritesOnly((currentValue) => !currentValue)
+            setShowFavoritesOnly(
+              (currentValue) => !currentValue
+            )
           }
           className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${
             showFavoritesOnly
@@ -234,7 +175,7 @@ export default function Watchlist() {
 
         <button
           type="button"
-          onClick={() => void fetchWatchlist(true)}
+          onClick={() => void handleRefresh()}
           disabled={isRefreshing}
           className="rounded-lg border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs font-medium text-zinc-400 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
@@ -277,7 +218,7 @@ export default function Watchlist() {
           <span />
         </div>
 
-        {isLoading ? (
+        {loading ? (
           <div className="px-4 py-10 text-center text-sm text-zinc-500">
             Loading live prices...
           </div>
@@ -293,7 +234,9 @@ export default function Watchlist() {
           </div>
         ) : (
           visibleItems.map((item) => {
-            const isFavorite = favorites.includes(item.symbol);
+            const isFavorite = favorites.includes(
+              item.symbol
+            );
             const isPositive = item.change24h >= 0;
 
             return (
@@ -306,7 +249,7 @@ export default function Watchlist() {
                   className="min-w-0"
                 >
                   <p className="font-semibold text-white">
-                    {formatSymbol(item.symbol)}
+                    {formatMarketSymbol(item.symbol)}
                   </p>
 
                   <p className="text-xs text-zinc-600">
@@ -315,7 +258,7 @@ export default function Watchlist() {
                 </Link>
 
                 <p className="text-right text-sm font-medium text-zinc-200">
-                  ${formatPrice(item.price)}
+                  ${formatMarketPrice(item.price)}
                 </p>
 
                 <p
@@ -331,7 +274,9 @@ export default function Watchlist() {
 
                 <button
                   type="button"
-                  onClick={() => toggleFavorite(item.symbol)}
+                  onClick={() =>
+                    toggleFavorite(item.symbol)
+                  }
                   aria-label={
                     isFavorite
                       ? `Remove ${item.symbol} from favorites`
@@ -356,11 +301,14 @@ export default function Watchlist() {
 
         <span>
           {lastUpdated
-            ? `Updated ${lastUpdated.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              })}`
+            ? `Updated ${lastUpdated.toLocaleTimeString(
+                [],
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                }
+              )}`
             : "Waiting for update"}
         </span>
       </div>
