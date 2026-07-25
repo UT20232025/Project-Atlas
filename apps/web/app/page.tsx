@@ -1,3 +1,4 @@
+import AtlasLiveAnalysis from "@/components/dashboard/AtlasLiveAnalysis";
 import AtlasAlerts from "../components/dashboard/AtlasAlerts";
 import AtlasIntelligence from "../components/dashboard/AtlasIntelligence";
 import DailyBrief from "../components/dashboard/DailyBrief";
