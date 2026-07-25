@@ -1,6 +1,7 @@
 import DailyBrief from "../components/dashboard/DailyBrief";
 import DashboardHero from "../components/dashboard/DashboardHero";
 import MarketAlerts from "../components/dashboard/MarketAlerts";
+import MarketHeatmap from "../components/dashboard/MarketHeatmap";
 import MarketStats from "../components/dashboard/MarketStats";
 import OpportunityCard from "../components/dashboard/OpportunityCard";
 import ScannerSection from "../components/dashboard/ScannerSection";
@@ -32,6 +33,13 @@ export default async function HomePage() {
   const opportunity = [...dashboard.scanner].sort(
     (first, second) => second.score - first.score
   )[0];
+
+  const heatmapItems = dashboard.scanner.map((item) => ({
+    coin: item.coin,
+    price: item.price,
+    change24h: item.change24h,
+    score: item.score,
+  }));
 
   return (
     <AppLayout marketTicker={dashboard.marketTicker}>
@@ -69,6 +77,10 @@ export default async function HomePage() {
           />
         </div>
       )}
+
+      <div className="mb-8">
+        <MarketHeatmap items={heatmapItems} />
+      </div>
 
       <div className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]">
         <MarketAlerts items={dashboard.scanner} />
