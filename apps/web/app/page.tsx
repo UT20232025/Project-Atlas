@@ -1,3 +1,4 @@
+import AtlasAlerts from "../components/dashboard/AtlasAlerts";
 import AtlasIntelligence from "../components/dashboard/AtlasIntelligence";
 import DailyBrief from "../components/dashboard/DailyBrief";
 import DashboardHero from "../components/dashboard/DashboardHero";
@@ -90,6 +91,10 @@ export default async function HomePage() {
 
       <div className="mb-8">
         <MarketHeatmap items={heatmapItems} />
+      </div>
+
+      <div className="mb-8">
+        <AtlasAlerts />
       </div>
 
       <div className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]">
