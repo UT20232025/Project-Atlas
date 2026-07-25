@@ -1,3 +1,4 @@
+import AtlasIntelligence from "../components/dashboard/AtlasIntelligence";
 import DailyBrief from "../components/dashboard/DailyBrief";
 import DashboardHero from "../components/dashboard/DashboardHero";
 import MarketAlerts from "../components/dashboard/MarketAlerts";
@@ -44,6 +45,15 @@ export default async function HomePage() {
   return (
     <AppLayout marketTicker={dashboard.marketTicker}>
       <DashboardHero />
+
+      <div className="mb-8">
+        <AtlasIntelligence
+          items={dashboard.scanner}
+          bullish={dashboard.bullish}
+          bearish={dashboard.bearish}
+          neutral={dashboard.neutral}
+        />
+      </div>
 
       <MarketStats
         scanner={dashboard.scanner}
