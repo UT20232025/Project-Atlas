@@ -2,11 +2,18 @@ import {
   analyzeMarket,
   type AtlasAnalysis,
 } from "@/lib/atlas/atlasEngine";
-import { calculateAtlasIndicators } from "@/lib/atlas/atlasIndicators";
+import {
+  calculateAtlasIndicators,
+  type AtlasIndicatorResult,
+} from "@/lib/atlas/atlasIndicators";
 import {
   calculateSupportResistance,
   type AtlasPriceLevels,
 } from "@/lib/atlas/supportResistance";
+import {
+  applyTrendFilter,
+  type AtlasTrendFilterResult,
+} from "@/lib/atlas/trendFilter";
 import { createTradeSetup } from "@/lib/atlas/tradeSetup";
 import {
   fetchBinanceCandles,
@@ -16,6 +23,8 @@ import type { MarketSymbol } from "@/lib/services/liveMarketService";
 
 export type AtlasAnalysisResponse = {
   analysis: AtlasAnalysis;
+  indicators: AtlasIndicatorResult;
+  trendFilter: AtlasTrendFilterResult;
   priceLevels: AtlasPriceLevels;
   tradeSetup: ReturnType<typeof createTradeSetup>;
 };
@@ -27,7 +36,7 @@ export async function getAtlasAnalysis(
   const candles = await fetchBinanceCandles(
     symbol,
     interval,
-    100
+    250
   );
 
   if (candles.length < 50) {
@@ -42,20 +51,30 @@ export async function getAtlasAnalysis(
   const analysis =
     analyzeMarket(indicators);
 
+  const trendFilter =
+    applyTrendFilter({
+      signal: analysis.signal,
+      confidence: analysis.confidence,
+      risk: analysis.risk,
+      trendStatus: indicators.trendStatus,
+    });
+
   const priceLevels =
     calculateSupportResistance(candles);
 
   const tradeSetup =
     createTradeSetup({
       candles,
-      signal: analysis.signal,
-      confidence: analysis.confidence,
-      risk: analysis.risk,
+      signal: trendFilter.signal,
+      confidence: trendFilter.confidence,
+      risk: trendFilter.risk,
       priceLevels,
     });
 
   return {
     analysis,
+    indicators,
+    trendFilter,
     priceLevels,
     tradeSetup,
   };
