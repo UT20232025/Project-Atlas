@@ -10,6 +10,11 @@ export type BreakOfStructureDirection =
   | "BEARISH"
   | "NONE";
 
+export type ChangeOfCharacterDirection =
+  | "BULLISH"
+  | "BEARISH"
+  | "NONE";
+
 export type SwingPoint = {
   index: number;
   price: number;
@@ -28,6 +33,11 @@ export type PriceActionResult = {
   bearishBos: boolean;
   bosDirection: BreakOfStructureDirection;
   bosLevel: number | null;
+
+  bullishChoch: boolean;
+  bearishChoch: boolean;
+  chochDirection: ChangeOfCharacterDirection;
+  chochLevel: number | null;
 
   lastHigh: SwingPoint | null;
   previousHigh: SwingPoint | null;
@@ -107,40 +117,44 @@ function findSwingLows(
   return swings;
 }
 
-function hasClosedAboveLevel(
+function findLatestCloseAboveIndex(
   candles: AtlasCandle[],
   level: number,
   startIndex: number
-): boolean {
+): number {
+  let latestIndex = -1;
+
   for (
     let i = Math.max(startIndex, 0);
     i < candles.length;
     i++
   ) {
     if (candles[i].close > level) {
-      return true;
+      latestIndex = i;
     }
   }
 
-  return false;
+  return latestIndex;
 }
 
-function hasClosedBelowLevel(
+function findLatestCloseBelowIndex(
   candles: AtlasCandle[],
   level: number,
   startIndex: number
-): boolean {
+): number {
+  let latestIndex = -1;
+
   for (
     let i = Math.max(startIndex, 0);
     i < candles.length;
     i++
   ) {
     if (candles[i].close < level) {
-      return true;
+      latestIndex = i;
     }
   }
 
-  return false;
+  return latestIndex;
 }
 
 export function analyzePriceAction(
@@ -160,6 +174,11 @@ export function analyzePriceAction(
       bearishBos: false,
       bosDirection: "NONE",
       bosLevel: null,
+
+      bullishChoch: false,
+      bearishChoch: false,
+      chochDirection: "NONE",
+      chochLevel: null,
 
       lastHigh: null,
       previousHigh: null,
@@ -250,21 +269,26 @@ export function analyzePriceAction(
     confidence = 60;
   }
 
-  const bullishBos =
-    lastHigh !== null &&
-    hasClosedAboveLevel(
-      candles,
-      lastHigh.price,
-      lastHigh.index + 1
-    );
+  const bullishBreakIndex =
+    lastHigh !== null
+      ? findLatestCloseAboveIndex(
+          candles,
+          lastHigh.price,
+          lastHigh.index + 1
+        )
+      : -1;
 
-  const bearishBos =
-    lastLow !== null &&
-    hasClosedBelowLevel(
-      candles,
-      lastLow.price,
-      lastLow.index + 1
-    );
+  const bearishBreakIndex =
+    lastLow !== null
+      ? findLatestCloseBelowIndex(
+          candles,
+          lastLow.price,
+          lastLow.index + 1
+        )
+      : -1;
+
+  let bullishBos = false;
+  let bearishBos = false;
 
   let bosDirection:
     BreakOfStructureDirection =
@@ -273,80 +297,125 @@ export function analyzePriceAction(
   let bosLevel: number | null =
     null;
 
-  if (
-    bullishBos &&
-    !bearishBos
-  ) {
-    bosDirection = "BULLISH";
-    bosLevel =
-      lastHigh?.price ?? null;
-  } else if (
-    bearishBos &&
-    !bullishBos
-  ) {
-    bosDirection = "BEARISH";
-    bosLevel =
-      lastLow?.price ?? null;
-  } else if (
-    bullishBos &&
-    bearishBos
-  ) {
-    const bullishBreakIndex =
-      candles.findIndex(
-        (candle, index) =>
-          lastHigh !== null &&
-          index >
-            lastHigh.index &&
-          candle.close >
-            lastHigh.price
-      );
+  let bullishChoch = false;
+  let bearishChoch = false;
 
-    const bearishBreakIndex =
-      candles.findIndex(
-        (candle, index) =>
-          lastLow !== null &&
-          index >
-            lastLow.index &&
-          candle.close <
-            lastLow.price
-      );
+  let chochDirection:
+    ChangeOfCharacterDirection =
+    "NONE";
 
+  let chochLevel: number | null =
+    null;
+
+  if (structure === "BULLISH") {
+    bullishBos =
+      bullishBreakIndex >= 0;
+
+    bearishChoch =
+      bearishBreakIndex >= 0;
+
+    if (bullishBos) {
+      bosDirection = "BULLISH";
+      bosLevel =
+        lastHigh?.price ?? null;
+    }
+
+    if (bearishChoch) {
+      chochDirection = "BEARISH";
+      chochLevel =
+        lastLow?.price ?? null;
+    }
+  } else if (
+    structure === "BEARISH"
+  ) {
+    bearishBos =
+      bearishBreakIndex >= 0;
+
+    bullishChoch =
+      bullishBreakIndex >= 0;
+
+    if (bearishBos) {
+      bosDirection = "BEARISH";
+      bosLevel =
+        lastLow?.price ?? null;
+    }
+
+    if (bullishChoch) {
+      chochDirection = "BULLISH";
+      chochLevel =
+        lastHigh?.price ?? null;
+    }
+  } else {
     if (
+      bullishBreakIndex >= 0 &&
       bullishBreakIndex >
-      bearishBreakIndex
+        bearishBreakIndex
     ) {
-      bosDirection =
-        "BULLISH";
+      bullishBos = true;
+      bosDirection = "BULLISH";
       bosLevel =
-        lastHigh?.price ??
-        null;
+        lastHigh?.price ?? null;
     } else if (
+      bearishBreakIndex >= 0 &&
       bearishBreakIndex >
-      bullishBreakIndex
+        bullishBreakIndex
     ) {
-      bosDirection =
-        "BEARISH";
+      bearishBos = true;
+      bosDirection = "BEARISH";
       bosLevel =
-        lastLow?.price ??
-        null;
+        lastLow?.price ?? null;
     }
   }
 
+  const latestBosIndex =
+    bosDirection === "BULLISH"
+      ? bullishBreakIndex
+      : bosDirection === "BEARISH"
+        ? bearishBreakIndex
+        : -1;
+
+  const latestChochIndex =
+    chochDirection === "BULLISH"
+      ? bullishBreakIndex
+      : chochDirection === "BEARISH"
+        ? bearishBreakIndex
+        : -1;
+
+  const latestEventIsChoch =
+    latestChochIndex >= 0 &&
+    latestChochIndex >=
+      latestBosIndex;
+
   if (
     structure === "BULLISH" &&
-    bosDirection === "BULLISH"
+    bullishBos &&
+    !latestEventIsChoch
   ) {
     confidence += 12;
   } else if (
     structure === "BEARISH" &&
-    bosDirection === "BEARISH"
+    bearishBos &&
+    !latestEventIsChoch
   ) {
     confidence += 12;
-  } else if (
-    structure !== "RANGING" &&
-    bosDirection !== "NONE"
+  }
+
+  if (latestEventIsChoch) {
+    confidence += 8;
+  }
+
+  if (
+    bullishBos &&
+    bearishChoch
   ) {
-    confidence -= 15;
+    confidence -= 8;
+  }
+
+  if (
+    bearishBos &&
+    bullishChoch
+  ) {
+    confidence -= 8;
   }
 
   confidence = clamp(
@@ -356,9 +425,21 @@ export function analyzePriceAction(
   );
 
   let explanation =
-    "No clear market structure or break of structure detected.";
+    "No clear market structure, BOS or CHoCH detected.";
 
   if (
+    latestEventIsChoch &&
+    chochDirection === "BEARISH"
+  ) {
+    explanation =
+      "Bearish change of character detected. Price closed below the latest protected swing low in a bullish structure.";
+  } else if (
+    latestEventIsChoch &&
+    chochDirection === "BULLISH"
+  ) {
+    explanation =
+      "Bullish change of character detected. Price closed above the latest protected swing high in a bearish structure.";
+  } else if (
     structure === "BULLISH" &&
     bosDirection === "BULLISH"
   ) {
@@ -371,25 +452,25 @@ export function analyzePriceAction(
     explanation =
       "Bearish market structure confirmed with a close below the latest swing low.";
   } else if (
-    bosDirection === "BULLISH"
-  ) {
-    explanation =
-      "Bullish break of structure detected above the latest swing high.";
-  } else if (
-    bosDirection === "BEARISH"
-  ) {
-    explanation =
-      "Bearish break of structure detected below the latest swing low.";
-  } else if (
     structure === "BULLISH"
   ) {
     explanation =
-      "Higher highs and higher lows detected, but no confirmed bullish break of structure.";
+      "Higher highs and higher lows detected without a new confirmed structural break.";
   } else if (
     structure === "BEARISH"
   ) {
     explanation =
-      "Lower highs and lower lows detected, but no confirmed bearish break of structure.";
+      "Lower highs and lower lows detected without a new confirmed structural break.";
+  } else if (
+    bosDirection === "BULLISH"
+  ) {
+    explanation =
+      "Bullish break above the latest swing high detected in a ranging market.";
+  } else if (
+    bosDirection === "BEARISH"
+  ) {
+    explanation =
+      "Bearish break below the latest swing low detected in a ranging market.";
   } else if (
     higherHigh ||
     higherLow ||
@@ -397,7 +478,7 @@ export function analyzePriceAction(
     lowerLow
   ) {
     explanation =
-      "Mixed market structure detected without a confirmed break.";
+      "Mixed market structure detected without a confirmed structural break.";
   }
 
   return {
@@ -413,6 +494,11 @@ export function analyzePriceAction(
     bearishBos,
     bosDirection,
     bosLevel,
+
+    bullishChoch,
+    bearishChoch,
+    chochDirection,
+    chochLevel,
 
     lastHigh,
     previousHigh,
