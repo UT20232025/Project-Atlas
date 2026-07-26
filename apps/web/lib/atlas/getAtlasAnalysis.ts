@@ -36,19 +36,23 @@ export async function getAtlasAnalysis(
     );
   }
 
-  const indicators = calculateAtlasIndicators(candles);
+  const indicators =
+    calculateAtlasIndicators(candles);
 
-  const analysis = analyzeMarket(indicators);
+  const analysis =
+    analyzeMarket(indicators);
 
   const priceLevels =
     calculateSupportResistance(candles);
 
-  const tradeSetup = createTradeSetup({
-    candles,
-    signal: analysis.signal,
-    confidence: analysis.confidence,
-    risk: analysis.risk,
-  });
+  const tradeSetup =
+    createTradeSetup({
+      candles,
+      signal: analysis.signal,
+      confidence: analysis.confidence,
+      risk: analysis.risk,
+      priceLevels,
+    });
 
   return {
     analysis,

@@ -1,11 +1,11 @@
 type TradeSetup = {
   direction: string;
-  entry: number;
-  stopLoss: number;
-  takeProfit1: number;
-  takeProfit2: number;
-  riskReward1: number;
-  riskReward2: number;
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit1: number | null;
+  takeProfit2: number | null;
+  riskReward1: number | null;
+  riskReward2: number | null;
   quality: string;
   explanation: string;
 };
@@ -14,15 +14,79 @@ type Props = {
   tradeSetup: TradeSetup;
 };
 
-function formatPrice(price: number) {
+function formatPrice(price: number | null) {
+  if (price === null || !Number.isFinite(price)) {
+    return "—";
+  }
+
   return price.toLocaleString(undefined, {
     maximumFractionDigits: 2,
   });
 }
 
+function formatRiskReward(value: number | null) {
+  if (value === null || !Number.isFinite(value)) {
+    return "—";
+  }
+
+  return `${value.toFixed(2)}:1`;
+}
+
+function getDirectionTextColor(direction: string) {
+  if (direction === "LONG") {
+    return "text-emerald-400";
+  }
+
+  if (direction === "SHORT") {
+    return "text-red-400";
+  }
+
+  return "text-amber-300";
+}
+
+function getQualityTextColor(quality: string) {
+  if (quality === "A") {
+    return "text-emerald-400";
+  }
+
+  if (quality === "B") {
+    return "text-sky-400";
+  }
+
+  if (quality === "C") {
+    return "text-amber-300";
+  }
+
+  return "text-zinc-400";
+}
+
 export default function AtlasTradeSetup({
   tradeSetup,
 }: Props) {
+  const isNoTrade =
+    tradeSetup.direction === "WAIT" ||
+    tradeSetup.quality === "NO_TRADE";
+
+  if (isNoTrade) {
+    return (
+      <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
+        <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
+          Trade Setup
+        </p>
+
+        <div className="mt-4 rounded-lg border border-amber-500/20 bg-zinc-950/30 p-4">
+          <p className="text-lg font-semibold text-amber-300">
+            No Trade
+          </p>
+
+          <p className="mt-2 text-sm leading-6 text-zinc-400">
+            {tradeSetup.explanation}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-5">
       <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
@@ -35,7 +99,11 @@ export default function AtlasTradeSetup({
             Direction
           </p>
 
-          <p className="mt-1 text-lg font-semibold text-white">
+          <p
+            className={`mt-1 text-lg font-semibold ${getDirectionTextColor(
+              tradeSetup.direction
+            )}`}
+          >
             {tradeSetup.direction}
           </p>
         </div>
@@ -65,7 +133,11 @@ export default function AtlasTradeSetup({
             Quality
           </p>
 
-          <p className="mt-1 font-medium text-emerald-400">
+          <p
+            className={`mt-1 font-medium ${getQualityTextColor(
+              tradeSetup.quality
+            )}`}
+          >
             {tradeSetup.quality}
           </p>
         </div>
@@ -82,7 +154,7 @@ export default function AtlasTradeSetup({
           </p>
 
           <p className="mt-2 text-xs text-zinc-500">
-            RR {tradeSetup.riskReward1.toFixed(2)}
+            RR {formatRiskReward(tradeSetup.riskReward1)}
           </p>
         </div>
 
@@ -96,7 +168,7 @@ export default function AtlasTradeSetup({
           </p>
 
           <p className="mt-2 text-xs text-zinc-500">
-            RR {tradeSetup.riskReward2.toFixed(2)}
+            RR {formatRiskReward(tradeSetup.riskReward2)}
           </p>
         </div>
       </div>
