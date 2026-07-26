@@ -66,7 +66,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const analysis = await getAtlasAnalysis(
+    const result = await getAtlasAnalysis(
       symbol,
       interval
     );
@@ -74,7 +74,9 @@ export async function GET(request: Request) {
     return NextResponse.json({
       symbol,
       interval,
-      analysis,
+      analysis: result.analysis,
+      priceLevels: result.priceLevels,
+      tradeSetup: result.tradeSetup,
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {

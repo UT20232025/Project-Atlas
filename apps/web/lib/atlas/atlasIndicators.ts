@@ -116,6 +116,72 @@ function calculateMomentum(closes: number[]): number {
   return clamp(percentageChange * 20);
 }
 
+export function calculateAtr(
+  candles: AtlasCandle[],
+  period = 14
+): number {
+  if (candles.length < period + 1) {
+    return 0;
+  }
+
+  const validCandles = candles.filter(
+    (candle) =>
+      Number.isFinite(candle.high) &&
+      Number.isFinite(candle.low) &&
+      Number.isFinite(candle.close)
+  );
+
+  if (validCandles.length < period + 1) {
+    return 0;
+  }
+
+  const trueRanges: number[] = [];
+
+  for (let index = 1; index < validCandles.length; index += 1) {
+    const currentCandle = validCandles[index];
+    const previousCandle = validCandles[index - 1];
+
+    const highLowRange =
+      currentCandle.high - currentCandle.low;
+
+    const highPreviousCloseRange = Math.abs(
+      currentCandle.high - previousCandle.close
+    );
+
+    const lowPreviousCloseRange = Math.abs(
+      currentCandle.low - previousCandle.close
+    );
+
+    trueRanges.push(
+      Math.max(
+        highLowRange,
+        highPreviousCloseRange,
+        lowPreviousCloseRange
+      )
+    );
+  }
+
+  const initialRanges = trueRanges.slice(0, period);
+
+  let atr =
+    initialRanges.reduce(
+      (total, trueRange) => total + trueRange,
+      0
+    ) / period;
+
+  for (
+    let index = period;
+    index < trueRanges.length;
+    index += 1
+  ) {
+    atr =
+      (atr * (period - 1) + trueRanges[index]) /
+      period;
+  }
+
+  return atr;
+}
+
 export function calculateAtlasIndicators(
   candles: AtlasCandle[]
 ): AtlasMarketInput {

@@ -4,15 +4,26 @@ import {
 } from "@/lib/atlas/atlasEngine";
 import { calculateAtlasIndicators } from "@/lib/atlas/atlasIndicators";
 import {
+  calculateSupportResistance,
+  type AtlasPriceLevels,
+} from "@/lib/atlas/supportResistance";
+import { createTradeSetup } from "@/lib/atlas/tradeSetup";
+import {
   fetchBinanceCandles,
   type BinanceInterval,
 } from "@/lib/services/binanceCandleService";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 
+export type AtlasAnalysisResponse = {
+  analysis: AtlasAnalysis;
+  priceLevels: AtlasPriceLevels;
+  tradeSetup: ReturnType<typeof createTradeSetup>;
+};
+
 export async function getAtlasAnalysis(
   symbol: MarketSymbol,
   interval: BinanceInterval = "1h"
-): Promise<AtlasAnalysis> {
+): Promise<AtlasAnalysisResponse> {
   const candles = await fetchBinanceCandles(
     symbol,
     interval,
@@ -27,5 +38,21 @@ export async function getAtlasAnalysis(
 
   const indicators = calculateAtlasIndicators(candles);
 
-  return analyzeMarket(indicators);
+  const analysis = analyzeMarket(indicators);
+
+  const priceLevels =
+    calculateSupportResistance(candles);
+
+  const tradeSetup = createTradeSetup({
+    candles,
+    signal: analysis.signal,
+    confidence: analysis.confidence,
+    risk: analysis.risk,
+  });
+
+  return {
+    analysis,
+    priceLevels,
+    tradeSetup,
+  };
 }

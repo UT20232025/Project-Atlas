@@ -24,7 +24,9 @@ function isMarketSymbol(value: string): value is MarketSymbol {
 function isBinanceInterval(
   value: string
 ): value is BinanceInterval {
-  return ALLOWED_INTERVALS.includes(value as BinanceInterval);
+  return ALLOWED_INTERVALS.includes(
+    value as BinanceInterval
+  );
 }
 
 export async function GET(request: Request) {
@@ -34,7 +36,8 @@ export async function GET(request: Request) {
     searchParams.get("symbol") ?? "BTCUSDT"
   ).toUpperCase();
 
-  const interval = searchParams.get("interval") ?? "1h";
+  const interval =
+    searchParams.get("interval") ?? "1h";
 
   if (!isMarketSymbol(symbol)) {
     return NextResponse.json(
@@ -59,7 +62,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const analysis = await getAtlasAnalysis(
+    const result = await getAtlasAnalysis(
       symbol,
       interval
     );
@@ -67,7 +70,8 @@ export async function GET(request: Request) {
     return NextResponse.json({
       symbol,
       interval,
-      analysis,
+      analysis: result.analysis,
+      tradeSetup: result.tradeSetup,
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {
