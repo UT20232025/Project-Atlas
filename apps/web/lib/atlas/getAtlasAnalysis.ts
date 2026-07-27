@@ -9,6 +9,11 @@ import {
 } from "./orderBlockEngine";
 
 import {
+  analyzeFairValueGaps,
+  type FairValueGapResult,
+} from "@/lib/atlas/fairValueGapEngine";
+
+import {
   calculateAtlasIndicators,
   type AtlasIndicatorResult,
 } from "@/lib/atlas/atlasIndicators";
@@ -97,6 +102,7 @@ liquidity: LiquidityResult;
 volume: VolumeAnalysisResult;
 marketStructure: MarketStructureResult;
 orderBlocks: ReturnType<typeof analyzeOrderBlocks>;
+fairValueGaps: FairValueGapResult;
 };
 
 export type AtlasAnalysisResponse = {
@@ -104,6 +110,7 @@ export type AtlasAnalysisResponse = {
   confidence: number;
 
   orderBlocks: OrderBlockResult;
+  fairValueGaps: FairValueGapResult;
 
   entry: number | null;
   stopLoss: number | null;
@@ -321,6 +328,9 @@ async function createTimeframeSnapshot(
   );
 const orderBlocks = analyzeOrderBlocks(candles);
 
+const fairValueGaps =
+  analyzeFairValueGaps(candles);
+
  return {
   interval,
   candles,
@@ -337,6 +347,7 @@ const orderBlocks = analyzeOrderBlocks(candles);
   volume,
   marketStructure,
   orderBlocks,
+  fairValueGaps,
 };
 }
 
@@ -530,7 +541,10 @@ const decision =
   return {
     orderBlocks:
   requestedSnapshot.orderBlocks,
-  
+
+  fairValueGaps:
+  requestedSnapshot.fairValueGaps,
+
     signal:
       decision.signal,
 

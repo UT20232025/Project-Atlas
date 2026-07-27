@@ -2,6 +2,7 @@
 import OrderBlockCard from "@/components/dashboard/OrderBlockCard";
 import { useEffect, useState } from "react";
 
+import FairValueGapCard from "@/components/dashboard/FairValueGapCard";
 import MarketStructureCard from "@/components/dashboard/MarketStructureCard";
 import AtlasFactorCard from "@/components/dashboard/AtlasFactorCard";
 import AtlasTradeSetup from "@/components/dashboard/AtlasTradeSetup";
@@ -22,6 +23,7 @@ import type { AtlasMtfResult } from "@/lib/atlas/multiTimeframeEngine";
 import type { VolumeAnalysisResult } from "@/lib/atlas/volumeEngine";
 import type { MarketStructureResult } from "@/lib/atlas/marketStructureEngine";
 import type { OrderBlockResult } from "@/lib/atlas/orderBlockEngine";
+import type { FairValueGapResult } from "@/lib/atlas/fairValueGapEngine";
 
 type TradeSetup = {
   direction: "LONG" | "SHORT" | "WAIT";
@@ -77,6 +79,7 @@ liquidity: LiquidityResult;
 volume: VolumeAnalysisResult;
 marketStructure: MarketStructureResult;
 orderBlocks: OrderBlockResult;
+fairValueGaps: FairValueGapResult;
 multiTimeframe: AtlasMtfResult;
   decision: AtlasDecision;
   tradeSetup: TradeSetup;
@@ -837,6 +840,11 @@ export default function AtlasLiveAnalysis() {
 <OrderBlockCard
   orderBlocks={data.orderBlocks}
 />
+
+<FairValueGapCard
+  fairValueGaps={data.fairValueGaps}
+/>
+
 <MultiTimeframeCard
   mtf={data.multiTimeframe}
 />

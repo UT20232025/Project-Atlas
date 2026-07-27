@@ -110,6 +110,9 @@ marketStructure:
 
 orderBlocks:
   result.orderBlocks,
+  
+fairValueGaps:
+   result.fairValueGaps,
 
 risk:
   result.risk,

@@ -129,3 +129,105 @@ function findBearishFairValueGaps(
 
   return gaps;
 }
+function updateFilledStatus(
+  gaps: FairValueGap[],
+  candles: AtlasCandle[]
+): FairValueGap[] {
+  return gaps.map((gap) => {
+    let filled = false;
+
+    for (
+      let i = gap.candleIndex + 1;
+      i < candles.length;
+      i += 1
+    ) {
+      const candle = candles[i];
+
+      if (
+        candle.low <= gap.midpoint &&
+        candle.high >= gap.midpoint
+      ) {
+        filled = true;
+        break;
+      }
+    }
+
+    return {
+      ...gap,
+      filled,
+    };
+  });
+}
+function getUnfilledFairValueGaps(
+  gaps: FairValueGap[]
+): FairValueGap[] {
+  return gaps.filter((gap) => !gap.filled);
+}
+function getNearestFairValueGap(
+  gaps: FairValueGap[],
+  currentPrice: number
+): FairValueGap | null {
+  if (gaps.length === 0) {
+    return null;
+  }
+
+  return gaps.reduce((nearest, gap) => {
+    const nearestDistance = Math.abs(
+      nearest.midpoint - currentPrice
+    );
+
+    const currentDistance = Math.abs(
+      gap.midpoint - currentPrice
+    );
+
+    return currentDistance < nearestDistance
+      ? gap
+      : nearest;
+  });
+}
+export function analyzeFairValueGaps(
+  candles: AtlasCandle[]
+): FairValueGapResult {
+  const currentPrice =
+    candles.at(-1)?.close ?? 0;
+
+  const bullishFairValueGaps =
+    getUnfilledFairValueGaps(
+      updateFilledStatus(
+        findBullishFairValueGaps(candles),
+        candles
+      )
+    );
+
+  const bearishFairValueGaps =
+    getUnfilledFairValueGaps(
+      updateFilledStatus(
+        findBearishFairValueGaps(candles),
+        candles
+      )
+    );
+
+  const nearestBullishFairValueGap =
+    getNearestFairValueGap(
+      bullishFairValueGaps,
+      currentPrice
+    );
+
+  const nearestBearishFairValueGap =
+    getNearestFairValueGap(
+      bearishFairValueGaps,
+      currentPrice
+    );
+
+  return {
+    bullishFairValueGaps,
+    bearishFairValueGaps,
+    nearestBullishFairValueGap,
+    nearestBearishFairValueGap,
+    currentPrice,
+    summary:
+      `${bullishFairValueGaps.length} bullish and ` +
+      `${bearishFairValueGaps.length} bearish ` +
+      `unfilled fair value gaps found.`,
+  };
+}
