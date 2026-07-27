@@ -74,10 +74,54 @@ export async function GET(request: Request) {
     return NextResponse.json({
       symbol,
       interval,
+
+      signal: result.signal,
+      confidence: result.confidence,
+
+      entry: result.entry,
+      stopLoss: result.stopLoss,
+      takeProfit: result.takeProfit,
+      riskRewardRatio:
+        result.riskRewardRatio,
+
       analysis: result.analysis,
-      priceLevels: result.priceLevels,
-      tradeSetup: result.tradeSetup,
-      generatedAt: new Date().toISOString(),
+      indicators: result.indicators,
+
+      trend: result.trend,
+      trendFilter: result.trendFilter,
+
+      multiTimeframe:
+        result.multiTimeframe,
+
+      priceLevels:
+        result.priceLevels,
+
+      priceAction:
+        result.priceAction,
+
+      liquidity:
+  result.liquidity,
+
+volume:
+  result.volume,
+
+marketStructure:
+  result.marketStructure,
+
+orderBlocks:
+  result.orderBlocks,
+
+risk:
+  result.risk,
+
+      decision:
+        result.decision,
+
+      tradeSetup:
+        result.tradeSetup,
+
+      generatedAt:
+        new Date().toISOString(),
     });
   } catch (error) {
     console.error(

@@ -1,46 +1,103 @@
 "use client";
-
+import OrderBlockCard from "@/components/dashboard/OrderBlockCard";
 import { useEffect, useState } from "react";
 
+import MarketStructureCard from "@/components/dashboard/MarketStructureCard";
 import AtlasFactorCard from "@/components/dashboard/AtlasFactorCard";
 import AtlasTradeSetup from "@/components/dashboard/AtlasTradeSetup";
+import LiquidityCard from "@/components/dashboard/LiquidityCard";
+import PriceActionCard from "@/components/dashboard/PriceActionCard";
+import TrendEngineCard from "@/components/dashboard/TrendEngineCard";
+import VolumeAnalysisCard from "@/components/dashboard/VolumeAnalysisCard";
 import Section from "@/components/ui/Section";
 import type {
   AtlasAnalysis,
   AtlasFactorResult,
 } from "@/lib/atlas/atlasEngine";
+import type { LiquidityResult } from "@/lib/atlas/liquidityEngine";
+import type { PriceActionResult } from "@/lib/atlas/priceActionEngine";
+import type { TrendEngineResult } from "@/lib/atlas/trendEngine";
+import MultiTimeframeCard from "@/components/dashboard/MultiTimeframeCard";
+import type { AtlasMtfResult } from "@/lib/atlas/multiTimeframeEngine";
+import type { VolumeAnalysisResult } from "@/lib/atlas/volumeEngine";
+import type { MarketStructureResult } from "@/lib/atlas/marketStructureEngine";
 
 type TradeSetup = {
-  direction: string;
-  entry: number;
-  stopLoss: number;
-  takeProfit1: number;
-  takeProfit2: number;
-  riskReward1: number;
-  riskReward2: number;
-  quality: string;
+  direction: "LONG" | "SHORT" | "WAIT";
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit1: number | null;
+  takeProfit2: number | null;
+  riskReward1: number | null;
+  riskReward2: number | null;
+  quality: "A" | "B" | "C" | "NO_TRADE";
+  explanation: string;
+};
+
+type AtlasDecision = {
+  signal: "LONG" | "SHORT" | "WAIT";
+  tradeApproved: boolean;
+  strength: string;
+  confidence: number;
+  score: number;
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
+  riskRewardRatio: number | null;
+  bullishScore: number;
+  bearishScore: number;
+  reasons: string[];
+  warnings: string[];
   explanation: string;
 };
 
 type AtlasApiResponse = {
   symbol: string;
   interval: string;
+
+  signal: "LONG" | "SHORT" | "WAIT";
+  confidence: number;
+
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
+  riskRewardRatio: number | null;
+
   analysis: AtlasAnalysis;
-  priceLevels: {
-    support: number | null;
-    resistance: number | null;
-  };
+
+priceLevels: {
+  support: number | null;
+  resistance: number | null;
+};
+
+trend: TrendEngineResult;
+priceAction: PriceActionResult;
+liquidity: LiquidityResult;
+volume: VolumeAnalysisResult;
+marketStructure: MarketStructureResult;
+multiTimeframe: AtlasMtfResult;
+  decision: AtlasDecision;
   tradeSetup: TradeSetup;
   generatedAt: string;
 };
 
-function formatSignal(signal: AtlasAnalysis["signal"]) {
+function formatSignal(
+  signal: AtlasAnalysis["signal"]
+): string {
   return signal.replaceAll("_", " ");
 }
 
-function formatPrice(price: number | null) {
+function formatDecisionStrength(
+  strength: string
+): string {
+  return strength.replaceAll("_", " ");
+}
+
+function formatPrice(
+  price: number | null
+): string {
   if (price === null) {
-    return "Not detected";
+    return "Not available";
   }
 
   return price.toLocaleString(undefined, {
@@ -48,7 +105,19 @@ function formatPrice(price: number | null) {
   });
 }
 
-function getSignalLabel(signal: AtlasAnalysis["signal"]) {
+function formatRiskReward(
+  riskRewardRatio: number | null
+): string {
+  if (riskRewardRatio === null) {
+    return "Not available";
+  }
+
+  return `${riskRewardRatio.toFixed(2)} : 1`;
+}
+
+function getSignalLabel(
+  signal: AtlasAnalysis["signal"]
+): string {
   switch (signal) {
     case "STRONG_LONG":
       return "Strong bullish setup";
@@ -67,14 +136,20 @@ function getSignalLabel(signal: AtlasAnalysis["signal"]) {
   }
 }
 
-function getSignalDescription(analysis: AtlasAnalysis) {
-  const bullishFactors = analysis.factors.filter(
-    (factor) => factor.status === "BULLISH"
-  );
+function getSignalDescription(
+  analysis: AtlasAnalysis
+): string {
+  const bullishFactors =
+    analysis.factors.filter(
+      (factor) =>
+        factor.status === "BULLISH"
+    );
 
-  const bearishFactors = analysis.factors.filter(
-    (factor) => factor.status === "BEARISH"
-  );
+  const bearishFactors =
+    analysis.factors.filter(
+      (factor) =>
+        factor.status === "BEARISH"
+    );
 
   if (
     analysis.signal === "STRONG_LONG" ||
@@ -101,25 +176,41 @@ function getSignalDescription(analysis: AtlasAnalysis) {
   return "Atlas detects conflicting or balanced indicators. Waiting for stronger confirmation may provide a better setup.";
 }
 
-function getPriorityFactors(factors: AtlasFactorResult[]) {
+function getPriorityFactors(
+  factors: AtlasFactorResult[]
+): AtlasFactorResult[] {
   return [...factors]
-    .sort((firstFactor, secondFactor) => {
-      const firstStrength = Math.abs(
-        firstFactor.score / firstFactor.maxScore - 0.5
-      );
+    .sort(
+      (
+        firstFactor,
+        secondFactor
+      ) => {
+        const firstStrength =
+          Math.abs(
+            firstFactor.score /
+              firstFactor.maxScore -
+              0.5
+          );
 
-      const secondStrength = Math.abs(
-        secondFactor.score / secondFactor.maxScore - 0.5
-      );
+        const secondStrength =
+          Math.abs(
+            secondFactor.score /
+              secondFactor.maxScore -
+              0.5
+          );
 
-      return secondStrength - firstStrength;
-    })
+        return (
+          secondStrength -
+          firstStrength
+        );
+      }
+    )
     .slice(0, 3);
 }
 
 function getStatusTextColor(
   status: AtlasFactorResult["status"]
-) {
+): string {
   if (status === "BULLISH") {
     return "text-emerald-400";
   }
@@ -131,9 +222,9 @@ function getStatusTextColor(
   return "text-amber-300";
 }
 
-function getSignalTextColor(
+function getLegacySignalTextColor(
   signal: AtlasAnalysis["signal"]
-) {
+): string {
   if (
     signal === "STRONG_LONG" ||
     signal === "LONG"
@@ -151,7 +242,65 @@ function getSignalTextColor(
   return "text-amber-300";
 }
 
-function getRiskTextColor(risk: AtlasAnalysis["risk"]) {
+function getDecisionTextColor(
+  signal: AtlasDecision["signal"]
+): string {
+  if (signal === "LONG") {
+    return "text-emerald-400";
+  }
+
+  if (signal === "SHORT") {
+    return "text-red-400";
+  }
+
+  return "text-amber-300";
+}
+
+function getDecisionBorderColor(
+  signal: AtlasDecision["signal"]
+): string {
+  if (signal === "LONG") {
+    return "border-emerald-500/30";
+  }
+
+  if (signal === "SHORT") {
+    return "border-red-500/30";
+  }
+
+  return "border-amber-500/30";
+}
+
+function getDecisionBackground(
+  signal: AtlasDecision["signal"]
+): string {
+  if (signal === "LONG") {
+    return "bg-emerald-500/5";
+  }
+
+  if (signal === "SHORT") {
+    return "bg-red-500/5";
+  }
+
+  return "bg-amber-500/5";
+}
+
+function getDecisionIcon(
+  signal: AtlasDecision["signal"]
+): string {
+  if (signal === "LONG") {
+    return "↑";
+  }
+
+  if (signal === "SHORT") {
+    return "↓";
+  }
+
+  return "—";
+}
+
+function getRiskTextColor(
+  risk: AtlasAnalysis["risk"]
+): string {
   if (risk === "LOW") {
     return "text-emerald-400";
   }
@@ -165,9 +314,12 @@ function getRiskTextColor(risk: AtlasAnalysis["risk"]) {
 
 export default function AtlasLiveAnalysis() {
   const [data, setData] =
-    useState<AtlasApiResponse | null>(null);
+    useState<AtlasApiResponse | null>(
+      null
+    );
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] =
+    useState(true);
 
   const [error, setError] =
     useState<string | null>(null);
@@ -187,20 +339,26 @@ export default function AtlasLiveAnalysis() {
           }
         );
 
-        const result = (await response.json()) as
-          | AtlasApiResponse
-          | { error?: string };
+        const result =
+          (await response.json()) as
+            | AtlasApiResponse
+            | {
+                error?: string;
+              };
 
         if (!response.ok) {
           throw new Error(
-            "error" in result && result.error
+            "error" in result &&
+              result.error
               ? result.error
               : "Failed to load Atlas analysis."
           );
         }
 
         if (!cancelled) {
-          setData(result as AtlasApiResponse);
+          setData(
+            result as AtlasApiResponse
+          );
         }
       } catch (loadError) {
         if (!cancelled) {
@@ -219,18 +377,24 @@ export default function AtlasLiveAnalysis() {
 
     void loadAnalysis();
 
-    const intervalId = window.setInterval(() => {
-      void loadAnalysis();
-    }, 60_000);
+    const intervalId =
+      window.setInterval(() => {
+        void loadAnalysis();
+      }, 60_000);
 
     return () => {
       cancelled = true;
-      window.clearInterval(intervalId);
+
+      window.clearInterval(
+        intervalId
+      );
     };
   }, []);
 
   const priorityFactors = data
-    ? getPriorityFactors(data.analysis.factors)
+    ? getPriorityFactors(
+        data.analysis.factors
+      )
     : [];
 
   return (
@@ -248,24 +412,291 @@ export default function AtlasLiveAnalysis() {
         </div>
       ) : data ? (
         <div className="space-y-5">
+          <div
+            className={`overflow-hidden rounded-2xl border ${getDecisionBorderColor(
+              data.decision.signal
+            )} ${getDecisionBackground(
+              data.decision.signal
+            )}`}
+          >
+            <div className="border-b border-white/5 px-5 py-4 sm:px-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
+                    Atlas AI Decision
+                  </p>
+
+                  <p className="mt-2 text-sm text-zinc-400">
+                    Final decision based on trend,
+                    multiple timeframes, price action,
+                    liquidity and risk.
+                  </p>
+                </div>
+
+                <div
+                  className={`inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                    data.decision
+                      .tradeApproved
+                      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                      : "border-zinc-700 bg-zinc-900/70 text-zinc-400"
+                  }`}
+                >
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      data.decision
+                        .tradeApproved
+                        ? "bg-emerald-400"
+                        : "bg-zinc-600"
+                    }`}
+                  />
+
+                  {data.decision
+                    .tradeApproved
+                    ? "Trade approved"
+                    : "No trade"}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-5 sm:p-6">
+              <div className="grid gap-6 xl:grid-cols-[1.15fr_1fr]">
+                <div>
+                  <div className="flex flex-wrap items-end gap-4">
+                    <div
+                      className={`text-5xl font-bold leading-none ${getDecisionTextColor(
+                        data.decision.signal
+                      )}`}
+                    >
+                      {getDecisionIcon(
+                        data.decision.signal
+                      )}
+                    </div>
+
+                    <div>
+                      <p
+                        className={`text-3xl font-bold tracking-tight ${getDecisionTextColor(
+                          data.decision.signal
+                        )}`}
+                      >
+                        {data.decision.signal}
+                      </p>
+
+                      <p className="mt-1 text-sm text-zinc-400">
+                        Strength:{" "}
+                        <span className="font-medium text-zinc-200">
+                          {formatDecisionStrength(
+                            data.decision.strength
+                          )}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+                      <p className="text-xs uppercase tracking-wide text-zinc-500">
+                        Confidence
+                      </p>
+
+                      <p className="mt-2 text-xl font-semibold text-white">
+                        {data.decision.confidence}%
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+                      <p className="text-xs uppercase tracking-wide text-zinc-500">
+                        Decision score
+                      </p>
+
+                      <p className="mt-2 text-xl font-semibold text-white">
+                        {data.decision.score}
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+                      <p className="text-xs uppercase tracking-wide text-zinc-500">
+                        Risk / reward
+                      </p>
+
+                      <p className="mt-2 text-xl font-semibold text-white">
+                        {formatRiskReward(
+                          data.decision
+                            .riskRewardRatio
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
+                      <p className="text-xs uppercase tracking-wide text-zinc-500">
+                        Bullish score
+                      </p>
+
+                      <p className="mt-2 text-lg font-semibold text-emerald-400">
+                        {
+                          data.decision
+                            .bullishScore
+                        }
+                      </p>
+                    </div>
+
+                    <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
+                      <p className="text-xs uppercase tracking-wide text-zinc-500">
+                        Bearish score
+                      </p>
+
+                      <p className="mt-2 text-lg font-semibold text-red-400">
+                        {
+                          data.decision
+                            .bearishScore
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+                    <p className="text-xs uppercase tracking-wide text-zinc-500">
+                      Entry
+                    </p>
+
+                    <p className="mt-2 text-lg font-semibold text-white">
+                      {formatPrice(
+                        data.decision.entry
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+                    <p className="text-xs uppercase tracking-wide text-zinc-500">
+                      Stop loss
+                    </p>
+
+                    <p className="mt-2 text-lg font-semibold text-red-400">
+                      {formatPrice(
+                        data.decision
+                          .stopLoss
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 sm:col-span-2">
+                    <p className="text-xs uppercase tracking-wide text-zinc-500">
+                      Take profit
+                    </p>
+
+                    <p className="mt-2 text-lg font-semibold text-emerald-400">
+                      {formatPrice(
+                        data.decision
+                          .takeProfit
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4 sm:col-span-2">
+                    <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
+                      AI explanation
+                    </p>
+
+                    <p className="mt-3 text-sm leading-6 text-zinc-300">
+                      {
+                        data.decision
+                          .explanation
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {(data.decision.reasons
+                .length > 0 ||
+                data.decision.warnings
+                  .length > 0) && (
+                <div className="mt-6 grid gap-4 lg:grid-cols-2">
+                  {data.decision.reasons
+                    .length > 0 && (
+                    <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
+                      <p className="text-xs font-medium uppercase tracking-widest text-emerald-400">
+                        Decision reasons
+                      </p>
+
+                      <div className="mt-3 space-y-2">
+                        {data.decision.reasons.map(
+                          (
+                            reason,
+                            index
+                          ) => (
+                            <div
+                              key={`${reason}-${index}`}
+                              className="flex items-start gap-2 text-sm leading-6 text-zinc-300"
+                            >
+                              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+
+                              <span>
+                                {reason}
+                              </span>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {data.decision.warnings
+                    .length > 0 && (
+                    <div className="rounded-xl border border-amber-500/15 bg-amber-500/5 p-4">
+                      <p className="text-xs font-medium uppercase tracking-widest text-amber-300">
+                        Risk warnings
+                      </p>
+
+                      <div className="mt-3 space-y-2">
+                        {data.decision.warnings.map(
+                          (
+                            warning,
+                            index
+                          ) => (
+                            <div
+                              key={`${warning}-${index}`}
+                              className="flex items-start gap-2 text-sm leading-6 text-zinc-300"
+                            >
+                              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
+
+                              <span>
+                                {warning}
+                              </span>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
           <div className="grid gap-4 md:grid-cols-4">
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Signal
+                Indicator signal
               </p>
 
               <p
-                className={`mt-2 text-lg font-semibold ${getSignalTextColor(
+                className={`mt-2 text-lg font-semibold ${getLegacySignalTextColor(
                   data.analysis.signal
                 )}`}
               >
-                {formatSignal(data.analysis.signal)}
+                {formatSignal(
+                  data.analysis.signal
+                )}
               </p>
             </div>
 
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Score
+                Indicator score
               </p>
 
               <p className="mt-2 text-lg font-semibold text-white">
@@ -275,17 +706,21 @@ export default function AtlasLiveAnalysis() {
 
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Confidence
+                Indicator confidence
               </p>
 
               <p className="mt-2 text-lg font-semibold text-white">
-                {data.analysis.confidence}%
+                {
+                  data.analysis
+                    .confidence
+                }
+                %
               </p>
             </div>
 
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Risk
+                Indicator risk
               </p>
 
               <p
@@ -304,11 +739,15 @@ export default function AtlasLiveAnalysis() {
             </p>
 
             <h3 className="mt-3 text-xl font-semibold text-white">
-              {getSignalLabel(data.analysis.signal)}
+              {getSignalLabel(
+                data.analysis.signal
+              )}
             </h3>
 
             <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-300">
-              {getSignalDescription(data.analysis)}
+              {getSignalDescription(
+                data.analysis
+              )}
             </p>
 
             <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-400">
@@ -323,8 +762,9 @@ export default function AtlasLiveAnalysis() {
               </p>
 
               <p className="mt-2 text-sm text-zinc-400">
-                The nearest technical price levels detected
-                from recent swing highs and swing lows.
+                The nearest technical price
+                levels detected from recent
+                swing highs and swing lows.
               </p>
             </div>
 
@@ -336,13 +776,15 @@ export default function AtlasLiveAnalysis() {
 
                 <p className="mt-2 text-xl font-semibold text-emerald-400">
                   {formatPrice(
-                    data.priceLevels.support
+                    data.priceLevels
+                      .support
                   )}
                 </p>
 
                 <p className="mt-2 text-xs leading-5 text-zinc-500">
-                  A nearby level where buyers may attempt to
-                  defend the price.
+                  A nearby level where buyers
+                  may attempt to defend the
+                  price.
                 </p>
               </div>
 
@@ -353,21 +795,46 @@ export default function AtlasLiveAnalysis() {
 
                 <p className="mt-2 text-xl font-semibold text-red-400">
                   {formatPrice(
-                    data.priceLevels.resistance
+                    data.priceLevels
+                      .resistance
                   )}
                 </p>
 
                 <p className="mt-2 text-xs leading-5 text-zinc-500">
-                  A nearby level where sellers may attempt to
-                  reject the price.
+                  A nearby level where sellers
+                  may attempt to reject the
+                  price.
                 </p>
               </div>
             </div>
           </div>
 
-          <AtlasTradeSetup
-            tradeSetup={data.tradeSetup}
-          />
+         <AtlasTradeSetup
+  tradeSetup={data.tradeSetup}
+/>
+
+<TrendEngineCard
+  trend={data.trend}
+/>
+
+<PriceActionCard
+  priceAction={data.priceAction}
+/>
+
+<LiquidityCard
+  liquidity={data.liquidity}
+/>
+
+<VolumeAnalysisCard
+  volume={data.volume}
+/>
+
+<MarketStructureCard
+  structure={data.marketStructure}
+/>
+<MultiTimeframeCard
+  mtf={data.multiTimeframe}
+/>
 
           <div className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-5">
             <div>
@@ -376,71 +843,83 @@ export default function AtlasLiveAnalysis() {
               </p>
 
               <p className="mt-2 text-sm text-zinc-400">
-                The strongest factors currently influencing
-                the Atlas signal.
+                The strongest factors currently
+                influencing the Atlas indicator
+                signal.
               </p>
             </div>
 
             <div className="mt-4 space-y-3">
-              {priorityFactors.map((factor) => (
-                <div
-                  key={factor.name}
-                  className="flex items-start gap-3 rounded-lg border border-zinc-800 bg-zinc-950/40 p-3"
-                >
+              {priorityFactors.map(
+                (factor) => (
                   <div
-                    className={`mt-0.5 text-sm font-semibold ${getStatusTextColor(
-                      factor.status
-                    )}`}
+                    key={factor.name}
+                    className="flex items-start gap-3 rounded-lg border border-zinc-800 bg-zinc-950/40 p-3"
                   >
-                    {factor.status === "BULLISH"
-                      ? "↑"
-                      : factor.status === "BEARISH"
-                        ? "↓"
-                        : "—"}
-                  </div>
-
-                  <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-medium text-white">
-                        {factor.label}
-                      </p>
-
-                      <span
-                        className={`text-xs font-medium ${getStatusTextColor(
-                          factor.status
-                        )}`}
-                      >
-                        {factor.status}
-                      </span>
+                    <div
+                      className={`mt-0.5 text-sm font-semibold ${getStatusTextColor(
+                        factor.status
+                      )}`}
+                    >
+                      {factor.status ===
+                      "BULLISH"
+                        ? "↑"
+                        : factor.status ===
+                            "BEARISH"
+                          ? "↓"
+                          : "—"}
                     </div>
 
-                    <p className="mt-1 text-sm leading-6 text-zinc-400">
-                      {factor.explanation}
-                    </p>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="text-sm font-medium text-white">
+                          {factor.label}
+                        </p>
+
+                        <span
+                          className={`text-xs font-medium ${getStatusTextColor(
+                            factor.status
+                          )}`}
+                        >
+                          {factor.status}
+                        </span>
+                      </div>
+
+                      <p className="mt-1 text-sm leading-6 text-zinc-400">
+                        {
+                          factor.explanation
+                        }
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              )}
             </div>
           </div>
 
           <div className="grid gap-3 lg:grid-cols-2">
-            {data.analysis.factors.map((factor) => (
-              <AtlasFactorCard
-                key={factor.name}
-                factor={factor}
-              />
-            ))}
+            {data.analysis.factors.map(
+              (factor) => (
+                <AtlasFactorCard
+                  key={factor.name}
+                  factor={factor}
+                />
+              )
+            )}
           </div>
 
           <p className="text-right text-xs text-zinc-600">
             Updated{" "}
             {new Date(
               data.generatedAt
-            ).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-            })}
+            ).toLocaleTimeString(
+              [],
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              }
+            )}
           </p>
         </div>
       ) : null}

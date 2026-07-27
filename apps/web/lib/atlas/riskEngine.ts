@@ -1,6 +1,6 @@
 import type {
   AtlasMtfResult,
-} from "@/lib/atlas/multiTimeframe";
+} from "@/lib/atlas/multiTimeframeEngine";
 
 import type {
   PriceActionResult,

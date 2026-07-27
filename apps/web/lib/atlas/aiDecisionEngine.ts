@@ -1,6 +1,6 @@
 import type {
   AtlasMtfResult,
-} from "@/lib/atlas/multiTimeframe";
+} from "@/lib/atlas/multiTimeframeEngine";
 
 import type {
   PriceActionResult,
@@ -9,6 +9,14 @@ import type {
 import type {
   LiquidityResult,
 } from "@/lib/atlas/liquidityEngine";
+import type {
+  VolumeAnalysisResult,
+} from "@/lib/atlas/volumeEngine";
+
+import type {
+  MarketStructureResult,
+} from "@/lib/atlas/marketStructureEngine";
+
 
 import type {
   AtlasRiskEngineResult,
@@ -26,15 +34,17 @@ export type AtlasDecisionStrength =
   | "NONE";
 
 export type AtlasDecisionEngineInput = {
-  proposedSignal: AtlasTradeDirection;
+ proposedSignal: AtlasTradeDirection;
 
-  trend: TrendEngineResult;
-  multiTimeframe: AtlasMtfResult;
-  priceAction: PriceActionResult;
-  liquidity: LiquidityResult;
-  risk: AtlasRiskEngineResult;
+trend: TrendEngineResult;
+multiTimeframe: AtlasMtfResult;
+priceAction: PriceActionResult;
+liquidity: LiquidityResult;
+volume: VolumeAnalysisResult;
+marketStructure: MarketStructureResult;
+risk: AtlasRiskEngineResult;
 
-  minimumConfidence?: number;
+minimumConfidence?: number;
 };
 
 export type AtlasDecisionEngineResult = {
@@ -285,6 +295,109 @@ function calculateDirectionScore(
       "Both bullish and bearish liquidity sweeps exist in the analyzed candle window."
     );
   }
+// ----- Volume Analysis -----
+
+if (
+  input.volume.pressure === "BULLISH"
+) {
+  bullishScore += 10;
+
+  bullishReasons.push(
+    "Volume analysis confirms bullish buying pressure."
+  );
+}
+
+if (
+  input.volume.pressure === "BEARISH"
+) {
+  bearishScore += 10;
+
+  bearishReasons.push(
+    "Volume analysis confirms bearish selling pressure."
+  );
+}
+
+if (
+  input.volume.confirmation === "CONFIRMED"
+) {
+  if (
+    input.volume.pressure === "BULLISH"
+  ) {
+    bullishScore += 8;
+  }
+
+  if (
+    input.volume.pressure === "BEARISH"
+  ) {
+    bearishScore += 8;
+  }
+}
+
+if (
+  input.volume.spike
+) {
+  if (
+    input.volume.pressure === "BULLISH"
+  ) {
+    bullishScore += 5;
+  }
+
+  if (
+    input.volume.pressure === "BEARISH"
+  ) {
+    bearishScore += 5;
+  }
+}
+
+// ----- Market Structure -----
+
+if (
+  input.marketStructure.trend === "BULLISH"
+) {
+  bullishScore += 12;
+
+  bullishReasons.push(
+    "Market Structure Engine confirms a bullish structure."
+  );
+}
+
+if (
+  input.marketStructure.trend === "BEARISH"
+) {
+  bearishScore += 12;
+
+  bearishReasons.push(
+    "Market Structure Engine confirms a bearish structure."
+  );
+}
+
+if (
+  input.marketStructure.event ===
+  "BOS_BULLISH"
+) {
+  bullishScore += 10;
+}
+
+if (
+  input.marketStructure.event ===
+  "BOS_BEARISH"
+) {
+  bearishScore += 10;
+}
+
+if (
+  input.marketStructure.event ===
+  "CHOCH_BULLISH"
+) {
+  bullishScore += 6;
+}
+
+if (
+  input.marketStructure.event ===
+  "CHOCH_BEARISH"
+) {
+  bearishScore += 6;
+}
 
   if (
     input.priceAction.bullishBos &&
