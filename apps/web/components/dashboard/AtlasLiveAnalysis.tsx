@@ -21,6 +21,7 @@ import MultiTimeframeCard from "@/components/dashboard/MultiTimeframeCard";
 import type { AtlasMtfResult } from "@/lib/atlas/multiTimeframeEngine";
 import type { VolumeAnalysisResult } from "@/lib/atlas/volumeEngine";
 import type { MarketStructureResult } from "@/lib/atlas/marketStructureEngine";
+import type { OrderBlockResult } from "@/lib/atlas/orderBlockEngine";
 
 type TradeSetup = {
   direction: "LONG" | "SHORT" | "WAIT";
@@ -75,6 +76,7 @@ priceAction: PriceActionResult;
 liquidity: LiquidityResult;
 volume: VolumeAnalysisResult;
 marketStructure: MarketStructureResult;
+orderBlocks: OrderBlockResult;
 multiTimeframe: AtlasMtfResult;
   decision: AtlasDecision;
   tradeSetup: TradeSetup;
@@ -831,6 +833,9 @@ export default function AtlasLiveAnalysis() {
 
 <MarketStructureCard
   structure={data.marketStructure}
+/>
+<OrderBlockCard
+  orderBlocks={data.orderBlocks}
 />
 <MultiTimeframeCard
   mtf={data.multiTimeframe}
