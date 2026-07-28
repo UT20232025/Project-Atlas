@@ -1,6 +1,8 @@
 import { MARKET_SYMBOLS } from "../config/markets";
 import type { SignalType, TrendType } from "../types/market";
-import { getAtlasAnalysis } from "./atlasEngine";
+import { getCachedAtlasAnalysis } from "../atlas/atlasAnalysisCache";
+import type { AtlasTrendStatus } from "../atlas/atlasIndicators";
+import { fetchLiveMarketData } from "../services/liveMarketService";
 
 export type ScannerItem = {
   coin: string;
@@ -11,23 +13,64 @@ export type ScannerItem = {
   signal: SignalType;
   trend: TrendType;
   rsi: number;
+  reasons: string[];
+  explanation: string;
 };
 
-export async function getAtlasScanner(): Promise<ScannerItem[]> {
-  const analyses = await Promise.all(
-    MARKET_SYMBOLS.map((symbol) => getAtlasAnalysis(symbol))
-  );
+function mapTrendStatus(
+  status: AtlasTrendStatus
+): TrendType {
+  if (
+    status === "STRONG_BULLISH" ||
+    status === "BULLISH"
+  ) {
+    return "BULLISH";
+  }
 
-  return analyses
-    .map((analysis) => ({
-      coin: analysis.coin,
-      price: analysis.price,
-      change24h: analysis.change24h,
-      score: analysis.score,
-      confidence: analysis.confidence,
-      signal: analysis.signal,
-      trend: analysis.trend,
-      rsi: analysis.rsi,
-    }))
-    .sort((a, b) => b.confidence - a.confidence);
+  if (
+    status === "STRONG_BEARISH" ||
+    status === "BEARISH"
+  ) {
+    return "BEARISH";
+  }
+
+  return "NEUTRAL";
+}
+
+export async function getAtlasScanner(): Promise<ScannerItem[]> {
+  const [analyses, marketData] = await Promise.all([
+    Promise.all(
+      MARKET_SYMBOLS.map((symbol) =>
+        getCachedAtlasAnalysis(symbol)
+      )
+    ),
+    fetchLiveMarketData(MARKET_SYMBOLS),
+  ]);
+
+  const items = MARKET_SYMBOLS.map((symbol, index) => {
+    const analysis = analyses[index];
+    const market = marketData.find(
+      (item) => item.symbol === symbol
+    );
+
+    return {
+      coin: symbol,
+      price: market?.price ?? 0,
+      change24h: market?.change24h ?? 0,
+      score: analysis.analysis.score,
+      confidence: analysis.decision.confidence,
+      signal: analysis.decision.signal,
+      trend: mapTrendStatus(
+        analysis.indicators.trendStatus
+      ),
+      rsi: analysis.indicators.rawRsi,
+      reasons: analysis.decision.reasons,
+      explanation: analysis.decision.explanation,
+    };
+  });
+
+  return items.sort(
+    (first, second) =>
+      second.confidence - first.confidence
+  );
 }

@@ -2,12 +2,16 @@ type AtlasExplainProps = {
   signal: "LONG" | "SHORT" | "WAIT";
   confidence: number;
   reasons: string[];
+  warnings?: string[];
+  explanation?: string;
 };
 
 export default function AtlasExplain({
   signal,
   confidence,
   reasons,
+  warnings = [],
+  explanation,
 }: AtlasExplainProps) {
   const signalColor =
     signal === "LONG"
@@ -55,16 +59,31 @@ export default function AtlasExplain({
         ))}
       </div>
 
+      {warnings.length > 0 && (
+        <div className="mt-3 space-y-3">
+          {warnings.map((warning, index) => (
+            <div
+              key={index}
+              className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 p-4"
+            >
+              <div className="flex gap-3">
+                <span className="text-yellow-400">⚠</span>
+
+                <p className="text-zinc-300">{warning}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="mt-6 rounded-xl border border-blue-500/20 bg-blue-500/10 p-4">
         <p className="font-semibold text-blue-300">
           Atlas Summary
         </p>
 
         <p className="mt-2 text-zinc-300 leading-7">
-          Atlas combines momentum, EMA trend,
-          RSI strength and market confidence to
-          determine whether the current setup
-          statistically favors LONG, SHORT or WAIT.
+          {explanation ??
+            "Atlas combines momentum, EMA trend, RSI strength and market confidence to determine whether the current setup statistically favors LONG, SHORT or WAIT."}
         </p>
       </div>
     </section>

@@ -18,6 +18,7 @@ export type AtlasIndicatorResult = AtlasMarketInput & {
   ema50: number | null;
   ema200: number | null;
   trendStatus: AtlasTrendStatus;
+  rawRsi: number;
 };
 
 function clamp(
@@ -376,5 +377,6 @@ export function calculateAtlasIndicators(
     ema50,
     ema200,
     trendStatus,
+    rawRsi: calculateWilderRsi(closes),
   };
 }

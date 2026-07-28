@@ -15,6 +15,8 @@ import { getAtlasAnalysis } from "../../../lib/analysis/atlasEngine";
 import { getChartCandles } from "../../../lib/analysis/candles";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
+import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
+import type { MarketSymbol } from "../../../lib/services/liveMarketService";
 
 type Props = {
   params: Promise<{
@@ -25,12 +27,14 @@ type Props = {
 export default async function CoinPage({ params }: Props) {
   const { symbol } = await params;
 
-  const [analysis, candles, rsiHistory, macdHistory] = await Promise.all([
-    getAtlasAnalysis(symbol),
-    getChartCandles(symbol),
-    getRSIHistory(symbol),
-    getMACDHistory(symbol),
-  ]);
+  const [analysis, candles, rsiHistory, macdHistory, decisionAnalysis] =
+    await Promise.all([
+      getAtlasAnalysis(symbol),
+      getChartCandles(symbol),
+      getRSIHistory(symbol),
+      getMACDHistory(symbol),
+      getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
+    ]);
 
   const trendScore =
     analysis.trend === "BULLISH"
@@ -120,7 +124,11 @@ export default async function CoinPage({ params }: Props) {
       </div>
 
       <div className="mt-8">
-        <AtlasScoreBreakdownCard score={analysis.breakdown} />
+        <AtlasScoreBreakdownCard
+          analysis={decisionAnalysis.analysis}
+          bullishScore={decisionAnalysis.decision.bullishScore}
+          bearishScore={decisionAnalysis.decision.bearishScore}
+        />
       </div>
 
       <div className="mt-8">
@@ -137,9 +145,11 @@ export default async function CoinPage({ params }: Props) {
 
       <div className="mt-8">
         <AtlasExplain
-          signal={analysis.signal}
-          confidence={analysis.confidence}
-          reasons={analysis.reasons}
+          signal={decisionAnalysis.decision.signal}
+          confidence={decisionAnalysis.decision.confidence}
+          reasons={decisionAnalysis.decision.reasons}
+          warnings={decisionAnalysis.decision.warnings}
+          explanation={decisionAnalysis.decision.explanation}
         />
       </div>
 

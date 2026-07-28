@@ -12,24 +12,6 @@ import AppLayout from "../components/layout/AppLayout";
 import Watchlist from "../components/watchlist/Watchlist";
 import { getDashboardData } from "../lib/services/dashboardService";
 
-function createOpportunityReason(
-  signal: "LONG" | "SHORT" | "WAIT",
-  score: number,
-  change24h: number
-) {
-  if (signal === "LONG") {
-    return `Atlas detects bullish momentum with a confidence score of ${score}%. The market is ${
-      change24h >= 0 ? "strengthening" : "showing recovery potential"
-    }, but risk management should still be used.`;
-  }
-
-  if (signal === "SHORT") {
-    return `Atlas detects bearish pressure with a confidence score of ${score}%. Momentum currently favors further downside, although market conditions can change quickly.`;
-  }
-
-  return `Atlas does not currently see a high-quality entry. The confidence score is ${score}%, so waiting for stronger confirmation may provide a better risk-to-reward setup.`;
-}
-
 export default async function HomePage() {
   const dashboard = await getDashboardData();
 
@@ -85,11 +67,7 @@ export default async function HomePage() {
             score={opportunity.score}
             price={opportunity.price}
             change24h={opportunity.change24h}
-            reason={createOpportunityReason(
-              opportunity.signal,
-              opportunity.score,
-              opportunity.change24h
-            )}
+            reason={opportunity.explanation}
           />
         </div>
       )}

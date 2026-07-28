@@ -1,17 +1,21 @@
-import type { AtlasScoreBreakdown } from "../../lib/analysis/score";
+import type { AtlasAnalysis } from "../../lib/atlas/atlasEngine";
 
 type AtlasScoreBreakdownProps = {
-  score: AtlasScoreBreakdown;
+  analysis: AtlasAnalysis;
+  bullishScore: number;
+  bearishScore: number;
 };
 
 function ScoreRow({
   label,
   value,
   max,
+  color = "bg-blue-500",
 }: {
   label: string;
   value: number;
   max: number;
+  color?: string;
 }) {
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
@@ -26,7 +30,7 @@ function ScoreRow({
 
       <div className="h-2 overflow-hidden rounded-full bg-zinc-800">
         <div
-          className="h-full rounded-full bg-blue-500 transition-all duration-500"
+          className={`h-full rounded-full ${color} transition-all duration-500`}
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -35,7 +39,9 @@ function ScoreRow({
 }
 
 export default function AtlasScoreBreakdownCard({
-  score,
+  analysis,
+  bullishScore,
+  bearishScore,
 }: AtlasScoreBreakdownProps) {
   return (
     <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
@@ -50,17 +56,42 @@ export default function AtlasScoreBreakdownCard({
         <div className="text-right">
           <p className="text-sm text-zinc-500">Total</p>
           <p className="text-4xl font-bold text-blue-400">
-            {score.total}
+            {analysis.score}
           </p>
         </div>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
-        <ScoreRow label="Trend" value={score.trend} max={25} />
-        <ScoreRow label="Momentum" value={score.momentum} max={25} />
-        <ScoreRow label="Volume" value={score.volume} max={20} />
-        <ScoreRow label="Market Context" value={score.market} max={20} />
-        <ScoreRow label="Risk" value={score.risk} max={10} />
+        {analysis.factors.map((factor) => (
+          <ScoreRow
+            key={factor.name}
+            label={factor.label}
+            value={factor.score}
+            max={factor.maxScore}
+          />
+        ))}
+      </div>
+
+      <div className="mt-8 border-t border-zinc-800 pt-6">
+        <p className="mb-4 text-sm text-zinc-500">
+          AI Decision Engine — inkluderer market structure,
+          liquidity, order blocks og fair value gaps
+        </p>
+
+        <div className="grid gap-5 md:grid-cols-2">
+          <ScoreRow
+            label="Bullish score"
+            value={bullishScore}
+            max={100}
+            color="bg-green-500"
+          />
+          <ScoreRow
+            label="Bearish score"
+            value={bearishScore}
+            max={100}
+            color="bg-red-500"
+          />
+        </div>
       </div>
     </section>
   );
