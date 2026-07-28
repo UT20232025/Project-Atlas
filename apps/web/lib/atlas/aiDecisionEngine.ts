@@ -17,6 +17,13 @@ import type {
   MarketStructureResult,
 } from "@/lib/atlas/marketStructureEngine";
 
+import type {
+  OrderBlockResult,
+} from "@/lib/atlas/orderBlockEngine";
+
+import type {
+  FairValueGapResult,
+} from "@/lib/atlas/fairValueGapEngine";
 
 import type {
   AtlasRiskEngineResult,
@@ -42,6 +49,8 @@ priceAction: PriceActionResult;
 liquidity: LiquidityResult;
 volume: VolumeAnalysisResult;
 marketStructure: MarketStructureResult;
+orderBlocks: OrderBlockResult;
+fairValueGaps: FairValueGapResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -397,6 +406,70 @@ if (
   "CHOCH_BEARISH"
 ) {
   bearishScore += 6;
+}
+
+// ----- Order Blocks -----
+
+if (
+  input.orderBlocks.nearestBullishOrderBlock
+) {
+  bullishScore += Math.round(
+    (input.orderBlocks.nearestBullishOrderBlock
+      .strength /
+      100) *
+      10
+  );
+
+  bullishReasons.push(
+    "An active bullish order block is providing support near the current price."
+  );
+}
+
+if (
+  input.orderBlocks.nearestBearishOrderBlock
+) {
+  bearishScore += Math.round(
+    (input.orderBlocks.nearestBearishOrderBlock
+      .strength /
+      100) *
+      10
+  );
+
+  bearishReasons.push(
+    "An active bearish order block is providing resistance near the current price."
+  );
+}
+
+// ----- Fair Value Gaps -----
+
+if (
+  input.fairValueGaps.nearestBullishFairValueGap
+) {
+  bullishScore += Math.round(
+    (input.fairValueGaps.nearestBullishFairValueGap
+      .strength /
+      100) *
+      8
+  );
+
+  bullishReasons.push(
+    "An unfilled bullish fair value gap supports upward continuation."
+  );
+}
+
+if (
+  input.fairValueGaps.nearestBearishFairValueGap
+) {
+  bearishScore += Math.round(
+    (input.fairValueGaps.nearestBearishFairValueGap
+      .strength /
+      100) *
+      8
+  );
+
+  bearishReasons.push(
+    "An unfilled bearish fair value gap supports downward continuation."
+  );
 }
 
   if (

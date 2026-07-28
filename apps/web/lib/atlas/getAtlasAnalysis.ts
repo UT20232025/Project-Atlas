@@ -505,6 +505,12 @@ const decision =
     marketStructure:
       requestedSnapshot.marketStructure,
 
+    orderBlocks:
+      requestedSnapshot.orderBlocks,
+
+    fairValueGaps:
+      requestedSnapshot.fairValueGaps,
+
     risk,
   });
 
