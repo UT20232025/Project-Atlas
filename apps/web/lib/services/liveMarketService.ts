@@ -1,9 +1,6 @@
-export const MARKET_SYMBOLS = [
-  "BTCUSDT",
-  "ETHUSDT",
-  "SOLUSDT",
-  "XRPUSDT",
-] as const;
+import { MARKET_SYMBOLS as ATLAS_MARKET_SYMBOLS } from "@/lib/config/markets";
+
+export const MARKET_SYMBOLS = ATLAS_MARKET_SYMBOLS;
 
 export type MarketSymbol = (typeof MARKET_SYMBOLS)[number];
 

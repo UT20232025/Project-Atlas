@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getAtlasAnalysis } from "@/lib/atlas/getAtlasAnalysis";
+import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
 import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 import {
   MARKET_SYMBOLS,
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const result = await getAtlasAnalysis(
+    const result = await getCachedAtlasAnalysis(
       symbol,
       interval
     );
