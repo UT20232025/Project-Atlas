@@ -6,6 +6,7 @@ import {
   calculateAtr,
   type AtlasCandle,
 } from "@/lib/atlas/atlasIndicators";
+import type { FairValueGapResult } from "@/lib/atlas/fairValueGapEngine";
 import type { AtlasPriceLevels } from "@/lib/atlas/supportResistance";
 
 export type TradeDirection = "LONG" | "SHORT" | "WAIT";
@@ -28,6 +29,7 @@ type CreateTradeSetupInput = {
   confidence: number;
   risk: AtlasRisk;
   priceLevels: AtlasPriceLevels;
+  fairValueGaps: FairValueGapResult;
 };
 
 type StopLossResult = {
@@ -80,15 +82,10 @@ function calculateRiskReward(
     return null;
   }
 
-  return (
-    Math.round((rewardDistance / riskDistance) * 100) /
-    100
-  );
+  return Math.round((rewardDistance / riskDistance) * 100) / 100;
 }
 
-function getDirection(
-  signal: AtlasSignal
-): TradeDirection {
+function getDirection(signal: AtlasSignal): TradeDirection {
   if (
     signal === "LONG" ||
     signal === "STRONG_LONG"
@@ -372,6 +369,7 @@ function createExplanation({
   firstTargetLimitedByStructure,
   secondTargetLimitedByStructure,
   priceLevels,
+  fairValueGaps,
 }: {
   direction: Exclude<TradeDirection, "WAIT">;
   risk: AtlasRisk;
@@ -381,6 +379,7 @@ function createExplanation({
   firstTargetLimitedByStructure: boolean;
   secondTargetLimitedByStructure: boolean;
   priceLevels: AtlasPriceLevels;
+  fairValueGaps: FairValueGapResult;
 }): string {
   const parts: string[] = [];
 
@@ -448,6 +447,28 @@ function createExplanation({
     );
   }
 
+  if (
+    direction === "LONG" &&
+    fairValueGaps.nearestBullishFairValueGap
+  ) {
+    parts.push(
+      `A nearby bullish Fair Value Gap around ${formatPrice(
+        fairValueGaps.nearestBullishFairValueGap.midpoint
+      )} provides additional support for the setup.`
+    );
+  }
+
+  if (
+    direction === "SHORT" &&
+    fairValueGaps.nearestBearishFairValueGap
+  ) {
+    parts.push(
+      `A nearby bearish Fair Value Gap around ${formatPrice(
+        fairValueGaps.nearestBearishFairValueGap.midpoint
+      )} provides additional resistance for the setup.`
+    );
+  }
+
   return parts.join(" ");
 }
 
@@ -473,6 +494,7 @@ export function createTradeSetup({
   confidence,
   risk,
   priceLevels,
+  fairValueGaps,
 }: CreateTradeSetupInput): AtlasTradeSetup {
   const direction = getDirection(signal);
   const latestCandle = candles.at(-1);
@@ -615,6 +637,7 @@ export function createTradeSetup({
       secondTargetLimitedByStructure:
         targetResult.secondTargetLimitedByStructure,
       priceLevels,
+      fairValueGaps,
     }),
   };
 }

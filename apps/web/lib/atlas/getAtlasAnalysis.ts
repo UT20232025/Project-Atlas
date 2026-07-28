@@ -536,6 +536,8 @@ const decision =
       priceLevels:
         requestedSnapshot
           .priceLevels,
+          fairValueGaps:
+  requestedSnapshot.fairValueGaps,
     });
 
   return {

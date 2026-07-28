@@ -2,14 +2,9 @@ import type { AtlasMarketInput } from "@/lib/atlas/atlasEngine";
 import { calculateLatestEma } from "./indicators/ema";
 import { calculateMacdScore } from "./indicators/macd";
 import { calculateWilderRsi } from "./indicators/rsi";
+import type { AtlasCandle } from "./atlasTypes";
 
-export type AtlasCandle = {
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-};
+export type { AtlasCandle } from "./atlasTypes";
 
 export type AtlasTrendStatus =
   | "STRONG_BULLISH"
