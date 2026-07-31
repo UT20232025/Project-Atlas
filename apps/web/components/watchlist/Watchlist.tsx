@@ -363,7 +363,7 @@ export default function Watchlist({
       )}
 
       <div className="overflow-hidden rounded-xl border border-zinc-800">
-        <div className="grid grid-cols-[1.2fr_1fr_1fr_1fr_36px] gap-3 border-b border-zinc-800 bg-zinc-950/70 px-4 py-3 text-xs font-medium text-zinc-500">
+        <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_24px] gap-1.5 border-b border-zinc-800 bg-zinc-950/70 px-3 py-3 text-xs font-medium text-zinc-500">
           <button
             type="button"
             onClick={() => updateSorting("symbol")}
@@ -420,27 +420,24 @@ export default function Watchlist({
             return (
               <div
                 key={item.symbol}
-                className="grid grid-cols-[1.2fr_1fr_1fr_1fr_36px] items-center gap-3 border-b border-zinc-800/70 px-4 py-4 last:border-b-0 hover:bg-zinc-900/40"
+                className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_24px] items-center gap-1.5 border-b border-zinc-800/70 px-3 py-3 last:border-b-0 hover:bg-zinc-900/40"
               >
                 <Link
                   href={`/coin/${item.symbol}`}
                   className="min-w-0"
                 >
-                  <p className="font-semibold text-white">
+                  <p className="truncate font-semibold text-white">
                     {formatMarketSymbol(item.symbol)}
                   </p>
 
-                  <p className="text-xs text-zinc-600">
-                    USDT
-                  </p>
                 </Link>
 
-                <p className="text-right text-sm font-medium text-zinc-200">
+                <p className="text-right text-xs font-medium text-zinc-200">
                   ${formatMarketPrice(item.price)}
                 </p>
 
                 <p
-                  className={`text-right text-sm font-semibold ${
+                  className={`text-right text-xs font-semibold ${
                     isPositive
                       ? "text-green-400"
                       : "text-red-400"
@@ -451,19 +448,13 @@ export default function Watchlist({
                 </p>
 
                 {atlasSignal ? (
-                  <div className="flex flex-col items-start gap-1">
-                    <Badge
-                      variant={getSignalBadgeVariant(
-                        atlasSignal.signal
-                      )}
-                    >
-                      {atlasSignal.signal}
-                    </Badge>
-
-                    <span className="text-[11px] text-zinc-600">
-                      {atlasSignal.confidence}%
-                    </span>
-                  </div>
+                  <Badge
+                    variant={getSignalBadgeVariant(
+                      atlasSignal.signal
+                    )}
+                  >
+                    {atlasSignal.signal}
+                  </Badge>
                 ) : (
                   <span className="text-xs text-zinc-700">
                     —
