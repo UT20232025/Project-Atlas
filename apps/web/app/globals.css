@@ -134,10 +134,58 @@
 }
 
 body {
-  background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 30%),
-    radial-gradient(circle at top right, rgba(16, 185, 129, 0.06), transparent 26%),
-    #09090b;
+  background: #050609;
+}
+
+@keyframes atlas-drift-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(50px, 40px) scale(1.08);
+  }
+}
+
+@keyframes atlas-drift-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 50px) scale(1.05);
+  }
+}
+
+@keyframes atlas-drift-c {
+  0%,
+  100% {
+    transform: translate(-50%, 0) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -40px) scale(1.1);
+  }
+}
+
+.atlas-drift-a {
+  animation: atlas-drift-a 22s ease-in-out infinite;
+}
+
+.atlas-drift-b {
+  animation: atlas-drift-b 26s ease-in-out infinite;
+}
+
+.atlas-drift-c {
+  animation: atlas-drift-c 30s ease-in-out infinite;
+  transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-drift-a,
+  .atlas-drift-b,
+  .atlas-drift-c {
+    animation: none;
+  }
 }
 
 .atlas-card {

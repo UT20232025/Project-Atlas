@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import SearchDialog from "../search/SearchDialog";
+import AmbientBackground from "./AmbientBackground";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
@@ -24,7 +25,8 @@ export default function AppLayout({
   marketTicker,
 }: AppLayoutProps) {
   return (
-    <div className="min-h-screen bg-zinc-950 text-white">
+    <div className="min-h-screen text-white">
+      <AmbientBackground />
       <SearchDialog />
 
       <div className="flex min-h-screen">
