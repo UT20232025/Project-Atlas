@@ -1,5 +1,6 @@
 import { Bell, Search, User } from "lucide-react";
 import MarketTicker from "./MarketTicker";
+import MobileNav from "./MobileNav";
 
 type TopbarProps = {
   marketTicker?: {
@@ -18,14 +19,18 @@ export default function Topbar({ marketTicker }: TopbarProps) {
   return (
     <header className="border-b border-zinc-800 bg-zinc-950">
       <div className="flex min-h-20 items-center justify-between gap-4 px-6 py-4">
-        <div>
-          <p className="text-sm text-zinc-500">
-            Trading Command Center
-          </p>
+        <div className="flex items-center gap-4">
+          <MobileNav />
 
-          <h2 className="text-xl font-semibold text-white">
-            Dashboard
-          </h2>
+          <div>
+            <p className="text-sm text-zinc-500">
+              Trading Command Center
+            </p>
+
+            <h2 className="text-xl font-semibold text-white">
+              Dashboard
+            </h2>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
