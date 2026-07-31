@@ -31,12 +31,12 @@ const menu = [
   },
   {
     title: "Journal",
-    href: "/",
+    href: "/journal",
     icon: "📒",
   },
   {
     title: "Portfolio",
-    href: "/",
+    href: "/portfolio",
     icon: "💼",
   },
   {

@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/lib/generated/prisma
+
+# prisma sqlite database (local dev data, not shared)
+/dev.db
+/dev.db-journal
+/dev.db-shm
+/dev.db-wal
+
+# AI agent reference docs bundled by `prisma init` (local tooling aid, not project code)
+/.agents/skills/prisma-*
+/.claude/skills/prisma-*
+/.windsurf/skills/prisma-*
+/skills-lock.json
