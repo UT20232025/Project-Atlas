@@ -37,13 +37,16 @@ model JournalEntry {
 }
 
 model SignalSnapshot {
-  id         String   @id @default(cuid())
-  symbol     String
-  interval   String
-  signal     String
-  confidence Int
-  score      Int
-  createdAt  DateTime @default(now())
+  id           String    @id @default(cuid())
+  symbol       String
+  interval     String
+  signal       String
+  confidence   Int
+  score        Int
+  price        Float?
+  outcomePrice Float?
+  outcomeAt    DateTime?
+  createdAt    DateTime  @default(now())
 
   @@index([symbol, interval, createdAt])
 }

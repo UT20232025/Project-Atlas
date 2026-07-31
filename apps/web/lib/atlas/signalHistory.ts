@@ -17,6 +17,7 @@ type SignalDecision = {
   signal: AtlasTradeDirection;
   confidence: number;
   score: number;
+  entry: number | null;
 };
 
 export async function recordSignalIfChanged(
@@ -41,6 +42,7 @@ export async function recordSignalIfChanged(
         signal: decision.signal,
         confidence: decision.confidence,
         score: decision.score,
+        price: decision.entry,
       },
     });
   } catch (error) {

@@ -68,6 +68,7 @@ v0.5 — fullført (v0.4 og v0.6 er også fullført, se docs/ROADMAP.md). Neste 
 - Trading Journal (`/journal`) — lukkede posisjoner logges automatisk, manuell registrering, CSV-eksport
 - Signalhistorikk — signalendringer logges automatisk (kun ved endring, ikke hver poll), vist per coin og som markedsbred feed på forsiden
 - Egendefinerte Watchlists — flere navngitte lister (SQLite via Prisma), erstatter den gamle enkle favoritt-listen; eksisterende favoritter migreres automatisk første gang
+- Track Record (`/track-record`) — verifisert 24t-utfall for hvert LONG/SHORT Atlas-signal (entry-pris lagres ved signalet, exit-pris hentes 24t senere fra Binance); eksisterende signaler backfilles automatisk med historiske priser første gang siden lastes
 
 ---
 

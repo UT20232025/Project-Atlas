@@ -57,6 +57,7 @@
 - Trendstyrke ✅
 - Volumanalyse ✅
 - Markedskontekst ✅
+- Verified Track Record (24t signalytelse) ✅
 
 ---
 

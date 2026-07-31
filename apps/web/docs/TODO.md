@@ -17,6 +17,7 @@
 - [x] Egendefinerte Watchlists (flere navngitte lister, migrert fra gamle favoritter)
 - [x] Favoritt-coins (dekket av egendefinerte watchlists)
 - [x] Eksporter journal til CSV
+- [x] Verified Track Record (24t-utfall per LONG/SHORT-signal, automatisk backfill av historiske priser)
 
 ---
 

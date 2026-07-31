@@ -36,6 +36,11 @@ export const menu = [
     icon: "📒",
   },
   {
+    title: "Track Record",
+    href: "/track-record",
+    icon: "🏆",
+  },
+  {
     title: "Portfolio",
     href: "/portfolio",
     icon: "💼",

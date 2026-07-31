@@ -74,3 +74,39 @@ export async function fetchBinanceCandles(
     volume: Number(kline[5]),
   }));
 }
+
+export async function fetchHistoricalClosePrice(
+  symbol: MarketSymbol,
+  interval: BinanceInterval,
+  atOrBeforeMs: number
+): Promise<number | null> {
+  const searchParams = new URLSearchParams({
+    symbol,
+    interval,
+    endTime: String(atOrBeforeMs),
+    limit: "1",
+  });
+
+  try {
+    const response = await fetch(
+      `${BINANCE_API_URL}?${searchParams.toString()}`,
+      {
+        cache: "force-cache",
+      }
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const data = (await response.json()) as BinanceKline[];
+
+    if (!Array.isArray(data) || data.length === 0) {
+      return null;
+    }
+
+    return Number(data[0][4]);
+  } catch {
+    return null;
+  }
+}

@@ -1,0 +1,229 @@
+import { prisma } from "@/lib/db/client";
+import { fetchHistoricalClosePrice } from "@/lib/services/binanceCandleService";
+import type { BinanceInterval } from "@/lib/services/binanceCandleService";
+import type { MarketSymbol } from "@/lib/services/liveMarketService";
+
+const HORIZON_MS = 24 * 60 * 60 * 1000;
+
+export type TrackRecordTrade = {
+  id: string;
+  symbol: MarketSymbol;
+  interval: BinanceInterval;
+  signal: "LONG" | "SHORT";
+  confidence: number;
+  entryPrice: number;
+  createdAt: string;
+  horizonAt: string;
+  status: "OPEN" | "CLOSED";
+  exitPrice: number | null;
+  pnlPercent: number | null;
+};
+
+export type TrackRecordSymbolBreakdown = {
+  symbol: MarketSymbol;
+  trades: number;
+  wins: number;
+  winRate: number;
+  avgPnlPercent: number;
+};
+
+export type TrackRecordSummary = {
+  totalClosed: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  avgPnlPercent: number;
+  bestTrade: TrackRecordTrade | null;
+  worstTrade: TrackRecordTrade | null;
+  closedTrades: TrackRecordTrade[];
+  openPositions: TrackRecordTrade[];
+  bySymbol: TrackRecordSymbolBreakdown[];
+};
+
+function calculatePnlPercent(
+  signal: "LONG" | "SHORT",
+  entryPrice: number,
+  exitPrice: number
+): number {
+  const rawChange =
+    ((exitPrice - entryPrice) / entryPrice) * 100;
+
+  return signal === "SHORT" ? -rawChange : rawChange;
+}
+
+export async function getTrackRecord(): Promise<TrackRecordSummary> {
+  const snapshots = await prisma.signalSnapshot.findMany({
+    where: {
+      signal: { in: ["LONG", "SHORT"] },
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
+  const closedTrades: TrackRecordTrade[] = [];
+  const openPositions: TrackRecordTrade[] = [];
+
+  for (const snapshot of snapshots) {
+    const symbol = snapshot.symbol as MarketSymbol;
+    const interval = snapshot.interval as BinanceInterval;
+    const signal = snapshot.signal as "LONG" | "SHORT";
+    const createdAtMs = snapshot.createdAt.getTime();
+    const horizonAtMs = createdAtMs + HORIZON_MS;
+
+    let entryPrice = snapshot.price;
+
+    if (entryPrice == null) {
+      entryPrice = await fetchHistoricalClosePrice(
+        symbol,
+        interval,
+        createdAtMs
+      );
+
+      if (entryPrice != null) {
+        await prisma.signalSnapshot.update({
+          where: { id: snapshot.id },
+          data: { price: entryPrice },
+        });
+      }
+    }
+
+    if (entryPrice == null) {
+      continue;
+    }
+
+    if (Date.now() < horizonAtMs) {
+      openPositions.push({
+        id: snapshot.id,
+        symbol,
+        interval,
+        signal,
+        confidence: snapshot.confidence,
+        entryPrice,
+        createdAt: snapshot.createdAt.toISOString(),
+        horizonAt: new Date(horizonAtMs).toISOString(),
+        status: "OPEN",
+        exitPrice: null,
+        pnlPercent: null,
+      });
+
+      continue;
+    }
+
+    let exitPrice = snapshot.outcomePrice;
+
+    if (exitPrice == null) {
+      exitPrice = await fetchHistoricalClosePrice(
+        symbol,
+        interval,
+        horizonAtMs
+      );
+
+      if (exitPrice != null) {
+        await prisma.signalSnapshot.update({
+          where: { id: snapshot.id },
+          data: {
+            outcomePrice: exitPrice,
+            outcomeAt: new Date(horizonAtMs),
+          },
+        });
+      }
+    }
+
+    if (exitPrice == null) {
+      continue;
+    }
+
+    closedTrades.push({
+      id: snapshot.id,
+      symbol,
+      interval,
+      signal,
+      confidence: snapshot.confidence,
+      entryPrice,
+      createdAt: snapshot.createdAt.toISOString(),
+      horizonAt: new Date(horizonAtMs).toISOString(),
+      status: "CLOSED",
+      exitPrice,
+      pnlPercent: calculatePnlPercent(
+        signal,
+        entryPrice,
+        exitPrice
+      ),
+    });
+  }
+
+  const wins = closedTrades.filter(
+    (trade) => (trade.pnlPercent ?? 0) > 0
+  ).length;
+
+  const totalClosed = closedTrades.length;
+
+  const avgPnlPercent =
+    totalClosed === 0
+      ? 0
+      : closedTrades.reduce(
+          (sum, trade) => sum + (trade.pnlPercent ?? 0),
+          0
+        ) / totalClosed;
+
+  const bestTrade = closedTrades.reduce<TrackRecordTrade | null>(
+    (best, trade) =>
+      !best ||
+      (trade.pnlPercent ?? 0) > (best.pnlPercent ?? 0)
+        ? trade
+        : best,
+    null
+  );
+
+  const worstTrade = closedTrades.reduce<TrackRecordTrade | null>(
+    (worst, trade) =>
+      !worst ||
+      (trade.pnlPercent ?? 0) < (worst.pnlPercent ?? 0)
+        ? trade
+        : worst,
+    null
+  );
+
+  const bySymbolMap = new Map<
+    MarketSymbol,
+    { trades: number; wins: number; pnlSum: number }
+  >();
+
+  for (const trade of closedTrades) {
+    const entry = bySymbolMap.get(trade.symbol) ?? {
+      trades: 0,
+      wins: 0,
+      pnlSum: 0,
+    };
+
+    entry.trades += 1;
+    entry.wins += (trade.pnlPercent ?? 0) > 0 ? 1 : 0;
+    entry.pnlSum += trade.pnlPercent ?? 0;
+
+    bySymbolMap.set(trade.symbol, entry);
+  }
+
+  const bySymbol: TrackRecordSymbolBreakdown[] = Array.from(
+    bySymbolMap.entries()
+  )
+    .map(([symbol, entry]) => ({
+      symbol,
+      trades: entry.trades,
+      wins: entry.wins,
+      winRate: (entry.wins / entry.trades) * 100,
+      avgPnlPercent: entry.pnlSum / entry.trades,
+    }))
+    .sort((a, b) => b.trades - a.trades);
+
+  return {
+    totalClosed,
+    wins,
+    losses: totalClosed - wins,
+    winRate: totalClosed === 0 ? 0 : (wins / totalClosed) * 100,
+    avgPnlPercent,
+    bestTrade,
+    worstTrade,
+    closedTrades: closedTrades.slice().reverse(),
+    openPositions: openPositions.slice().reverse(),
+    bySymbol,
+  };
+}
