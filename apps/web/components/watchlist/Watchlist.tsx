@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
+import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
 import {
   formatMarketPrice,
@@ -15,7 +16,22 @@ import {
 type SortField = "symbol" | "price" | "change24h";
 type SortDirection = "asc" | "desc";
 
+type AtlasSignal = "LONG" | "SHORT" | "WAIT";
+
+type AtlasSignalMap = Record<
+  string,
+  { signal: AtlasSignal; confidence: number }
+>;
+
 const FAVORITES_STORAGE_KEY = "genwelth-watchlist-favorites";
+
+function getSignalBadgeVariant(
+  signal: AtlasSignal
+): "green" | "red" | "yellow" {
+  if (signal === "LONG") return "green";
+  if (signal === "SHORT") return "red";
+  return "yellow";
+}
 
 function getStoredFavorites(): MarketSymbol[] {
   if (typeof window === "undefined") {
@@ -65,6 +81,61 @@ export default function Watchlist() {
   const [showFavoritesOnly, setShowFavoritesOnly] =
     useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [atlasSignals, setAtlasSignals] =
+    useState<AtlasSignalMap>({});
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadAtlasSignals() {
+      try {
+        const response = await fetch(
+          "/api/atlas/scanner",
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = (await response.json()) as {
+          items: {
+            coin: string;
+            signal: AtlasSignal;
+            confidence: number;
+          }[];
+        };
+
+        if (isCancelled) {
+          return;
+        }
+
+        const nextSignals: AtlasSignalMap = {};
+
+        for (const item of data.items) {
+          nextSignals[item.coin] = {
+            signal: item.signal,
+            confidence: item.confidence,
+          };
+        }
+
+        setAtlasSignals(nextSignals);
+      } catch {
+        // Keep showing the last known signals on failure.
+      }
+    }
+
+    void loadAtlasSignals();
+
+    const interval = window.setInterval(() => {
+      void loadAtlasSignals();
+    }, 30_000);
+
+    return () => {
+      isCancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
 
   async function handleRefresh() {
     try {
@@ -190,7 +261,7 @@ export default function Watchlist() {
       )}
 
       <div className="overflow-hidden rounded-xl border border-zinc-800">
-        <div className="grid grid-cols-[1.2fr_1fr_1fr_36px] gap-3 border-b border-zinc-800 bg-zinc-950/70 px-4 py-3 text-xs font-medium text-zinc-500">
+        <div className="grid grid-cols-[1.2fr_1fr_1fr_1fr_36px] gap-3 border-b border-zinc-800 bg-zinc-950/70 px-4 py-3 text-xs font-medium text-zinc-500">
           <button
             type="button"
             onClick={() => updateSorting("symbol")}
@@ -215,6 +286,8 @@ export default function Watchlist() {
             24h{getSortIndicator("change24h")}
           </button>
 
+          <span>Atlas</span>
+
           <span />
         </div>
 
@@ -238,11 +311,12 @@ export default function Watchlist() {
               item.symbol
             );
             const isPositive = item.change24h >= 0;
+            const atlasSignal = atlasSignals[item.symbol];
 
             return (
               <div
                 key={item.symbol}
-                className="grid grid-cols-[1.2fr_1fr_1fr_36px] items-center gap-3 border-b border-zinc-800/70 px-4 py-4 last:border-b-0 hover:bg-zinc-900/40"
+                className="grid grid-cols-[1.2fr_1fr_1fr_1fr_36px] items-center gap-3 border-b border-zinc-800/70 px-4 py-4 last:border-b-0 hover:bg-zinc-900/40"
               >
                 <Link
                   href={`/coin/${item.symbol}`}
@@ -271,6 +345,26 @@ export default function Watchlist() {
                   {isPositive ? "+" : ""}
                   {item.change24h.toFixed(2)}%
                 </p>
+
+                {atlasSignal ? (
+                  <div className="flex flex-col items-start gap-1">
+                    <Badge
+                      variant={getSignalBadgeVariant(
+                        atlasSignal.signal
+                      )}
+                    >
+                      {atlasSignal.signal}
+                    </Badge>
+
+                    <span className="text-[11px] text-zinc-600">
+                      {atlasSignal.confidence}%
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-xs text-zinc-700">
+                    —
+                  </span>
+                )}
 
                 <button
                   type="button"
