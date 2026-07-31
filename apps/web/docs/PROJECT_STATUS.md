@@ -47,9 +47,18 @@ v0.3 (Vacation Release)
 
 ## Analyse
 
-- Atlas Engine
+- Atlas Engine (trend, RSI, MACD, volum, liquidity, market structure, order blocks, fair value gaps, multi-timeframe, AI decision engine)
 - Dashboard Service
 - Score-beregning
+- Opportunity Card (ekte Atlas-analyse)
+- Atlas Alerts (pris, 24t-endring og signal/confidence-baserte varsler)
+- Live Watchlist (signal + confidence per coin, oppdateres hvert 30. sekund)
+
+---
+
+## Kvalitet
+
+- Vitest satt opp med innledende dekning av kjernelogikken (atlasEngine, orderBlockEngine, fairValueGapEngine, aiDecisionEngine)
 
 ---
 
@@ -80,11 +89,10 @@ v0.3 (Vacation Release)
 
 # Neste prioriteringer
 
-1. Live Watchlist
-2. Opportunity Card
-3. Alerts
-4. Portfolio
-5. Trading Journal
+1. Signalhistorikk (v0.4 gjenstår)
+2. Portfolio
+3. Trading Journal
+4. Egendefinerte Watchlists / Favoritt-coins
 
 ---
 

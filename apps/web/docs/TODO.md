@@ -2,11 +2,11 @@
 
 ## Høy prioritet
 
-- [ ] Live Watchlist
-- [ ] Opportunity Card
-- [ ] Atlas Alerts
-- [ ] Forbedre Atlas Score
-- [ ] Flere markedsindikatorer
+- [x] Live Watchlist
+- [x] Opportunity Card
+- [x] Atlas Alerts (inkl. signal-baserte varsler)
+- [x] Forbedre Atlas Score
+- [x] Flere markedsindikatorer (liquidity, order blocks, fair value gaps, market structure, multi-timeframe)
 
 ---
 
@@ -36,7 +36,7 @@
 - [ ] Optimalisere API-kall
 - [ ] Forbedre feilhåndtering
 - [ ] Redusere unødvendige re-renders
-- [ ] Flere enhetstester
+- [ ] Flere enhetstester (Vitest satt opp, dekker atlasEngine/orderBlockEngine/fairValueGapEngine/aiDecisionEngine — liquidity, market structure og trend-motorene mangler fortsatt)
 
 ---
 
