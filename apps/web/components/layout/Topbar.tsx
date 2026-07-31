@@ -1,4 +1,6 @@
 import { Bell, Search, User } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import MarketTicker from "./MarketTicker";
 import MobileNav from "./MobileNav";
 
@@ -21,6 +23,22 @@ export default function Topbar({ marketTicker }: TopbarProps) {
       <div className="flex min-h-20 items-center justify-between gap-4 px-6 py-4">
         <div className="flex items-center gap-4">
           <MobileNav />
+
+          <Link
+            href="/"
+            className="flex items-center gap-3"
+          >
+            <Image
+              src="/logo-mark.png"
+              alt="Genwelth AI"
+              width={740}
+              height={638}
+              priority
+              className="h-9 w-auto"
+            />
+
+            <span className="hidden h-8 w-px bg-zinc-800 sm:block" />
+          </Link>
 
           <div>
             <p className="text-sm text-zinc-500">
