@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import PortfolioView from "@/components/portfolio/PortfolioView";
+import { requireSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import type {
   MarketSymbol,
@@ -12,7 +13,10 @@ import type {
 import { closePosition, createPosition, deletePosition } from "./actions";
 
 export default async function PortfolioPage() {
+  const { userId, email } = await requireSession();
+
   const positions = await prisma.position.findMany({
+    where: { userId },
     orderBy: { openedAt: "desc" },
   });
 
@@ -29,7 +33,7 @@ export default async function PortfolioPage() {
   );
 
   return (
-    <AppLayout>
+    <AppLayout userEmail={email}>
       <PortfolioView
         positions={positionViews}
         createPositionAction={createPosition}

@@ -1,8 +1,9 @@
-import { Bell, Search, User } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import MarketTicker from "./MarketTicker";
 import MobileNav from "./MobileNav";
+import UserMenu from "./UserMenu";
 
 type TopbarProps = {
   marketTicker?: {
@@ -15,9 +16,10 @@ type TopbarProps = {
     fearGreed: number;
     btcDominance: number;
   };
+  userEmail?: string;
 };
 
-export default function Topbar({ marketTicker }: TopbarProps) {
+export default function Topbar({ marketTicker, userEmail }: TopbarProps) {
   return (
     <header className="border-b border-zinc-800 bg-zinc-950">
       <div className="flex min-h-20 items-center justify-between gap-4 px-6 py-4">
@@ -73,25 +75,7 @@ export default function Topbar({ marketTicker }: TopbarProps) {
             <Bell size={19} />
           </button>
 
-          <button
-            type="button"
-            aria-label="Open user menu"
-            className="flex items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-3 py-2 text-zinc-300 transition hover:border-zinc-700 hover:text-white"
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600">
-              <User size={18} />
-            </span>
-
-            <span className="hidden text-left sm:block">
-              <span className="block text-sm font-medium">
-                Christer
-              </span>
-
-              <span className="block text-xs text-zinc-500">
-                Free Beta
-              </span>
-            </span>
-          </button>
+          <UserMenu email={userEmail} />
         </div>
       </div>
 

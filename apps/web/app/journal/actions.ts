@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import { requireSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import {
   parseDirection,
@@ -14,6 +15,8 @@ import { calculatePnl } from "@/lib/trading/pnl";
 export async function createJournalEntry(
   formData: FormData
 ) {
+  const { userId } = await requireSession();
+
   const symbol = parseSymbol(formData.get("symbol"));
   const direction = parseDirection(formData.get("direction"));
 
@@ -51,6 +54,7 @@ export async function createJournalEntry(
 
   await prisma.journalEntry.create({
     data: {
+      userId,
       symbol,
       direction,
       entryPrice,
@@ -69,12 +73,14 @@ export async function createJournalEntry(
 export async function deleteJournalEntry(
   formData: FormData
 ) {
+  const { userId } = await requireSession();
+
   const entryId = String(
     formData.get("entryId") ?? ""
   );
 
-  await prisma.journalEntry.delete({
-    where: { id: entryId },
+  await prisma.journalEntry.deleteMany({
+    where: { id: entryId, userId },
   });
 
   revalidatePath("/journal");

@@ -12,18 +12,29 @@ datasource db {
   provider = "sqlite"
 }
 
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
 model Position {
   id         String   @id @default(cuid())
+  userId     String?
   symbol     String
   direction  String
   entryPrice Float
   quantity   Float
   note       String?
   openedAt   DateTime @default(now())
+
+  @@index([userId])
 }
 
 model JournalEntry {
   id         String   @id @default(cuid())
+  userId     String?
   symbol     String
   direction  String
   entryPrice Float
@@ -34,6 +45,8 @@ model JournalEntry {
   note       String?
   openedAt   DateTime
   closedAt   DateTime @default(now())
+
+  @@index([userId])
 }
 
 model SignalSnapshot {
@@ -53,9 +66,12 @@ model SignalSnapshot {
 
 model Watchlist {
   id        String            @id @default(cuid())
+  userId    String?
   name      String
   createdAt DateTime          @default(now())
   symbols   WatchlistSymbol[]
+
+  @@index([userId])
 }
 
 model WatchlistSymbol {

@@ -18,11 +18,13 @@ type MarketTickerData = {
 type AppLayoutProps = {
   children: ReactNode;
   marketTicker?: MarketTickerData;
+  userEmail?: string;
 };
 
 export default function AppLayout({
   children,
   marketTicker,
+  userEmail,
 }: AppLayoutProps) {
   return (
     <div className="min-h-screen text-white">
@@ -35,7 +37,7 @@ export default function AppLayout({
         </div>
 
         <div className="min-w-0 flex-1">
-          <Topbar marketTicker={marketTicker} />
+          <Topbar marketTicker={marketTicker} userEmail={userEmail} />
 
           <main className="p-6 md:p-8">{children}</main>
         </div>

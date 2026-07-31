@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import JournalView from "@/components/journal/JournalView";
+import { requireSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import type {
   MarketSymbol,
@@ -12,7 +13,10 @@ import type {
 import { createJournalEntry, deleteJournalEntry } from "./actions";
 
 export default async function JournalPage() {
+  const { userId, email } = await requireSession();
+
   const entries = await prisma.journalEntry.findMany({
+    where: { userId },
     orderBy: { closedAt: "desc" },
   });
 
@@ -33,7 +37,7 @@ export default async function JournalPage() {
   );
 
   return (
-    <AppLayout>
+    <AppLayout userEmail={email}>
       <JournalView
         entries={entryViews}
         createEntryAction={createJournalEntry}

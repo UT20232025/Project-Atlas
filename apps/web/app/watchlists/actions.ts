@@ -2,12 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 
+import { requireSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import { Prisma } from "@/lib/generated/prisma/client";
 import { parseSymbol } from "@/lib/trading/formData";
 import { MARKET_SYMBOLS } from "@/lib/services/liveMarketService";
 
 export async function createWatchlist(formData: FormData) {
+  const { userId } = await requireSession();
+
   const name = String(formData.get("name") ?? "").trim();
 
   if (name.length === 0) {
@@ -15,19 +18,21 @@ export async function createWatchlist(formData: FormData) {
   }
 
   await prisma.watchlist.create({
-    data: { name },
+    data: { name, userId },
   });
 
   revalidatePath("/");
 }
 
 export async function deleteWatchlist(formData: FormData) {
+  const { userId } = await requireSession();
+
   const watchlistId = String(
     formData.get("watchlistId") ?? ""
   );
 
-  await prisma.watchlist.delete({
-    where: { id: watchlistId },
+  await prisma.watchlist.deleteMany({
+    where: { id: watchlistId, userId },
   });
 
   revalidatePath("/");
@@ -36,10 +41,20 @@ export async function deleteWatchlist(formData: FormData) {
 export async function addSymbolToWatchlist(
   formData: FormData
 ) {
+  const { userId } = await requireSession();
+
   const watchlistId = String(
     formData.get("watchlistId") ?? ""
   );
   const symbol = parseSymbol(formData.get("symbol"));
+
+  const watchlist = await prisma.watchlist.findFirst({
+    where: { id: watchlistId, userId },
+  });
+
+  if (!watchlist) {
+    throw new Error("Watchlist not found.");
+  }
 
   try {
     await prisma.watchlistSymbol.create({
@@ -62,10 +77,20 @@ export async function addSymbolToWatchlist(
 export async function removeSymbolFromWatchlist(
   formData: FormData
 ) {
+  const { userId } = await requireSession();
+
   const watchlistId = String(
     formData.get("watchlistId") ?? ""
   );
   const symbol = parseSymbol(formData.get("symbol"));
+
+  const watchlist = await prisma.watchlist.findFirst({
+    where: { id: watchlistId, userId },
+  });
+
+  if (!watchlist) {
+    throw new Error("Watchlist not found.");
+  }
 
   await prisma.watchlistSymbol.deleteMany({
     where: { watchlistId, symbol },
@@ -77,7 +102,11 @@ export async function removeSymbolFromWatchlist(
 export async function migrateLegacyFavorites(
   formData: FormData
 ) {
-  const existingCount = await prisma.watchlist.count();
+  const { userId } = await requireSession();
+
+  const existingCount = await prisma.watchlist.count({
+    where: { userId },
+  });
 
   if (existingCount > 0) {
     return;
@@ -108,6 +137,7 @@ export async function migrateLegacyFavorites(
   await prisma.watchlist.create({
     data: {
       name: "Favoritter",
+      userId,
       symbols: {
         create: symbols.map((symbol) => ({
           symbol: String(symbol),

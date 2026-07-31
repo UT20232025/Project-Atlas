@@ -61,7 +61,17 @@
 
 ---
 
-# v0.7
+# v0.7 – ✅
+
+## Autentisering
+
+- Ekte innlogging (e-post/passord) ✅
+- Bruker-eid Portfolio/Journal/Watchlists ✅
+- Stripe-abonnement (neste steg, venter på Stripe-konto)
+
+---
+
+# v0.8
 
 ## Brukeropplevelse
 

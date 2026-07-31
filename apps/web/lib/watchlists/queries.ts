@@ -8,8 +8,11 @@ export type WatchlistView = {
   symbols: MarketSymbol[];
 };
 
-export async function getWatchlists(): Promise<WatchlistView[]> {
+export async function getWatchlists(
+  userId: string
+): Promise<WatchlistView[]> {
   const watchlists = await prisma.watchlist.findMany({
+    where: { userId },
     include: {
       symbols: {
         orderBy: { addedAt: "asc" },

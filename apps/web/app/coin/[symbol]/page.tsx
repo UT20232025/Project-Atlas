@@ -18,6 +18,7 @@ import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
 import { getSignalHistory } from "../../../lib/atlas/signalHistory";
+import { requireSession } from "../../../lib/auth/session";
 import type { MarketSymbol } from "../../../lib/services/liveMarketService";
 import { getWatchlists } from "../../../lib/watchlists/queries";
 import {
@@ -33,6 +34,7 @@ type Props = {
 
 export default async function CoinPage({ params }: Props) {
   const { symbol } = await params;
+  const { userId, email } = await requireSession();
 
   const [
     analysis,
@@ -49,7 +51,7 @@ export default async function CoinPage({ params }: Props) {
     getMACDHistory(symbol),
     getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
     getSignalHistory(symbol.toUpperCase() as MarketSymbol, 20),
-    getWatchlists(),
+    getWatchlists(userId),
   ]);
 
   const trendScore =
@@ -74,7 +76,7 @@ export default async function CoinPage({ params }: Props) {
         : 40;
 
   return (
-    <AppLayout>
+    <AppLayout userEmail={email}>
    <div className="flex flex-wrap items-center justify-between gap-4">
   <Link
     href="/"

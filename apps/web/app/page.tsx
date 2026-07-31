@@ -11,6 +11,7 @@ import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import AppLayout from "../components/layout/AppLayout";
 import Watchlist from "../components/watchlist/Watchlist";
+import { requireSession } from "../lib/auth/session";
 import { getDashboardData } from "../lib/services/dashboardService";
 import { getWatchlists } from "../lib/watchlists/queries";
 import {
@@ -22,9 +23,11 @@ import {
 } from "./watchlists/actions";
 
 export default async function HomePage() {
+  const { userId, email } = await requireSession();
+
   const [dashboard, watchlists] = await Promise.all([
     getDashboardData(),
-    getWatchlists(),
+    getWatchlists(userId),
   ]);
 
   const opportunity = [...dashboard.scanner].sort(
@@ -39,7 +42,10 @@ export default async function HomePage() {
   }));
 
   return (
-    <AppLayout marketTicker={dashboard.marketTicker}>
+    <AppLayout
+      marketTicker={dashboard.marketTicker}
+      userEmail={email}
+    >
       <DashboardHero />
 
       <div className="mb-8">

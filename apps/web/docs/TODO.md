@@ -21,6 +21,14 @@
 
 ---
 
+## Autentisering
+
+- [x] Ekte innlogging (e-post/passord, bcryptjs + jose JWT httpOnly-cookie, ingen ekstern tjeneste)
+- [x] Bruker-eid data for Portfolio/Journal/Watchlists (`userId` per rad, proxy.ts beskytter alle sider)
+- [ ] Stripe-abonnement (venter på at Stripe-konto opprettes)
+
+---
+
 ## Lav prioritet
 
 - [ ] Flere temaer
