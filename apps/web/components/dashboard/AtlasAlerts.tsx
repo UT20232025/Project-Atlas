@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
 import Section from "@/components/ui/Section";
@@ -15,7 +15,10 @@ type AlertRule =
   | "price_above"
   | "price_below"
   | "change_above"
-  | "change_below";
+  | "change_below"
+  | "signal_long"
+  | "signal_short"
+  | "confidence_above";
 
 type AtlasAlert = {
   id: string;
@@ -24,6 +27,24 @@ type AtlasAlert = {
   target: number;
   enabled: boolean;
 };
+
+type AtlasSignalData = {
+  signal: "LONG" | "SHORT" | "WAIT";
+  confidence: number;
+};
+
+const RULES_WITHOUT_TARGET: AlertRule[] = [
+  "signal_long",
+  "signal_short",
+];
+
+function usesAtlasSignal(rule: AlertRule) {
+  return (
+    rule === "signal_long" ||
+    rule === "signal_short" ||
+    rule === "confidence_above"
+  );
+}
 
 const STORAGE_KEY = "genwelth-atlas-alerts";
 
@@ -51,15 +72,39 @@ function getRuleLabel(rule: AlertRule) {
   if (rule === "price_above") return "Price above";
   if (rule === "price_below") return "Price below";
   if (rule === "change_above") return "24h change above";
+  if (rule === "change_below") return "24h change below";
+  if (rule === "signal_long") return "Atlas signal flips to LONG";
+  if (rule === "signal_short") return "Atlas signal flips to SHORT";
 
-  return "24h change below";
+  return "Atlas confidence above";
 }
 
 function isAlertTriggered(
   alert: AtlasAlert,
-  marketData?: LiveMarketItem
+  marketData?: LiveMarketItem,
+  atlasSignal?: AtlasSignalData
 ) {
-  if (!marketData || !alert.enabled) {
+  if (!alert.enabled) {
+    return false;
+  }
+
+  if (usesAtlasSignal(alert.rule)) {
+    if (!atlasSignal) {
+      return false;
+    }
+
+    if (alert.rule === "signal_long") {
+      return atlasSignal.signal === "LONG";
+    }
+
+    if (alert.rule === "signal_short") {
+      return atlasSignal.signal === "SHORT";
+    }
+
+    return atlasSignal.confidence >= alert.target;
+  }
+
+  if (!marketData) {
     return false;
   }
 
@@ -89,6 +134,63 @@ export default function AtlasAlerts() {
   const [rule, setRule] =
     useState<AlertRule>("price_above");
   const [target, setTarget] = useState("");
+  const [atlasSignals, setAtlasSignals] = useState<
+    Record<string, AtlasSignalData>
+  >({});
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    async function loadAtlasSignals() {
+      try {
+        const response = await fetch(
+          "/api/atlas/scanner",
+          { cache: "no-store" }
+        );
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = (await response.json()) as {
+          items: {
+            coin: string;
+            signal: "LONG" | "SHORT" | "WAIT";
+            confidence: number;
+          }[];
+        };
+
+        if (isCancelled) {
+          return;
+        }
+
+        const nextSignals: Record<string, AtlasSignalData> =
+          {};
+
+        for (const item of data.items) {
+          nextSignals[item.coin] = {
+            signal: item.signal,
+            confidence: item.confidence,
+          };
+        }
+
+        setAtlasSignals(nextSignals);
+      } catch {
+        // Keep showing the last known signals on failure.
+      }
+    }
+
+    void loadAtlasSignals();
+
+    const interval = window.setInterval(() => {
+      void loadAtlasSignals();
+    }, 30_000);
+
+    return () => {
+      isCancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
 
   function saveAlerts(nextAlerts: AtlasAlert[]) {
     setAlerts(nextAlerts);
@@ -102,9 +204,18 @@ export default function AtlasAlerts() {
   function createAlert(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const numericTarget = Number(target);
+    const requiresTarget = !RULES_WITHOUT_TARGET.includes(
+      rule
+    );
 
-    if (!Number.isFinite(numericTarget)) {
+    const numericTarget = requiresTarget
+      ? Number(target)
+      : 0;
+
+    if (
+      requiresTarget &&
+      !Number.isFinite(numericTarget)
+    ) {
       return;
     }
 
@@ -144,10 +255,11 @@ export default function AtlasAlerts() {
           alert,
           market.find(
             (item) => item.symbol === alert.symbol
-          )
+          ),
+          atlasSignals[alert.symbol]
         )
       ).length,
-    [alerts, market]
+    [alerts, market, atlasSignals]
   );
 
   return (
@@ -188,21 +300,38 @@ export default function AtlasAlerts() {
           <option value="change_below">
             24h change below
           </option>
+          <option value="signal_long">
+            Signal flips to LONG
+          </option>
+          <option value="signal_short">
+            Signal flips to SHORT
+          </option>
+          <option value="confidence_above">
+            Atlas confidence above
+          </option>
         </select>
 
-        <input
-          type="number"
-          value={target}
-          onChange={(event) => setTarget(event.target.value)}
-          placeholder={
-            rule.startsWith("price")
-              ? "Target price"
-              : "Target %"
-          }
-          step="any"
-          required
-          className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
-        />
+        {RULES_WITHOUT_TARGET.includes(rule) ? (
+          <div className="flex items-center rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-zinc-600">
+            No target needed
+          </div>
+        ) : (
+          <input
+            type="number"
+            value={target}
+            onChange={(event) => setTarget(event.target.value)}
+            placeholder={
+              rule.startsWith("price")
+                ? "Target price"
+                : rule === "confidence_above"
+                ? "Target confidence %"
+                : "Target %"
+            }
+            step="any"
+            required
+            className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
+          />
+        )}
 
         <button
           type="submit"
@@ -257,10 +386,15 @@ export default function AtlasAlerts() {
 
             const triggered = isAlertTriggered(
               alert,
-              coinMarketData
+              coinMarketData,
+              atlasSignals[alert.symbol]
             );
 
-            const targetSuffix = alert.rule.startsWith("change")
+            const targetSuffix = alert.rule.startsWith(
+              "change"
+            )
+              ? "%"
+              : alert.rule === "confidence_above"
               ? "%"
               : " USDT";
 
@@ -297,11 +431,18 @@ export default function AtlasAlerts() {
                   </div>
 
                   <p className="mt-1 text-sm text-zinc-500">
-                    {getRuleLabel(alert.rule)}{" "}
-                    <span className="text-zinc-300">
-                      {alert.target}
-                      {targetSuffix}
-                    </span>
+                    {getRuleLabel(alert.rule)}
+                    {!RULES_WITHOUT_TARGET.includes(
+                      alert.rule
+                    ) && (
+                      <>
+                        {" "}
+                        <span className="text-zinc-300">
+                          {alert.target}
+                          {targetSuffix}
+                        </span>
+                      </>
+                    )}
                   </p>
                 </div>
 
