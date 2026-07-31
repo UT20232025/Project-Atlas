@@ -62,6 +62,13 @@ v0.3 (Vacation Release)
 
 ---
 
+## Trading
+
+- Portfolio (`/portfolio`) — SQLite-database via Prisma, live urealisert P&L
+- Trading Journal (`/journal`) — lukkede posisjoner logges automatisk, manuell registrering, CSV-eksport
+
+---
+
 ## Søk
 
 - Ctrl + K Search
@@ -90,9 +97,8 @@ v0.3 (Vacation Release)
 # Neste prioriteringer
 
 1. Signalhistorikk (v0.4 gjenstår)
-2. Portfolio
-3. Trading Journal
-4. Egendefinerte Watchlists / Favoritt-coins
+2. Egendefinerte Watchlists / Favoritt-coins
+3. Ekte autentisering (kun når flerbrukerstøtte faktisk trengs — Portfolio/Journal er i dag én delt database uten innlogging)
 
 ---
 

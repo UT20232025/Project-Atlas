@@ -12,11 +12,11 @@
 
 ## Middels prioritet
 
-- [ ] Portfolio
-- [ ] Trading Journal
+- [x] Portfolio (SQLite database via Prisma, live unrealized P&L)
+- [x] Trading Journal (auto-logget fra lukkede posisjoner + manuell registrering)
 - [ ] Egendefinerte Watchlists
 - [ ] Favoritt-coins
-- [ ] Eksporter journal til CSV
+- [x] Eksporter journal til CSV
 
 ---
 
