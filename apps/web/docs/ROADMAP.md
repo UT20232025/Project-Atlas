@@ -16,19 +16,19 @@
 
 ---
 
-# v0.4
+# v0.4 – ✅
 
 ## Live Market
 
-- Live Watchlist
-- Sanntidsoppdateringer
-- Flere markedsdata
+- Live Watchlist ✅
+- Sanntidsoppdateringer ✅
+- Flere markedsdata ✅
 
 ## Analyse
 
-- Opportunity Card
-- Forbedret Atlas Score
-- Signalhistorikk
+- Opportunity Card ✅
+- Forbedret Atlas Score ✅
+- Signalhistorikk ✅
 
 ---
 
@@ -36,27 +36,27 @@
 
 ## Trading
 
-- Portfolio
-- Trading Journal
+- Portfolio ✅
+- Trading Journal ✅
 - Egendefinerte Watchlists
 
 ## Varsler
 
-- Prisvarsler
-- Atlas Alerts
-- Signalvarsler
+- Prisvarsler ✅
+- Atlas Alerts ✅
+- Signalvarsler ✅
 
 ---
 
-# v0.6
+# v0.6 – ✅
 
 ## Atlas AI
 
-- Multi-timeframe analyse
-- Support og motstand
-- Trendstyrke
-- Volumanalyse
-- Markedskontekst
+- Multi-timeframe analyse ✅
+- Support og motstand ✅
+- Trendstyrke ✅
+- Volumanalyse ✅
+- Markedskontekst ✅
 
 ---
 

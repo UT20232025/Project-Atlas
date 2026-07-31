@@ -2,7 +2,7 @@
 
 ## Nåværende versjon
 
-v0.3 (Vacation Release)
+v0.5 (v0.4 og v0.6 er fullført; v0.5 gjenstår kun Egendefinerte Watchlists — se docs/ROADMAP.md)
 
 ---
 
@@ -66,6 +66,7 @@ v0.3 (Vacation Release)
 
 - Portfolio (`/portfolio`) — SQLite-database via Prisma, live urealisert P&L
 - Trading Journal (`/journal`) — lukkede posisjoner logges automatisk, manuell registrering, CSV-eksport
+- Signalhistorikk — signalendringer logges automatisk (kun ved endring, ikke hver poll), vist per coin og som markedsbred feed på forsiden
 
 ---
 
@@ -96,9 +97,8 @@ v0.3 (Vacation Release)
 
 # Neste prioriteringer
 
-1. Signalhistorikk (v0.4 gjenstår)
-2. Egendefinerte Watchlists / Favoritt-coins
-3. Ekte autentisering (kun når flerbrukerstøtte faktisk trengs — Portfolio/Journal er i dag én delt database uten innlogging)
+1. Egendefinerte Watchlists / Favoritt-coins
+2. Ekte autentisering (kun når flerbrukerstøtte faktisk trengs — Portfolio/Journal/Signalhistorikk er i dag én delt database uten innlogging)
 
 ---
 
