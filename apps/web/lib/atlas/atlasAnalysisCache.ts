@@ -2,6 +2,7 @@ import {
   getAtlasAnalysis,
   type AtlasAnalysisResponse,
 } from "@/lib/atlas/getAtlasAnalysis";
+import { recordSignalIfChanged } from "@/lib/atlas/signalHistory";
 import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 
@@ -43,6 +44,10 @@ export function getCachedAtlasAnalysis(
     if (cache.get(key)?.promise === promise) {
       cache.delete(key);
     }
+  });
+
+  promise.then((result) => {
+    void recordSignalIfChanged(symbol, interval, result.decision);
   });
 
   return promise;

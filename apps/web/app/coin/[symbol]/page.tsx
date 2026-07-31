@@ -3,6 +3,7 @@ import AtlasAnalysis from "../../../components/AtlasAnalysis";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
+import SignalHistoryCard from "../../../components/analysis/SignalHistoryCard";
 import CandlestickChart from "../../../components/CandlestickChart";
 import CoinHero from "../../../components/CoinHero";
 import EMACard from "../../../components/EMACard";
@@ -16,6 +17,7 @@ import { getChartCandles } from "../../../lib/analysis/candles";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
+import { getSignalHistory } from "../../../lib/atlas/signalHistory";
 import type { MarketSymbol } from "../../../lib/services/liveMarketService";
 
 type Props = {
@@ -27,14 +29,21 @@ type Props = {
 export default async function CoinPage({ params }: Props) {
   const { symbol } = await params;
 
-  const [analysis, candles, rsiHistory, macdHistory, decisionAnalysis] =
-    await Promise.all([
-      getAtlasAnalysis(symbol),
-      getChartCandles(symbol),
-      getRSIHistory(symbol),
-      getMACDHistory(symbol),
-      getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
-    ]);
+  const [
+    analysis,
+    candles,
+    rsiHistory,
+    macdHistory,
+    decisionAnalysis,
+    signalHistory,
+  ] = await Promise.all([
+    getAtlasAnalysis(symbol),
+    getChartCandles(symbol),
+    getRSIHistory(symbol),
+    getMACDHistory(symbol),
+    getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
+    getSignalHistory(symbol.toUpperCase() as MarketSymbol, 20),
+  ]);
 
   const trendScore =
     analysis.trend === "BULLISH"
@@ -160,6 +169,10 @@ export default async function CoinPage({ params }: Props) {
           change={analysis.change24h.toFixed(2)}
           reasons={analysis.reasons}
         />
+      </div>
+
+      <div className="mt-8">
+        <SignalHistoryCard history={signalHistory} />
       </div>
     </AppLayout>
   );

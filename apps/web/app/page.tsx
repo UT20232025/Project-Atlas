@@ -7,6 +7,7 @@ import MarketAlerts from "../components/dashboard/MarketAlerts";
 import MarketHeatmap from "../components/dashboard/MarketHeatmap";
 import MarketStats from "../components/dashboard/MarketStats";
 import OpportunityCard from "../components/dashboard/OpportunityCard";
+import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import AppLayout from "../components/layout/AppLayout";
 import Watchlist from "../components/watchlist/Watchlist";
@@ -83,6 +84,12 @@ export default async function HomePage() {
       <div className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]">
         <MarketAlerts items={dashboard.scanner} />
         <Watchlist />
+      </div>
+
+      <div className="mb-8">
+        <RecentSignalChanges
+          items={dashboard.recentSignalChanges}
+        />
       </div>
 
       <ScannerSection items={dashboard.scanner} />

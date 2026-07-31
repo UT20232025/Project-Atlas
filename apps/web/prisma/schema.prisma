@@ -35,3 +35,15 @@ model JournalEntry {
   openedAt   DateTime
   closedAt   DateTime @default(now())
 }
+
+model SignalSnapshot {
+  id         String   @id @default(cuid())
+  symbol     String
+  interval   String
+  signal     String
+  confidence Int
+  score      Int
+  createdAt  DateTime @default(now())
+
+  @@index([symbol, interval, createdAt])
+}

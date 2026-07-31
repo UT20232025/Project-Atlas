@@ -1,4 +1,5 @@
 import { getAtlasScanner } from "../analysis/scanner";
+import { getSignalHistory } from "../atlas/signalHistory";
 
 type FearGreedData = {
   value: number;
@@ -69,11 +70,13 @@ async function getBTCDominance(): Promise<number> {
 }
 
 export async function getDashboardData() {
-  const [scanner, fearGreed, btcDominance] = await Promise.all([
-    getAtlasScanner(),
-    getFearGreed(),
-    getBTCDominance(),
-  ]);
+  const [scanner, fearGreed, btcDominance, recentSignalChanges] =
+    await Promise.all([
+      getAtlasScanner(),
+      getFearGreed(),
+      getBTCDominance(),
+      getSignalHistory(undefined, 15),
+    ]);
 
   const bullish = scanner.filter(
     (item) => item.trend === "BULLISH"
@@ -98,6 +101,7 @@ export async function getDashboardData() {
     bullish,
     bearish,
     neutral,
+    recentSignalChanges,
 
     marketTicker: {
       btc: btc?.price ?? 0,
