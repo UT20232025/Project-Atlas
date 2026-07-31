@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -33,16 +34,14 @@ export default function MobileNav() {
           />
 
           <aside className="absolute left-0 top-0 flex h-full w-72 max-w-[85vw] flex-col border-r border-zinc-800 bg-zinc-950">
-            <div className="flex items-center justify-between border-b border-zinc-800 p-6">
-              <div>
-                <h1 className="text-2xl font-bold text-white">
-                  Genwelth AI
-                </h1>
-
-                <p className="mt-1 text-xs text-zinc-500">
-                  Powered by Atlas
-                </p>
-              </div>
+            <div className="flex items-center justify-between gap-3 border-b border-zinc-800 p-5">
+              <Image
+                src="/logo-full.png"
+                alt="Genwelth AI — Powered by Atlas"
+                width={1095}
+                height={821}
+                className="h-auto w-full max-w-[190px]"
+              />
 
               <button
                 type="button"

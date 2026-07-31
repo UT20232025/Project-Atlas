@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -56,14 +57,17 @@ export default function Sidebar() {
 
   return (
     <aside className="flex h-screen w-72 flex-col border-r border-zinc-800 bg-zinc-950">
-      <div className="border-b border-zinc-800 p-8">
-        <h1 className="text-3xl font-bold text-white">
-          Genwelth AI
-        </h1>
-
-        <p className="mt-2 text-sm text-zinc-500">
-          Powered by Atlas
-        </p>
+      <div className="border-b border-zinc-800 p-6">
+        <Link href="/">
+          <Image
+            src="/logo-full.png"
+            alt="Genwelth AI — Powered by Atlas"
+            width={1095}
+            height={821}
+            priority
+            className="h-auto w-full"
+          />
+        </Link>
       </div>
 
       <nav className="flex-1 space-y-2 p-5">
