@@ -10,6 +10,7 @@ import {
   formatMarketPrice,
   formatMarketSymbol,
   MARKET_SYMBOLS,
+  WATCHLIST_FAVORITES_STORAGE_KEY,
   type MarketSymbol,
 } from "@/lib/services/liveMarketService";
 
@@ -22,8 +23,6 @@ type AtlasSignalMap = Record<
   string,
   { signal: AtlasSignal; confidence: number }
 >;
-
-const FAVORITES_STORAGE_KEY = "genwelth-watchlist-favorites";
 
 function getSignalBadgeVariant(
   signal: AtlasSignal
@@ -40,7 +39,7 @@ function getStoredFavorites(): MarketSymbol[] {
 
   try {
     const storedFavorites = window.localStorage.getItem(
-      FAVORITES_STORAGE_KEY
+      WATCHLIST_FAVORITES_STORAGE_KEY
     );
 
     if (!storedFavorites) {
@@ -155,7 +154,7 @@ export default function Watchlist() {
         : [...currentFavorites, symbol];
 
       window.localStorage.setItem(
-        FAVORITES_STORAGE_KEY,
+        WATCHLIST_FAVORITES_STORAGE_KEY,
         JSON.stringify(nextFavorites)
       );
 

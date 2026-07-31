@@ -4,6 +4,9 @@ export const MARKET_SYMBOLS = ATLAS_MARKET_SYMBOLS;
 
 export type MarketSymbol = (typeof MARKET_SYMBOLS)[number];
 
+export const WATCHLIST_FAVORITES_STORAGE_KEY =
+  "genwelth-watchlist-favorites";
+
 export type LiveMarketItem = {
   symbol: MarketSymbol;
   price: number;

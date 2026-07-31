@@ -3,7 +3,7 @@
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const STORAGE_KEY = "genwelth-watchlist";
+import { WATCHLIST_FAVORITES_STORAGE_KEY as STORAGE_KEY } from "@/lib/services/liveMarketService";
 
 type WatchlistButtonProps = {
   symbol: string;
