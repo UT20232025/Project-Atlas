@@ -36,7 +36,7 @@
 - [ ] Optimalisere API-kall
 - [ ] Forbedre feilhåndtering
 - [ ] Redusere unødvendige re-renders
-- [ ] Flere enhetstester (Vitest satt opp, dekker atlasEngine/orderBlockEngine/fairValueGapEngine/aiDecisionEngine — liquidity, market structure og trend-motorene mangler fortsatt)
+- [x] Flere enhetstester (Vitest: atlasEngine, orderBlockEngine, fairValueGapEngine, aiDecisionEngine, liquidityEngine, marketStructureEngine, trendEngine — 20 tester totalt)
 
 ---
 
