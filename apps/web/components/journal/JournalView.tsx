@@ -2,6 +2,7 @@
 
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
+import Select from "@/components/ui/Select";
 import {
   formatMarketSymbol,
   MARKET_SYMBOLS,
@@ -91,28 +92,23 @@ export default function JournalView({
       >
         <form
           action={createEntryAction}
-          className="mb-6 grid gap-3 rounded-2xl border border-zinc-800 bg-zinc-950/40 p-4 md:grid-cols-2 xl:grid-cols-4"
+          className="atlas-subcard mb-6 grid gap-3 rounded-2xl p-4 md:grid-cols-2 xl:grid-cols-4"
         >
-          <select
+          <Select
             name="symbol"
             defaultValue={MARKET_SYMBOLS[0]}
-            className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none focus:border-zinc-600"
           >
             {MARKET_SYMBOLS.map((symbol) => (
               <option key={symbol} value={symbol}>
                 {formatMarketSymbol(symbol)}
               </option>
             ))}
-          </select>
+          </Select>
 
-          <select
-            name="direction"
-            defaultValue="LONG"
-            className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none focus:border-zinc-600"
-          >
+          <Select name="direction" defaultValue="LONG">
             <option value="LONG">LONG</option>
             <option value="SHORT">SHORT</option>
-          </select>
+          </Select>
 
           <input
             type="number"
@@ -193,7 +189,7 @@ export default function JournalView({
             {entries.map((entry) => (
               <div
                 key={entry.id}
-                className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-4"
+                className="atlas-subcard rounded-xl p-4"
               >
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-3">

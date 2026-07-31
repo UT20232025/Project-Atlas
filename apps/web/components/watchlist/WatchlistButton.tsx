@@ -57,7 +57,7 @@ export default function WatchlistButton({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 z-10 mt-2 w-56 rounded-xl border border-zinc-800 bg-zinc-950 p-2 shadow-xl">
+        <div className="atlas-subcard absolute right-0 z-10 mt-2 w-56 rounded-xl p-2 shadow-xl backdrop-blur-xl">
           {watchlists.length === 0 ? (
             <p className="p-2 text-xs text-zinc-500">
               No watchlists yet — create one from the

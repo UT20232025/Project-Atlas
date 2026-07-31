@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useMarket } from "@/components/providers/MarketProvider";
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
+import Select from "@/components/ui/Select";
 import {
   formatMarketSymbol,
   MARKET_SYMBOLS,
@@ -40,28 +41,23 @@ export default function PortfolioView({
       >
         <form
           action={createPositionAction}
-          className="mb-6 grid gap-3 rounded-2xl border border-zinc-800 bg-zinc-950/40 p-4 md:grid-cols-[1fr_1fr_1fr_1fr_1.5fr_auto]"
+          className="atlas-subcard mb-6 grid gap-3 rounded-2xl p-4 md:grid-cols-[1fr_1fr_1fr_1fr_1.5fr_auto]"
         >
-          <select
+          <Select
             name="symbol"
             defaultValue={MARKET_SYMBOLS[0]}
-            className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none focus:border-zinc-600"
           >
             {MARKET_SYMBOLS.map((symbol) => (
               <option key={symbol} value={symbol}>
                 {formatMarketSymbol(symbol)}
               </option>
             ))}
-          </select>
+          </Select>
 
-          <select
-            name="direction"
-            defaultValue="LONG"
-            className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none focus:border-zinc-600"
-          >
+          <Select name="direction" defaultValue="LONG">
             <option value="LONG">LONG</option>
             <option value="SHORT">SHORT</option>
-          </select>
+          </Select>
 
           <input
             type="number"
@@ -129,7 +125,7 @@ export default function PortfolioView({
               return (
                 <div
                   key={position.id}
-                  className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-4"
+                  className="atlas-subcard rounded-xl p-4"
                 >
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
@@ -235,7 +231,7 @@ export default function PortfolioView({
                   {isClosing && (
                     <form
                       action={closePositionAction}
-                      className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-950 p-3"
+                      className="atlas-subcard mt-4 flex flex-wrap items-center gap-3 rounded-xl p-3"
                     >
                       <input
                         type="hidden"

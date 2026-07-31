@@ -26,7 +26,7 @@ export default function Topbar({ marketTicker }: TopbarProps) {
 
           <Link
             href="/"
-            className="flex items-center gap-3"
+            className="flex shrink-0 items-center gap-3"
           >
             <Image
               src="/logo-mark.png"
@@ -34,18 +34,18 @@ export default function Topbar({ marketTicker }: TopbarProps) {
               width={740}
               height={638}
               priority
-              className="h-9 w-auto"
+              className="h-9 w-auto shrink-0"
             />
 
             <span className="hidden h-8 w-px bg-zinc-800 sm:block" />
           </Link>
 
-          <div>
-            <p className="text-sm text-zinc-500">
+          <div className="min-w-0">
+            <p className="truncate text-sm text-zinc-500">
               Trading Command Center
             </p>
 
-            <h2 className="text-xl font-semibold text-white">
+            <h2 className="truncate text-xl font-semibold text-white">
               Dashboard
             </h2>
           </div>

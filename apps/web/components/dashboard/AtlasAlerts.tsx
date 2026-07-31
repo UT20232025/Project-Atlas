@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
 import Section from "@/components/ui/Section";
+import Select from "@/components/ui/Select";
 import {
   formatMarketSymbol,
   MARKET_SYMBOLS,
@@ -269,28 +270,26 @@ export default function AtlasAlerts() {
     >
       <form
         onSubmit={createAlert}
-        className="mb-6 grid gap-3 rounded-2xl border border-zinc-800 bg-zinc-950/40 p-4 md:grid-cols-[1fr_1.5fr_1fr_auto]"
+        className="atlas-subcard mb-6 grid gap-3 rounded-2xl p-4 md:grid-cols-[1fr_1.5fr_1fr_auto]"
       >
-        <select
+        <Select
           value={symbol}
           onChange={(event) =>
             setSymbol(event.target.value as MarketSymbol)
           }
-          className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none focus:border-zinc-600"
         >
           {MARKET_SYMBOLS.map((marketSymbol) => (
             <option key={marketSymbol} value={marketSymbol}>
               {formatMarketSymbol(marketSymbol)}
             </option>
           ))}
-        </select>
+        </Select>
 
-        <select
+        <Select
           value={rule}
           onChange={(event) =>
             setRule(event.target.value as AlertRule)
           }
-          className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none focus:border-zinc-600"
         >
           <option value="price_above">Price above</option>
           <option value="price_below">Price below</option>
@@ -309,7 +308,7 @@ export default function AtlasAlerts() {
           <option value="confidence_above">
             Atlas confidence above
           </option>
-        </select>
+        </Select>
 
         {RULES_WITHOUT_TARGET.includes(rule) ? (
           <div className="flex items-center rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-zinc-600">
@@ -401,10 +400,10 @@ export default function AtlasAlerts() {
             return (
               <div
                 key={alert.id}
-                className={`flex flex-wrap items-center justify-between gap-4 rounded-xl border p-4 ${
+                className={`flex flex-wrap items-center justify-between gap-4 rounded-xl p-4 ${
                   triggered
-                    ? "border-yellow-500/30 bg-yellow-500/10"
-                    : "border-zinc-800 bg-zinc-950/30"
+                    ? "border border-yellow-500/30 bg-yellow-500/10"
+                    : "atlas-subcard"
                 }`}
               >
                 <div>

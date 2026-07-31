@@ -362,7 +362,7 @@ export default function Watchlist({
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-zinc-800">
+      <div className="atlas-subcard overflow-hidden rounded-xl">
         <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_24px] gap-1.5 border-b border-zinc-800 bg-zinc-950/70 px-3 py-3 text-xs font-medium text-zinc-500">
           <button
             type="button"

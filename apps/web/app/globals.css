@@ -201,6 +201,15 @@ body {
   backdrop-filter: blur(18px);
 }
 
+.atlas-subcard {
+  border: 1px solid rgba(63, 63, 70, 0.6);
+  background: linear-gradient(
+    145deg,
+    rgba(39, 39, 42, 0.55),
+    rgba(9, 9, 11, 0.5)
+  );
+}
+
 .atlas-card-hover {
   transition:
     transform 180ms ease,
