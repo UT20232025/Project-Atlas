@@ -47,3 +47,20 @@ model SignalSnapshot {
 
   @@index([symbol, interval, createdAt])
 }
+
+model Watchlist {
+  id        String            @id @default(cuid())
+  name      String
+  createdAt DateTime          @default(now())
+  symbols   WatchlistSymbol[]
+}
+
+model WatchlistSymbol {
+  id          String    @id @default(cuid())
+  watchlistId String
+  symbol      String
+  addedAt     DateTime  @default(now())
+  watchlist   Watchlist @relation(fields: [watchlistId], references: [id], onDelete: Cascade)
+
+  @@unique([watchlistId, symbol])
+}

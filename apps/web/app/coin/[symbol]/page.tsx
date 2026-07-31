@@ -19,6 +19,11 @@ import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
 import { getSignalHistory } from "../../../lib/atlas/signalHistory";
 import type { MarketSymbol } from "../../../lib/services/liveMarketService";
+import { getWatchlists } from "../../../lib/watchlists/queries";
+import {
+  addSymbolToWatchlist,
+  removeSymbolFromWatchlist,
+} from "../../watchlists/actions";
 
 type Props = {
   params: Promise<{
@@ -36,6 +41,7 @@ export default async function CoinPage({ params }: Props) {
     macdHistory,
     decisionAnalysis,
     signalHistory,
+    watchlists,
   ] = await Promise.all([
     getAtlasAnalysis(symbol),
     getChartCandles(symbol),
@@ -43,6 +49,7 @@ export default async function CoinPage({ params }: Props) {
     getMACDHistory(symbol),
     getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
     getSignalHistory(symbol.toUpperCase() as MarketSymbol, 20),
+    getWatchlists(),
   ]);
 
   const trendScore =
@@ -76,7 +83,16 @@ export default async function CoinPage({ params }: Props) {
     ← Dashboard
   </Link>
 
-  <WatchlistButton symbol={analysis.coin} />
+  <WatchlistButton
+    symbol={
+      symbol.toUpperCase() as MarketSymbol
+    }
+    watchlists={watchlists}
+    addSymbolToWatchlistAction={addSymbolToWatchlist}
+    removeSymbolFromWatchlistAction={
+      removeSymbolFromWatchlist
+    }
+  />
 </div>
 
       <div className="mt-8">

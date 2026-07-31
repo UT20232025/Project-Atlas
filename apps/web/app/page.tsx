@@ -12,9 +12,20 @@ import ScannerSection from "../components/dashboard/ScannerSection";
 import AppLayout from "../components/layout/AppLayout";
 import Watchlist from "../components/watchlist/Watchlist";
 import { getDashboardData } from "../lib/services/dashboardService";
+import { getWatchlists } from "../lib/watchlists/queries";
+import {
+  addSymbolToWatchlist,
+  createWatchlist,
+  deleteWatchlist,
+  migrateLegacyFavorites,
+  removeSymbolFromWatchlist,
+} from "./watchlists/actions";
 
 export default async function HomePage() {
-  const dashboard = await getDashboardData();
+  const [dashboard, watchlists] = await Promise.all([
+    getDashboardData(),
+    getWatchlists(),
+  ]);
 
   const opportunity = [...dashboard.scanner].sort(
     (first, second) => second.score - first.score
@@ -83,7 +94,18 @@ export default async function HomePage() {
 
       <div className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]">
         <MarketAlerts items={dashboard.scanner} />
-        <Watchlist />
+        <Watchlist
+          watchlists={watchlists}
+          createWatchlistAction={createWatchlist}
+          deleteWatchlistAction={deleteWatchlist}
+          addSymbolToWatchlistAction={addSymbolToWatchlist}
+          removeSymbolFromWatchlistAction={
+            removeSymbolFromWatchlist
+          }
+          migrateLegacyFavoritesAction={
+            migrateLegacyFavorites
+          }
+        />
       </div>
 
       <div className="mb-8">

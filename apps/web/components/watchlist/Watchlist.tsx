@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
+import type { WatchlistView } from "@/lib/watchlists/queries";
 import {
   formatMarketPrice,
   formatMarketSymbol,
-  MARKET_SYMBOLS,
   WATCHLIST_FAVORITES_STORAGE_KEY,
   type MarketSymbol,
 } from "@/lib/services/liveMarketService";
@@ -24,6 +25,19 @@ type AtlasSignalMap = Record<
   { signal: AtlasSignal; confidence: number }
 >;
 
+type WatchlistProps = {
+  watchlists: WatchlistView[];
+  createWatchlistAction: (formData: FormData) => void;
+  deleteWatchlistAction: (formData: FormData) => void;
+  addSymbolToWatchlistAction: (formData: FormData) => void;
+  removeSymbolFromWatchlistAction: (
+    formData: FormData
+  ) => void;
+  migrateLegacyFavoritesAction: (
+    formData: FormData
+  ) => Promise<void>;
+};
+
 function getSignalBadgeVariant(
   signal: AtlasSignal
 ): "green" | "red" | "yellow" {
@@ -32,56 +46,86 @@ function getSignalBadgeVariant(
   return "yellow";
 }
 
-function getStoredFavorites(): MarketSymbol[] {
+function getLegacyFavorites(): string[] {
   if (typeof window === "undefined") {
     return [];
   }
 
   try {
-    const storedFavorites = window.localStorage.getItem(
+    const stored = window.localStorage.getItem(
       WATCHLIST_FAVORITES_STORAGE_KEY
     );
 
-    if (!storedFavorites) {
+    if (!stored) {
       return [];
     }
 
-    const parsedFavorites = JSON.parse(storedFavorites);
+    const parsed = JSON.parse(stored);
 
-    if (!Array.isArray(parsedFavorites)) {
-      return [];
-    }
-
-    return parsedFavorites.filter(
-      (symbol): symbol is MarketSymbol =>
-        MARKET_SYMBOLS.includes(symbol as MarketSymbol)
-    );
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
 }
 
-export default function Watchlist() {
-  const {
-    market,
-    loading,
-    error,
-    lastUpdated,
-    refresh,
-  } = useMarket();
+export default function Watchlist({
+  watchlists,
+  createWatchlistAction,
+  deleteWatchlistAction,
+  addSymbolToWatchlistAction,
+  removeSymbolFromWatchlistAction,
+  migrateLegacyFavoritesAction,
+}: WatchlistProps) {
+  const router = useRouter();
+  const { market, loading, error, lastUpdated, refresh } =
+    useMarket();
 
-  const [favorites, setFavorites] = useState<MarketSymbol[]>(
-    getStoredFavorites
-  );
+  const [activeWatchlistId, setActiveWatchlistId] =
+    useState<string | null>(
+      () => watchlists[0]?.id ?? null
+    );
   const [sortField, setSortField] =
     useState<SortField>("change24h");
   const [sortDirection, setSortDirection] =
     useState<SortDirection>("desc");
-  const [showFavoritesOnly, setShowFavoritesOnly] =
+  const [showActiveListOnly, setShowActiveListOnly] =
     useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isCreatingList, setIsCreatingList] =
+    useState(false);
   const [atlasSignals, setAtlasSignals] =
     useState<AtlasSignalMap>({});
+
+  const activeWatchlist =
+    watchlists.find(
+      (watchlist) => watchlist.id === activeWatchlistId
+    ) ?? watchlists[0] ?? null;
+
+  useEffect(() => {
+    if (watchlists.length > 0) {
+      return;
+    }
+
+    const legacyFavorites = getLegacyFavorites();
+
+    if (legacyFavorites.length === 0) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.set(
+      "symbols",
+      JSON.stringify(legacyFavorites)
+    );
+
+    void migrateLegacyFavoritesAction(formData).then(
+      () => {
+        router.refresh();
+      }
+    );
+    // Only ever runs while there are zero DB watchlists.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchlists.length]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -145,23 +189,6 @@ export default function Watchlist() {
     }
   }
 
-  function toggleFavorite(symbol: MarketSymbol) {
-    setFavorites((currentFavorites) => {
-      const nextFavorites = currentFavorites.includes(symbol)
-        ? currentFavorites.filter(
-            (favoriteSymbol) => favoriteSymbol !== symbol
-          )
-        : [...currentFavorites, symbol];
-
-      window.localStorage.setItem(
-        WATCHLIST_FAVORITES_STORAGE_KEY,
-        JSON.stringify(nextFavorites)
-      );
-
-      return nextFavorites;
-    });
-  }
-
   function updateSorting(field: SortField) {
     if (sortField === field) {
       setSortDirection((currentDirection) =>
@@ -176,9 +203,12 @@ export default function Watchlist() {
   }
 
   const visibleItems = useMemo(() => {
-    const filteredItems = showFavoritesOnly
-      ? market.filter((item) => favorites.includes(item.symbol))
-      : market;
+    const filteredItems =
+      showActiveListOnly && activeWatchlist
+        ? market.filter((item) =>
+            activeWatchlist.symbols.includes(item.symbol)
+          )
+        : market;
 
     return [...filteredItems].sort(
       (firstItem, secondItem) => {
@@ -206,9 +236,9 @@ export default function Watchlist() {
       }
     );
   }, [
-    favorites,
+    activeWatchlist,
     market,
-    showFavoritesOnly,
+    showActiveListOnly,
     sortDirection,
     sortField,
   ]);
@@ -226,22 +256,95 @@ export default function Watchlist() {
       title="Live Watchlist"
       subtitle="Updates automatically every 30 seconds"
     >
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {watchlists.map((watchlist) => (
+          <button
+            key={watchlist.id}
+            type="button"
+            onClick={() =>
+              setActiveWatchlistId(watchlist.id)
+            }
+            className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${
+              activeWatchlist?.id === watchlist.id
+                ? "border-blue-500/40 bg-blue-500/10 text-blue-300"
+                : "border-zinc-800 bg-zinc-950/50 text-zinc-400 hover:text-white"
+            }`}
+          >
+            {watchlist.name}
+          </button>
+        ))}
+
+        {isCreatingList ? (
+          <form
+            action={(formData) => {
+              createWatchlistAction(formData);
+              setIsCreatingList(false);
+            }}
+            className="flex items-center gap-2"
+          >
+            <input
+              type="text"
+              name="name"
+              autoFocus
+              placeholder="List name"
+              required
+              className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
+            />
+
+            <button
+              type="submit"
+              className="rounded-lg border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs font-medium text-zinc-400 transition hover:text-white"
+            >
+              Add
+            </button>
+          </form>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsCreatingList(true)}
+            className="rounded-lg border border-dashed border-zinc-800 px-3 py-2 text-xs font-medium text-zinc-500 transition hover:text-white"
+          >
+            + New list
+          </button>
+        )}
+      </div>
+
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={() =>
-            setShowFavoritesOnly(
-              (currentValue) => !currentValue
-            )
-          }
-          className={`rounded-lg border px-3 py-2 text-xs font-medium transition ${
-            showFavoritesOnly
-              ? "border-yellow-500/40 bg-yellow-500/10 text-yellow-300"
-              : "border-zinc-800 bg-zinc-950/50 text-zinc-400 hover:text-white"
-          }`}
-        >
-          ★ Favorites
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              setShowActiveListOnly(
+                (currentValue) => !currentValue
+              )
+            }
+            disabled={!activeWatchlist}
+            className={`rounded-lg border px-3 py-2 text-xs font-medium transition disabled:cursor-not-allowed disabled:opacity-50 ${
+              showActiveListOnly
+                ? "border-yellow-500/40 bg-yellow-500/10 text-yellow-300"
+                : "border-zinc-800 bg-zinc-950/50 text-zinc-400 hover:text-white"
+            }`}
+          >
+            ★ Show only {activeWatchlist?.name ?? "list"}
+          </button>
+
+          {activeWatchlist && (
+            <form action={deleteWatchlistAction}>
+              <input
+                type="hidden"
+                name="watchlistId"
+                value={activeWatchlist.id}
+              />
+
+              <button
+                type="submit"
+                className="rounded-lg border border-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10"
+              >
+                Delete list
+              </button>
+            </form>
+          )}
+        </div>
 
         <button
           type="button"
@@ -297,7 +400,7 @@ export default function Watchlist() {
         ) : visibleItems.length === 0 ? (
           <div className="px-4 py-10 text-center">
             <p className="text-sm font-medium text-zinc-300">
-              No favorite assets
+              No assets in this list
             </p>
 
             <p className="mt-1 text-xs text-zinc-500">
@@ -306,8 +409,10 @@ export default function Watchlist() {
           </div>
         ) : (
           visibleItems.map((item) => {
-            const isFavorite = favorites.includes(
-              item.symbol
+            const isMember = Boolean(
+              activeWatchlist?.symbols.includes(
+                item.symbol
+              )
             );
             const isPositive = item.change24h >= 0;
             const atlasSignal = atlasSignals[item.symbol];
@@ -365,24 +470,47 @@ export default function Watchlist() {
                   </span>
                 )}
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    toggleFavorite(item.symbol)
-                  }
-                  aria-label={
-                    isFavorite
-                      ? `Remove ${item.symbol} from favorites`
-                      : `Add ${item.symbol} to favorites`
-                  }
-                  className={`text-lg transition ${
-                    isFavorite
-                      ? "text-yellow-400"
-                      : "text-zinc-700 hover:text-yellow-400"
-                  }`}
-                >
-                  {isFavorite ? "★" : "☆"}
-                </button>
+                {activeWatchlist ? (
+                  <form
+                    action={
+                      isMember
+                        ? removeSymbolFromWatchlistAction
+                        : addSymbolToWatchlistAction
+                    }
+                  >
+                    <input
+                      type="hidden"
+                      name="watchlistId"
+                      value={activeWatchlist.id}
+                    />
+
+                    <input
+                      type="hidden"
+                      name="symbol"
+                      value={item.symbol}
+                    />
+
+                    <button
+                      type="submit"
+                      aria-label={
+                        isMember
+                          ? `Remove ${item.symbol} from ${activeWatchlist.name}`
+                          : `Add ${item.symbol} to ${activeWatchlist.name}`
+                      }
+                      className={`text-lg transition ${
+                        isMember
+                          ? "text-yellow-400"
+                          : "text-zinc-700 hover:text-yellow-400"
+                      }`}
+                    >
+                      {isMember ? "★" : "☆"}
+                    </button>
+                  </form>
+                ) : (
+                  <span className="text-xs text-zinc-700">
+                    —
+                  </span>
+                )}
               </div>
             );
           })
