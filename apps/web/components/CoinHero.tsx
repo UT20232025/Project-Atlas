@@ -21,26 +21,28 @@ export default function CoinHero({
       : "text-yellow-400";
 
   return (
-    <div className="rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-8">
-      <div className="flex items-center justify-between">
+    <div className="rounded-3xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-zinc-950 p-5 sm:p-8">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-zinc-500 text-sm">
             Genwelth AI Analysis
           </p>
 
-          <h1 className="mt-2 text-5xl font-bold">
+          <h1 className="mt-2 text-3xl font-bold sm:text-5xl">
             {coin}
           </h1>
 
-          <p className="mt-4 text-4xl font-bold">
+          <p className="mt-4 text-2xl font-bold sm:text-4xl">
             ${price.toLocaleString()}
           </p>
         </div>
 
-        <div className="text-right">
+        <div className="sm:text-right">
           <p className="text-zinc-500">Signal</p>
 
-          <p className={`text-5xl font-bold ${signalColor}`}>
+          <p
+            className={`text-3xl font-bold sm:text-5xl ${signalColor}`}
+          >
             {signal}
           </p>
 
@@ -48,7 +50,7 @@ export default function CoinHero({
             Atlas Score
           </p>
 
-          <p className="text-3xl font-bold">
+          <p className="text-2xl font-bold sm:text-3xl">
             {score}
           </p>
 
@@ -56,7 +58,7 @@ export default function CoinHero({
             Confidence
           </p>
 
-          <p className="text-3xl font-bold text-green-400">
+          <p className="text-2xl font-bold text-green-400 sm:text-3xl">
             {confidence}%
           </p>
         </div>
