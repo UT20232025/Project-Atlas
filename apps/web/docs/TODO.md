@@ -14,8 +14,8 @@
 
 - [x] Portfolio (SQLite database via Prisma, live unrealized P&L)
 - [x] Trading Journal (auto-logget fra lukkede posisjoner + manuell registrering)
-- [ ] Egendefinerte Watchlists
-- [ ] Favoritt-coins
+- [x] Egendefinerte Watchlists (flere navngitte lister, migrert fra gamle favoritter)
+- [x] Favoritt-coins (dekket av egendefinerte watchlists)
 - [x] Eksporter journal til CSV
 
 ---

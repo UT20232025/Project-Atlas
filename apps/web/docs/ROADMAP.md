@@ -32,13 +32,13 @@
 
 ---
 
-# v0.5
+# v0.5 – ✅
 
 ## Trading
 
 - Portfolio ✅
 - Trading Journal ✅
-- Egendefinerte Watchlists
+- Egendefinerte Watchlists ✅
 
 ## Varsler
 
