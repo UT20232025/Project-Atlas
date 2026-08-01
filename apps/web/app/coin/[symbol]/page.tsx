@@ -18,8 +18,8 @@ import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
 import { getSignalHistory } from "../../../lib/atlas/signalHistory";
-import { requireSession } from "../../../lib/auth/session";
 import type { MarketSymbol } from "../../../lib/services/liveMarketService";
+import { getCurrentUser, hasActiveSubscription } from "../../../lib/subscription/requirePro";
 import { getWatchlists } from "../../../lib/watchlists/queries";
 import {
   addSymbolToWatchlist,
@@ -34,7 +34,9 @@ type Props = {
 
 export default async function CoinPage({ params }: Props) {
   const { symbol } = await params;
-  const { userId, email } = await requireSession();
+  const user = await getCurrentUser();
+  const { id: userId, email } = user;
+  const isPro = hasActiveSubscription(user);
 
   const [
     analysis,
@@ -51,7 +53,7 @@ export default async function CoinPage({ params }: Props) {
     getMACDHistory(symbol),
     getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
     getSignalHistory(symbol.toUpperCase() as MarketSymbol, 20),
-    getWatchlists(userId),
+    isPro ? getWatchlists(userId) : Promise.resolve([]),
   ]);
 
   const trendScore =
@@ -76,7 +78,7 @@ export default async function CoinPage({ params }: Props) {
         : 40;
 
   return (
-    <AppLayout userEmail={email}>
+    <AppLayout userEmail={email} isPro={isPro}>
    <div className="flex flex-wrap items-center justify-between gap-4">
   <Link
     href="/"
@@ -85,16 +87,25 @@ export default async function CoinPage({ params }: Props) {
     ← Dashboard
   </Link>
 
-  <WatchlistButton
-    symbol={
-      symbol.toUpperCase() as MarketSymbol
-    }
-    watchlists={watchlists}
-    addSymbolToWatchlistAction={addSymbolToWatchlist}
-    removeSymbolFromWatchlistAction={
-      removeSymbolFromWatchlist
-    }
-  />
+  {isPro ? (
+    <WatchlistButton
+      symbol={
+        symbol.toUpperCase() as MarketSymbol
+      }
+      watchlists={watchlists}
+      addSymbolToWatchlistAction={addSymbolToWatchlist}
+      removeSymbolFromWatchlistAction={
+        removeSymbolFromWatchlist
+      }
+    />
+  ) : (
+    <Link
+      href="/pricing"
+      className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3 font-medium text-zinc-300 transition hover:border-yellow-500/40 hover:text-yellow-300"
+    >
+      💎 Oppgrader for watchlists
+    </Link>
+  )}
 </div>
 
       <div className="mt-8">

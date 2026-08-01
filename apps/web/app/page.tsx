@@ -11,8 +11,9 @@ import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import AppLayout from "../components/layout/AppLayout";
 import Watchlist from "../components/watchlist/Watchlist";
-import { requireSession } from "../lib/auth/session";
+import WatchlistUpsell from "../components/watchlist/WatchlistUpsell";
 import { getDashboardData } from "../lib/services/dashboardService";
+import { getCurrentUser, hasActiveSubscription } from "../lib/subscription/requirePro";
 import { getWatchlists } from "../lib/watchlists/queries";
 import {
   addSymbolToWatchlist,
@@ -23,11 +24,13 @@ import {
 } from "./watchlists/actions";
 
 export default async function HomePage() {
-  const { userId, email } = await requireSession();
+  const user = await getCurrentUser();
+  const { id: userId, email } = user;
+  const isPro = hasActiveSubscription(user);
 
   const [dashboard, watchlists] = await Promise.all([
     getDashboardData(),
-    getWatchlists(userId),
+    isPro ? getWatchlists(userId) : Promise.resolve([]),
   ]);
 
   const opportunity = [...dashboard.scanner].sort(
@@ -45,6 +48,7 @@ export default async function HomePage() {
     <AppLayout
       marketTicker={dashboard.marketTicker}
       userEmail={email}
+      isPro={isPro}
     >
       <DashboardHero />
 
@@ -100,18 +104,22 @@ export default async function HomePage() {
 
       <div className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]">
         <MarketAlerts items={dashboard.scanner} />
-        <Watchlist
-          watchlists={watchlists}
-          createWatchlistAction={createWatchlist}
-          deleteWatchlistAction={deleteWatchlist}
-          addSymbolToWatchlistAction={addSymbolToWatchlist}
-          removeSymbolFromWatchlistAction={
-            removeSymbolFromWatchlist
-          }
-          migrateLegacyFavoritesAction={
-            migrateLegacyFavorites
-          }
-        />
+        {isPro ? (
+          <Watchlist
+            watchlists={watchlists}
+            createWatchlistAction={createWatchlist}
+            deleteWatchlistAction={deleteWatchlist}
+            addSymbolToWatchlistAction={addSymbolToWatchlist}
+            removeSymbolFromWatchlistAction={
+              removeSymbolFromWatchlist
+            }
+            migrateLegacyFavoritesAction={
+              migrateLegacyFavorites
+            }
+          />
+        ) : (
+          <WatchlistUpsell />
+        )}
       </div>
 
       <div className="mb-8">

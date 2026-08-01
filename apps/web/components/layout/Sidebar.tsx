@@ -46,6 +46,11 @@ export const menu = [
     icon: "💼",
   },
   {
+    title: "Oppgrader til Pro",
+    href: "/pricing",
+    icon: "💎",
+  },
+  {
     title: "News",
     href: "/",
     icon: "📰",

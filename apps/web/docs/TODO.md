@@ -25,7 +25,7 @@
 
 - [x] Ekte innlogging (e-post/passord, bcryptjs + jose JWT httpOnly-cookie, ingen ekstern tjeneste)
 - [x] Bruker-eid data for Portfolio/Journal/Watchlists (`userId` per rad, proxy.ts beskytter alle sider)
-- [ ] Stripe-abonnement (venter på at Stripe-konto opprettes)
+- [x] Stripe-abonnement (Genwelth AI Pro, 199 kr/mnd, 7 dagers prøve, Checkout + Billing Portal + webhook)
 
 ---
 

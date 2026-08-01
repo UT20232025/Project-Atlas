@@ -1,10 +1,10 @@
 import AppLayout from "@/components/layout/AppLayout";
 import JournalView from "@/components/journal/JournalView";
-import { requireSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import type {
   MarketSymbol,
 } from "@/lib/services/liveMarketService";
+import { requirePro } from "@/lib/subscription/requirePro";
 import type {
   JournalEntryView,
   TradeDirection,
@@ -13,7 +13,7 @@ import type {
 import { createJournalEntry, deleteJournalEntry } from "./actions";
 
 export default async function JournalPage() {
-  const { userId, email } = await requireSession();
+  const { id: userId, email } = await requirePro();
 
   const entries = await prisma.journalEntry.findMany({
     where: { userId },
@@ -37,7 +37,7 @@ export default async function JournalPage() {
   );
 
   return (
-    <AppLayout userEmail={email}>
+    <AppLayout userEmail={email} isPro>
       <JournalView
         entries={entryViews}
         createEntryAction={createJournalEntry}

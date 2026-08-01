@@ -1,14 +1,14 @@
 import AppLayout from "@/components/layout/AppLayout";
 import TrackRecordView from "@/components/track-record/TrackRecordView";
-import { requireSession } from "@/lib/auth/session";
 import { getTrackRecord } from "@/lib/atlas/trackRecord";
+import { requirePro } from "@/lib/subscription/requirePro";
 
 export default async function TrackRecordPage() {
-  const { email } = await requireSession();
+  const { email } = await requirePro();
   const trackRecord = await getTrackRecord();
 
   return (
-    <AppLayout userEmail={email}>
+    <AppLayout userEmail={email} isPro>
       <TrackRecordView trackRecord={trackRecord} />
     </AppLayout>
   );

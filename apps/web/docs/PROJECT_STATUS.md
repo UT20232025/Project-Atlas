@@ -78,7 +78,13 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 - `proxy.ts` beskytter alle sider unntatt `/login`/`/signup` og omdirigerer til innlogging
 - Portfolio, Trading Journal og Watchlists er nå bruker-eide (egen `userId` per rad); Signalhistorikk og Track Record forblir delt markedsdata
 - Første konto som registreres arver automatisk alt eksisterende data fra før innlogging fantes
-- Stripe-abonnement er neste steg (ikke startet — venter på at brukeren oppretter Stripe-konto)
+
+## Abonnement (Stripe)
+
+- Genwelth AI Pro (`/pricing`) — 199 kr/måned, 7 dagers gratis prøveperiode, Stripe Checkout (hostet side, ingen kortdata i egen kode)
+- Låser opp Track Record, Portfolio, Trading Journal og Watchlists; Dashboard og live Atlas-scanner forblir gratis
+- Stripe-webhook (`/api/stripe/webhook`) holder abonnementsstatus oppdatert (fornyelse, kansellering); i tillegg synkroniseres status umiddelbart ved retur fra Checkout så brukeren ikke venter på webhook
+- "Administrer abonnement" åpner Stripes hostede Billing Portal — ingen egenbygget kanselling/kortoppdatering-UI
 
 ---
 
@@ -111,8 +117,9 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 
 # Neste prioriteringer
 
-1. Stripe-abonnement (auth er på plass, betaling er neste steg — venter på Stripe-konto/API-nøkler fra brukeren)
-2. v0.8 Brukeropplevelse — mobiloptimalisering og animasjoner gjenstår (tema er ferdig)
+1. v0.8 Brukeropplevelse — mobiloptimalisering og animasjoner gjenstår (tema er ferdig)
+2. Bot-distribusjon og landingsside (pillar 2 og 4 — ikke startet, venter på bekreftelse)
+3. Bytte Stripe fra test-nøkler til live-nøkler når appen er klar for reelle abonnenter
 
 ---
 

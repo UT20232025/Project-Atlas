@@ -19,12 +19,14 @@ type AppLayoutProps = {
   children: ReactNode;
   marketTicker?: MarketTickerData;
   userEmail?: string;
+  isPro?: boolean;
 };
 
 export default function AppLayout({
   children,
   marketTicker,
   userEmail,
+  isPro,
 }: AppLayoutProps) {
   return (
     <div className="min-h-screen text-white">
@@ -37,7 +39,7 @@ export default function AppLayout({
         </div>
 
         <div className="min-w-0 flex-1">
-          <Topbar marketTicker={marketTicker} userEmail={userEmail} />
+          <Topbar marketTicker={marketTicker} userEmail={userEmail} isPro={isPro} />
 
           <main className="p-6 md:p-8">{children}</main>
         </div>

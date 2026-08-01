@@ -18,9 +18,10 @@ type TopbarProps = {
     btcDominance: number;
   };
   userEmail?: string;
+  isPro?: boolean;
 };
 
-export default function Topbar({ marketTicker, userEmail }: TopbarProps) {
+export default function Topbar({ marketTicker, userEmail, isPro }: TopbarProps) {
   return (
     <header className="border-b border-zinc-800 bg-zinc-950">
       <div className="flex min-h-20 items-center justify-between gap-2 px-3 py-4 sm:gap-4 sm:px-6">
@@ -78,7 +79,7 @@ export default function Topbar({ marketTicker, userEmail }: TopbarProps) {
 
           <ThemeToggle />
 
-          <UserMenu email={userEmail} />
+          <UserMenu email={userEmail} isPro={isPro} />
         </div>
       </div>
 

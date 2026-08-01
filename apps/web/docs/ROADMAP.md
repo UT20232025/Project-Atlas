@@ -67,7 +67,7 @@
 
 - Ekte innlogging (e-post/passord) ✅
 - Bruker-eid Portfolio/Journal/Watchlists ✅
-- Stripe-abonnement (neste steg, venter på Stripe-konto)
+- Stripe-abonnement — Genwelth AI Pro, 199 kr/mnd, 7 dagers prøveperiode ✅
 
 ---
 

@@ -7,9 +7,10 @@ import { logout } from "@/lib/auth/actions";
 
 type UserMenuProps = {
   email?: string;
+  isPro?: boolean;
 };
 
-export default function UserMenu({ email }: UserMenuProps) {
+export default function UserMenu({ email, isPro }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   if (!email) {
@@ -38,7 +39,7 @@ export default function UserMenu({ email }: UserMenuProps) {
           </span>
 
           <span className="block text-xs text-zinc-500">
-            Free Beta
+            {isPro ? "Pro" : "Free Beta"}
           </span>
         </span>
       </button>
