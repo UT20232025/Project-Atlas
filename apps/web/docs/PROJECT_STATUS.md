@@ -92,6 +92,11 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 - WAIT-signaler og lav-confidence-signaler filtreres bort for å unngå spam — gjenbruker den eksisterende signalendring-deteksjonen i `recordSignalIfChanged`, ikke en egen sjekk
 - Formålet er å demonstrere ekte, verifiserbare signaler for folk utenfor appen og drive dem til å registrere seg
 
+## Landingsside
+
+- "/" viser en offentlig markedsføringsside for besøkende uten innlogging (live Track Record-tall, funksjonsoversikt, prisoversikt, lenke til Telegram-kanalen), og den vanlige dashbordet for innloggede brukere — samme URL, ingen egen "/dashboard"-rute
+- `proxy.ts` slipper "/" gjennom uten omdirigering; alle andre sider er fortsatt beskyttet som før
+
 ---
 
 ## Søk
@@ -124,8 +129,9 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 # Neste prioriteringer
 
 1. v0.8 Brukeropplevelse — mobiloptimalisering og animasjoner gjenstår (tema er ferdig)
-2. Landingsside (siste pilar — ikke startet, venter på bekreftelse)
-3. Bytte Stripe fra test-nøkler til live-nøkler når appen er klar for reelle abonnenter
+2. Bytte Stripe fra test-nøkler til live-nøkler når appen er klar for reelle abonnenter
+
+Alle 4 pilarer i abonnements-strategien (Track Record, Stripe, Telegram, Landingsside) er nå fullført.
 
 ---
 

@@ -32,7 +32,7 @@
 ## Distribusjon
 
 - [x] Telegram-kanal med automatiske signaler (LONG/SHORT, høy confidence, filtrert for å unngå spam)
-- [ ] Landingsside
+- [x] Landingsside (offentlig "/" med live Track Record-tall for besøkende uten innlogging)
 
 ---
 

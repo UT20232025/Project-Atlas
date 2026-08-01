@@ -73,6 +73,10 @@
 
 - Telegram-kanal med automatiske Atlas-signaler (LONG/SHORT, høy confidence) ✅
 
+## Markedsføring
+
+- Offentlig landingsside med live Track Record-tall ✅
+
 ---
 
 # v0.8

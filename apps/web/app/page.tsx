@@ -9,9 +9,12 @@ import MarketStats from "../components/dashboard/MarketStats";
 import OpportunityCard from "../components/dashboard/OpportunityCard";
 import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
+import LandingPage from "../components/landing/LandingPage";
 import AppLayout from "../components/layout/AppLayout";
 import Watchlist from "../components/watchlist/Watchlist";
 import WatchlistUpsell from "../components/watchlist/WatchlistUpsell";
+import { getTrackRecord } from "../lib/atlas/trackRecord";
+import { getSession } from "../lib/auth/session";
 import { getDashboardData } from "../lib/services/dashboardService";
 import { getCurrentUser, hasActiveSubscription } from "../lib/subscription/requirePro";
 import { getWatchlists } from "../lib/watchlists/queries";
@@ -24,6 +27,13 @@ import {
 } from "./watchlists/actions";
 
 export default async function HomePage() {
+  const session = await getSession();
+
+  if (!session) {
+    const trackRecord = await getTrackRecord();
+    return <LandingPage trackRecord={trackRecord} />;
+  }
+
   const user = await getCurrentUser();
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
