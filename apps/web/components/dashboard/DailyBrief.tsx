@@ -15,17 +15,17 @@ export default function DailyBrief({
 }: DailyBriefProps) {
   const marketText =
     bullish > bearish
-      ? "Markedet viser bullish momentum."
+      ? "The market is showing bullish momentum."
       : bearish > bullish
-      ? "Markedet viser bearish momentum."
-      : "Markedet er balansert.";
+      ? "The market is showing bearish momentum."
+      : "The market is balanced.";
 
   const sentiment =
     fearGreed >= 70
-      ? "Investorene viser sterk grådighet."
+      ? "Investors are showing strong greed."
       : fearGreed <= 30
-      ? "Investorene viser betydelig frykt."
-      : "Sentimentet er nøytralt.";
+      ? "Investors are showing significant fear."
+      : "Sentiment is neutral.";
 
   return (
    <section className="atlas-card rounded-2xl p-8">
@@ -43,11 +43,11 @@ export default function DailyBrief({
         <p>{sentiment}</p>
 
         <p>
-          {bullish} bullish • {neutral} nøytrale • {bearish} bearish markeder.
+          {bullish} bullish • {neutral} neutral • {bearish} bearish markets.
         </p>
 
         <p>
-          Bitcoin-dominansen ligger på{" "}
+          Bitcoin dominance is at{" "}
           <span className="font-bold">
             {btcDominance.toFixed(2)}%
           </span>
@@ -55,8 +55,8 @@ export default function DailyBrief({
         </p>
 
         <p className="text-green-400 font-semibold">
-          Atlas anbefaler å fokusere på markedene med høyest
-          Confidence Score.
+          Atlas recommends focusing on the markets with the
+          highest Confidence Score.
         </p>
       </div>
     </section>

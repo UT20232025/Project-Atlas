@@ -32,7 +32,7 @@ export async function fetchTicker(
   );
 
   if (!response.ok) {
-    throw new Error(`Kunne ikke hente markedsdata for ${symbol}`);
+    throw new Error(`Could not fetch market data for ${symbol}`);
   }
 
   const data = (await response.json()) as BinanceTicker;
@@ -58,7 +58,7 @@ export async function fetchKlines(
   );
 
   if (!response.ok) {
-    throw new Error(`Kunne ikke hente candles for ${symbol}`);
+    throw new Error(`Could not fetch candles for ${symbol}`);
   }
 
   return (await response.json()) as BinanceKline[];
@@ -83,7 +83,7 @@ export async function fetchTopMovers(): Promise<TopMover[]> {
   );
 
   if (!response.ok) {
-    throw new Error("Kunne ikke hente Top Movers");
+    throw new Error("Could not fetch Top Movers");
   }
 
   const data = (await response.json()) as BinanceTicker[];

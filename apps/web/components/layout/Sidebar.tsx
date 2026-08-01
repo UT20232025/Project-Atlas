@@ -46,7 +46,7 @@ export const menu = [
     icon: "💼",
   },
   {
-    title: "Oppgrader til Pro",
+    title: "Upgrade to Pro",
     href: "/pricing",
     icon: "💎",
   },

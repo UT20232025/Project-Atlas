@@ -129,8 +129,8 @@ export default function MACDChart({ values }: MACDChartProps) {
       </div>
 
       <div className="mt-4 flex gap-6 text-sm text-zinc-400">
-        <span>Blå: MACD</span>
-        <span>Oransje: Signal</span>
+        <span>Blue: MACD</span>
+        <span>Orange: Signal</span>
         <span>Histogram: Momentum</span>
       </div>
     </div>

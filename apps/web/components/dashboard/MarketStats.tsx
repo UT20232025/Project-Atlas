@@ -17,7 +17,7 @@ function getMarketHealth(
   if (bullishCount > bearishCount + 3) {
     return {
       value: "Bullish",
-      subtitle: `${bullishCount} markeder i opptrend`,
+      subtitle: `${bullishCount} markets trending up`,
       color: "green" as const,
     };
   }
@@ -25,14 +25,14 @@ function getMarketHealth(
   if (bearishCount > bullishCount + 3) {
     return {
       value: "Bearish",
-      subtitle: `${bearishCount} markeder i nedtrend`,
+      subtitle: `${bearishCount} markets trending down`,
       color: "red" as const,
     };
   }
 
   return {
     value: "Neutral",
-    subtitle: "Blandet marked",
+    subtitle: "Mixed market",
     color: "yellow" as const,
   };
 }
@@ -82,7 +82,7 @@ export default function MarketStats({
       <StatCard
         title="BTC Dominance"
         value={`${btcDominance.toFixed(2)}%`}
-        subtitle="Bitcoin markedsandel"
+        subtitle="Bitcoin market share"
         color="blue"
       />
 
@@ -92,7 +92,7 @@ export default function MarketStats({
         subtitle={
           topSetup
             ? `${topSetup.signal} • Confidence ${topSetup.confidence}`
-            : "Ingen data"
+            : "No data"
         }
         color={
           topSetup?.signal === "LONG"

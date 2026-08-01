@@ -7,7 +7,7 @@ import Input from "@/components/ui/Input";
 import { login } from "./actions";
 
 const ERROR_MESSAGES: Record<string, string> = {
-  invalid_credentials: "Feil e-post eller passord.",
+  invalid_credentials: "Incorrect email or password.",
 };
 
 type LoginPageProps = {
@@ -39,11 +39,11 @@ export default async function LoginPage({
 
         <div className="atlas-card rounded-2xl p-6">
           <h1 className="text-xl font-bold text-white">
-            Logg inn
+            Log in
           </h1>
 
           <p className="mt-1 text-sm text-zinc-500">
-            Fortsett til Genwelth AI
+            Continue to Genwelth AI
           </p>
 
           {errorMessage && (
@@ -58,7 +58,7 @@ export default async function LoginPage({
                 htmlFor="email"
                 className="text-xs text-zinc-500"
               >
-                E-post
+                Email
               </label>
 
               <Input
@@ -76,7 +76,7 @@ export default async function LoginPage({
                 htmlFor="password"
                 className="text-xs text-zinc-500"
               >
-                Passord
+                Password
               </label>
 
               <Input
@@ -90,17 +90,17 @@ export default async function LoginPage({
             </div>
 
             <Button type="submit" className="w-full">
-              Logg inn
+              Log in
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            Ingen konto?{" "}
+            No account?{" "}
             <Link
               href="/signup"
               className="text-white underline"
             >
-              Registrer deg
+              Sign up
             </Link>
           </p>
         </div>

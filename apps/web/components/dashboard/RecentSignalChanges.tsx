@@ -25,13 +25,13 @@ export default function RecentSignalChanges({
         </h2>
 
         <p className="mt-1 text-sm text-zinc-500">
-          Atlas-signaler som nettopp har snudd
+          Atlas signals that just flipped
         </p>
       </div>
 
       {items.length === 0 ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 text-zinc-400">
-          Ingen signalendringer registrert ennå.
+          No signal changes recorded yet.
         </div>
       ) : (
         <div className="space-y-3">

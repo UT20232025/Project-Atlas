@@ -36,23 +36,23 @@ export async function getAtlasAnalysis(
 
   if (indicators.trend === "BULLISH") {
     confidence += 8;
-    reasons.push("EMA 20 ligger over EMA 50");
+    reasons.push("EMA 20 is above EMA 50");
   }
 
   if (indicators.trend === "BEARISH") {
     confidence += 8;
-    reasons.push("EMA 20 ligger under EMA 50");
+    reasons.push("EMA 20 is below EMA 50");
   }
 
   if (indicators.rsi >= 45 && indicators.rsi <= 65) {
     confidence += 7;
-    reasons.push("RSI viser balansert momentum");
+    reasons.push("RSI shows balanced momentum");
   } else if (indicators.rsi > 70) {
     confidence -= 5;
-    reasons.push("RSI viser at markedet kan være overkjøpt");
+    reasons.push("RSI shows the market may be overbought");
   } else if (indicators.rsi < 30) {
     confidence -= 5;
-    reasons.push("RSI viser at markedet kan være oversolgt");
+    reasons.push("RSI shows the market may be oversold");
   }
 
   confidence = Math.max(0, Math.min(100, confidence));

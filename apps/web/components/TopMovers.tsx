@@ -15,7 +15,7 @@ export default function TopMovers({ items }: TopMoversProps) {
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900">
       <div className="border-b border-zinc-800 p-5">
         <h2 className="text-2xl font-bold">🔥 Top Movers</h2>
-        <p className="text-sm text-zinc-500">Største bevegelser siste 24t</p>
+        <p className="text-sm text-zinc-500">Biggest moves in the last 24h</p>
       </div>
 
       <div className="divide-y divide-zinc-800">
@@ -39,7 +39,7 @@ export default function TopMovers({ items }: TopMoversProps) {
                 {item.change}%
               </p>
 
-              <p className="text-right text-zinc-500">Analyse →</p>
+              <p className="text-right text-zinc-500">Analysis →</p>
             </Link>
           );
         })}

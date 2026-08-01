@@ -15,24 +15,24 @@ export default function AtlasAnalysis({
 
   const momentum =
     changeNumber > 3
-      ? "Sterkt bullish momentum"
+      ? "Strong bullish momentum"
       : changeNumber < -3
-      ? "Sterkt bearish momentum"
-      : "Nøytralt momentum";
+      ? "Strong bearish momentum"
+      : "Neutral momentum";
 
   const risk =
     score >= 85
       ? "Medium"
       : score >= 70
-      ? "Medium / høy"
-      : "Vent / lav kvalitet";
+      ? "Medium / high"
+      : "Wait / low quality";
 
   const conclusion =
     signal === "LONG"
-      ? "Markedet viser styrke. Vent helst på en god inngang og bruk tydelig stop loss."
+      ? "The market is showing strength. Wait for a good entry and use a clear stop loss."
       : signal === "SHORT"
-      ? "Markedet viser svakhet. Vent på bekreftet brudd eller retest før inngang."
-      : "Markedet er uklart. Atlas anbefaler å vente på et bedre oppsett.";
+      ? "The market is showing weakness. Wait for a confirmed breakdown or retest before entry."
+      : "The market is unclear. Atlas recommends waiting for a better setup.";
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
@@ -40,7 +40,7 @@ export default function AtlasAnalysis({
         <div>
           <h2 className="text-3xl font-bold">Atlas Analysis</h2>
           <p className="mt-1 text-zinc-500">
-            Forklaring basert på Atlas Score {score}
+            Explanation based on Atlas Score {score}
           </p>
         </div>
 
@@ -63,7 +63,7 @@ export default function AtlasAnalysis({
       </div>
 
       <div className="mt-6 rounded-xl bg-zinc-950 p-5">
-        <p className="text-sm text-zinc-500">Hvorfor Atlas mener dette</p>
+        <p className="text-sm text-zinc-500">Why Atlas thinks this</p>
 
         <ul className="mt-4 space-y-3">
           {reasons.map((reason) => (
@@ -76,7 +76,7 @@ export default function AtlasAnalysis({
       </div>
 
       <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950 p-5">
-        <p className="text-sm text-zinc-500">Konklusjon</p>
+        <p className="text-sm text-zinc-500">Conclusion</p>
         <p className="mt-2 text-zinc-300">{conclusion}</p>
       </div>
     </div>

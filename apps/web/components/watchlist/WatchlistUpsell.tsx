@@ -5,21 +5,21 @@ import Section from "@/components/ui/Section";
 
 export default function WatchlistUpsell() {
   return (
-    <Section title="Watchlist" subtitle="Kun for Pro-abonnenter">
+    <Section title="Watchlist" subtitle="Pro subscribers only">
       <div className="atlas-subcard flex flex-col items-center gap-3 rounded-xl p-8 text-center">
         <span className="text-3xl">💎</span>
 
         <p className="font-medium text-zinc-300">
-          Egendefinerte watchlists krever Pro
+          Custom watchlists require Pro
         </p>
 
         <p className="text-sm text-zinc-600">
-          Opprett navngitte lister og følg favorittcoins dine.
+          Create named lists and follow your favorite coins.
         </p>
 
         <Link href="/pricing">
           <Button size="sm" className="mt-2">
-            Oppgrader til Pro
+            Upgrade to Pro
           </Button>
         </Link>
       </div>

@@ -17,7 +17,7 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.confidence >= 90 && item.signal === "LONG") {
       alerts.push({
         coin: item.coin,
-        message: `Sterkt LONG-oppsett med Confidence ${item.confidence}`,
+        message: `Strong LONG setup with Confidence ${item.confidence}`,
         tone: "green",
       });
     }
@@ -25,7 +25,7 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.confidence >= 90 && item.signal === "SHORT") {
       alerts.push({
         coin: item.coin,
-        message: `Sterkt SHORT-oppsett med Confidence ${item.confidence}`,
+        message: `Strong SHORT setup with Confidence ${item.confidence}`,
         tone: "red",
       });
     }
@@ -33,7 +33,7 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.rsi >= 70) {
       alerts.push({
         coin: item.coin,
-        message: `RSI er overkjøpt på ${item.rsi.toFixed(1)}`,
+        message: `RSI is overbought at ${item.rsi.toFixed(1)}`,
         tone: "red",
       });
     }
@@ -41,7 +41,7 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.rsi <= 30) {
       alerts.push({
         coin: item.coin,
-        message: `RSI er oversolgt på ${item.rsi.toFixed(1)}`,
+        message: `RSI is oversold at ${item.rsi.toFixed(1)}`,
         tone: "green",
       });
     }
@@ -49,7 +49,7 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.trend === "BULLISH" && item.change24h > 5) {
       alerts.push({
         coin: item.coin,
-        message: `Bullish trend og sterk 24t-bevegelse på ${item.change24h.toFixed(2)}%`,
+        message: `Bullish trend and strong 24h move of ${item.change24h.toFixed(2)}%`,
         tone: "blue",
       });
     }
@@ -75,13 +75,13 @@ export default function MarketAlerts({
       <div className="mb-5">
         <h2 className="text-2xl font-bold">Market Alerts</h2>
         <p className="mt-1 text-sm text-zinc-500">
-          Viktige signaler oppdaget av Atlas
+          Important signals detected by Atlas
         </p>
       </div>
 
       {alerts.length === 0 ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 text-zinc-400">
-          Ingen sterke varsler akkurat nå.
+          No strong alerts right now.
         </div>
       ) : (
         <div className="grid gap-3 md:grid-cols-2">

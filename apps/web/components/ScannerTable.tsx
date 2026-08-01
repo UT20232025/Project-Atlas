@@ -23,7 +23,7 @@ export default function ScannerTable({ items }: ScannerTableProps) {
       <div className="border-b border-zinc-800 p-6">
         <h2 className="text-2xl font-bold">Atlas Scanner</h2>
         <p className="mt-1 text-sm text-zinc-500">
-          Markedene rangert etter Atlas Confidence
+          Markets ranked by Atlas Confidence
         </p>
       </div>
 

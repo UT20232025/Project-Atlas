@@ -10,8 +10,8 @@ export default function DashboardHero() {
       </h1>
 
       <p className="mt-3 max-w-2xl text-zinc-400">
-        Live markedsanalyse, tekniske indikatorer og rangering av
-        kryptomarkedet.
+        Live market analysis, technical indicators, and rankings
+        of the crypto market.
       </p>
     </header>
   );

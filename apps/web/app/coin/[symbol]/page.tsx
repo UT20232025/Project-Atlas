@@ -103,7 +103,7 @@ export default async function CoinPage({ params }: Props) {
       href="/pricing"
       className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3 font-medium text-zinc-300 transition hover:border-yellow-500/40 hover:text-yellow-300"
     >
-      💎 Oppgrader for watchlists
+      💎 Upgrade for watchlists
     </Link>
   )}
 </div>

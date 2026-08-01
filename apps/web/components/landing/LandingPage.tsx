@@ -9,30 +9,30 @@ const FEATURES = [
     icon: "🤖",
     title: "Atlas AI Engine",
     description:
-      "Trend, RSI, MACD, volum, liquidity, market structure, order blocks og multi-timeframe-analyse i sanntid.",
+      "Trend, RSI, MACD, volume, liquidity, market structure, order blocks, and multi-timeframe analysis in real time.",
   },
   {
     icon: "🏆",
     title: "Verified Track Record",
     description:
-      "24t-utfall for hvert LONG/SHORT-signal, verifisert mot ekte Binance-priser — ikke bare påstander.",
+      "24h outcome for every LONG/SHORT signal, verified against real Binance prices — not just claims.",
   },
   {
     icon: "💼",
     title: "Portfolio",
     description:
-      "Spor åpne posisjoner med live urealisert P&L.",
+      "Track open positions with live unrealized P&L.",
   },
   {
     icon: "📒",
     title: "Trading Journal",
     description:
-      "Automatisk logging fra lukkede posisjoner, manuell registrering, CSV-eksport.",
+      "Automatic logging from closed positions, manual entry, CSV export.",
   },
   {
     icon: "⭐",
-    title: "Egendefinerte Watchlists",
-    description: "Flere navngitte lister for coinene du følger.",
+    title: "Custom Watchlists",
+    description: "Multiple named lists for the coins you follow.",
   },
 ];
 
@@ -62,11 +62,11 @@ export default function LandingPage({
 
         <div className="flex items-center gap-3">
           <Link href="/login">
-            <Button variant="secondary">Logg inn</Button>
+            <Button variant="secondary">Log in</Button>
           </Link>
 
           <Link href="/signup">
-            <Button>Registrer deg gratis</Button>
+            <Button>Sign up free</Button>
           </Link>
         </div>
       </header>
@@ -78,18 +78,19 @@ export default function LandingPage({
           </p>
 
           <h1 className="mt-4 text-4xl font-bold md:text-6xl">
-            AI-drevet kryptoanalyse med et bevisbart track record
+            AI-driven crypto analysis with a provable track record
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">
-            Genwelth AI analyserer kryptomarkedet i sanntid og gir
-            deg LONG/SHORT-signaler — og vi viser deg ærlig hvordan
-            de faktisk har prestert, ikke bare hva de sier.
+            Genwelth AI analyzes the crypto market in real time and
+            gives you LONG/SHORT signals — and we show you honestly
+            how they&apos;ve actually performed, not just what they
+            claim.
           </p>
 
           <div className="mt-8 flex justify-center gap-4">
             <Link href="/signup">
-              <Button size="lg">Kom i gang gratis</Button>
+              <Button size="lg">Get started free</Button>
             </Link>
 
             <a
@@ -98,7 +99,7 @@ export default function LandingPage({
               rel="noopener noreferrer"
             >
               <Button variant="secondary" size="lg">
-                Følg signaler på Telegram
+                Follow signals on Telegram
               </Button>
             </a>
           </div>
@@ -110,8 +111,8 @@ export default function LandingPage({
           </h2>
 
           <p className="mt-1 text-center text-sm text-zinc-500">
-            Hvert LONG/SHORT-signal evalueres automatisk mot ekte
-            priser 24 timer etter det ble gitt
+            Every LONG/SHORT signal is automatically evaluated
+            against real prices 24 hours after it was given
           </p>
 
           {hasClosedTrades ? (
@@ -125,7 +126,7 @@ export default function LandingPage({
 
               <div className="atlas-subcard rounded-xl p-6 text-center">
                 <p className="text-xs text-zinc-500">
-                  Verifiserte signaler
+                  Verified signals
                 </p>
                 <p className="mt-2 text-3xl font-bold text-white">
                   {trackRecord.totalClosed}
@@ -133,7 +134,7 @@ export default function LandingPage({
               </div>
 
               <div className="atlas-subcard rounded-xl p-6 text-center">
-                <p className="text-xs text-zinc-500">Snitt P&L</p>
+                <p className="text-xs text-zinc-500">Avg P&L</p>
                 <p
                   className={`mt-2 text-3xl font-bold ${
                     trackRecord.avgPnlPercent >= 0
@@ -148,7 +149,7 @@ export default function LandingPage({
 
               <div className="atlas-subcard rounded-xl p-6 text-center">
                 <p className="text-xs text-zinc-500">
-                  Under evaluering
+                  Under evaluation
                 </p>
                 <p className="mt-2 text-3xl font-bold text-white">
                   {trackRecord.openPositions.length}
@@ -161,11 +162,11 @@ export default function LandingPage({
                 {trackRecord.openPositions.length}
               </p>
               <p className="mt-2 text-zinc-400">
-                signaler under sanntidsevaluering akkurat nå
+                signals under real-time evaluation right now
               </p>
               <p className="mt-1 text-sm text-zinc-600">
-                Verifiserte resultater vises her etter hvert som
-                24-timersvinduet lukkes for hvert signal.
+                Verified results will appear here as the 24-hour
+                window closes for each signal.
               </p>
             </div>
           )}
@@ -175,15 +176,15 @@ export default function LandingPage({
               href="/signup"
               className="text-sm text-zinc-400 underline hover:text-white"
             >
-              Registrer deg for å se full historikk og
-              per-coin-statistikk →
+              Sign up to see the full history and per-coin
+              stats →
             </Link>
           </div>
         </section>
 
         <section className="mt-16">
           <h2 className="text-center text-2xl font-bold">
-            Alt du trenger for å handle med data, ikke magefølelse
+            Everything you need to trade on data, not gut feeling
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -211,17 +212,17 @@ export default function LandingPage({
 
           <div className="mt-4 flex items-baseline justify-center gap-2">
             <p className="text-4xl font-bold text-white">199 kr</p>
-            <p className="text-zinc-500">/ måned</p>
+            <p className="text-zinc-500">/ month</p>
           </div>
 
           <p className="mt-2 text-zinc-400">
-            7 dager gratis prøveperiode. Låser opp Track Record,
-            Portfolio, Trading Journal og Watchlists.
+            7-day free trial. Unlocks Track Record, Portfolio,
+            Trading Journal, and Watchlists.
           </p>
 
           <div className="mt-6">
             <Link href="/signup">
-              <Button size="lg">Start gratis prøveperiode</Button>
+              <Button size="lg">Start free trial</Button>
             </Link>
           </div>
         </section>

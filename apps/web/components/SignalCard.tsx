@@ -44,7 +44,7 @@ export default function SignalCard({ coin, signal, score, price, change }: Signa
             </div>
 
             <p className="mt-5 text-4xl font-bold">${price}</p>
-            <p className={`mt-1 ${changeColor}`}>{change}% siste 24t</p>
+            <p className={`mt-1 ${changeColor}`}>{change}% last 24h</p>
           </div>
 
           <div className="text-right">

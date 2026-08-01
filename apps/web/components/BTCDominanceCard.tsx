@@ -11,7 +11,7 @@ export default function BTCDominanceCard({ value }: BTCDominanceCardProps) {
         {value}%
       </h2>
 
-      <p className="text-zinc-400">Bitcoin markedsandel</p>
+      <p className="text-zinc-400">Bitcoin market share</p>
     </div>
   );
 }

@@ -49,7 +49,7 @@ export default function AtlasScoreBreakdownCard({
         <div>
           <h2 className="text-2xl font-bold">Atlas Score Breakdown</h2>
           <p className="mt-1 text-sm text-zinc-500">
-            Slik er den samlede poengsummen beregnet
+            How the combined score is calculated
           </p>
         </div>
 
@@ -74,8 +74,8 @@ export default function AtlasScoreBreakdownCard({
 
       <div className="mt-8 border-t border-zinc-800 pt-6">
         <p className="mb-4 text-sm text-zinc-500">
-          AI Decision Engine — inkluderer market structure,
-          liquidity, order blocks og fair value gaps
+          AI Decision Engine — includes market structure,
+          liquidity, order blocks, and fair value gaps
         </p>
 
         <div className="grid gap-5 md:grid-cols-2">

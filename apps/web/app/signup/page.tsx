@@ -8,8 +8,8 @@ import { signup } from "./actions";
 
 const ERROR_MESSAGES: Record<string, string> = {
   invalid_input:
-    "Skriv inn en gyldig e-post og et passord på minst 8 tegn.",
-  email_taken: "Det finnes allerede en konto med denne e-posten.",
+    "Enter a valid email and a password with at least 8 characters.",
+  email_taken: "An account with this email already exists.",
 };
 
 type SignupPageProps = {
@@ -41,11 +41,11 @@ export default async function SignupPage({
 
         <div className="atlas-card rounded-2xl p-6">
           <h1 className="text-xl font-bold text-white">
-            Opprett konto
+            Create account
           </h1>
 
           <p className="mt-1 text-sm text-zinc-500">
-            Kom i gang med Genwelth AI
+            Get started with Genwelth AI
           </p>
 
           {errorMessage && (
@@ -60,7 +60,7 @@ export default async function SignupPage({
                 htmlFor="email"
                 className="text-xs text-zinc-500"
               >
-                E-post
+                Email
               </label>
 
               <Input
@@ -78,7 +78,7 @@ export default async function SignupPage({
                 htmlFor="password"
                 className="text-xs text-zinc-500"
               >
-                Passord
+                Password
               </label>
 
               <Input
@@ -92,19 +92,19 @@ export default async function SignupPage({
               />
 
               <p className="text-xs text-zinc-600">
-                Minst 8 tegn.
+                At least 8 characters.
               </p>
             </div>
 
             <Button type="submit" className="w-full">
-              Registrer deg
+              Sign up
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            Har du allerede en konto?{" "}
+            Already have an account?{" "}
             <Link href="/login" className="text-white underline">
-              Logg inn
+              Log in
             </Link>
           </p>
         </div>

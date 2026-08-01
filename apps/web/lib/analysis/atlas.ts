@@ -22,22 +22,22 @@ export function calculateAtlasSignal({
 
   if (priceChangePercent > 3) {
     score += 25;
-    reason.push("Sterk positiv 24t-bevegelse");
+    reason.push("Strong positive 24h move");
   } else if (priceChangePercent < -3) {
     score += 25;
-    reason.push("Sterk negativ 24t-bevegelse");
+    reason.push("Strong negative 24h move");
   } else {
-    reason.push("Ingen tydelig retning siste 24t");
+    reason.push("No clear direction in the last 24h");
   }
 
   if (volume > 1_000_000_000) {
     score += 10;
-    reason.push("Høyt handelsvolum");
+    reason.push("High trading volume");
   }
 
   if (absoluteChange > 6) {
     score += 10;
-    reason.push("Kraftig momentum");
+    reason.push("Strong momentum");
   }
 
   const signal: SignalType =

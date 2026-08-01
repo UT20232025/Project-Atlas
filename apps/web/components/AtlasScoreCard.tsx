@@ -122,7 +122,7 @@ export default function AtlasScoreCard({
                 {displayScore}
               </p>
 
-              <p className="mt-1 text-sm text-zinc-500">av 100</p>
+              <p className="mt-1 text-sm text-zinc-500">of 100</p>
             </div>
           </div>
 

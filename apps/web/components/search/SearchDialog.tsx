@@ -77,13 +77,13 @@ export default function SearchDialog() {
             ))
           ) : (
             <div className="rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3 text-zinc-500">
-              Ingen treff
+              No results
             </div>
           )}
         </div>
 
         <div className="mt-4 text-sm text-zinc-500">
-          Ctrl + K åpner søket • Esc lukker
+          Ctrl + K opens search • Esc closes
         </div>
       </div>
     </div>

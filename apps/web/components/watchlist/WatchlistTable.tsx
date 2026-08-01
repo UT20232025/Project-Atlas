@@ -51,11 +51,11 @@ export default function WatchlistTable({
       {items.length === 0 ? (
         <div className="px-5 py-12 text-center">
           <p className="font-medium text-zinc-300">
-            Watchlisten er tom
+            The watchlist is empty
           </p>
 
           <p className="mt-1 text-sm text-zinc-500">
-            Legg til markeder fra en coin-side.
+            Add markets from a coin page.
           </p>
         </div>
       ) : (
