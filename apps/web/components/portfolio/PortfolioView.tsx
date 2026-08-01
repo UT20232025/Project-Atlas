@@ -86,7 +86,7 @@ export default function PortfolioView({
 
           <button
             type="submit"
-            className="rounded-xl bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-zinc-200"
+            className="rounded-xl bg-[#ffffff] px-5 py-3 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
           >
             Add position
           </button>
@@ -251,7 +251,7 @@ export default function PortfolioView({
 
                       <button
                         type="submit"
-                        className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black transition hover:bg-zinc-200"
+                        className="rounded-lg bg-[#ffffff] px-4 py-2 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
                       >
                         Confirm close
                       </button>

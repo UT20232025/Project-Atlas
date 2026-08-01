@@ -2,7 +2,7 @@
 
 ## Nåværende versjon
 
-v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). Neste versjon (v0.8) er brukeropplevelse (mobiloptimalisering, temaer, animasjoner) — ingen konkret plan enda.
+v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). v0.8 (brukeropplevelse) er delvis i gang — light/dark-tema er ferdig, mobiloptimalisering/animasjoner/ytelse gjenstår.
 
 ---
 
@@ -96,6 +96,8 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 - Button
 - Badge
 - Progress
+- Input
+- ThemeToggle (light/dark, persistert i localStorage, ingen flash ved lasting)
 
 ---
 
@@ -110,7 +112,7 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 # Neste prioriteringer
 
 1. Stripe-abonnement (auth er på plass, betaling er neste steg — venter på Stripe-konto/API-nøkler fra brukeren)
-2. v0.7 Brukeropplevelse (mobiloptimalisering, temaer, animasjoner) — ingen konkret plan enda
+2. v0.8 Brukeropplevelse — mobiloptimalisering og animasjoner gjenstår (tema er ferdig)
 
 ---
 

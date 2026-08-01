@@ -50,7 +50,7 @@ export default function AtlasFactorCard({ factor }: Props) {
 
         <div className="h-2 overflow-hidden rounded-full bg-zinc-800">
           <div
-            className="h-full rounded-full bg-white transition-all"
+            className="h-full rounded-full bg-[#ffffff] transition-all"
             style={{ width: `${percent}%` }}
           />
         </div>

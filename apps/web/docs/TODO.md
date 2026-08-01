@@ -31,7 +31,7 @@
 
 ## Lav prioritet
 
-- [ ] Flere temaer
+- [x] Flere temaer (light/dark-bryter, `[data-theme]`-drevet CSS-variabel-omtema, ingen endring i eksisterende komponenter nødvendig)
 - [ ] Flere språk
 - [ ] Flere animasjoner
 - [ ] Tastatursnarveier

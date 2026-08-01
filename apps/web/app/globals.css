@@ -131,10 +131,52 @@
   --atlas-card: rgba(24, 24, 27, 0.78);
   --atlas-border: rgba(63, 63, 70, 0.8);
   --atlas-glow: rgba(59, 130, 246, 0.16);
+  --atlas-card-bg: linear-gradient(
+    145deg,
+    rgba(39, 39, 42, 0.82),
+    rgba(9, 9, 11, 0.88)
+  );
+  --atlas-subcard-bg: linear-gradient(
+    145deg,
+    rgba(39, 39, 42, 0.55),
+    rgba(9, 9, 11, 0.5)
+  );
+  --atlas-subcard-border: rgba(63, 63, 70, 0.6);
+  --atlas-hover-border: rgba(82, 82, 91, 1);
+  --app-backdrop: #050609;
+}
+
+[data-theme="light"] {
+  --color-white: #18181b;
+  --color-zinc-950: #f4f4f5;
+  --color-zinc-900: #ffffff;
+  --color-zinc-800: #e4e4e7;
+  --color-zinc-700: #d4d4d8;
+  --color-zinc-600: #83838c;
+  --color-zinc-500: #71717a;
+  --color-zinc-400: #52525b;
+  --color-zinc-300: #3f3f46;
+  --color-zinc-200: #27272a;
+
+  --atlas-border: rgba(212, 212, 216, 0.8);
+  --atlas-glow: rgba(59, 130, 246, 0.12);
+  --atlas-card-bg: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.9),
+    rgba(244, 244, 245, 0.95)
+  );
+  --atlas-subcard-bg: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.6),
+    rgba(244, 244, 245, 0.5)
+  );
+  --atlas-subcard-border: rgba(212, 212, 216, 0.6);
+  --atlas-hover-border: rgba(161, 161, 170, 1);
+  --app-backdrop: #f4f4f5;
 }
 
 body {
-  background: #050609;
+  background: var(--app-backdrop);
 }
 
 @keyframes atlas-drift-a {
@@ -190,11 +232,7 @@ body {
 
 .atlas-card {
   border: 1px solid var(--atlas-border);
-  background: linear-gradient(
-    145deg,
-    rgba(39, 39, 42, 0.82),
-    rgba(9, 9, 11, 0.88)
-  );
+  background: var(--atlas-card-bg);
   box-shadow:
     0 18px 50px rgba(0, 0, 0, 0.22),
     0 0 30px var(--atlas-glow);
@@ -202,12 +240,8 @@ body {
 }
 
 .atlas-subcard {
-  border: 1px solid rgba(63, 63, 70, 0.6);
-  background: linear-gradient(
-    145deg,
-    rgba(39, 39, 42, 0.55),
-    rgba(9, 9, 11, 0.5)
-  );
+  border: 1px solid var(--atlas-subcard-border);
+  background: var(--atlas-subcard-bg);
 }
 
 .atlas-card-hover {
@@ -219,7 +253,7 @@ body {
 
 .atlas-card-hover:hover {
   transform: translateY(-2px);
-  border-color: rgba(82, 82, 91, 1);
+  border-color: var(--atlas-hover-border);
   box-shadow:
     0 22px 60px rgba(0, 0, 0, 0.28),
     0 0 36px rgba(59, 130, 246, 0.2);

@@ -1,6 +1,7 @@
 import { Bell, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import MarketTicker from "./MarketTicker";
 import MobileNav from "./MobileNav";
 import UserMenu from "./UserMenu";
@@ -22,8 +23,8 @@ type TopbarProps = {
 export default function Topbar({ marketTicker, userEmail }: TopbarProps) {
   return (
     <header className="border-b border-zinc-800 bg-zinc-950">
-      <div className="flex min-h-20 items-center justify-between gap-4 px-6 py-4">
-        <div className="flex items-center gap-4">
+      <div className="flex min-h-20 items-center justify-between gap-2 px-3 py-4 sm:gap-4 sm:px-6">
+        <div className="flex items-center gap-2 sm:gap-4">
           <MobileNav />
 
           <Link
@@ -53,7 +54,7 @@ export default function Topbar({ marketTicker, userEmail }: TopbarProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
             className="hidden items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm text-zinc-400 transition hover:border-zinc-700 hover:text-white md:flex"
@@ -70,10 +71,12 @@ export default function Topbar({ marketTicker, userEmail }: TopbarProps) {
           <button
             type="button"
             aria-label="Notifications"
-            className="rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-zinc-400 transition hover:border-zinc-700 hover:text-white"
+            className="hidden rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-zinc-400 transition hover:border-zinc-700 hover:text-white sm:block"
           >
             <Bell size={19} />
           </button>
+
+          <ThemeToggle />
 
           <UserMenu email={userEmail} />
         </div>

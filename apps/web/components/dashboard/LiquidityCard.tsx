@@ -149,7 +149,7 @@ export default function LiquidityCard({
 
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-800">
           <div
-            className="h-full rounded-full bg-white"
+            className="h-full rounded-full bg-[#ffffff]"
             style={{
               width: `${liquidity.confidence}%`,
             }}

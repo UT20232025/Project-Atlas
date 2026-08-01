@@ -21,7 +21,10 @@ export default async function LoginPage({
   const errorMessage = error ? ERROR_MESSAGES[error] : undefined;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#050609] p-6 text-white">
+    <div
+      className="flex min-h-screen items-center justify-center p-6 text-white"
+      style={{ background: "var(--app-backdrop)" }}
+    >
       <div className="w-full max-w-sm">
         <div className="mb-8 flex justify-center">
           <Image

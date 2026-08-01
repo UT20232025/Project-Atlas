@@ -78,7 +78,7 @@
 - Mobiloptimalisering
 - Flere animasjoner
 - Forbedret ytelse
-- Flere temaer
+- Flere temaer — Light/dark-bryter ✅
 
 ---
 
