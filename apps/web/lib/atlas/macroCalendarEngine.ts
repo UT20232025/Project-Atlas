@@ -7,7 +7,7 @@ export type UpcomingMacroEvent = {
   hoursUntil: number;
 };
 
-const DEFAULT_EVENT_COUNT = 2;
+const DEFAULT_EVENT_COUNT = 3;
 
 export function getUpcomingMacroEvents(
   count = DEFAULT_EVENT_COUNT,
