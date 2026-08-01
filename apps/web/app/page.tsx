@@ -3,6 +3,7 @@ import AtlasAlerts from "../components/dashboard/AtlasAlerts";
 import AtlasIntelligence from "../components/dashboard/AtlasIntelligence";
 import DailyBrief from "../components/dashboard/DailyBrief";
 import DashboardHero from "../components/dashboard/DashboardHero";
+import MacroEventsCard from "../components/dashboard/MacroEventsCard";
 import MarketAlerts from "../components/dashboard/MarketAlerts";
 import MarketHeatmap from "../components/dashboard/MarketHeatmap";
 import MarketStats from "../components/dashboard/MarketStats";
@@ -13,6 +14,7 @@ import LandingPage from "../components/landing/LandingPage";
 import AppLayout from "../components/layout/AppLayout";
 import Watchlist from "../components/watchlist/Watchlist";
 import WatchlistUpsell from "../components/watchlist/WatchlistUpsell";
+import { getUpcomingMacroEvents } from "../lib/atlas/macroCalendarEngine";
 import { getTrackRecord } from "../lib/atlas/trackRecord";
 import { getSession } from "../lib/auth/session";
 import { getDashboardData } from "../lib/services/dashboardService";
@@ -47,6 +49,8 @@ export default async function HomePage() {
     (first, second) => second.score - first.score
   )[0];
 
+  const upcomingMacroEvents = getUpcomingMacroEvents();
+
   const heatmapItems = dashboard.scanner.map((item) => ({
     coin: item.coin,
     price: item.price,
@@ -61,6 +65,8 @@ export default async function HomePage() {
       isPro={isPro}
     >
       <DashboardHero />
+
+      <MacroEventsCard events={upcomingMacroEvents} />
 
       <div className="mb-8">
         <AtlasLiveAnalysis />

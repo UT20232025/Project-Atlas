@@ -12,12 +12,15 @@ import WatchlistButton from "../../../components/watchlist/WatchlistButton";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
+import WhaleActivityCard from "../../../components/WhaleActivityCard";
 import { getAtlasAnalysis } from "../../../lib/analysis/atlasEngine";
 import { getChartCandles } from "../../../lib/analysis/candles";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
 import { getSignalHistory } from "../../../lib/atlas/signalHistory";
+import { analyzeWhaleActivity } from "../../../lib/atlas/whaleEngine";
+import { fetchRecentTrades } from "../../../lib/services/binanceTradeService";
 import type { MarketSymbol } from "../../../lib/services/liveMarketService";
 import { getCurrentUser, hasActiveSubscription } from "../../../lib/subscription/requirePro";
 import { getWatchlists } from "../../../lib/watchlists/queries";
@@ -46,6 +49,7 @@ export default async function CoinPage({ params }: Props) {
     decisionAnalysis,
     signalHistory,
     watchlists,
+    recentTrades,
   ] = await Promise.all([
     getAtlasAnalysis(symbol),
     getChartCandles(symbol),
@@ -54,7 +58,10 @@ export default async function CoinPage({ params }: Props) {
     getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
     getSignalHistory(symbol.toUpperCase() as MarketSymbol, 20),
     isPro ? getWatchlists(userId) : Promise.resolve([]),
+    fetchRecentTrades(symbol.toUpperCase() as MarketSymbol),
   ]);
+
+  const whaleActivity = analyzeWhaleActivity(recentTrades);
 
   const trendScore =
     analysis.trend === "BULLISH"
@@ -148,6 +155,8 @@ export default async function CoinPage({ params }: Props) {
           ema50={analysis.ema50}
           trend={analysis.trend}
         />
+
+        <WhaleActivityCard activity={whaleActivity} />
       </div>
 
       <div className="mt-8">
