@@ -24,7 +24,7 @@ export async function recordSignalIfChanged(
   symbol: MarketSymbol,
   interval: BinanceInterval,
   decision: SignalDecision
-): Promise<void> {
+): Promise<{ changed: boolean }> {
   try {
     const lastSnapshot = await prisma.signalSnapshot.findFirst({
       where: { symbol, interval },
@@ -32,7 +32,7 @@ export async function recordSignalIfChanged(
     });
 
     if (lastSnapshot && lastSnapshot.signal === decision.signal) {
-      return;
+      return { changed: false };
     }
 
     await prisma.signalSnapshot.create({
@@ -45,11 +45,15 @@ export async function recordSignalIfChanged(
         price: decision.entry,
       },
     });
+
+    return { changed: true };
   } catch (error) {
     console.error(
       "Failed to record Atlas signal history:",
       error
     );
+
+    return { changed: false };
   }
 }
 

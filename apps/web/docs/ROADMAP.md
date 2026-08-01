@@ -69,6 +69,10 @@
 - Bruker-eid Portfolio/Journal/Watchlists ✅
 - Stripe-abonnement — Genwelth AI Pro, 199 kr/mnd, 7 dagers prøveperiode ✅
 
+## Distribusjon
+
+- Telegram-kanal med automatiske Atlas-signaler (LONG/SHORT, høy confidence) ✅
+
 ---
 
 # v0.8

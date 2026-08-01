@@ -5,6 +5,7 @@ import {
 import { recordSignalIfChanged } from "@/lib/atlas/signalHistory";
 import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
+import { notifySignalChange } from "@/lib/telegram/notify";
 
 const CACHE_TTL_MS = 25_000;
 
@@ -46,8 +47,16 @@ export function getCachedAtlasAnalysis(
     }
   });
 
-  promise.then((result) => {
-    void recordSignalIfChanged(symbol, interval, result.decision);
+  promise.then(async (result) => {
+    const { changed } = await recordSignalIfChanged(
+      symbol,
+      interval,
+      result.decision
+    );
+
+    if (changed) {
+      void notifySignalChange(symbol, result.decision);
+    }
   });
 
   return promise;

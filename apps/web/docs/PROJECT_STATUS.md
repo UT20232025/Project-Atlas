@@ -86,6 +86,12 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 - Stripe-webhook (`/api/stripe/webhook`) holder abonnementsstatus oppdatert (fornyelse, kansellering); i tillegg synkroniseres status umiddelbart ved retur fra Checkout så brukeren ikke venter på webhook
 - "Administrer abonnement" åpner Stripes hostede Billing Portal — ingen egenbygget kanselling/kortoppdatering-UI
 
+## Distribusjon (Telegram)
+
+- Offentlig Telegram-kanal (@GenwelthAiSignals) poster automatisk når Atlas gir et LONG/SHORT-signal med høy confidence (terskel 70%, konfigurerbar)
+- WAIT-signaler og lav-confidence-signaler filtreres bort for å unngå spam — gjenbruker den eksisterende signalendring-deteksjonen i `recordSignalIfChanged`, ikke en egen sjekk
+- Formålet er å demonstrere ekte, verifiserbare signaler for folk utenfor appen og drive dem til å registrere seg
+
 ---
 
 ## Søk
@@ -118,7 +124,7 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 # Neste prioriteringer
 
 1. v0.8 Brukeropplevelse — mobiloptimalisering og animasjoner gjenstår (tema er ferdig)
-2. Bot-distribusjon og landingsside (pillar 2 og 4 — ikke startet, venter på bekreftelse)
+2. Landingsside (siste pilar — ikke startet, venter på bekreftelse)
 3. Bytte Stripe fra test-nøkler til live-nøkler når appen er klar for reelle abonnenter
 
 ---

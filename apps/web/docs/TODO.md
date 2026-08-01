@@ -29,6 +29,13 @@
 
 ---
 
+## Distribusjon
+
+- [x] Telegram-kanal med automatiske signaler (LONG/SHORT, høy confidence, filtrert for å unngå spam)
+- [ ] Landingsside
+
+---
+
 ## Lav prioritet
 
 - [x] Flere temaer (light/dark-bryter, `[data-theme]`-drevet CSS-variabel-omtema, ingen endring i eksisterende komponenter nødvendig)
