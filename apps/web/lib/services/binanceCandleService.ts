@@ -75,6 +75,64 @@ export async function fetchBinanceCandles(
   }));
 }
 
+export async function fetchHistoricalCandleRange(
+  symbol: MarketSymbol,
+  interval: BinanceInterval,
+  startTimeMs: number,
+  endTimeMs: number
+): Promise<AtlasCandle[]> {
+  const candles: AtlasCandle[] = [];
+  let cursor = startTimeMs;
+
+  while (cursor < endTimeMs) {
+    const searchParams = new URLSearchParams({
+      symbol,
+      interval,
+      startTime: String(cursor),
+      endTime: String(endTimeMs),
+      limit: "1000",
+    });
+
+    const response = await fetch(
+      `${BINANCE_API_URL}?${searchParams.toString()}`,
+      { cache: "no-store" }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch historical Binance candles: ${response.status}`
+      );
+    }
+
+    const data = (await response.json()) as BinanceKline[];
+
+    if (!Array.isArray(data) || data.length === 0) {
+      break;
+    }
+
+    for (const kline of data) {
+      candles.push({
+        timestamp: Number(kline[0]),
+        open: Number(kline[1]),
+        high: Number(kline[2]),
+        low: Number(kline[3]),
+        close: Number(kline[4]),
+        volume: Number(kline[5]),
+      });
+    }
+
+    const lastOpenTime = Number(data[data.length - 1][0]);
+
+    if (data.length < 1000 || lastOpenTime <= cursor) {
+      break;
+    }
+
+    cursor = lastOpenTime + 1;
+  }
+
+  return candles;
+}
+
 export async function fetchHistoricalClosePrice(
   symbol: MarketSymbol,
   interval: BinanceInterval,

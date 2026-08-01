@@ -262,20 +262,13 @@ function calculateAtr(
   return atr;
 }
 
-async function createTimeframeSnapshot(
-  symbol: MarketSymbol,
-  interval: BinanceInterval
-): Promise<AtlasTimeframeSnapshot> {
-  const candles =
-    await fetchBinanceCandles(
-      symbol,
-      interval,
-      250
-    );
-
+export function buildTimeframeSnapshot(
+  interval: BinanceInterval,
+  candles: BinanceCandles
+): AtlasTimeframeSnapshot {
   if (candles.length < 50) {
     throw new Error(
-      `Not enough candle data to analyze ${symbol} on ${interval}.`
+      `Not enough candle data to analyze ${interval}.`
     );
   }
 
@@ -351,6 +344,23 @@ const fairValueGaps =
 };
 }
 
+async function createTimeframeSnapshot(
+  symbol: MarketSymbol,
+  interval: BinanceInterval
+): Promise<AtlasTimeframeSnapshot> {
+  const candles =
+    await fetchBinanceCandles(
+      symbol,
+      interval,
+      250
+    );
+
+  return buildTimeframeSnapshot(
+    interval,
+    candles
+  );
+}
+
 function getSnapshot(
   snapshots: Map<
     BinanceInterval,
@@ -370,47 +380,13 @@ function getSnapshot(
   return snapshot;
 }
 
-export async function getAtlasAnalysis(
-  symbol: MarketSymbol,
+export function computeAtlasAnalysis(
+  snapshots: Map<
+    BinanceInterval,
+    AtlasTimeframeSnapshot
+  >,
   interval: BinanceInterval = "1h"
-): Promise<AtlasAnalysisResponse> {
-  const requiredIntervals =
-    Array.from(
-      new Set<BinanceInterval>([
-        interval,
-        ...MTF_TIMEFRAMES,
-      ])
-    );
-
-  const snapshotResults =
-    await Promise.all(
-      requiredIntervals.map(
-        (
-          requiredInterval
-        ) =>
-          createTimeframeSnapshot(
-            symbol,
-            requiredInterval
-          )
-      )
-    );
-
-  const snapshots =
-    new Map<
-      BinanceInterval,
-      AtlasTimeframeSnapshot
-    >();
-
-  for (
-    const snapshot
-    of snapshotResults
-  ) {
-    snapshots.set(
-      snapshot.interval,
-      snapshot
-    );
-  }
-
+): AtlasAnalysisResponse {
   const requestedSnapshot =
     getSnapshot(
       snapshots,
@@ -611,4 +587,51 @@ decision,
 
 tradeSetup,
   };
+}
+
+export async function getAtlasAnalysis(
+  symbol: MarketSymbol,
+  interval: BinanceInterval = "1h"
+): Promise<AtlasAnalysisResponse> {
+  const requiredIntervals =
+    Array.from(
+      new Set<BinanceInterval>([
+        interval,
+        ...MTF_TIMEFRAMES,
+      ])
+    );
+
+  const snapshotResults =
+    await Promise.all(
+      requiredIntervals.map(
+        (
+          requiredInterval
+        ) =>
+          createTimeframeSnapshot(
+            symbol,
+            requiredInterval
+          )
+      )
+    );
+
+  const snapshots =
+    new Map<
+      BinanceInterval,
+      AtlasTimeframeSnapshot
+    >();
+
+  for (
+    const snapshot
+    of snapshotResults
+  ) {
+    snapshots.set(
+      snapshot.interval,
+      snapshot
+    );
+  }
+
+  return computeAtlasAnalysis(
+    snapshots,
+    interval
+  );
 }
