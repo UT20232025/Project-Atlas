@@ -83,7 +83,7 @@
 
 ## Brukeropplevelse
 
-- Mobiloptimalisering
+- Mobiloptimalisering — revidert på 375px viewport, ingen reelle overflow-bugs funnet, forbedret ett tap-mål ✅
 - Flere animasjoner
 - Forbedret ytelse
 - Flere temaer — Light/dark-bryter ✅

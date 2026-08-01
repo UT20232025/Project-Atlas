@@ -82,7 +82,7 @@ export default async function CoinPage({ params }: Props) {
    <div className="flex flex-wrap items-center justify-between gap-4">
   <Link
     href="/"
-    className="text-zinc-400 transition hover:text-white"
+    className="inline-block py-2 text-zinc-400 transition hover:text-white"
   >
     ← Dashboard
   </Link>

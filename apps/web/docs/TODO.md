@@ -39,6 +39,7 @@
 ## Lav prioritet
 
 - [x] Flere temaer (light/dark-bryter, `[data-theme]`-drevet CSS-variabel-omtema, ingen endring i eksisterende komponenter nødvendig)
+- [x] Mobiloptimalisering (revidert på 375px viewport: ingen horisontal overflow, mobilmeny fungerer, ett tap-mål forbedret)
 - [ ] Flere språk
 - [ ] Flere animasjoner
 - [ ] Tastatursnarveier
