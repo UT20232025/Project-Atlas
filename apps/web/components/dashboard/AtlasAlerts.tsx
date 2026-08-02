@@ -1,8 +1,12 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
+import {
+  useScannerSignals,
+  type AtlasSignalData,
+} from "@/components/providers/ScannerSignalsProvider";
 import Section from "@/components/ui/Section";
 import Select from "@/components/ui/Select";
 import {
@@ -27,11 +31,6 @@ type AtlasAlert = {
   rule: AlertRule;
   target: number;
   enabled: boolean;
-};
-
-type AtlasSignalData = {
-  signal: "LONG" | "SHORT" | "WAIT";
-  confidence: number;
 };
 
 const RULES_WITHOUT_TARGET: AlertRule[] = [
@@ -126,6 +125,7 @@ function isAlertTriggered(
 
 export default function AtlasAlerts() {
   const { market, loading, error } = useMarket();
+  const atlasSignals = useScannerSignals();
 
   const [alerts, setAlerts] = useState<AtlasAlert[]>(
     getStoredAlerts
@@ -135,63 +135,6 @@ export default function AtlasAlerts() {
   const [rule, setRule] =
     useState<AlertRule>("price_above");
   const [target, setTarget] = useState("");
-  const [atlasSignals, setAtlasSignals] = useState<
-    Record<string, AtlasSignalData>
-  >({});
-
-  useEffect(() => {
-    let isCancelled = false;
-
-    async function loadAtlasSignals() {
-      try {
-        const response = await fetch(
-          "/api/atlas/scanner",
-          { cache: "no-store" }
-        );
-
-        if (!response.ok) {
-          return;
-        }
-
-        const data = (await response.json()) as {
-          items: {
-            coin: string;
-            signal: "LONG" | "SHORT" | "WAIT";
-            confidence: number;
-          }[];
-        };
-
-        if (isCancelled) {
-          return;
-        }
-
-        const nextSignals: Record<string, AtlasSignalData> =
-          {};
-
-        for (const item of data.items) {
-          nextSignals[item.coin] = {
-            signal: item.signal,
-            confidence: item.confidence,
-          };
-        }
-
-        setAtlasSignals(nextSignals);
-      } catch {
-        // Keep showing the last known signals on failure.
-      }
-    }
-
-    void loadAtlasSignals();
-
-    const interval = window.setInterval(() => {
-      void loadAtlasSignals();
-    }, 30_000);
-
-    return () => {
-      isCancelled = true;
-      window.clearInterval(interval);
-    };
-  }, []);
 
   function saveAlerts(nextAlerts: AtlasAlert[]) {
     setAlerts(nextAlerts);

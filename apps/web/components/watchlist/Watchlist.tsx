@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
+import { useScannerSignals } from "@/components/providers/ScannerSignalsProvider";
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
 import type { WatchlistView } from "@/lib/watchlists/queries";
@@ -19,11 +20,6 @@ type SortField = "symbol" | "price" | "change24h";
 type SortDirection = "asc" | "desc";
 
 type AtlasSignal = "LONG" | "SHORT" | "WAIT";
-
-type AtlasSignalMap = Record<
-  string,
-  { signal: AtlasSignal; confidence: number }
->;
 
 type WatchlistProps = {
   watchlists: WatchlistView[];
@@ -79,6 +75,7 @@ export default function Watchlist({
   const router = useRouter();
   const { market, loading, error, lastUpdated, refresh } =
     useMarket();
+  const atlasSignals = useScannerSignals();
 
   const [activeWatchlistId, setActiveWatchlistId] =
     useState<string | null>(
@@ -93,8 +90,6 @@ export default function Watchlist({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isCreatingList, setIsCreatingList] =
     useState(false);
-  const [atlasSignals, setAtlasSignals] =
-    useState<AtlasSignalMap>({});
 
   const activeWatchlist =
     watchlists.find(
@@ -126,59 +121,6 @@ export default function Watchlist({
     // Only ever runs while there are zero DB watchlists.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchlists.length]);
-
-  useEffect(() => {
-    let isCancelled = false;
-
-    async function loadAtlasSignals() {
-      try {
-        const response = await fetch(
-          "/api/atlas/scanner",
-          { cache: "no-store" }
-        );
-
-        if (!response.ok) {
-          return;
-        }
-
-        const data = (await response.json()) as {
-          items: {
-            coin: string;
-            signal: AtlasSignal;
-            confidence: number;
-          }[];
-        };
-
-        if (isCancelled) {
-          return;
-        }
-
-        const nextSignals: AtlasSignalMap = {};
-
-        for (const item of data.items) {
-          nextSignals[item.coin] = {
-            signal: item.signal,
-            confidence: item.confidence,
-          };
-        }
-
-        setAtlasSignals(nextSignals);
-      } catch {
-        // Keep showing the last known signals on failure.
-      }
-    }
-
-    void loadAtlasSignals();
-
-    const interval = window.setInterval(() => {
-      void loadAtlasSignals();
-    }, 30_000);
-
-    return () => {
-      isCancelled = true;
-      window.clearInterval(interval);
-    };
-  }, []);
 
   async function handleRefresh() {
     try {

@@ -50,8 +50,8 @@
 ## Teknisk gjeld
 
 - [ ] Gjennomgå komponenter for gjenbruk
-- [ ] Optimalisere API-kall
-- [ ] Forbedre feilhåndtering
+- [x] Optimalisere API-kall (MarketProvider/ScannerSignalsProvider begrenset til sidene som faktisk trenger dem, delt polling i stedet for duplisert)
+- [x] Forbedre feilhåndtering (Postgres-pool gjenoppretter seg selv etter inaktivitet i stedet for å krasje siden)
 - [ ] Redusere unødvendige re-renders
 - [x] Flere enhetstester (Vitest: atlasEngine, orderBlockEngine, fairValueGapEngine, aiDecisionEngine, liquidityEngine, marketStructureEngine, trendEngine — 20 tester totalt)
 

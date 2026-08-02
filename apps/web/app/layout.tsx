@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { MarketProvider } from "@/components/providers/MarketProvider";
-
 export const metadata: Metadata = {
   title: "Genwelth AI",
   description: "AI-powered crypto market intelligence",
@@ -30,9 +28,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
         />
       </head>
-      <body>
-        <MarketProvider>{children}</MarketProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

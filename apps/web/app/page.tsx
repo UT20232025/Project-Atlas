@@ -12,6 +12,8 @@ import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import LandingPage from "../components/landing/LandingPage";
 import AppLayout from "../components/layout/AppLayout";
+import { MarketProvider } from "../components/providers/MarketProvider";
+import { ScannerSignalsProvider } from "../components/providers/ScannerSignalsProvider";
 import Watchlist from "../components/watchlist/Watchlist";
 import WatchlistUpsell from "../components/watchlist/WatchlistUpsell";
 import { getUpcomingMacroEvents } from "../lib/atlas/macroCalendarEngine";
@@ -59,6 +61,8 @@ export default async function HomePage() {
   }));
 
   return (
+    <MarketProvider>
+    <ScannerSignalsProvider>
     <AppLayout
       marketTicker={dashboard.marketTicker}
       userEmail={email}
@@ -149,5 +153,7 @@ export default async function HomePage() {
 
       <ScannerSection items={dashboard.scanner} />
     </AppLayout>
+    </ScannerSignalsProvider>
+    </MarketProvider>
   );
 }

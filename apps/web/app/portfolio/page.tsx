@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import PortfolioView from "@/components/portfolio/PortfolioView";
+import { MarketProvider } from "@/components/providers/MarketProvider";
 import { prisma } from "@/lib/db/client";
 import type {
   MarketSymbol,
@@ -33,13 +34,15 @@ export default async function PortfolioPage() {
   );
 
   return (
-    <AppLayout userEmail={email} isPro>
-      <PortfolioView
-        positions={positionViews}
-        createPositionAction={createPosition}
-        closePositionAction={closePosition}
-        deletePositionAction={deletePosition}
-      />
-    </AppLayout>
+    <MarketProvider>
+      <AppLayout userEmail={email} isPro>
+        <PortfolioView
+          positions={positionViews}
+          createPositionAction={createPosition}
+          closePositionAction={closePosition}
+          deletePositionAction={deletePosition}
+        />
+      </AppLayout>
+    </MarketProvider>
   );
 }
