@@ -12,22 +12,22 @@ export const menu = [
   },
   {
     title: "Scanner",
-    href: "/",
+    href: "/#scanner",
     icon: "📊",
   },
   {
     title: "Markets",
-    href: "/",
+    href: "/#markets",
     icon: "📈",
   },
   {
     title: "Alerts",
-    href: "/",
+    href: "/#alerts",
     icon: "🔔",
   },
   {
     title: "Watchlist",
-    href: "/",
+    href: "/#watchlist",
     icon: "⭐",
   },
   {
@@ -51,13 +51,8 @@ export const menu = [
     icon: "💎",
   },
   {
-    title: "News",
-    href: "/",
-    icon: "📰",
-  },
-  {
     title: "Settings",
-    href: "/",
+    href: "/settings",
     icon: "⚙️",
   },
 ];

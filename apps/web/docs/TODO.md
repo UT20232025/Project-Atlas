@@ -43,7 +43,7 @@
 - [ ] Flere språk
 - [ ] Flere animasjoner
 - [ ] Tastatursnarveier
-- [ ] Innstillinger
+- [x] Innstillinger (`/settings`: konto-info, abonnementsstatus + administrer-lenke, utlogging)
 
 ---
 
@@ -59,7 +59,7 @@
 
 ## Før v1.0
 
-- [ ] Full mobiloptimalisering
+- [x] Full mobiloptimalisering
 - [ ] Ytelsesoptimalisering
 - [ ] Lukket betatest
 - [ ] Feilretting

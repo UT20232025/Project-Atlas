@@ -9,7 +9,7 @@ export default function ScannerSection({
   items,
 }: ScannerSectionProps) {
   return (
-    <section>
+    <section id="scanner">
       <ScannerTable items={items} />
     </section>
   );

@@ -110,15 +110,18 @@ export default async function HomePage() {
         </div>
       )}
 
-      <div className="mb-8">
+      <div id="markets" className="mb-8">
         <MarketHeatmap items={heatmapItems} />
       </div>
 
-      <div className="mb-8">
+      <div id="alerts" className="mb-8">
         <AtlasAlerts />
       </div>
 
-      <div className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]">
+      <div
+        id="watchlist"
+        className="mb-8 grid gap-8 xl:grid-cols-[1fr_360px]"
+      >
         <MarketAlerts items={dashboard.scanner} />
         {isPro ? (
           <Watchlist
