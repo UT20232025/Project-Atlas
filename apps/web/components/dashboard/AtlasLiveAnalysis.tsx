@@ -1,6 +1,6 @@
 "use client";
 import OrderBlockCard from "@/components/dashboard/OrderBlockCard";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import FairValueGapCard from "@/components/dashboard/FairValueGapCard";
 import MarketStructureCard from "@/components/dashboard/MarketStructureCard";
@@ -11,6 +11,12 @@ import PriceActionCard from "@/components/dashboard/PriceActionCard";
 import TrendEngineCard from "@/components/dashboard/TrendEngineCard";
 import VolumeAnalysisCard from "@/components/dashboard/VolumeAnalysisCard";
 import Section from "@/components/ui/Section";
+import Select from "@/components/ui/Select";
+import {
+  formatMarketSymbol,
+  MARKET_SYMBOLS,
+  type MarketSymbol,
+} from "@/lib/services/liveMarketService";
 import type {
   AtlasAnalysis,
   AtlasFactorResult,
@@ -317,7 +323,52 @@ function getRiskTextColor(
   return "text-amber-300";
 }
 
+function useTypewriter(text: string): string {
+  const [displayed, setDisplayed] = useState(text);
+  const previousText = useRef(text);
+
+  useEffect(() => {
+    if (text === previousText.current) {
+      return;
+    }
+
+    previousText.current = text;
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+    if (!text || prefersReducedMotion) {
+      setDisplayed(text);
+      return;
+    }
+
+    setDisplayed("");
+
+    let index = 0;
+    const intervalId = window.setInterval(() => {
+      index += 1;
+      setDisplayed(text.slice(0, index));
+
+      if (index >= text.length) {
+        window.clearInterval(intervalId);
+      }
+    }, 12);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [text]);
+
+  return displayed;
+}
+
 export default function AtlasLiveAnalysis() {
+  const [symbol, setSymbol] =
+    useState<MarketSymbol>("BTCUSDT");
+
   const [data, setData] =
     useState<AtlasApiResponse | null>(
       null
@@ -338,7 +389,7 @@ export default function AtlasLiveAnalysis() {
         setError(null);
 
         const response = await fetch(
-          "/api/atlas?symbol=BTCUSDT&interval=1h",
+          `/api/atlas?symbol=${symbol}&interval=1h`,
           {
             cache: "no-store",
           }
@@ -394,7 +445,7 @@ export default function AtlasLiveAnalysis() {
         intervalId
       );
     };
-  }, []);
+  }, [symbol]);
 
   const priorityFactors = data
     ? getPriorityFactors(
@@ -402,10 +453,31 @@ export default function AtlasLiveAnalysis() {
       )
     : [];
 
+  const typedExplanation = useTypewriter(
+    data?.decision.explanation ?? ""
+  );
+
   return (
     <Section
       title="Atlas Intelligence"
-      subtitle="Live BTC market analysis on the 1-hour timeframe"
+      subtitle={`Live ${formatMarketSymbol(symbol)} market analysis on the 1-hour timeframe`}
+      rightContent={
+        <Select
+          value={symbol}
+          onChange={(event) =>
+            setSymbol(
+              event.target.value as MarketSymbol
+            )
+          }
+          className="w-40"
+        >
+          {MARKET_SYMBOLS.map((marketSymbol) => (
+            <option key={marketSymbol} value={marketSymbol}>
+              {formatMarketSymbol(marketSymbol)}
+            </option>
+          ))}
+        </Select>
+      }
     >
       {loading && !data ? (
         <div className="rounded-xl border border-zinc-800 p-8 text-center text-sm text-zinc-500">
@@ -606,10 +678,11 @@ export default function AtlasLiveAnalysis() {
                     </p>
 
                     <p className="mt-3 text-sm leading-6 text-zinc-300">
-                      {
-                        data.decision
-                          .explanation
-                      }
+                      {typedExplanation}
+                      {typedExplanation !==
+                        data.decision.explanation && (
+                        <span className="atlas-typing-cursor" />
+                      )}
                     </p>
                   </div>
                 </div>
@@ -635,7 +708,10 @@ export default function AtlasLiveAnalysis() {
                           ) => (
                             <div
                               key={`${reason}-${index}`}
-                              className="flex items-start gap-2 text-sm leading-6 text-zinc-300"
+                              className="atlas-reveal-item flex items-start gap-2 text-sm leading-6 text-zinc-300"
+                              style={{
+                                animationDelay: `${index * 90}ms`,
+                              }}
                             >
                               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
 
@@ -664,7 +740,10 @@ export default function AtlasLiveAnalysis() {
                           ) => (
                             <div
                               key={`${warning}-${index}`}
-                              className="flex items-start gap-2 text-sm leading-6 text-zinc-300"
+                              className="atlas-reveal-item flex items-start gap-2 text-sm leading-6 text-zinc-300"
+                              style={{
+                                animationDelay: `${index * 90}ms`,
+                              }}
                             >
                               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
 

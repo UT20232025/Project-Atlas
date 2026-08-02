@@ -230,6 +230,53 @@ body {
   }
 }
 
+@keyframes atlas-reveal-item {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.atlas-reveal-item {
+  opacity: 0;
+  animation: atlas-reveal-item 0.4s ease-out forwards;
+}
+
+@keyframes atlas-typing-cursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.atlas-typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: currentColor;
+  animation: atlas-typing-cursor 0.8s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .atlas-reveal-item {
+    opacity: 1;
+    animation: none;
+  }
+
+  .atlas-typing-cursor {
+    display: none;
+  }
+}
+
 .atlas-card {
   border: 1px solid var(--atlas-border);
   background: var(--atlas-card-bg);
