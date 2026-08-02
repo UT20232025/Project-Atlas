@@ -88,6 +88,10 @@ export default function LandingPage({
             claim.
           </p>
 
+          <p className="mt-3 text-sm font-medium uppercase tracking-[0.15em] text-blue-400">
+            Built for the marathon, not the sprint
+          </p>
+
           <div className="mt-8 flex justify-center gap-4">
             <Link href="/signup">
               <Button size="lg">Get started free</Button>

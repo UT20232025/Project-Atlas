@@ -566,6 +566,13 @@ export default function AtlasLiveAnalysis() {
                           )}
                         </span>
                       </p>
+
+                      {data.decision.signal === "WAIT" && (
+                        <p className="mt-2 text-xs italic text-zinc-500">
+                          Patience is the edge — not every
+                          setup is a trade.
+                        </p>
+                      )}
                     </div>
                   </div>
 
