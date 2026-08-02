@@ -128,10 +128,10 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 
 # Neste prioriteringer
 
-1. v0.8 Brukeropplevelse — mobiloptimalisering og animasjoner gjenstår (tema er ferdig)
-2. Bytte Stripe fra test-nøkler til live-nøkler når appen er klar for reelle abonnenter
+1. v0.8 Brukeropplevelse — flere animasjoner, flere språk, tastatursnarveier gjenstår (tema, mobiloptimalisering og innstillinger er ferdig)
+2. Ytelsesoptimalisering, teknisk gjeld, lukket betatest
 
-Alle 4 pilarer i abonnements-strategien (Track Record, Stripe, Telegram, Landingsside) er nå fullført.
+Alle 4 pilarer i abonnements-strategien (Track Record, Stripe, Telegram, Landingsside) er fullført. Appen er deployet på Prisma Compute med egendomenet www.genwelth.com, og Stripe kjører nå på **live-nøkler** — ekte betalende abonnenter kan registrere seg.
 
 ---
 
