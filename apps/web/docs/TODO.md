@@ -41,7 +41,7 @@
 - [x] Flere temaer (light/dark-bryter, `[data-theme]`-drevet CSS-variabel-omtema, ingen endring i eksisterende komponenter nødvendig)
 - [x] Mobiloptimalisering (revidert på 375px viewport: ingen horisontal overflow, mobilmeny fungerer, ett tap-mål forbedret)
 - [~] Flere språk (engelsk/norsk/spansk/portugisisk/tysk på hele dashbordet, coin-siden, portefølje/journal/track record og pricing; kun AI-genererte forklaringssetninger fra Atlas-motoren er fortsatt engelsk, siden det krever en refaktorering av selve motoren, ikke bare UI-tekst)
-- [ ] Flere animasjoner
+- [~] Flere animasjoner (prisflash grønt/rødt ved endring i Watchlist/Portfolio, signal-puls når Atlas-signalet flipper i Watchlist og hoved-AI-beslutningspanelet — begge gjenbruker det eksisterende reveal/typing-cursor-mønsteret med prefers-reduced-motion-støtte)
 - [ ] Tastatursnarveier
 - [x] Innstillinger (`/settings`: konto-info, abonnementsstatus + administrer-lenke, utlogging)
 
