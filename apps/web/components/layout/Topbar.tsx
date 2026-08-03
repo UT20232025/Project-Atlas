@@ -1,10 +1,11 @@
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import MarketTicker from "./MarketTicker";
 import MobileNav from "./MobileNav";
+import SearchButton from "./SearchButton";
 import UserMenu from "./UserMenu";
 
 type TopbarProps = {
@@ -59,18 +60,9 @@ export default async function Topbar({ marketTicker, userEmail, isPro }: TopbarP
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            className="hidden items-center gap-3 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm text-zinc-400 transition hover:border-zinc-700 hover:text-white md:flex"
-          >
-            <Search size={18} />
-
-            <span>{t("searchPlaceholder")}</span>
-
-            <span className="ml-2 rounded border border-zinc-700 px-2 py-0.5 text-xs text-zinc-500">
-              Ctrl K
-            </span>
-          </button>
+          <SearchButton
+            placeholder={t("searchPlaceholder")}
+          />
 
           <button
             type="button"

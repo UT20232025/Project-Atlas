@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import SearchDialog from "../search/SearchDialog";
+import ShortcutsHelp from "../search/ShortcutsHelp";
 import AmbientBackground from "./AmbientBackground";
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
@@ -32,6 +33,7 @@ export default function AppLayout({
     <div className="min-h-screen text-white">
       <AmbientBackground />
       <SearchDialog />
+      <ShortcutsHelp />
 
       <div className="flex min-h-screen">
         <div className="hidden lg:block">

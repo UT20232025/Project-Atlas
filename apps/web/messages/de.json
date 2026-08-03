@@ -600,6 +600,20 @@
     "colRsi": "RSI",
     "colConfidence": "Konfidenz"
   },
+  "SearchDialog": {
+    "placeholder": "Märkte durchsuchen...",
+    "noResults": "Keine Ergebnisse",
+    "hint": "↑↓ zum Navigieren • Enter zum Auswählen • Esc zum Schließen • ? für Tastenkombinationen"
+  },
+  "ShortcutsHelp": {
+    "title": "Tastenkombinationen",
+    "openSearch": "Suche öffnen",
+    "navigateResults": "Ergebnisse navigieren",
+    "selectResult": "Ergebnis auswählen",
+    "closeDialog": "Dialog schließen",
+    "showShortcuts": "Diese Hilfe anzeigen",
+    "closeHint": "Esc drücken zum Schließen"
+  },
   "Settings": {
     "title": "Einstellungen",
     "subtitle": "Dein Konto und Abonnement",

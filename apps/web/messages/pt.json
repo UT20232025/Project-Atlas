@@ -600,6 +600,20 @@
     "colRsi": "RSI",
     "colConfidence": "Confiança"
   },
+  "SearchDialog": {
+    "placeholder": "Buscar mercados...",
+    "noResults": "Nenhum resultado",
+    "hint": "↑↓ para navegar • Enter para selecionar • Esc para fechar • ? para atalhos"
+  },
+  "ShortcutsHelp": {
+    "title": "Atalhos de teclado",
+    "openSearch": "Abrir busca",
+    "navigateResults": "Navegar pelos resultados",
+    "selectResult": "Selecionar resultado",
+    "closeDialog": "Fechar caixa de diálogo",
+    "showShortcuts": "Mostrar esta ajuda",
+    "closeHint": "Pressione Esc para fechar"
+  },
   "Settings": {
     "title": "Configurações",
     "subtitle": "Sua conta e assinatura",

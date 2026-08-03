@@ -600,6 +600,20 @@
     "colRsi": "RSI",
     "colConfidence": "Konfidens"
   },
+  "SearchDialog": {
+    "placeholder": "Søk i markeder...",
+    "noResults": "Ingen resultater",
+    "hint": "↑↓ for å navigere • Enter for å velge • Esc for å lukke • ? for snarveier"
+  },
+  "ShortcutsHelp": {
+    "title": "Tastatursnarveier",
+    "openSearch": "Åpne søk",
+    "navigateResults": "Naviger i resultater",
+    "selectResult": "Velg resultat",
+    "closeDialog": "Lukk dialog",
+    "showShortcuts": "Vis denne hjelpen",
+    "closeHint": "Trykk Esc for å lukke"
+  },
   "Settings": {
     "title": "Innstillinger",
     "subtitle": "Kontoen og abonnementet ditt",

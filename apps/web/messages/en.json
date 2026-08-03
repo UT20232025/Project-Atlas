@@ -600,6 +600,20 @@
     "colRsi": "RSI",
     "colConfidence": "Confidence"
   },
+  "SearchDialog": {
+    "placeholder": "Search markets...",
+    "noResults": "No results",
+    "hint": "↑↓ to navigate • Enter to select • Esc to close • ? for shortcuts"
+  },
+  "ShortcutsHelp": {
+    "title": "Keyboard shortcuts",
+    "openSearch": "Open search",
+    "navigateResults": "Navigate results",
+    "selectResult": "Select result",
+    "closeDialog": "Close dialog",
+    "showShortcuts": "Show this help",
+    "closeHint": "Press Esc to close"
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Your account and subscription",
