@@ -590,6 +590,16 @@
     "feature4": "Listas de seguimiento personalizadas — varias listas con nombre",
     "startTrial": "Iniciar prueba gratuita de 7 días"
   },
+  "ScannerTable": {
+    "title": "Atlas Scanner",
+    "subtitle": "Mercados clasificados por confianza de Atlas",
+    "colMarket": "Mercado",
+    "colPrice": "Precio",
+    "col24h": "24h",
+    "colSignal": "Señal",
+    "colRsi": "RSI",
+    "colConfidence": "Confianza"
+  },
   "Settings": {
     "title": "Configuración",
     "subtitle": "Tu cuenta y suscripción",

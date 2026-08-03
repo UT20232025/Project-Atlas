@@ -49,7 +49,7 @@
 
 ## Teknisk gjeld
 
-- [ ] Gjennomgå komponenter for gjenbruk
+- [x] Gjennomgå komponenter for gjenbruk (fjernet 8 ubrukte duplikat-komponenter: Header, Sidebar, MarketOverview, TopMovers, SignalCard, BTCDominanceCard, FearGreedCard, TradingViewWidget; fikset stray norsk/engelsk-blanding i ScannerTable)
 - [x] Optimalisere API-kall (MarketProvider/ScannerSignalsProvider begrenset til sidene som faktisk trenger dem, delt polling i stedet for duplisert)
 - [x] Forbedre feilhåndtering (Postgres-pool gjenoppretter seg selv etter inaktivitet i stedet for å krasje siden)
 - [ ] Redusere unødvendige re-renders

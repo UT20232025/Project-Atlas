@@ -590,6 +590,16 @@
     "feature4": "Custom Watchlists — multiple named lists",
     "startTrial": "Start 7-day free trial"
   },
+  "ScannerTable": {
+    "title": "Atlas Scanner",
+    "subtitle": "Markets ranked by Atlas Confidence",
+    "colMarket": "Market",
+    "colPrice": "Price",
+    "col24h": "24h",
+    "colSignal": "Signal",
+    "colRsi": "RSI",
+    "colConfidence": "Confidence"
+  },
   "Settings": {
     "title": "Settings",
     "subtitle": "Your account and subscription",

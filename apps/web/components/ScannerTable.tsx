@@ -1,3 +1,4 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import type { ScannerItem } from "../lib/analysis/scanner";
 
@@ -17,13 +18,16 @@ function getTrendSymbol(trend: ScannerItem["trend"]) {
   return "→";
 }
 
-export default function ScannerTable({ items }: ScannerTableProps) {
+export default async function ScannerTable({ items }: ScannerTableProps) {
+  const t = await getTranslations("ScannerTable");
+  const locale = await getLocale();
+
   return (
     <section className="rounded-2xl border border-zinc-800 bg-zinc-900">
       <div className="border-b border-zinc-800 p-6">
-        <h2 className="text-2xl font-bold">Atlas Scanner</h2>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
         <p className="mt-1 text-sm text-zinc-500">
-          Markets ranked by Atlas Confidence
+          {t("subtitle")}
         </p>
       </div>
 
@@ -31,12 +35,12 @@ export default function ScannerTable({ items }: ScannerTableProps) {
         <div className="min-w-[760px]">
           <div className="grid grid-cols-7 gap-4 border-b border-zinc-800 px-6 py-3 text-sm text-zinc-500">
             <span>#</span>
-            <span>Marked</span>
-            <span>Pris</span>
-            <span>24t</span>
-            <span>Signal</span>
-            <span>RSI</span>
-            <span className="text-right">Confidence</span>
+            <span>{t("colMarket")}</span>
+            <span>{t("colPrice")}</span>
+            <span>{t("col24h")}</span>
+            <span>{t("colSignal")}</span>
+            <span>{t("colRsi")}</span>
+            <span className="text-right">{t("colConfidence")}</span>
           </div>
 
           <div className="divide-y divide-zinc-800">
@@ -60,7 +64,7 @@ export default function ScannerTable({ items }: ScannerTableProps) {
                   </div>
 
                   <span className="font-medium">
-                    ${item.price.toLocaleString("en-US")}
+                    ${item.price.toLocaleString(locale)}
                   </span>
 
                   <span className={changeColor}>

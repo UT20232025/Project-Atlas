@@ -590,6 +590,16 @@
     "feature4": "Individuelle Watchlists — mehrere benannte Listen",
     "startTrial": "7 Tage kostenlose Testphase starten"
   },
+  "ScannerTable": {
+    "title": "Atlas Scanner",
+    "subtitle": "Märkte nach Atlas-Konfidenz sortiert",
+    "colMarket": "Markt",
+    "colPrice": "Preis",
+    "col24h": "24h",
+    "colSignal": "Signal",
+    "colRsi": "RSI",
+    "colConfidence": "Konfidenz"
+  },
   "Settings": {
     "title": "Einstellungen",
     "subtitle": "Dein Konto und Abonnement",

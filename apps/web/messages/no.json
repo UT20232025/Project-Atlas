@@ -590,6 +590,16 @@
     "feature4": "Egendefinerte overvåkningslister — flere navngitte lister",
     "startTrial": "Start 7 dager gratis prøveperiode"
   },
+  "ScannerTable": {
+    "title": "Atlas Scanner",
+    "subtitle": "Markeder rangert etter Atlas-konfidens",
+    "colMarket": "Marked",
+    "colPrice": "Pris",
+    "col24h": "24t",
+    "colSignal": "Signal",
+    "colRsi": "RSI",
+    "colConfidence": "Konfidens"
+  },
   "Settings": {
     "title": "Innstillinger",
     "subtitle": "Kontoen og abonnementet ditt",

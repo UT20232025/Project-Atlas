@@ -590,6 +590,16 @@
     "feature4": "Listas de observação personalizadas — várias listas nomeadas",
     "startTrial": "Iniciar teste grátis de 7 dias"
   },
+  "ScannerTable": {
+    "title": "Atlas Scanner",
+    "subtitle": "Mercados classificados pela confiança da Atlas",
+    "colMarket": "Mercado",
+    "colPrice": "Preço",
+    "col24h": "24h",
+    "colSignal": "Sinal",
+    "colRsi": "RSI",
+    "colConfidence": "Confiança"
+  },
   "Settings": {
     "title": "Configurações",
     "subtitle": "Sua conta e assinatura",
