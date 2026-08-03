@@ -7,7 +7,11 @@ import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 import { notifySignalChange } from "@/lib/telegram/notify";
 
-const CACHE_TTL_MS = 25_000;
+// Must exceed the dashboard's 30s poll interval (MarketProvider,
+// ScannerSignalsProvider), otherwise every poll hits a cold cache and
+// re-triggers a full recompute (~60 concurrent Binance calls across
+// 20 symbols x 3 timeframes) instead of reusing the cached result.
+const CACHE_TTL_MS = 35_000;
 
 type CacheEntry = {
   expiresAt: number;

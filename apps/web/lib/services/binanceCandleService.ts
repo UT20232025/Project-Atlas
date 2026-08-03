@@ -28,6 +28,8 @@ type BinanceKline = [
 const BINANCE_API_URL =
   "https://api.binance.com/api/v3/klines";
 
+const BINANCE_REQUEST_TIMEOUT_MS = 10_000;
+
 export async function fetchBinanceCandles(
   symbol: MarketSymbol,
   interval: BinanceInterval = "1h",
@@ -48,6 +50,9 @@ export async function fetchBinanceCandles(
     `${BINANCE_API_URL}?${searchParams.toString()}`,
     {
       cache: "no-store",
+      signal: AbortSignal.timeout(
+        BINANCE_REQUEST_TIMEOUT_MS
+      ),
     }
   );
 
