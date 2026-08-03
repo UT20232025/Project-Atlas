@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { clearSessionCookie, requireSession } from "@/lib/auth/session";
+import { requireSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import type { User } from "@/lib/generated/prisma/client";
 
@@ -26,7 +26,9 @@ export async function getCurrentUser(): Promise<User> {
     // Session cookie refers to an account that no longer exists
     // (e.g. deleted after the cookie was issued) — treat it the
     // same as not being logged in rather than crashing the page.
-    await clearSessionCookie();
+    // Cookies can't be mutated from a Server Component render, so
+    // the stale cookie is left in place; /login's own flow
+    // overwrites it on the next successful sign-in.
     redirect("/login");
   }
 
