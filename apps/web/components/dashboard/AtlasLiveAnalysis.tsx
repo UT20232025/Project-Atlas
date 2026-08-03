@@ -1,5 +1,6 @@
 "use client";
 import OrderBlockCard from "@/components/dashboard/OrderBlockCard";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
 import FairValueGapCard from "@/components/dashboard/FairValueGapCard";
@@ -92,6 +93,8 @@ multiTimeframe: AtlasMtfResult;
   generatedAt: string;
 };
 
+type Translator = ReturnType<typeof useTranslations>;
+
 function formatSignal(
   signal: AtlasAnalysis["signal"]
 ): string {
@@ -99,55 +102,72 @@ function formatSignal(
 }
 
 function formatDecisionStrength(
+  t: Translator,
   strength: string
 ): string {
-  return strength.replaceAll("_", " ");
+  switch (strength) {
+    case "STRONG":
+      return t("strengthStrong");
+    case "MODERATE":
+      return t("strengthModerate");
+    case "WEAK":
+      return t("strengthWeak");
+    case "NONE":
+      return t("strengthNone");
+    default:
+      return strength.replaceAll("_", " ");
+  }
 }
 
 function formatPrice(
-  price: number | null
+  t: Translator,
+  price: number | null,
+  locale: string
 ): string {
   if (price === null) {
-    return "Not available";
+    return t("notAvailable");
   }
 
-  return price.toLocaleString(undefined, {
+  return price.toLocaleString(locale, {
     maximumFractionDigits: 5,
   });
 }
 
 function formatRiskReward(
+  t: Translator,
   riskRewardRatio: number | null
 ): string {
   if (riskRewardRatio === null) {
-    return "Not available";
+    return t("notAvailable");
   }
 
   return `${riskRewardRatio.toFixed(2)} : 1`;
 }
 
 function getSignalLabel(
+  t: Translator,
   signal: AtlasAnalysis["signal"]
 ): string {
   switch (signal) {
     case "STRONG_LONG":
-      return "Strong bullish setup";
+      return t("signalLabelStrongLong");
 
     case "LONG":
-      return "Bullish setup";
+      return t("signalLabelLong");
 
     case "SHORT":
-      return "Bearish setup";
+      return t("signalLabelShort");
 
     case "STRONG_SHORT":
-      return "Strong bearish setup";
+      return t("signalLabelStrongShort");
 
     default:
-      return "No clear trading advantage";
+      return t("signalLabelWait");
   }
 }
 
 function getSignalDescription(
+  t: Translator,
   analysis: AtlasAnalysis
 ): string {
   const bullishFactors =
@@ -167,10 +187,10 @@ function getSignalDescription(
     analysis.signal === "LONG"
   ) {
     if (bullishFactors.length >= 4) {
-      return "Most Atlas indicators are aligned to the upside. Buyers currently have the stronger market advantage.";
+      return t("signalDescriptionBullishStrong");
     }
 
-    return "Market conditions lean bullish, although some indicators still need stronger confirmation.";
+    return t("signalDescriptionBullishWeak");
   }
 
   if (
@@ -178,13 +198,13 @@ function getSignalDescription(
     analysis.signal === "SHORT"
   ) {
     if (bearishFactors.length >= 4) {
-      return "Most Atlas indicators are aligned to the downside. Sellers currently have the stronger market advantage.";
+      return t("signalDescriptionBearishStrong");
     }
 
-    return "Market conditions lean bearish, although some indicators still need stronger confirmation.";
+    return t("signalDescriptionBearishWeak");
   }
 
-  return "Atlas detects conflicting or balanced indicators. Waiting for stronger confirmation may provide a better setup.";
+  return t("signalDescriptionNeutral");
 }
 
 function getPriorityFactors(
@@ -366,6 +386,9 @@ function useTypewriter(text: string): string {
 }
 
 export default function AtlasLiveAnalysis() {
+  const t = useTranslations("AtlasLive");
+  const locale = useLocale();
+
   const [symbol, setSymbol] =
     useState<MarketSymbol>("BTCUSDT");
 
@@ -407,7 +430,7 @@ export default function AtlasLiveAnalysis() {
             "error" in result &&
               result.error
               ? result.error
-              : "Failed to load Atlas analysis."
+              : t("loadFailed")
           );
         }
 
@@ -459,8 +482,8 @@ export default function AtlasLiveAnalysis() {
 
   return (
     <Section
-      title="Atlas Intelligence"
-      subtitle={`Live ${formatMarketSymbol(symbol)} market analysis on the 1-hour timeframe`}
+      title={t("title")}
+      subtitle={t("subtitle", { symbol: formatMarketSymbol(symbol) })}
       rightContent={
         <Select
           value={symbol}
@@ -481,7 +504,7 @@ export default function AtlasLiveAnalysis() {
     >
       {loading && !data ? (
         <div className="rounded-xl border border-zinc-800 p-8 text-center text-sm text-zinc-500">
-          Atlas is analyzing the market...
+          {t("loading")}
         </div>
       ) : error ? (
         <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
@@ -500,13 +523,11 @@ export default function AtlasLiveAnalysis() {
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
-                    Atlas AI Decision
+                    {t("aiDecisionLabel")}
                   </p>
 
                   <p className="mt-2 text-sm text-zinc-400">
-                    Final decision based on trend,
-                    multiple timeframes, price action,
-                    liquidity and risk.
+                    {t("aiDecisionDescription")}
                   </p>
                 </div>
 
@@ -529,8 +550,8 @@ export default function AtlasLiveAnalysis() {
 
                   {data.decision
                     .tradeApproved
-                    ? "Trade approved"
-                    : "No trade"}
+                    ? t("tradeApproved")
+                    : t("noTrade")}
                 </div>
               </div>
             </div>
@@ -559,9 +580,10 @@ export default function AtlasLiveAnalysis() {
                       </p>
 
                       <p className="mt-1 text-sm text-zinc-400">
-                        Strength:{" "}
+                        {t("strengthLabel")}{" "}
                         <span className="font-medium text-zinc-200">
                           {formatDecisionStrength(
+                            t,
                             data.decision.strength
                           )}
                         </span>
@@ -569,8 +591,7 @@ export default function AtlasLiveAnalysis() {
 
                       {data.decision.signal === "WAIT" && (
                         <p className="mt-2 text-xs italic text-zinc-500">
-                          Patience is the edge — not every
-                          setup is a trade.
+                          {t("waitQuip")}
                         </p>
                       )}
                     </div>
@@ -579,7 +600,7 @@ export default function AtlasLiveAnalysis() {
                   <div className="mt-6 grid gap-3 sm:grid-cols-3">
                     <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">
-                        Confidence
+                        {t("confidence")}
                       </p>
 
                       <p className="mt-2 text-xl font-semibold text-white">
@@ -589,7 +610,7 @@ export default function AtlasLiveAnalysis() {
 
                     <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">
-                        Decision score
+                        {t("decisionScore")}
                       </p>
 
                       <p className="mt-2 text-xl font-semibold text-white">
@@ -599,11 +620,12 @@ export default function AtlasLiveAnalysis() {
 
                     <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">
-                        Risk / reward
+                        {t("riskReward")}
                       </p>
 
                       <p className="mt-2 text-xl font-semibold text-white">
                         {formatRiskReward(
+                          t,
                           data.decision
                             .riskRewardRatio
                         )}
@@ -614,7 +636,7 @@ export default function AtlasLiveAnalysis() {
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">
-                        Bullish score
+                        {t("bullishScore")}
                       </p>
 
                       <p className="mt-2 text-lg font-semibold text-emerald-400">
@@ -627,7 +649,7 @@ export default function AtlasLiveAnalysis() {
 
                     <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">
-                        Bearish score
+                        {t("bearishScore")}
                       </p>
 
                       <p className="mt-2 text-lg font-semibold text-red-400">
@@ -643,45 +665,51 @@ export default function AtlasLiveAnalysis() {
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
                     <p className="text-xs uppercase tracking-wide text-zinc-500">
-                      Entry
+                      {t("entry")}
                     </p>
 
                     <p className="mt-2 text-lg font-semibold text-white">
                       {formatPrice(
-                        data.decision.entry
+                        t,
+                        data.decision.entry,
+                        locale
                       )}
                     </p>
                   </div>
 
                   <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
                     <p className="text-xs uppercase tracking-wide text-zinc-500">
-                      Stop loss
+                      {t("stopLoss")}
                     </p>
 
                     <p className="mt-2 text-lg font-semibold text-red-400">
                       {formatPrice(
+                        t,
                         data.decision
-                          .stopLoss
+                          .stopLoss,
+                        locale
                       )}
                     </p>
                   </div>
 
                   <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 sm:col-span-2">
                     <p className="text-xs uppercase tracking-wide text-zinc-500">
-                      Take profit
+                      {t("takeProfit")}
                     </p>
 
                     <p className="mt-2 text-lg font-semibold text-emerald-400">
                       {formatPrice(
+                        t,
                         data.decision
-                          .takeProfit
+                          .takeProfit,
+                        locale
                       )}
                     </p>
                   </div>
 
                   <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4 sm:col-span-2">
                     <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-                      AI explanation
+                      {t("aiExplanation")}
                     </p>
 
                     <p className="mt-3 text-sm leading-6 text-zinc-300">
@@ -704,7 +732,7 @@ export default function AtlasLiveAnalysis() {
                     .length > 0 && (
                     <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
                       <p className="text-xs font-medium uppercase tracking-widest text-emerald-400">
-                        Decision reasons
+                        {t("decisionReasons")}
                       </p>
 
                       <div className="mt-3 space-y-2">
@@ -736,7 +764,7 @@ export default function AtlasLiveAnalysis() {
                     .length > 0 && (
                     <div className="rounded-xl border border-amber-500/15 bg-amber-500/5 p-4">
                       <p className="text-xs font-medium uppercase tracking-widest text-amber-300">
-                        Risk warnings
+                        {t("riskWarnings")}
                       </p>
 
                       <div className="mt-3 space-y-2">
@@ -771,7 +799,7 @@ export default function AtlasLiveAnalysis() {
           <div className="grid gap-4 md:grid-cols-4">
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Indicator signal
+                {t("indicatorSignal")}
               </p>
 
               <p
@@ -787,7 +815,7 @@ export default function AtlasLiveAnalysis() {
 
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Indicator score
+                {t("indicatorScore")}
               </p>
 
               <p className="mt-2 text-lg font-semibold text-white">
@@ -797,7 +825,7 @@ export default function AtlasLiveAnalysis() {
 
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Indicator confidence
+                {t("indicatorConfidence")}
               </p>
 
               <p className="mt-2 text-lg font-semibold text-white">
@@ -811,7 +839,7 @@ export default function AtlasLiveAnalysis() {
 
             <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
-                Indicator risk
+                {t("indicatorRisk")}
               </p>
 
               <p
@@ -826,17 +854,19 @@ export default function AtlasLiveAnalysis() {
 
           <div className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-5">
             <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-              Atlas Market Brief
+              {t("marketBrief")}
             </p>
 
             <h3 className="mt-3 text-xl font-semibold text-white">
               {getSignalLabel(
+                t,
                 data.analysis.signal
               )}
             </h3>
 
             <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-300">
               {getSignalDescription(
+                t,
                 data.analysis
               )}
             </p>
@@ -849,52 +879,50 @@ export default function AtlasLiveAnalysis() {
           <div className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-5">
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-                Support & Resistance
+                {t("supportResistance")}
               </p>
 
               <p className="mt-2 text-sm text-zinc-400">
-                The nearest technical price
-                levels detected from recent
-                swing highs and swing lows.
+                {t("supportResistanceExplanation")}
               </p>
             </div>
 
             <div className="mt-5 grid gap-4 md:grid-cols-2">
               <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4">
                 <p className="text-xs uppercase tracking-wide text-zinc-500">
-                  Nearest Support
+                  {t("nearestSupport")}
                 </p>
 
                 <p className="mt-2 text-xl font-semibold text-emerald-400">
                   {formatPrice(
+                    t,
                     data.priceLevels
-                      .support
+                      .support,
+                    locale
                   )}
                 </p>
 
                 <p className="mt-2 text-xs leading-5 text-zinc-500">
-                  A nearby level where buyers
-                  may attempt to defend the
-                  price.
+                  {t("nearestSupportExplanation")}
                 </p>
               </div>
 
               <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4">
                 <p className="text-xs uppercase tracking-wide text-zinc-500">
-                  Nearest Resistance
+                  {t("nearestResistance")}
                 </p>
 
                 <p className="mt-2 text-xl font-semibold text-red-400">
                   {formatPrice(
+                    t,
                     data.priceLevels
-                      .resistance
+                      .resistance,
+                    locale
                   )}
                 </p>
 
                 <p className="mt-2 text-xs leading-5 text-zinc-500">
-                  A nearby level where sellers
-                  may attempt to reject the
-                  price.
+                  {t("nearestResistanceExplanation")}
                 </p>
               </div>
             </div>
@@ -938,13 +966,11 @@ export default function AtlasLiveAnalysis() {
           <div className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-5">
             <div>
               <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-                Key observations
+                {t("keyObservations")}
               </p>
 
               <p className="mt-2 text-sm text-zinc-400">
-                The strongest factors currently
-                influencing the Atlas indicator
-                signal.
+                {t("keyObservationsExplanation")}
               </p>
             </div>
 
@@ -1008,17 +1034,18 @@ export default function AtlasLiveAnalysis() {
           </div>
 
           <p className="text-right text-xs text-zinc-600">
-            Updated{" "}
-            {new Date(
-              data.generatedAt
-            ).toLocaleTimeString(
-              [],
-              {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              }
-            )}
+            {t("updated", {
+              time: new Date(
+                data.generatedAt
+              ).toLocaleTimeString(
+                locale,
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                }
+              ),
+            })}
           </p>
         </div>
       ) : null}

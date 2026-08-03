@@ -1,3 +1,5 @@
+import { getLocale, getTranslations } from "next-intl/server";
+
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
 import { formatMarketSymbol } from "@/lib/services/liveMarketService";
@@ -11,12 +13,15 @@ function formatPnl(pnlPercent: number) {
   return `${pnlPercent >= 0 ? "+" : ""}${pnlPercent.toFixed(2)}%`;
 }
 
-function formatCountdown(horizonAt: string) {
+function formatCountdown(
+  t: Awaited<ReturnType<typeof getTranslations>>,
+  horizonAt: string
+) {
   const remainingMs =
     new Date(horizonAt).getTime() - Date.now();
 
   if (remainingMs <= 0) {
-    return "Evaluating…";
+    return t("evaluating");
   }
 
   const hours = Math.floor(remainingMs / (60 * 60 * 1000));
@@ -24,12 +29,14 @@ function formatCountdown(horizonAt: string) {
     (remainingMs % (60 * 60 * 1000)) / (60 * 1000)
   );
 
-  return `${hours}h ${minutes}m left`;
+  return t("timeLeft", { hours, minutes });
 }
 
-export default function TrackRecordView({
+export default async function TrackRecordView({
   trackRecord,
 }: TrackRecordViewProps) {
+  const t = await getTranslations("TrackRecord");
+  const locale = await getLocale();
   const {
     totalClosed,
     wins,
@@ -46,12 +53,12 @@ export default function TrackRecordView({
   return (
     <div className="space-y-8">
       <Section
-        title="Track Record"
-        subtitle="Verified 24h outcome of every Atlas LONG/SHORT signal"
+        title={t("title")}
+        subtitle={t("subtitle")}
       >
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="atlas-subcard rounded-xl p-4">
-            <p className="text-xs text-zinc-500">Win rate</p>
+            <p className="text-xs text-zinc-500">{t("winRate")}</p>
             <p className="mt-1 text-2xl font-bold text-white">
               {totalClosed === 0 ? "—" : `${winRate.toFixed(1)}%`}
             </p>
@@ -62,18 +69,18 @@ export default function TrackRecordView({
 
           <div className="atlas-subcard rounded-xl p-4">
             <p className="text-xs text-zinc-500">
-              Closed trades
+              {t("closedTrades")}
             </p>
             <p className="mt-1 text-2xl font-bold text-white">
               {totalClosed}
             </p>
             <p className="mt-1 text-xs text-zinc-600">
-              {openPositions.length} pending
+              {t("pending", { count: openPositions.length })}
             </p>
           </div>
 
           <div className="atlas-subcard rounded-xl p-4">
-            <p className="text-xs text-zinc-500">Avg P&L</p>
+            <p className="text-xs text-zinc-500">{t("avgPnl")}</p>
             <p
               className={`mt-1 text-2xl font-bold ${
                 avgPnlPercent >= 0
@@ -89,7 +96,7 @@ export default function TrackRecordView({
 
           <div className="atlas-subcard rounded-xl p-4">
             <p className="text-xs text-zinc-500">
-              Best / worst
+              {t("bestWorst")}
             </p>
             <p className="mt-1 text-sm text-zinc-200">
               {bestTrade
@@ -107,17 +114,17 @@ export default function TrackRecordView({
 
       {bySymbol.length > 0 && (
         <Section
-          title="Per-symbol breakdown"
-          subtitle="Closed trades only"
+          title={t("perSymbolTitle")}
+          subtitle={t("perSymbolSubtitle")}
         >
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="text-xs text-zinc-500">
-                  <th className="pb-3 font-medium">Symbol</th>
-                  <th className="pb-3 font-medium">Trades</th>
-                  <th className="pb-3 font-medium">Win rate</th>
-                  <th className="pb-3 font-medium">Avg P&L</th>
+                  <th className="pb-3 font-medium">{t("colSymbol")}</th>
+                  <th className="pb-3 font-medium">{t("colTrades")}</th>
+                  <th className="pb-3 font-medium">{t("colWinRate")}</th>
+                  <th className="pb-3 font-medium">{t("colAvgPnl")}</th>
                 </tr>
               </thead>
 
@@ -154,17 +161,16 @@ export default function TrackRecordView({
       )}
 
       <Section
-        title="Open positions"
-        subtitle="Awaiting the 24h evaluation window"
+        title={t("openPositionsTitle")}
+        subtitle={t("openPositionsSubtitle")}
       >
         {openPositions.length === 0 ? (
           <div className="rounded-xl border border-dashed border-zinc-800 p-8 text-center">
             <p className="font-medium text-zinc-300">
-              Nothing pending
+              {t("nothingPendingTitle")}
             </p>
             <p className="mt-1 text-sm text-zinc-600">
-              Every LONG/SHORT signal has already been
-              evaluated.
+              {t("nothingPendingHint")}
             </p>
           </div>
         ) : (
@@ -190,7 +196,7 @@ export default function TrackRecordView({
                 <div className="flex items-center gap-6 text-sm">
                   <div>
                     <p className="text-xs text-zinc-500">
-                      Entry
+                      {t("entry")}
                     </p>
                     <p className="text-zinc-200">
                       {trade.entryPrice}
@@ -198,7 +204,7 @@ export default function TrackRecordView({
                   </div>
 
                   <p className="text-zinc-500">
-                    {formatCountdown(trade.horizonAt)}
+                    {formatCountdown(t, trade.horizonAt)}
                   </p>
                 </div>
               </div>
@@ -208,17 +214,16 @@ export default function TrackRecordView({
       </Section>
 
       <Section
-        title="Closed trades"
-        subtitle="24h price outcome, most recent first"
+        title={t("closedTradesTitle")}
+        subtitle={t("closedTradesSubtitle")}
       >
         {closedTrades.length === 0 ? (
           <div className="rounded-xl border border-dashed border-zinc-800 p-8 text-center">
             <p className="font-medium text-zinc-300">
-              No closed trades yet
+              {t("noClosedTitle")}
             </p>
             <p className="mt-1 text-sm text-zinc-600">
-              Trades appear here once 24h has passed since a
-              LONG/SHORT signal fired.
+              {t("noClosedHint")}
             </p>
           </div>
         ) : (
@@ -246,7 +251,7 @@ export default function TrackRecordView({
                         {trade.signal}
                       </Badge>
                       <Badge variant={isWin ? "green" : "red"}>
-                        {isWin ? "WIN" : "LOSS"}
+                        {isWin ? t("win") : t("loss")}
                       </Badge>
                     </div>
 
@@ -264,7 +269,7 @@ export default function TrackRecordView({
                   <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Entry
+                        {t("entry")}
                       </p>
                       <p className="text-zinc-200">
                         {trade.entryPrice}
@@ -273,7 +278,7 @@ export default function TrackRecordView({
 
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Exit (24h)
+                        {t("exit24h")}
                       </p>
                       <p className="text-zinc-200">
                         {trade.exitPrice}
@@ -282,18 +287,18 @@ export default function TrackRecordView({
 
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Signaled
+                        {t("signaled")}
                       </p>
                       <p className="text-zinc-200">
                         {new Date(
                           trade.createdAt
-                        ).toLocaleString()}
+                        ).toLocaleString(locale)}
                       </p>
                     </div>
 
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Confidence
+                        {t("confidence")}
                       </p>
                       <p className="text-zinc-200">
                         {trade.confidence}%

@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 type MACDPoint = {
   macd: number;
   signal: number;
@@ -8,7 +10,8 @@ type MACDChartProps = {
   values: MACDPoint[];
 };
 
-export default function MACDChart({ values }: MACDChartProps) {
+export default async function MACDChart({ values }: MACDChartProps) {
+  const t = await getTranslations("MACDChart");
   const width = 1000;
   const height = 320;
   const padding = 35;
@@ -54,14 +57,14 @@ export default function MACDChart({ values }: MACDChartProps) {
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">MACD</h2>
+          <h2 className="text-2xl font-bold">{t("title")}</h2>
           <p className="text-sm text-zinc-500">
-            12 / 26 / 9 · 1-hour candles
+            {t("subtitle")}
           </p>
         </div>
 
         <div className="text-right text-sm">
-          <p className="text-zinc-500">Current histogram</p>
+          <p className="text-zinc-500">{t("currentHistogram")}</p>
           <p
             className={
               (latest?.histogram ?? 0) >= 0
@@ -129,9 +132,9 @@ export default function MACDChart({ values }: MACDChartProps) {
       </div>
 
       <div className="mt-4 flex gap-6 text-sm text-zinc-400">
-        <span>Blue: MACD</span>
-        <span>Orange: Signal</span>
-        <span>Histogram: Momentum</span>
+        <span>{t("legendMacd")}</span>
+        <span>{t("legendSignal")}</span>
+        <span>{t("legendHistogram")}</span>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import AtlasAnalysis from "../../../components/AtlasAnalysis";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
@@ -37,6 +38,8 @@ type Props = {
 
 export default async function CoinPage({ params }: Props) {
   const { symbol } = await params;
+  const t = await getTranslations("CoinPage");
+  const locale = await getLocale();
   const user = await getCurrentUser();
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
@@ -91,7 +94,7 @@ export default async function CoinPage({ params }: Props) {
     href="/"
     className="inline-block py-2 text-zinc-400 transition hover:text-white"
   >
-    ← Dashboard
+    {t("backToDashboard")}
   </Link>
 
   {isPro ? (
@@ -110,7 +113,7 @@ export default async function CoinPage({ params }: Props) {
       href="/pricing"
       className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-3 font-medium text-zinc-300 transition hover:border-yellow-500/40 hover:text-yellow-300"
     >
-      💎 Upgrade for watchlists
+      {t("upgradeForWatchlists")}
     </Link>
   )}
 </div>
@@ -127,7 +130,7 @@ export default async function CoinPage({ params }: Props) {
 
       <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-          <p className="text-zinc-400">24h Change</p>
+          <p className="text-zinc-400">{t("change24h")}</p>
 
           <p
             className={`mt-4 text-5xl font-bold ${
@@ -141,10 +144,10 @@ export default async function CoinPage({ params }: Props) {
         </div>
 
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
-          <p className="text-zinc-400">24h Volume</p>
+          <p className="text-zinc-400">{t("volume24h")}</p>
 
           <p className="mt-4 text-4xl font-bold">
-            ${analysis.volume24h.toLocaleString("en-US")}
+            ${analysis.volume24h.toLocaleString(locale)}
           </p>
         </div>
 

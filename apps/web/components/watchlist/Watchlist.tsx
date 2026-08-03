@@ -1,5 +1,6 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -72,6 +73,8 @@ export default function Watchlist({
   removeSymbolFromWatchlistAction,
   migrateLegacyFavoritesAction,
 }: WatchlistProps) {
+  const t = useTranslations("Watchlist");
+  const locale = useLocale();
   const router = useRouter();
   const { market, loading, error, lastUpdated, refresh } =
     useMarket();
@@ -195,8 +198,8 @@ export default function Watchlist({
 
   return (
     <Section
-      title="Live Watchlist"
-      subtitle="Updates automatically every 30 seconds"
+      title={t("title")}
+      subtitle={t("subtitle")}
     >
       <div className="mb-4 flex flex-wrap items-center gap-2">
         {watchlists.map((watchlist) => (
@@ -228,7 +231,7 @@ export default function Watchlist({
               type="text"
               name="name"
               autoFocus
-              placeholder="List name"
+              placeholder={t("listNamePlaceholder")}
               required
               className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2 text-xs text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
             />
@@ -237,7 +240,7 @@ export default function Watchlist({
               type="submit"
               className="rounded-lg border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs font-medium text-zinc-400 transition hover:text-white"
             >
-              Add
+              {t("add")}
             </button>
           </form>
         ) : (
@@ -246,7 +249,7 @@ export default function Watchlist({
             onClick={() => setIsCreatingList(true)}
             className="rounded-lg border border-dashed border-zinc-800 px-3 py-2 text-xs font-medium text-zinc-500 transition hover:text-white"
           >
-            + New list
+            {t("newList")}
           </button>
         )}
       </div>
@@ -267,7 +270,7 @@ export default function Watchlist({
                 : "border-zinc-800 bg-zinc-950/50 text-zinc-400 hover:text-white"
             }`}
           >
-            ★ Show only {activeWatchlist?.name ?? "list"}
+            {t("showOnly", { name: activeWatchlist?.name ?? t("showOnlyFallback") })}
           </button>
 
           {activeWatchlist && (
@@ -282,7 +285,7 @@ export default function Watchlist({
                 type="submit"
                 className="rounded-lg border border-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10"
               >
-                Delete list
+                {t("deleteList")}
               </button>
             </form>
           )}
@@ -294,7 +297,7 @@ export default function Watchlist({
           disabled={isRefreshing}
           className="rounded-lg border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs font-medium text-zinc-400 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isRefreshing ? "Refreshing..." : "Refresh"}
+          {isRefreshing ? t("refreshing") : t("refresh")}
         </button>
       </div>
 
@@ -311,7 +314,7 @@ export default function Watchlist({
             onClick={() => updateSorting("symbol")}
             className="text-left hover:text-white"
           >
-            Asset{getSortIndicator("symbol")}
+            {t("colAsset")}{getSortIndicator("symbol")}
           </button>
 
           <button
@@ -319,7 +322,7 @@ export default function Watchlist({
             onClick={() => updateSorting("price")}
             className="text-right hover:text-white"
           >
-            Price{getSortIndicator("price")}
+            {t("colPrice")}{getSortIndicator("price")}
           </button>
 
           <button
@@ -327,26 +330,26 @@ export default function Watchlist({
             onClick={() => updateSorting("change24h")}
             className="text-right hover:text-white"
           >
-            24h{getSortIndicator("change24h")}
+            {t("col24h")}{getSortIndicator("change24h")}
           </button>
 
-          <span>Atlas</span>
+          <span>{t("colAtlas")}</span>
 
           <span />
         </div>
 
         {loading ? (
           <div className="px-4 py-10 text-center text-sm text-zinc-500">
-            Loading live prices...
+            {t("loadingPrices")}
           </div>
         ) : visibleItems.length === 0 ? (
           <div className="px-4 py-10 text-center">
             <p className="text-sm font-medium text-zinc-300">
-              No assets in this list
+              {t("emptyTitle")}
             </p>
 
             <p className="mt-1 text-xs text-zinc-500">
-              Press the star beside a coin to add it.
+              {t("emptyHint")}
             </p>
           </div>
         ) : (
@@ -427,8 +430,8 @@ export default function Watchlist({
                       type="submit"
                       aria-label={
                         isMember
-                          ? `Remove ${item.symbol} from ${activeWatchlist.name}`
-                          : `Add ${item.symbol} to ${activeWatchlist.name}`
+                          ? t("removeAria", { symbol: item.symbol, name: activeWatchlist.name })
+                          : t("addAria", { symbol: item.symbol, name: activeWatchlist.name })
                       }
                       className={`text-lg transition ${
                         isMember
@@ -451,19 +454,21 @@ export default function Watchlist({
       </div>
 
       <div className="mt-3 flex items-center justify-between text-xs text-zinc-600">
-        <span>Binance market data</span>
+        <span>{t("binanceData")}</span>
 
         <span>
           {lastUpdated
-            ? `Updated ${lastUpdated.toLocaleTimeString(
-                [],
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                }
-              )}`
-            : "Waiting for update"}
+            ? t("updated", {
+                time: lastUpdated.toLocaleTimeString(
+                  locale,
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  }
+                ),
+              })
+            : t("waitingForUpdate")}
         </span>
       </div>
     </Section>

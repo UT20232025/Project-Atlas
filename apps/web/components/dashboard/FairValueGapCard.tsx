@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type {
   FairValueGapResult,
 } from "@/lib/atlas/fairValueGapEngine";
@@ -9,6 +13,9 @@ type FairValueGapCardProps = {
 export default function FairValueGapCard({
   fairValueGaps,
 }: FairValueGapCardProps) {
+  const t = useTranslations("FairValueGapCard");
+  const c = useTranslations("Cards");
+
   return (
     <div className="space-y-2 text-sm">
       <p className="text-zinc-400">
@@ -16,35 +23,35 @@ export default function FairValueGapCard({
       </p>
 
       <p className="text-emerald-400">
-        Bullish:{" "}
+        {t("bullish")}{" "}
         {fairValueGaps.bullishFairValueGaps.length}
       </p>
 
       <p className="text-red-400">
-        Bearish:{" "}
+        {t("bearish")}{" "}
         {fairValueGaps.bearishFairValueGaps.length}
       </p>
 
       <p className="text-zinc-300">
-        Nearest Bullish:{" "}
+        {t("nearestBullish")}{" "}
         {fairValueGaps.nearestBullishFairValueGap
           ? fairValueGaps.nearestBullishFairValueGap.midpoint.toFixed(2)
-          : "None"}
+          : c("none")}
       </p>{fairValueGaps.nearestBullishFairValueGap && (
   <p className="text-xs text-zinc-500">
-    Strength:{" "}
+    {c("strengthColon")}{" "}
     {fairValueGaps.nearestBullishFairValueGap.strength}%
   </p>
 )}
 
       <p className="text-zinc-300">
-        Nearest Bearish:{" "}
+        {t("nearestBearish")}{" "}
         {fairValueGaps.nearestBearishFairValueGap
           ? fairValueGaps.nearestBearishFairValueGap.midpoint.toFixed(2)
-          : "None"}
+          : c("none")}
       </p>{fairValueGaps.nearestBearishFairValueGap && (
   <p className="text-xs text-zinc-500">
-    Strength:{" "}
+    {c("strengthColon")}{" "}
     {fairValueGaps.nearestBearishFairValueGap.strength}%
   </p>
 )}

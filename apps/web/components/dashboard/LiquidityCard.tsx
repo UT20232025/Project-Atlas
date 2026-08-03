@@ -1,15 +1,19 @@
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
+
 import type { LiquidityResult } from "@/lib/atlas/liquidityEngine";
 
 type Props = {
   liquidity: LiquidityResult;
 };
 
-function formatPrice(value: number | null) {
+function formatPrice(t: ReturnType<typeof useTranslations>, value: number | null, locale: string) {
   if (value === null) {
-    return "Not detected";
+    return t("notDetected");
   }
 
-  return value.toLocaleString(undefined, {
+  return value.toLocaleString(locale, {
     maximumFractionDigits: 5,
   });
 }
@@ -58,16 +62,20 @@ function Status({
 export default function LiquidityCard({
   liquidity,
 }: Props) {
+  const t = useTranslations("LiquidityCard");
+  const c = useTranslations("Cards");
+  const locale = useLocale();
+
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
-            Liquidity
+            {t("title")}
           </p>
 
           <h3 className="mt-2 text-xl font-semibold text-white">
-            Liquidity Engine
+            {t("subtitle")}
           </h3>
         </div>
 
@@ -82,22 +90,22 @@ export default function LiquidityCard({
 
       <div className="mt-6 grid gap-3 md:grid-cols-2">
         <Status
-          label="Equal Highs"
+          label={t("equalHighs")}
           value={liquidity.equalHighs}
         />
 
         <Status
-          label="Equal Lows"
+          label={t("equalLows")}
           value={liquidity.equalLows}
         />
 
         <Status
-          label="Bullish Sweep"
+          label={t("bullishSweep")}
           value={liquidity.bullishSweep}
         />
 
         <Status
-          label="Bearish Sweep"
+          label={t("bearishSweep")}
           value={liquidity.bearishSweep}
         />
       </div>
@@ -105,21 +113,21 @@ export default function LiquidityCard({
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Liquidity Above
+            {t("liquidityAbove")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-white">
-            {formatPrice(liquidity.liquidityAbove)}
+            {formatPrice(c, liquidity.liquidityAbove, locale)}
           </p>
         </div>
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Liquidity Below
+            {t("liquidityBelow")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-white">
-            {formatPrice(liquidity.liquidityBelow)}
+            {formatPrice(c, liquidity.liquidityBelow, locale)}
           </p>
         </div>
       </div>
@@ -127,11 +135,11 @@ export default function LiquidityCard({
       <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
         <div className="flex items-center justify-between">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Sweep Level
+            {t("sweepLevel")}
           </p>
 
           <p className="text-white font-semibold">
-            {formatPrice(liquidity.sweepLevel)}
+            {formatPrice(c, liquidity.sweepLevel, locale)}
           </p>
         </div>
       </div>
@@ -139,7 +147,7 @@ export default function LiquidityCard({
       <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
         <div className="flex items-center justify-between">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Confidence
+            {c("confidence")}
           </p>
 
           <p className="font-semibold text-white">
@@ -159,7 +167,7 @@ export default function LiquidityCard({
 
       <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
         <p className="text-xs uppercase tracking-widest text-zinc-500">
-          Atlas Explanation
+          {c("atlasExplanation")}
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">

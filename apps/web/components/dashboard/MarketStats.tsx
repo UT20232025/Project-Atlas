@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import StatCard from "../StatCard";
 import type { ScannerItem } from "../../lib/analysis/scanner";
 
@@ -11,37 +13,40 @@ type MarketStatsProps = {
 };
 
 function getMarketHealth(
+  t: Awaited<ReturnType<typeof getTranslations>>,
   bullishCount: number,
   bearishCount: number
 ) {
   if (bullishCount > bearishCount + 3) {
     return {
-      value: "Bullish",
-      subtitle: `${bullishCount} markets trending up`,
+      value: t("bullish"),
+      subtitle: t("marketsUp", { count: bullishCount }),
       color: "green" as const,
     };
   }
 
   if (bearishCount > bullishCount + 3) {
     return {
-      value: "Bearish",
-      subtitle: `${bearishCount} markets trending down`,
+      value: t("bearish"),
+      subtitle: t("marketsDown", { count: bearishCount }),
       color: "red" as const,
     };
   }
 
   return {
-    value: "Neutral",
-    subtitle: "Mixed market",
+    value: t("neutral"),
+    subtitle: t("mixedMarket"),
     color: "yellow" as const,
   };
 }
 
-export default function MarketStats({
+export default async function MarketStats({
   scanner,
   fearGreed,
   btcDominance,
 }: MarketStatsProps) {
+  const t = await getTranslations("MarketStats");
+
   const bullishCount = scanner.filter(
     (item) => item.trend === "BULLISH"
   ).length;
@@ -51,6 +56,7 @@ export default function MarketStats({
   ).length;
 
   const marketHealth = getMarketHealth(
+    t,
     bullishCount,
     bearishCount
   );
@@ -60,14 +66,14 @@ export default function MarketStats({
   return (
    <section className="mb-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <StatCard
-        title="Market Health"
+        title={t("marketHealth")}
         value={marketHealth.value}
         subtitle={marketHealth.subtitle}
         color={marketHealth.color}
       />
 
       <StatCard
-        title="Fear & Greed"
+        title={t("fearGreed")}
         value={String(fearGreed.value)}
         subtitle={fearGreed.label}
         color={
@@ -80,19 +86,19 @@ export default function MarketStats({
       />
 
       <StatCard
-        title="BTC Dominance"
+        title={t("btcDominance")}
         value={`${btcDominance.toFixed(2)}%`}
-        subtitle="Bitcoin market share"
+        subtitle={t("bitcoinShare")}
         color="blue"
       />
 
       <StatCard
-        title="Best Setup"
+        title={t("bestSetup")}
         value={topSetup?.coin ?? "-"}
         subtitle={
           topSetup
-            ? `${topSetup.signal} • Confidence ${topSetup.confidence}`
-            : "No data"
+            ? t("setupConfidence", { signal: topSetup.signal, confidence: topSetup.confidence })
+            : t("noData")
         }
         color={
           topSetup?.signal === "LONG"

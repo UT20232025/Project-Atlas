@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import type { AtlasAnalysis } from "../../lib/atlas/atlasEngine";
 
 type AtlasScoreBreakdownProps = {
@@ -38,23 +40,25 @@ function ScoreRow({
   );
 }
 
-export default function AtlasScoreBreakdownCard({
+export default async function AtlasScoreBreakdownCard({
   analysis,
   bullishScore,
   bearishScore,
 }: AtlasScoreBreakdownProps) {
+  const t = await getTranslations("AtlasScoreBreakdown");
+
   return (
     <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">Atlas Score Breakdown</h2>
+          <h2 className="text-2xl font-bold">{t("title")}</h2>
           <p className="mt-1 text-sm text-zinc-500">
-            How the combined score is calculated
+            {t("subtitle")}
           </p>
         </div>
 
         <div className="text-right">
-          <p className="text-sm text-zinc-500">Total</p>
+          <p className="text-sm text-zinc-500">{t("total")}</p>
           <p className="text-4xl font-bold text-blue-400">
             {analysis.score}
           </p>
@@ -74,19 +78,18 @@ export default function AtlasScoreBreakdownCard({
 
       <div className="mt-8 border-t border-zinc-800 pt-6">
         <p className="mb-4 text-sm text-zinc-500">
-          AI Decision Engine — includes market structure,
-          liquidity, order blocks, and fair value gaps
+          {t("aiEngineNote")}
         </p>
 
         <div className="grid gap-5 md:grid-cols-2">
           <ScoreRow
-            label="Bullish score"
+            label={t("bullishScore")}
             value={bullishScore}
             max={100}
             color="bg-green-500"
           />
           <ScoreRow
-            label="Bearish score"
+            label={t("bearishScore")}
             value={bearishScore}
             max={100}
             color="bg-red-500"

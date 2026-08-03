@@ -1,3 +1,4 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 
 import Badge from "@/components/ui/Badge";
@@ -29,7 +30,7 @@ function getProgressColor(
   return "red";
 }
 
-export default function OpportunityCard({
+export default async function OpportunityCard({
   coin,
   signal,
   score,
@@ -37,12 +38,14 @@ export default function OpportunityCard({
   change24h,
   reason,
 }: OpportunityCardProps) {
+  const t = await getTranslations("OpportunityCard");
+  const locale = await getLocale();
   const safeScore = Math.max(0, Math.min(100, score));
 
   return (
     <Section
-      title="Atlas Opportunity"
-      subtitle="Best opportunity right now"
+      title={t("title")}
+      subtitle={t("subtitle")}
     >
       <div className="space-y-6">
         <div className="flex items-start justify-between gap-4">
@@ -53,7 +56,7 @@ export default function OpportunityCard({
 
             <p className="mt-1 text-zinc-400">
               $
-              {price.toLocaleString("en-US", {
+              {price.toLocaleString(locale, {
                 maximumFractionDigits: price < 1 ? 6 : 2,
               })}
             </p>
@@ -67,7 +70,7 @@ export default function OpportunityCard({
         <div>
           <div className="mb-2 flex items-center justify-between">
             <span className="text-sm text-zinc-500">
-              Atlas Confidence
+              {t("atlasConfidence")}
             </span>
 
             <span className="font-bold text-white">
@@ -90,7 +93,7 @@ export default function OpportunityCard({
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs text-zinc-500">
-              24h change
+              {t("changeLabel")}
             </p>
 
             <p
@@ -109,7 +112,7 @@ export default function OpportunityCard({
             href={`/coin/${coin}`}
             className="inline-flex items-center justify-center rounded-xl border border-blue-500 bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-500"
           >
-            Open Market
+            {t("openMarket")}
           </Link>
         </div>
       </div>

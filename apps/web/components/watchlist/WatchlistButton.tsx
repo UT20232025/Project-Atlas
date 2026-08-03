@@ -1,6 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
@@ -21,6 +22,7 @@ export default function WatchlistButton({
   addSymbolToWatchlistAction,
   removeSymbolFromWatchlistAction,
 }: WatchlistButtonProps) {
+  const t = useTranslations("WatchlistButton");
   const [isOpen, setIsOpen] = useState(false);
 
   const memberCount = watchlists.filter((watchlist) =>
@@ -50,18 +52,15 @@ export default function WatchlistButton({
         />
 
         {memberCount > 0
-          ? `In ${memberCount} watchlist${
-              memberCount === 1 ? "" : "s"
-            }`
-          : "Add to Watchlist"}
+          ? t("inWatchlists", { count: memberCount })
+          : t("addToWatchlist")}
       </button>
 
       {isOpen && (
         <div className="atlas-subcard absolute right-0 z-10 mt-2 w-56 rounded-xl p-2 shadow-xl backdrop-blur-xl">
           {watchlists.length === 0 ? (
             <p className="p-2 text-xs text-zinc-500">
-              No watchlists yet — create one from the
-              dashboard.
+              {t("empty")}
             </p>
           ) : (
             watchlists.map((watchlist) => {

@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
 import Select from "@/components/ui/Select";
@@ -15,19 +17,6 @@ type JournalViewProps = {
   deleteEntryAction: (formData: FormData) => void;
 };
 
-const CSV_COLUMNS = [
-  "Symbol",
-  "Direction",
-  "Entry Price",
-  "Exit Price",
-  "Quantity",
-  "P&L",
-  "P&L %",
-  "Opened At",
-  "Closed At",
-  "Note",
-] as const;
-
 function toCsvValue(value: string | number) {
   const stringValue = String(value);
 
@@ -38,7 +27,7 @@ function toCsvValue(value: string | number) {
   return stringValue;
 }
 
-function buildCsv(entries: JournalEntryView[]) {
+function buildCsv(entries: JournalEntryView[], csvColumns: string[]) {
   const rows = entries.map((entry) =>
     [
       entry.symbol,
@@ -56,11 +45,11 @@ function buildCsv(entries: JournalEntryView[]) {
       .join(",")
   );
 
-  return [CSV_COLUMNS.join(","), ...rows].join("\n");
+  return [csvColumns.join(","), ...rows].join("\n");
 }
 
-function downloadCsv(entries: JournalEntryView[]) {
-  const csv = buildCsv(entries);
+function downloadCsv(entries: JournalEntryView[], csvColumns: string[]) {
+  const csv = buildCsv(entries, csvColumns);
   const blob = new Blob([csv], {
     type: "text/csv;charset=utf-8;",
   });
@@ -84,11 +73,27 @@ export default function JournalView({
   createEntryAction,
   deleteEntryAction,
 }: JournalViewProps) {
+  const t = useTranslations("Journal");
+  const locale = useLocale();
+
+  const csvColumns = [
+    t("csvSymbol"),
+    t("csvDirection"),
+    t("csvEntryPrice"),
+    t("csvExitPrice"),
+    t("csvQuantity"),
+    t("csvPnl"),
+    t("csvPnlPercent"),
+    t("csvOpenedAt"),
+    t("csvClosedAt"),
+    t("csvNote"),
+  ];
+
   return (
     <div className="space-y-8">
       <Section
-        title="Trading Journal"
-        subtitle="A log of your closed trades"
+        title={t("title")}
+        subtitle={t("subtitle")}
       >
         <form
           action={createEntryAction}
@@ -113,7 +118,7 @@ export default function JournalView({
           <input
             type="number"
             name="entryPrice"
-            placeholder="Entry price"
+            placeholder={t("entryPricePlaceholder")}
             step="any"
             required
             className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
@@ -122,7 +127,7 @@ export default function JournalView({
           <input
             type="number"
             name="exitPrice"
-            placeholder="Exit price"
+            placeholder={t("exitPricePlaceholder")}
             step="any"
             required
             className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
@@ -131,7 +136,7 @@ export default function JournalView({
           <input
             type="number"
             name="quantity"
-            placeholder="Quantity"
+            placeholder={t("quantityPlaceholder")}
             step="any"
             required
             className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
@@ -146,7 +151,7 @@ export default function JournalView({
           <input
             type="text"
             name="note"
-            placeholder="Note (optional)"
+            placeholder={t("notePlaceholder")}
             className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
           />
 
@@ -154,34 +159,33 @@ export default function JournalView({
             type="submit"
             className="rounded-xl bg-[#ffffff] px-5 py-3 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
           >
-            Add entry
+            {t("addEntry")}
           </button>
         </form>
 
         <div className="mb-4 flex items-center justify-between text-sm">
           <span className="text-zinc-500">
-            {entries.length} closed trades
+            {t("closedTrades", { count: entries.length })}
           </span>
 
           <button
             type="button"
-            onClick={() => downloadCsv(entries)}
+            onClick={() => downloadCsv(entries, csvColumns)}
             disabled={entries.length === 0}
             className="rounded-lg border border-zinc-800 bg-zinc-950/50 px-3 py-2 text-xs font-medium text-zinc-400 transition hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Export CSV
+            {t("exportCsv")}
           </button>
         </div>
 
         {entries.length === 0 ? (
           <div className="rounded-xl border border-dashed border-zinc-800 p-8 text-center">
             <p className="font-medium text-zinc-300">
-              No journal entries yet
+              {t("emptyTitle")}
             </p>
 
             <p className="mt-1 text-sm text-zinc-600">
-              Close a position from Portfolio, or add a trade
-              manually above.
+              {t("emptyHint")}
             </p>
           </div>
         ) : (
@@ -219,7 +223,7 @@ export default function JournalView({
                       type="submit"
                       className="rounded-lg border border-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10"
                     >
-                      Delete
+                      {t("delete")}
                     </button>
                   </form>
                 </div>
@@ -227,7 +231,7 @@ export default function JournalView({
                 <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-5">
                   <div>
                     <p className="text-xs text-zinc-500">
-                      Entry
+                      {t("entry")}
                     </p>
                     <p className="text-zinc-200">
                       {entry.entryPrice}
@@ -236,7 +240,7 @@ export default function JournalView({
 
                   <div>
                     <p className="text-xs text-zinc-500">
-                      Exit
+                      {t("exit")}
                     </p>
                     <p className="text-zinc-200">
                       {entry.exitPrice}
@@ -245,7 +249,7 @@ export default function JournalView({
 
                   <div>
                     <p className="text-xs text-zinc-500">
-                      Quantity
+                      {t("quantity")}
                     </p>
                     <p className="text-zinc-200">
                       {entry.quantity}
@@ -254,7 +258,7 @@ export default function JournalView({
 
                   <div>
                     <p className="text-xs text-zinc-500">
-                      P&L
+                      {t("pnl")}
                     </p>
                     <p
                       className={
@@ -271,12 +275,12 @@ export default function JournalView({
 
                   <div>
                     <p className="text-xs text-zinc-500">
-                      Closed
+                      {t("closed")}
                     </p>
                     <p className="text-zinc-200">
                       {new Date(
                         entry.closedAt
-                      ).toLocaleDateString()}
+                      ).toLocaleDateString(locale)}
                     </p>
                   </div>
                 </div>

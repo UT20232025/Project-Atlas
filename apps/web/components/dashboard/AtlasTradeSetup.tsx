@@ -1,3 +1,7 @@
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
+
 type TradeSetup = {
   direction: string;
   entry: number | null;
@@ -14,22 +18,22 @@ type Props = {
   tradeSetup: TradeSetup;
 };
 
-function formatPrice(price: number | null) {
+function formatPrice(price: number | null, locale: string) {
   if (price === null || !Number.isFinite(price)) {
     return "—";
   }
 
-  return price.toLocaleString(undefined, {
+  return price.toLocaleString(locale, {
     maximumFractionDigits: 2,
   });
 }
 
-function formatRiskReward(value: number | null) {
+function formatRiskReward(t: ReturnType<typeof useTranslations>, value: number | null) {
   if (value === null || !Number.isFinite(value)) {
     return "—";
   }
 
-  return `${value.toFixed(2)}:1`;
+  return t("rr", { value: `${value.toFixed(2)}:1` });
 }
 
 function getDirectionTextColor(direction: string) {
@@ -63,6 +67,9 @@ function getQualityTextColor(quality: string) {
 export default function AtlasTradeSetup({
   tradeSetup,
 }: Props) {
+  const t = useTranslations("AtlasTradeSetup");
+  const locale = useLocale();
+
   const isNoTrade =
     tradeSetup.direction === "WAIT" ||
     tradeSetup.quality === "NO_TRADE";
@@ -71,12 +78,12 @@ export default function AtlasTradeSetup({
     return (
       <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
         <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-          Trade Setup
+          {t("title")}
         </p>
 
         <div className="mt-4 rounded-lg border border-amber-500/20 bg-zinc-950/30 p-4">
           <p className="text-lg font-semibold text-amber-300">
-            No Trade
+            {t("noTrade")}
           </p>
 
           <p className="mt-2 text-sm leading-6 text-zinc-400">
@@ -90,13 +97,13 @@ export default function AtlasTradeSetup({
   return (
     <div className="rounded-xl border border-zinc-800 bg-zinc-950/30 p-5">
       <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-        Trade Setup
+        {t("title")}
       </p>
 
       <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div>
           <p className="text-xs text-zinc-500">
-            Direction
+            {t("direction")}
           </p>
 
           <p
@@ -110,27 +117,27 @@ export default function AtlasTradeSetup({
 
         <div>
           <p className="text-xs text-zinc-500">
-            Entry
+            {t("entry")}
           </p>
 
           <p className="mt-1 font-medium text-white">
-            {formatPrice(tradeSetup.entry)}
+            {formatPrice(tradeSetup.entry, locale)}
           </p>
         </div>
 
         <div>
           <p className="text-xs text-zinc-500">
-            Stop Loss
+            {t("stopLoss")}
           </p>
 
           <p className="mt-1 font-medium text-red-400">
-            {formatPrice(tradeSetup.stopLoss)}
+            {formatPrice(tradeSetup.stopLoss, locale)}
           </p>
         </div>
 
         <div>
           <p className="text-xs text-zinc-500">
-            Quality
+            {t("quality")}
           </p>
 
           <p
@@ -146,29 +153,29 @@ export default function AtlasTradeSetup({
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-lg border border-zinc-800 p-4">
           <p className="text-xs text-zinc-500">
-            Take Profit 1
+            {t("takeProfit1")}
           </p>
 
           <p className="mt-1 text-lg font-semibold text-emerald-400">
-            {formatPrice(tradeSetup.takeProfit1)}
+            {formatPrice(tradeSetup.takeProfit1, locale)}
           </p>
 
           <p className="mt-2 text-xs text-zinc-500">
-            RR {formatRiskReward(tradeSetup.riskReward1)}
+            {formatRiskReward(t, tradeSetup.riskReward1)}
           </p>
         </div>
 
         <div className="rounded-lg border border-zinc-800 p-4">
           <p className="text-xs text-zinc-500">
-            Take Profit 2
+            {t("takeProfit2")}
           </p>
 
           <p className="mt-1 text-lg font-semibold text-emerald-400">
-            {formatPrice(tradeSetup.takeProfit2)}
+            {formatPrice(tradeSetup.takeProfit2, locale)}
           </p>
 
           <p className="mt-2 text-xs text-zinc-500">
-            RR {formatRiskReward(tradeSetup.riskReward2)}
+            {formatRiskReward(t, tradeSetup.riskReward2)}
           </p>
         </div>
       </div>

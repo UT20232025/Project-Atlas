@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type { TrendEngineResult } from "@/lib/atlas/trendEngine";
 
 type Props = {
@@ -22,16 +26,19 @@ function getDirectionColor(direction: TrendEngineResult["direction"]) {
 export default function TrendEngineCard({
   trend,
 }: Props) {
+  const t = useTranslations("TrendEngineCard");
+  const c = useTranslations("Cards");
+
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
-            Trend Engine
+            {t("title")}
           </p>
 
           <h3 className="mt-2 text-xl font-semibold text-white">
-            Market Trend
+            {t("subtitle")}
           </h3>
         </div>
 
@@ -47,7 +54,7 @@ export default function TrendEngineCard({
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Strength
+            {c("strength")}
           </p>
 
           <p className="mt-2 text-xl font-semibold text-white">
@@ -57,7 +64,7 @@ export default function TrendEngineCard({
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Confidence
+            {c("confidence")}
           </p>
 
           <p className="mt-2 text-xl font-semibold text-white">
@@ -68,7 +75,7 @@ export default function TrendEngineCard({
 
       <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
         <p className="text-xs uppercase tracking-widest text-zinc-500">
-          Atlas Explanation
+          {c("atlasExplanation")}
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">

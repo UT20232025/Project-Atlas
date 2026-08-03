@@ -1,3 +1,5 @@
+import { getLocale, getTranslations } from "next-intl/server";
+
 import Badge from "@/components/ui/Badge";
 import type { SignalSnapshotView } from "@/lib/atlas/signalHistory";
 
@@ -13,30 +15,32 @@ function getSignalVariant(
   return "yellow";
 }
 
-export default function SignalHistoryCard({
+export default async function SignalHistoryCard({
   history,
 }: SignalHistoryCardProps) {
+  const t = await getTranslations("SignalHistoryCard");
+  const locale = await getLocale();
+
   return (
     <section className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
       <div className="mb-6">
         <h2 className="text-2xl font-bold">
-          Signal History
+          {t("title")}
         </h2>
 
         <p className="mt-1 text-sm text-zinc-500">
-          Every time the Atlas signal for this coin has
-          changed
+          {t("subtitle")}
         </p>
       </div>
 
       {history.length === 0 ? (
         <div className="rounded-xl border border-dashed border-zinc-800 p-8 text-center">
           <p className="font-medium text-zinc-300">
-            No signal changes recorded yet
+            {t("emptyTitle")}
           </p>
 
           <p className="mt-1 text-sm text-zinc-600">
-            Check back after the signal moves.
+            {t("emptyHint")}
           </p>
         </div>
       ) : (
@@ -56,15 +60,14 @@ export default function SignalHistoryCard({
                 </Badge>
 
                 <span className="text-sm text-zinc-400">
-                  Confidence {snapshot.confidence}% ·
-                  Score {snapshot.score}
+                  {t("confidenceScore", { confidence: snapshot.confidence, score: snapshot.score })}
                 </span>
               </div>
 
               <span className="text-xs text-zinc-600">
                 {new Date(
                   snapshot.createdAt
-                ).toLocaleString()}
+                ).toLocaleString(locale)}
               </span>
             </div>
           ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 type AtlasScoreCardProps = {
@@ -11,13 +12,16 @@ type AtlasScoreCardProps = {
   risk?: number;
 };
 
-function getSignalStyles(signal: AtlasScoreCardProps["signal"]) {
+function getSignalStyles(
+  t: ReturnType<typeof useTranslations>,
+  signal: AtlasScoreCardProps["signal"]
+) {
   if (signal === "LONG") {
     return {
       text: "text-green-400",
       dot: "bg-green-400",
       ring: "#22c55e",
-      label: "Bullish",
+      label: t("bullish"),
     };
   }
 
@@ -26,7 +30,7 @@ function getSignalStyles(signal: AtlasScoreCardProps["signal"]) {
       text: "text-red-400",
       dot: "bg-red-400",
       ring: "#ef4444",
-      label: "Bearish",
+      label: t("bearish"),
     };
   }
 
@@ -34,7 +38,7 @@ function getSignalStyles(signal: AtlasScoreCardProps["signal"]) {
     text: "text-yellow-400",
     dot: "bg-yellow-400",
     ring: "#eab308",
-    label: "Neutral",
+    label: t("neutral"),
   };
 }
 
@@ -72,7 +76,8 @@ export default function AtlasScoreCard({
   volume = 50,
   risk = 50,
 }: AtlasScoreCardProps) {
-  const styles = getSignalStyles(signal);
+  const t = useTranslations("AtlasScoreCard");
+  const styles = getSignalStyles(t, signal);
   const safeScore = Math.round(Math.max(0, Math.min(100, score)));
   const [displayScore, setDisplayScore] = useState(0);
 
@@ -102,7 +107,7 @@ export default function AtlasScoreCard({
       <div className="grid gap-10 lg:grid-cols-[320px_1fr] lg:items-center">
         <div className="flex flex-col items-center">
           <p className="text-sm font-medium uppercase tracking-[0.24em] text-zinc-500">
-            Atlas Score
+            {t("atlasScore")}
           </p>
 
           <div className="relative mt-6 h-56 w-56">
@@ -122,7 +127,7 @@ export default function AtlasScoreCard({
                 {displayScore}
               </p>
 
-              <p className="mt-1 text-sm text-zinc-500">of 100</p>
+              <p className="mt-1 text-sm text-zinc-500">{t("of100")}</p>
             </div>
           </div>
 
@@ -138,10 +143,10 @@ export default function AtlasScoreCard({
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
-          <ScoreBar label="Trend" value={trend} />
-          <ScoreBar label="Momentum" value={momentum} />
-          <ScoreBar label="Volume" value={volume} />
-          <ScoreBar label="Risk" value={risk} />
+          <ScoreBar label={t("trend")} value={trend} />
+          <ScoreBar label={t("momentum")} value={momentum} />
+          <ScoreBar label={t("volume")} value={volume} />
+          <ScoreBar label={t("risk")} value={risk} />
         </div>
       </div>
     </section>

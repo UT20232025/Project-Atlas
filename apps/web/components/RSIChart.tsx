@@ -1,8 +1,11 @@
+import { getTranslations } from "next-intl/server";
+
 type RSIChartProps = {
   values: number[];
 };
 
-export default function RSIChart({ values }: RSIChartProps) {
+export default async function RSIChart({ values }: RSIChartProps) {
+  const t = await getTranslations("RSIChart");
   const width = 1000;
   const height = 280;
   const padding = 30;
@@ -43,14 +46,14 @@ export default function RSIChart({ values }: RSIChartProps) {
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">RSI History</h2>
+          <h2 className="text-2xl font-bold">{t("title")}</h2>
           <p className="text-sm text-zinc-500">
-            RSI 14 · 1-hour candles
+            {t("subtitle")}
           </p>
         </div>
 
         <div className="text-right">
-          <p className="text-sm text-zinc-500">Current RSI</p>
+          <p className="text-sm text-zinc-500">{t("currentRsi")}</p>
           <p className={`text-3xl font-bold ${latestColor}`}>
             {latestRSI.toFixed(1)}
           </p>
@@ -98,8 +101,8 @@ export default function RSIChart({ values }: RSIChartProps) {
       </div>
 
       <div className="mt-4 flex justify-between text-sm text-zinc-500">
-        <span>Oversold below 30</span>
-        <span>Overbought above 70</span>
+        <span>{t("oversoldBelow")}</span>
+        <span>{t("overboughtAbove")}</span>
       </div>
     </div>
   );

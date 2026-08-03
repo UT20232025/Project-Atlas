@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 type AtlasExplainProps = {
   signal: "LONG" | "SHORT" | "WAIT";
   confidence: number;
@@ -6,13 +8,15 @@ type AtlasExplainProps = {
   explanation?: string;
 };
 
-export default function AtlasExplain({
+export default async function AtlasExplain({
   signal,
   confidence,
   reasons,
   warnings = [],
   explanation,
 }: AtlasExplainProps) {
+  const t = await getTranslations("AtlasExplain");
+
   const signalColor =
     signal === "LONG"
       ? "text-green-400"
@@ -25,17 +29,17 @@ export default function AtlasExplain({
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold">
-            🤖 Why Atlas chose {signal}
+            {t("whyChose", { signal })}
           </h2>
 
           <p className="mt-1 text-zinc-500">
-            AI explanation of the current setup
+            {t("subtitle")}
           </p>
         </div>
 
         <div className="text-right">
           <p className="text-sm text-zinc-500">
-            Confidence
+            {t("confidence")}
           </p>
 
           <p className={`text-4xl font-bold ${signalColor}`}>
@@ -78,12 +82,11 @@ export default function AtlasExplain({
 
       <div className="mt-6 rounded-xl border border-blue-500/20 bg-blue-500/10 p-4">
         <p className="font-semibold text-blue-300">
-          Atlas Summary
+          {t("summaryTitle")}
         </p>
 
         <p className="mt-2 text-zinc-300 leading-7">
-          {explanation ??
-            "Atlas combines momentum, EMA trend, RSI strength and market confidence to determine whether the current setup statistically favors LONG, SHORT or WAIT."}
+          {explanation ?? t("summaryFallback")}
         </p>
       </div>
     </section>

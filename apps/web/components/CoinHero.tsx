@@ -1,3 +1,5 @@
+import { getLocale, getTranslations } from "next-intl/server";
+
 type CoinHeroProps = {
   coin: string;
   price: number;
@@ -6,13 +8,16 @@ type CoinHeroProps = {
   score: number;
 };
 
-export default function CoinHero({
+export default async function CoinHero({
   coin,
   price,
   signal,
   confidence,
   score,
 }: CoinHeroProps) {
+  const t = await getTranslations("CoinHero");
+  const locale = await getLocale();
+
   const signalColor =
     signal === "LONG"
       ? "text-green-400"
@@ -25,7 +30,7 @@ export default function CoinHero({
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-zinc-500 text-sm">
-            Genwelth AI Analysis
+            {t("analysisLabel")}
           </p>
 
           <h1 className="mt-2 text-3xl font-bold sm:text-5xl">
@@ -33,12 +38,12 @@ export default function CoinHero({
           </h1>
 
           <p className="mt-4 text-2xl font-bold sm:text-4xl">
-            ${price.toLocaleString()}
+            ${price.toLocaleString(locale)}
           </p>
         </div>
 
         <div className="sm:text-right">
-          <p className="text-zinc-500">Signal</p>
+          <p className="text-zinc-500">{t("signal")}</p>
 
           <p
             className={`text-3xl font-bold sm:text-5xl ${signalColor}`}
@@ -47,7 +52,7 @@ export default function CoinHero({
           </p>
 
           <p className="mt-6 text-zinc-500">
-            Atlas Score
+            {t("atlasScore")}
           </p>
 
           <p className="text-2xl font-bold sm:text-3xl">
@@ -55,7 +60,7 @@ export default function CoinHero({
           </p>
 
           <p className="mt-4 text-zinc-500">
-            Confidence
+            {t("confidence")}
           </p>
 
           <p className="text-2xl font-bold text-green-400 sm:text-3xl">

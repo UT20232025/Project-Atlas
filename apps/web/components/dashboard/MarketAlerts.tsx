@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import type { ScannerItem } from "../../lib/analysis/scanner";
 
 type MarketAlertsProps = {
@@ -6,8 +8,9 @@ type MarketAlertsProps = {
 
 type AlertItem = {
   coin: string;
-  message: string;
   tone: "green" | "red" | "yellow" | "blue";
+  key: "alertStrongLong" | "alertStrongShort" | "alertRsiOverbought" | "alertRsiOversold" | "alertBullishMove";
+  values: Record<string, string | number>;
 };
 
 function buildAlerts(items: ScannerItem[]): AlertItem[] {
@@ -17,7 +20,8 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.confidence >= 90 && item.signal === "LONG") {
       alerts.push({
         coin: item.coin,
-        message: `Strong LONG setup with Confidence ${item.confidence}`,
+        key: "alertStrongLong",
+        values: { confidence: item.confidence },
         tone: "green",
       });
     }
@@ -25,7 +29,8 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.confidence >= 90 && item.signal === "SHORT") {
       alerts.push({
         coin: item.coin,
-        message: `Strong SHORT setup with Confidence ${item.confidence}`,
+        key: "alertStrongShort",
+        values: { confidence: item.confidence },
         tone: "red",
       });
     }
@@ -33,7 +38,8 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.rsi >= 70) {
       alerts.push({
         coin: item.coin,
-        message: `RSI is overbought at ${item.rsi.toFixed(1)}`,
+        key: "alertRsiOverbought",
+        values: { rsi: item.rsi.toFixed(1) },
         tone: "red",
       });
     }
@@ -41,7 +47,8 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.rsi <= 30) {
       alerts.push({
         coin: item.coin,
-        message: `RSI is oversold at ${item.rsi.toFixed(1)}`,
+        key: "alertRsiOversold",
+        values: { rsi: item.rsi.toFixed(1) },
         tone: "green",
       });
     }
@@ -49,7 +56,8 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
     if (item.trend === "BULLISH" && item.change24h > 5) {
       alerts.push({
         coin: item.coin,
-        message: `Bullish trend and strong 24h move of ${item.change24h.toFixed(2)}%`,
+        key: "alertBullishMove",
+        values: { change: item.change24h.toFixed(2) },
         tone: "blue",
       });
     }
@@ -58,9 +66,10 @@ function buildAlerts(items: ScannerItem[]): AlertItem[] {
   return alerts.slice(0, 6);
 }
 
-export default function MarketAlerts({
+export default async function MarketAlerts({
   items,
 }: MarketAlertsProps) {
+  const t = await getTranslations("MarketAlerts");
   const alerts = buildAlerts(items);
 
   const toneClasses = {
@@ -73,15 +82,15 @@ export default function MarketAlerts({
   return (
   <section className="atlas-card rounded-2xl p-8">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold">Market Alerts</h2>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
         <p className="mt-1 text-sm text-zinc-500">
-          Important signals detected by Atlas
+          {t("subtitle")}
         </p>
       </div>
 
       {alerts.length === 0 ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-5 text-zinc-400">
-          No strong alerts right now.
+          {t("empty")}
         </div>
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
@@ -91,7 +100,7 @@ export default function MarketAlerts({
               className={`rounded-xl border p-4 ${toneClasses[alert.tone]}`}
             >
               <p className="font-bold">{alert.coin}</p>
-              <p className="mt-1 text-sm">{alert.message}</p>
+              <p className="mt-1 text-sm">{t(alert.key, alert.values)}</p>
             </div>
           ))}
         </div>

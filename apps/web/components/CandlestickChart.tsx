@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 import {
   CandlestickSeries,
@@ -31,6 +32,7 @@ type CandlestickChartProps = {
 export default function CandlestickChart({
   candles,
 }: CandlestickChartProps) {
+  const t = useTranslations("CandlestickChart");
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -156,9 +158,9 @@ export default function CandlestickChart({
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold">Price Chart</h2>
+        <h2 className="text-2xl font-bold">{t("title")}</h2>
         <p className="text-sm text-zinc-500">
-          Candlesticks · EMA 20 · EMA 50 · Volume
+          {t("subtitle")}
         </p>
       </div>
 

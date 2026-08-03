@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 type DailyBriefProps = {
   bullish: number;
   bearish: number;
@@ -6,26 +8,28 @@ type DailyBriefProps = {
   btcDominance: number;
 };
 
-export default function DailyBrief({
+export default async function DailyBrief({
   bullish,
   bearish,
   neutral,
   fearGreed,
   btcDominance,
 }: DailyBriefProps) {
+  const t = await getTranslations("DailyBrief");
+
   const marketText =
     bullish > bearish
-      ? "The market is showing bullish momentum."
+      ? t("marketBullish")
       : bearish > bullish
-      ? "The market is showing bearish momentum."
-      : "The market is balanced.";
+      ? t("marketBearish")
+      : t("marketBalanced");
 
   const sentiment =
     fearGreed >= 70
-      ? "Investors are showing strong greed."
+      ? t("sentimentGreed")
       : fearGreed <= 30
-      ? "Investors are showing significant fear."
-      : "Sentiment is neutral.";
+      ? t("sentimentFear")
+      : t("sentimentNeutral");
 
   return (
    <section className="atlas-card rounded-2xl p-8">
@@ -33,7 +37,7 @@ export default function DailyBrief({
         <span className="text-2xl">🤖</span>
 
         <h2 className="text-2xl font-bold">
-          Atlas AI Daily Brief
+          {t("title")}
         </h2>
       </div>
 
@@ -43,20 +47,15 @@ export default function DailyBrief({
         <p>{sentiment}</p>
 
         <p>
-          {bullish} bullish • {neutral} neutral • {bearish} bearish markets.
+          {t("counts", { bullish, neutral, bearish })}
         </p>
 
         <p>
-          Bitcoin dominance is at{" "}
-          <span className="font-bold">
-            {btcDominance.toFixed(2)}%
-          </span>
-          .
+          {t("dominance", { value: btcDominance.toFixed(2) })}
         </p>
 
         <p className="text-green-400 font-semibold">
-          Atlas recommends focusing on the markets with the
-          highest Confidence Score.
+          {t("recommendation")}
         </p>
       </div>
     </section>

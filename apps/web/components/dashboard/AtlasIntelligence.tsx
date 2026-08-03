@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import Badge from "@/components/ui/Badge";
 import Progress from "@/components/ui/Progress";
 import Section from "@/components/ui/Section";
@@ -60,12 +62,13 @@ function getProgressColor(
   return "yellow";
 }
 
-export default function AtlasIntelligence({
+export default async function AtlasIntelligence({
   items,
   bullish,
   bearish,
   neutral,
 }: AtlasIntelligenceProps) {
+  const t = await getTranslations("AtlasIntelligence");
   const marketBias = getMarketBias(bullish, bearish);
   const confidence = getConfidence(
     bullish,
@@ -89,20 +92,20 @@ export default function AtlasIntelligence({
 
   const recommendation =
     marketBias === "BULLISH"
-      ? "Focus on high-quality LONG setups while momentum remains constructive."
+      ? t("recBullish")
       : marketBias === "BEARISH"
-      ? "Prioritize capital protection and only consider SHORT setups with clear confirmation."
-      : "The market is mixed. Wait for stronger confirmation before taking new positions.";
+      ? t("recBearish")
+      : t("recNeutral");
 
   return (
     <Section
-      title="Atlas Intelligence"
-      subtitle="AI-powered market overview"
+      title={t("title")}
+      subtitle={t("subtitle")}
     >
       <div className="grid gap-6 xl:grid-cols-[280px_1fr]">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-5">
           <p className="text-sm text-zinc-500">
-            Market Bias
+            {t("marketBias")}
           </p>
 
           <div className="mt-3">
@@ -114,7 +117,7 @@ export default function AtlasIntelligence({
           <div className="mt-6">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-sm text-zinc-500">
-                Confidence
+                {t("confidence")}
               </span>
 
               <span className="font-bold text-white">
@@ -134,7 +137,7 @@ export default function AtlasIntelligence({
                 {bullish}
               </p>
               <p className="text-xs text-zinc-500">
-                Bullish
+                {t("bullish")}
               </p>
             </div>
 
@@ -143,7 +146,7 @@ export default function AtlasIntelligence({
                 {bearish}
               </p>
               <p className="text-xs text-zinc-500">
-                Bearish
+                {t("bearish")}
               </p>
             </div>
 
@@ -152,7 +155,7 @@ export default function AtlasIntelligence({
                 {neutral}
               </p>
               <p className="text-xs text-zinc-500">
-                Neutral
+                {t("neutral")}
               </p>
             </div>
           </div>
@@ -161,7 +164,7 @@ export default function AtlasIntelligence({
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">
             <p className="text-sm text-zinc-500">
-              Strongest Coin
+              {t("strongestCoin")}
             </p>
 
             <p className="mt-2 text-2xl font-bold text-white">
@@ -169,13 +172,13 @@ export default function AtlasIntelligence({
             </p>
 
             <p className="mt-1 text-sm text-green-400">
-              Atlas Score {strongestCoin?.score ?? 0}
+              {t("atlasScore", { score: strongestCoin?.score ?? 0 })}
             </p>
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">
             <p className="text-sm text-zinc-500">
-              Weakest Coin
+              {t("weakestCoin")}
             </p>
 
             <p className="mt-2 text-2xl font-bold text-white">
@@ -183,13 +186,13 @@ export default function AtlasIntelligence({
             </p>
 
             <p className="mt-1 text-sm text-red-400">
-              Atlas Score {weakestCoin?.score ?? 0}
+              {t("atlasScore", { score: weakestCoin?.score ?? 0 })}
             </p>
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">
             <p className="text-sm text-zinc-500">
-              Biggest Market Move
+              {t("biggestMove")}
             </p>
 
             <p className="mt-2 text-2xl font-bold text-white">
@@ -212,7 +215,7 @@ export default function AtlasIntelligence({
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">
             <p className="text-sm text-zinc-500">
-              Atlas Recommendation
+              {t("recommendation")}
             </p>
 
             <p className="mt-2 text-sm leading-6 text-zinc-300">

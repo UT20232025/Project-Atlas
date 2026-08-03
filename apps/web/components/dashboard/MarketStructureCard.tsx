@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type { MarketStructureResult } from "@/lib/atlas/marketStructureEngine";
 
 type Props = {
@@ -33,16 +37,19 @@ function formatPrice(
 export default function MarketStructureCard({
   structure,
 }: Props) {
+  const t = useTranslations("MarketStructureCard");
+  const c = useTranslations("Cards");
+
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-6">
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-zinc-500">
-            Market Structure
+            {t("title")}
           </p>
 
           <h3 className="mt-2 text-xl font-semibold text-white">
-            Structure Analysis
+            {t("subtitle")}
           </h3>
         </div>
 
@@ -58,7 +65,7 @@ export default function MarketStructureCard({
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Event
+            {t("event")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-white">
@@ -68,7 +75,7 @@ export default function MarketStructureCard({
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Strength
+            {c("strength")}
           </p>
 
           <p className="mt-2 text-xl font-semibold text-white">
@@ -78,7 +85,7 @@ export default function MarketStructureCard({
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Confidence
+            {c("confidence")}
           </p>
 
           <p className="mt-2 text-xl font-semibold text-white">
@@ -90,7 +97,7 @@ export default function MarketStructureCard({
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Latest Swing High
+            {t("latestSwingHigh")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-emerald-400">
@@ -101,13 +108,13 @@ export default function MarketStructureCard({
 
           <p className="mt-2 text-sm text-zinc-400">
             {structure.swingHighType ??
-              "No classification"}
+              c("noClassification")}
           </p>
         </div>
 
         <div className="rounded-xl border border-red-500/15 bg-red-500/5 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Latest Swing Low
+            {t("latestSwingLow")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-red-400">
@@ -118,7 +125,7 @@ export default function MarketStructureCard({
 
           <p className="mt-2 text-sm text-zinc-400">
             {structure.swingLowType ??
-              "No classification"}
+              c("noClassification")}
           </p>
         </div>
       </div>
@@ -126,32 +133,32 @@ export default function MarketStructureCard({
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Bullish Break
+            {t("bullishBreak")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-white">
             {structure.bullishBreak
-              ? "Yes"
-              : "No"}
+              ? c("yes")
+              : c("no")}
           </p>
         </div>
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Bearish Break
+            {t("bearishBreak")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-white">
             {structure.bearishBreak
-              ? "Yes"
-              : "No"}
+              ? c("yes")
+              : c("no")}
           </p>
         </div>
       </div>
 
       <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
         <p className="text-xs uppercase tracking-widest text-zinc-500">
-          Atlas Explanation
+          {c("atlasExplanation")}
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">

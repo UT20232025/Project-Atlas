@@ -1,3 +1,7 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type { AtlasFactorResult } from "@/lib/atlas/atlasEngine";
 
 type Props = {
@@ -16,6 +20,7 @@ function getStatusColor(status: AtlasFactorResult["status"]) {
 }
 
 export default function AtlasFactorCard({ factor }: Props) {
+  const t = useTranslations("Cards");
   const percent = (factor.score / factor.maxScore) * 100;
 
   return (
@@ -42,7 +47,7 @@ export default function AtlasFactorCard({ factor }: Props) {
 
       <div className="mt-4">
         <div className="mb-2 flex justify-between text-xs text-zinc-500">
-          <span>Strength</span>
+          <span>{t("strength")}</span>
           <span>
             {factor.score}/{factor.maxScore}
           </span>

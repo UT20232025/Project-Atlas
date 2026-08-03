@@ -1,3 +1,4 @@
+import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 
 import Section from "@/components/ui/Section";
@@ -33,24 +34,27 @@ function getHeatmapStyle(change24h: number) {
   return "border-zinc-700 bg-zinc-900 hover:bg-zinc-800";
 }
 
-function formatPrice(price: number) {
-  return price.toLocaleString("en-US", {
+function formatPrice(price: number, locale: string) {
+  return price.toLocaleString(locale, {
     maximumFractionDigits: price < 1 ? 6 : 2,
   });
 }
 
-export default function MarketHeatmap({
+export default async function MarketHeatmap({
   items,
 }: MarketHeatmapProps) {
+  const t = await getTranslations("MarketHeatmap");
+  const locale = await getLocale();
+
   return (
     <Section
-      title="Market Heatmap"
-      subtitle="24-hour market performance"
+      title={t("title")}
+      subtitle={t("subtitle")}
     >
       {items.length === 0 ? (
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-8 text-center">
           <p className="text-sm text-zinc-500">
-            No market data available.
+            {t("empty")}
           </p>
         </div>
       ) : (
@@ -73,7 +77,7 @@ export default function MarketHeatmap({
                     </p>
 
                     <p className="mt-1 text-sm text-zinc-400">
-                      ${formatPrice(item.price)}
+                      ${formatPrice(item.price, locale)}
                     </p>
                   </div>
 
@@ -90,7 +94,7 @@ export default function MarketHeatmap({
                     </p>
 
                     <p className="mt-1 text-xs text-zinc-500">
-                      Atlas {item.score}
+                      {t("atlasScore", { score: item.score })}
                     </p>
                   </div>
                 </div>

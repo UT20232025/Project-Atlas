@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { FormEvent, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
@@ -68,15 +69,15 @@ function getStoredAlerts(): AtlasAlert[] {
   }
 }
 
-function getRuleLabel(rule: AlertRule) {
-  if (rule === "price_above") return "Price above";
-  if (rule === "price_below") return "Price below";
-  if (rule === "change_above") return "24h change above";
-  if (rule === "change_below") return "24h change below";
-  if (rule === "signal_long") return "Atlas signal flips to LONG";
-  if (rule === "signal_short") return "Atlas signal flips to SHORT";
+function getRuleLabel(t: ReturnType<typeof useTranslations>, rule: AlertRule) {
+  if (rule === "price_above") return t("rulePriceAbove");
+  if (rule === "price_below") return t("rulePriceBelow");
+  if (rule === "change_above") return t("ruleChangeAbove");
+  if (rule === "change_below") return t("ruleChangeBelow");
+  if (rule === "signal_long") return t("ruleSignalLong");
+  if (rule === "signal_short") return t("ruleSignalShort");
 
-  return "Atlas confidence above";
+  return t("ruleConfidenceAbove");
 }
 
 function isAlertTriggered(
@@ -124,6 +125,7 @@ function isAlertTriggered(
 }
 
 export default function AtlasAlerts() {
+  const t = useTranslations("AtlasAlerts");
   const { market, loading, error } = useMarket();
   const atlasSignals = useScannerSignals();
 
@@ -208,8 +210,8 @@ export default function AtlasAlerts() {
 
   return (
     <Section
-      title="Atlas Alerts"
-      subtitle="Create price and market movement alerts"
+      title={t("title")}
+      subtitle={t("subtitle")}
     >
       <form
         onSubmit={createAlert}
@@ -234,28 +236,28 @@ export default function AtlasAlerts() {
             setRule(event.target.value as AlertRule)
           }
         >
-          <option value="price_above">Price above</option>
-          <option value="price_below">Price below</option>
+          <option value="price_above">{t("rulePriceAbove")}</option>
+          <option value="price_below">{t("rulePriceBelow")}</option>
           <option value="change_above">
-            24h change above
+            {t("ruleChangeAbove")}
           </option>
           <option value="change_below">
-            24h change below
+            {t("ruleChangeBelow")}
           </option>
           <option value="signal_long">
-            Signal flips to LONG
+            {t("optionSignalLong")}
           </option>
           <option value="signal_short">
-            Signal flips to SHORT
+            {t("optionSignalShort")}
           </option>
           <option value="confidence_above">
-            Atlas confidence above
+            {t("ruleConfidenceAbove")}
           </option>
         </Select>
 
         {RULES_WITHOUT_TARGET.includes(rule) ? (
           <div className="flex items-center rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-zinc-600">
-            No target needed
+            {t("noTargetNeeded")}
           </div>
         ) : (
           <input
@@ -264,10 +266,10 @@ export default function AtlasAlerts() {
             onChange={(event) => setTarget(event.target.value)}
             placeholder={
               rule.startsWith("price")
-                ? "Target price"
+                ? t("targetPrice")
                 : rule === "confidence_above"
-                ? "Target confidence %"
-                : "Target %"
+                ? t("targetConfidence")
+                : t("targetPercent")
             }
             step="any"
             required
@@ -279,13 +281,13 @@ export default function AtlasAlerts() {
           type="submit"
           className="rounded-xl bg-[#ffffff] px-5 py-3 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
         >
-          Add alert
+          {t("addAlert")}
         </button>
       </form>
 
       <div className="mb-4 flex items-center justify-between text-sm">
         <span className="text-zinc-500">
-          {alerts.length} saved alerts
+          {t("savedAlerts", { count: alerts.length })}
         </span>
 
         <span
@@ -295,7 +297,7 @@ export default function AtlasAlerts() {
               : "text-zinc-500"
           }
         >
-          {triggeredAlerts} triggered
+          {t("triggeredCount", { count: triggeredAlerts })}
         </span>
       </div>
 
@@ -308,16 +310,16 @@ export default function AtlasAlerts() {
       <div className="space-y-3">
         {loading && alerts.length === 0 ? (
           <div className="rounded-xl border border-zinc-800 p-8 text-center text-sm text-zinc-500">
-            Loading alerts...
+            {t("loadingAlerts")}
           </div>
         ) : alerts.length === 0 ? (
           <div className="rounded-xl border border-dashed border-zinc-800 p-8 text-center">
             <p className="font-medium text-zinc-300">
-              No alerts created
+              {t("noAlertsCreated")}
             </p>
 
             <p className="mt-1 text-sm text-zinc-600">
-              Create your first Atlas market alert above.
+              {t("noAlertsHint")}
             </p>
           </div>
         ) : (
@@ -365,15 +367,15 @@ export default function AtlasAlerts() {
                       }`}
                     >
                       {triggered
-                        ? "TRIGGERED"
+                        ? t("statusTriggered")
                         : alert.enabled
-                        ? "ACTIVE"
-                        : "PAUSED"}
+                        ? t("statusActive")
+                        : t("statusPaused")}
                     </span>
                   </div>
 
                   <p className="mt-1 text-sm text-zinc-500">
-                    {getRuleLabel(alert.rule)}
+                    {getRuleLabel(t, alert.rule)}
                     {!RULES_WITHOUT_TARGET.includes(
                       alert.rule
                     ) && (
@@ -394,7 +396,7 @@ export default function AtlasAlerts() {
                     onClick={() => toggleAlert(alert.id)}
                     className="rounded-lg border border-zinc-800 px-3 py-2 text-xs text-zinc-400 transition hover:text-white"
                   >
-                    {alert.enabled ? "Pause" : "Activate"}
+                    {alert.enabled ? t("pause") : t("activate")}
                   </button>
 
                   <button
@@ -402,7 +404,7 @@ export default function AtlasAlerts() {
                     onClick={() => deleteAlert(alert.id)}
                     className="rounded-lg border border-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10"
                   >
-                    Delete
+                    {t("delete")}
                   </button>
                 </div>
               </div>

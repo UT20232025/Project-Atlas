@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
@@ -28,6 +29,7 @@ export default function PortfolioView({
   closePositionAction,
   deletePositionAction,
 }: PortfolioViewProps) {
+  const t = useTranslations("Portfolio");
   const { market } = useMarket();
   const [closingPositionId, setClosingPositionId] = useState<
     string | null
@@ -36,8 +38,8 @@ export default function PortfolioView({
   return (
     <div className="space-y-8">
       <Section
-        title="Portfolio"
-        subtitle="Track your open positions"
+        title={t("title")}
+        subtitle={t("subtitle")}
       >
         <form
           action={createPositionAction}
@@ -62,7 +64,7 @@ export default function PortfolioView({
           <input
             type="number"
             name="entryPrice"
-            placeholder="Entry price"
+            placeholder={t("entryPricePlaceholder")}
             step="any"
             required
             className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
@@ -71,7 +73,7 @@ export default function PortfolioView({
           <input
             type="number"
             name="quantity"
-            placeholder="Quantity"
+            placeholder={t("quantityPlaceholder")}
             step="any"
             required
             className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
@@ -80,7 +82,7 @@ export default function PortfolioView({
           <input
             type="text"
             name="note"
-            placeholder="Note (optional)"
+            placeholder={t("notePlaceholder")}
             className="rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-3 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
           />
 
@@ -88,18 +90,18 @@ export default function PortfolioView({
             type="submit"
             className="rounded-xl bg-[#ffffff] px-5 py-3 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
           >
-            Add position
+            {t("addPosition")}
           </button>
         </form>
 
         {positions.length === 0 ? (
           <div className="rounded-xl border border-dashed border-zinc-800 p-8 text-center">
             <p className="font-medium text-zinc-300">
-              No open positions
+              {t("emptyTitle")}
             </p>
 
             <p className="mt-1 text-sm text-zinc-600">
-              Add your first position above.
+              {t("emptyHint")}
             </p>
           </div>
         ) : (
@@ -154,7 +156,7 @@ export default function PortfolioView({
                         }
                         className="rounded-lg border border-zinc-800 px-3 py-2 text-xs text-zinc-400 transition hover:text-white"
                       >
-                        {isClosing ? "Cancel" : "Close"}
+                        {isClosing ? t("cancel") : t("close")}
                       </button>
 
                       <form action={deletePositionAction}>
@@ -168,7 +170,7 @@ export default function PortfolioView({
                           type="submit"
                           className="rounded-lg border border-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10"
                         >
-                          Delete
+                          {t("delete")}
                         </button>
                       </form>
                     </div>
@@ -177,7 +179,7 @@ export default function PortfolioView({
                   <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Entry
+                        {t("entry")}
                       </p>
                       <p className="text-zinc-200">
                         {position.entryPrice}
@@ -186,7 +188,7 @@ export default function PortfolioView({
 
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Quantity
+                        {t("quantity")}
                       </p>
                       <p className="text-zinc-200">
                         {position.quantity}
@@ -195,7 +197,7 @@ export default function PortfolioView({
 
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Current price
+                        {t("currentPrice")}
                       </p>
                       <p className="text-zinc-200">
                         {currentPrice ?? "—"}
@@ -204,7 +206,7 @@ export default function PortfolioView({
 
                     <div>
                       <p className="text-xs text-zinc-500">
-                        Unrealized P&L
+                        {t("unrealizedPnl")}
                       </p>
                       <p
                         className={
@@ -242,7 +244,7 @@ export default function PortfolioView({
                       <input
                         type="number"
                         name="exitPrice"
-                        placeholder="Exit price"
+                        placeholder={t("exitPricePlaceholder")}
                         step="any"
                         required
                         defaultValue={currentPrice}
@@ -253,7 +255,7 @@ export default function PortfolioView({
                         type="submit"
                         className="rounded-lg bg-[#ffffff] px-4 py-2 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
                       >
-                        Confirm close
+                        {t("confirmClose")}
                       </button>
                     </form>
                   )}

@@ -1,15 +1,19 @@
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
+
 import type { PriceActionResult } from "@/lib/atlas/priceActionEngine";
 
 type Props = {
   priceAction: PriceActionResult;
 };
 
-function formatPrice(value: number | null): string {
+function formatPrice(t: ReturnType<typeof useTranslations>, value: number | null, locale: string): string {
   if (value === null) {
-    return "Not detected";
+    return t("notDetected");
   }
 
-  return value.toLocaleString(undefined, {
+  return value.toLocaleString(locale, {
     maximumFractionDigits: 5,
   });
 }
@@ -73,22 +77,24 @@ function StructureItem({
 export default function PriceActionCard({
   priceAction,
 }: Props) {
+  const t = useTranslations("PriceActionCard");
+  const c = useTranslations("Cards");
+  const locale = useLocale();
+
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-5 sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
-            Price Action
+            {t("title")}
           </p>
 
           <h3 className="mt-2 text-xl font-semibold text-white">
-            Market Structure
+            {t("subtitle")}
           </h3>
 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400">
-            Swing structure, break of structure and
-            change of character detected from recent
-            candles.
+            {t("description")}
           </p>
         </div>
 
@@ -103,22 +109,22 @@ export default function PriceActionCard({
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StructureItem
-          label="Higher High"
+          label={t("higherHigh")}
           active={priceAction.higherHigh}
         />
 
         <StructureItem
-          label="Higher Low"
+          label={t("higherLow")}
           active={priceAction.higherLow}
         />
 
         <StructureItem
-          label="Lower High"
+          label={t("lowerHigh")}
           active={priceAction.lowerHigh}
         />
 
         <StructureItem
-          label="Lower Low"
+          label={t("lowerLow")}
           active={priceAction.lowerLow}
         />
       </div>
@@ -126,7 +132,7 @@ export default function PriceActionCard({
       <div className="mt-5 grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Break of Structure
+            {t("breakOfStructure")}
           </p>
 
           <div className="mt-3 flex items-end justify-between gap-4">
@@ -139,19 +145,18 @@ export default function PriceActionCard({
             </p>
 
             <p className="text-sm text-zinc-400">
-              {formatPrice(priceAction.bosLevel)}
+              {formatPrice(c, priceAction.bosLevel, locale)}
             </p>
           </div>
 
           <p className="mt-3 text-xs leading-5 text-zinc-500">
-            Confirms continuation when price closes
-            beyond a relevant swing level.
+            {t("bosDescription")}
           </p>
         </div>
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Change of Character
+            {t("changeOfCharacter")}
           </p>
 
           <div className="mt-3 flex items-end justify-between gap-4">
@@ -164,13 +169,12 @@ export default function PriceActionCard({
             </p>
 
             <p className="text-sm text-zinc-400">
-              {formatPrice(priceAction.chochLevel)}
+              {formatPrice(c, priceAction.chochLevel, locale)}
             </p>
           </div>
 
           <p className="mt-3 text-xs leading-5 text-zinc-500">
-            Warns that the current market structure
-            may be shifting direction.
+            {t("chochDescription")}
           </p>
         </div>
       </div>
@@ -178,38 +182,46 @@ export default function PriceActionCard({
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Latest Swing High
+            {t("latestSwingHigh")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-white">
             {formatPrice(
-              priceAction.lastHigh?.price ?? null
+              c,
+              priceAction.lastHigh?.price ?? null,
+              locale
             )}
           </p>
 
           <p className="mt-3 text-xs text-zinc-600">
-            Previous:{" "}
+            {c("previousColon")}{" "}
             {formatPrice(
-              priceAction.previousHigh?.price ?? null
+              c,
+              priceAction.previousHigh?.price ?? null,
+              locale
             )}
           </p>
         </div>
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Latest Swing Low
+            {t("latestSwingLow")}
           </p>
 
           <p className="mt-2 text-lg font-semibold text-white">
             {formatPrice(
-              priceAction.lastLow?.price ?? null
+              c,
+              priceAction.lastLow?.price ?? null,
+              locale
             )}
           </p>
 
           <p className="mt-3 text-xs text-zinc-600">
-            Previous:{" "}
+            {c("previousColon")}{" "}
             {formatPrice(
-              priceAction.previousLow?.price ?? null
+              c,
+              priceAction.previousLow?.price ?? null,
+              locale
             )}
           </p>
         </div>
@@ -218,7 +230,7 @@ export default function PriceActionCard({
       <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
         <div className="flex items-center justify-between gap-4">
           <p className="text-xs uppercase tracking-wide text-zinc-500">
-            Confidence
+            {c("confidence")}
           </p>
 
           <p className="text-sm font-semibold text-white">
@@ -238,7 +250,7 @@ export default function PriceActionCard({
 
       <div className="mt-5 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
         <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
-          Structure explanation
+          {t("structureExplanation")}
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">

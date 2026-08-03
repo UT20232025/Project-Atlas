@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 type AtlasAnalysisProps = {
   signal: "LONG" | "SHORT" | "WAIT";
   score: number;
@@ -5,65 +7,66 @@ type AtlasAnalysisProps = {
   reasons: string[];
 };
 
-export default function AtlasAnalysis({
+export default async function AtlasAnalysis({
   signal,
   score,
   change,
   reasons,
 }: AtlasAnalysisProps) {
+  const t = await getTranslations("AtlasAnalysisLegacy");
   const changeNumber = Number(change);
 
   const momentum =
     changeNumber > 3
-      ? "Strong bullish momentum"
+      ? t("momentumStrongBullish")
       : changeNumber < -3
-      ? "Strong bearish momentum"
-      : "Neutral momentum";
+      ? t("momentumStrongBearish")
+      : t("momentumNeutral");
 
   const risk =
     score >= 85
-      ? "Medium"
+      ? t("riskMedium")
       : score >= 70
-      ? "Medium / high"
-      : "Wait / low quality";
+      ? t("riskMediumHigh")
+      : t("riskWaitLowQuality");
 
   const conclusion =
     signal === "LONG"
-      ? "The market is showing strength. Wait for a good entry and use a clear stop loss."
+      ? t("conclusionLong")
       : signal === "SHORT"
-      ? "The market is showing weakness. Wait for a confirmed breakdown or retest before entry."
-      : "The market is unclear. Atlas recommends waiting for a better setup.";
+      ? t("conclusionShort")
+      : t("conclusionWait");
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-8">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h2 className="text-3xl font-bold">Atlas Analysis</h2>
+          <h2 className="text-3xl font-bold">{t("title")}</h2>
           <p className="mt-1 text-zinc-500">
-            Explanation based on Atlas Score {score}
+            {t("subtitleScore", { score })}
           </p>
         </div>
 
         <div className="rounded-full border border-zinc-700 bg-zinc-950 px-4 py-2">
-          <span className="text-sm text-zinc-400">Signal: </span>
+          <span className="text-sm text-zinc-400">{t("signalLabel")} </span>
           <span className="font-semibold text-white">{signal}</span>
         </div>
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded-xl bg-zinc-950 p-5">
-          <p className="text-sm text-zinc-500">Momentum</p>
+          <p className="text-sm text-zinc-500">{t("momentum")}</p>
           <p className="mt-2 font-semibold">{momentum}</p>
         </div>
 
         <div className="rounded-xl bg-zinc-950 p-5">
-          <p className="text-sm text-zinc-500">Risk</p>
+          <p className="text-sm text-zinc-500">{t("risk")}</p>
           <p className="mt-2 font-semibold">{risk}</p>
         </div>
       </div>
 
       <div className="mt-6 rounded-xl bg-zinc-950 p-5">
-        <p className="text-sm text-zinc-500">Why Atlas thinks this</p>
+        <p className="text-sm text-zinc-500">{t("whyThis")}</p>
 
         <ul className="mt-4 space-y-3">
           {reasons.map((reason) => (
@@ -76,7 +79,7 @@ export default function AtlasAnalysis({
       </div>
 
       <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950 p-5">
-        <p className="text-sm text-zinc-500">Conclusion</p>
+        <p className="text-sm text-zinc-500">{t("conclusion")}</p>
         <p className="mt-2 text-zinc-300">{conclusion}</p>
       </div>
     </div>
