@@ -79,11 +79,14 @@
   "Signup": {
     "errorInvalidInput": "Gib eine gültige E-Mail-Adresse und ein Passwort mit mindestens 8 Zeichen ein.",
     "errorEmailTaken": "Es existiert bereits ein Konto mit dieser E-Mail-Adresse.",
+    "errorInvalidInviteCode": "Dieser Einladungscode ist ungültig.",
     "heading": "Konto erstellen",
     "subheading": "Starte mit Genwelth AI",
     "email": "E-Mail",
     "password": "Passwort",
     "passwordHint": "Mindestens 8 Zeichen.",
+    "inviteCode": "Einladungscode",
+    "inviteCodeHint": "Genwelth AI befindet sich in der geschlossenen Betaphase — du brauchst einen Einladungscode, um dich zu registrieren.",
     "submit": "Registrieren",
     "haveAccount": "Du hast bereits ein Konto?",
     "logInLink": "Anmelden"
@@ -612,6 +615,16 @@
     "selectResult": "Ergebnis auswählen",
     "closeDialog": "Dialog schließen",
     "showShortcuts": "Diese Hilfe anzeigen",
+    "closeHint": "Esc drücken zum Schließen"
+  },
+  "Feedback": {
+    "buttonLabel": "Feedback",
+    "title": "Feedback senden",
+    "subtitle": "Du bist in der geschlossenen Betaphase — sag uns, was kaputt ist oder was du dir wünschst.",
+    "placeholder": "Was liegt dir auf dem Herzen?",
+    "submit": "Senden",
+    "sending": "Wird gesendet...",
+    "thanks": "Danke! Dein Feedback wurde gesendet.",
     "closeHint": "Esc drücken zum Schließen"
   },
   "Settings": {

@@ -61,6 +61,6 @@
 
 - [x] Full mobiloptimalisering
 - [ ] Ytelsesoptimalisering
-- [ ] Lukket betatest
+- [x] Lukket betatest (forberedt teknisk: `/signup` krever nå en invitasjonskode når `BETA_INVITE_CODE` er satt i miljøet — allerede satt i produksjon, se Prisma Console → Project env vars for verdien; en flytende "Tilbakemelding"-knapp er lagt til i AppLayout som lagrer fri tekst + hvilken side testeren var på, i en ny `Feedback`-tabell. Selve rekrutteringen av testere er opp til deg)
 - [ ] Feilretting
 - [ ] Endelig dokumentasjon

@@ -79,11 +79,14 @@
   "Signup": {
     "errorInvalidInput": "Skriv inn en gyldig e-post og et passord på minst 8 tegn.",
     "errorEmailTaken": "Det finnes allerede en konto med denne e-posten.",
+    "errorInvalidInviteCode": "Denne invitasjonskoden er ikke gyldig.",
     "heading": "Opprett konto",
     "subheading": "Kom i gang med Genwelth AI",
     "email": "E-post",
     "password": "Passord",
     "passwordHint": "Minst 8 tegn.",
+    "inviteCode": "Invitasjonskode",
+    "inviteCodeHint": "Genwelth AI er i lukket betatest — du trenger en invitasjonskode for å registrere deg.",
     "submit": "Registrer deg",
     "haveAccount": "Har du allerede en konto?",
     "logInLink": "Logg inn"
@@ -612,6 +615,16 @@
     "selectResult": "Velg resultat",
     "closeDialog": "Lukk dialog",
     "showShortcuts": "Vis denne hjelpen",
+    "closeHint": "Trykk Esc for å lukke"
+  },
+  "Feedback": {
+    "buttonLabel": "Tilbakemelding",
+    "title": "Send tilbakemelding",
+    "subtitle": "Du er med i den lukkede betatesten — fortell oss hva som er ødelagt eller hva du gjerne vil se.",
+    "placeholder": "Hva tenker du på?",
+    "submit": "Send",
+    "sending": "Sender...",
+    "thanks": "Takk! Tilbakemeldingen din ble sendt.",
     "closeHint": "Trykk Esc for å lukke"
   },
   "Settings": {

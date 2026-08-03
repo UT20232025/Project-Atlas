@@ -12,9 +12,16 @@ export async function signup(formData: FormData) {
     .trim()
     .toLowerCase();
   const password = String(formData.get("password") ?? "");
+  const inviteCode = String(formData.get("inviteCode") ?? "").trim();
 
   if (!email.includes("@") || password.length < 8) {
     redirect("/signup?error=invalid_input");
+  }
+
+  const requiredInviteCode = process.env.BETA_INVITE_CODE;
+
+  if (requiredInviteCode && inviteCode !== requiredInviteCode) {
+    redirect("/signup?error=invalid_invite_code");
   }
 
   const existingUser = await prisma.user.findUnique({

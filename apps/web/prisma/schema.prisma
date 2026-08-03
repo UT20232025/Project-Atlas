@@ -68,6 +68,17 @@ model SignalSnapshot {
   @@index([symbol, interval, createdAt])
 }
 
+model Feedback {
+  id        String   @id @default(cuid())
+  userId    String?
+  email     String?
+  message   String
+  pathname  String?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
 model Watchlist {
   id        String            @id @default(cuid())
   userId    String?

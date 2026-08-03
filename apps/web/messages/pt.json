@@ -79,11 +79,14 @@
   "Signup": {
     "errorInvalidInput": "Informe um e-mail válido e uma senha com pelo menos 8 caracteres.",
     "errorEmailTaken": "Já existe uma conta com este e-mail.",
+    "errorInvalidInviteCode": "Este código de convite não é válido.",
     "heading": "Criar conta",
     "subheading": "Comece com a Genwelth AI",
     "email": "E-mail",
     "password": "Senha",
     "passwordHint": "Pelo menos 8 caracteres.",
+    "inviteCode": "Código de convite",
+    "inviteCodeHint": "A Genwelth AI está em beta fechada — você precisa de um código de convite para se cadastrar.",
     "submit": "Cadastre-se",
     "haveAccount": "Já tem uma conta?",
     "logInLink": "Entrar"
@@ -612,6 +615,16 @@
     "selectResult": "Selecionar resultado",
     "closeDialog": "Fechar caixa de diálogo",
     "showShortcuts": "Mostrar esta ajuda",
+    "closeHint": "Pressione Esc para fechar"
+  },
+  "Feedback": {
+    "buttonLabel": "Feedback",
+    "title": "Enviar feedback",
+    "subtitle": "Você está no beta fechado — conte o que está quebrado ou o que gostaria de ver.",
+    "placeholder": "O que você tem em mente?",
+    "submit": "Enviar",
+    "sending": "Enviando...",
+    "thanks": "Obrigado! Seu feedback foi enviado.",
     "closeHint": "Pressione Esc para fechar"
   },
   "Settings": {

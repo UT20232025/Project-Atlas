@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import FeedbackButton from "../feedback/FeedbackButton";
 import SearchDialog from "../search/SearchDialog";
 import ShortcutsHelp from "../search/ShortcutsHelp";
 import AmbientBackground from "./AmbientBackground";
@@ -34,6 +35,7 @@ export default function AppLayout({
       <AmbientBackground />
       <SearchDialog />
       <ShortcutsHelp />
+      <FeedbackButton />
 
       <div className="flex min-h-screen">
         <div className="hidden lg:block">

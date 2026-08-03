@@ -79,11 +79,14 @@
   "Signup": {
     "errorInvalidInput": "Enter a valid email and a password with at least 8 characters.",
     "errorEmailTaken": "An account with this email already exists.",
+    "errorInvalidInviteCode": "That invite code is not valid.",
     "heading": "Create account",
     "subheading": "Get started with Genwelth AI",
     "email": "Email",
     "password": "Password",
     "passwordHint": "At least 8 characters.",
+    "inviteCode": "Invite code",
+    "inviteCodeHint": "Genwelth AI is in closed beta — you need an invite code to sign up.",
     "submit": "Sign up",
     "haveAccount": "Already have an account?",
     "logInLink": "Log in"
@@ -612,6 +615,16 @@
     "selectResult": "Select result",
     "closeDialog": "Close dialog",
     "showShortcuts": "Show this help",
+    "closeHint": "Press Esc to close"
+  },
+  "Feedback": {
+    "buttonLabel": "Feedback",
+    "title": "Send feedback",
+    "subtitle": "You're in the closed beta — tell us what's broken or what you'd like to see.",
+    "placeholder": "What's on your mind?",
+    "submit": "Send",
+    "sending": "Sending...",
+    "thanks": "Thanks! Your feedback was sent.",
     "closeHint": "Press Esc to close"
   },
   "Settings": {

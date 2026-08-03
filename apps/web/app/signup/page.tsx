@@ -19,8 +19,10 @@ export default async function SignupPage({
   const ERROR_MESSAGES: Record<string, string> = {
     invalid_input: t("errorInvalidInput"),
     email_taken: t("errorEmailTaken"),
+    invalid_invite_code: t("errorInvalidInviteCode"),
   };
   const errorMessage = error ? ERROR_MESSAGES[error] : undefined;
+  const inviteCodeRequired = Boolean(process.env.BETA_INVITE_CODE);
 
   return (
     <div
@@ -95,6 +97,30 @@ export default async function SignupPage({
                 {t("passwordHint")}
               </p>
             </div>
+
+            {inviteCodeRequired && (
+              <div className="space-y-1.5">
+                <label
+                  htmlFor="inviteCode"
+                  className="text-xs text-zinc-500"
+                >
+                  {t("inviteCode")}
+                </label>
+
+                <Input
+                  id="inviteCode"
+                  name="inviteCode"
+                  type="text"
+                  autoComplete="off"
+                  required
+                  className="w-full"
+                />
+
+                <p className="text-xs text-zinc-600">
+                  {t("inviteCodeHint")}
+                </p>
+              </div>
+            )}
 
             <Button type="submit" className="w-full">
               {t("submit")}
