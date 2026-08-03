@@ -52,7 +52,7 @@
 - [x] Gjennomgå komponenter for gjenbruk (fjernet 8 ubrukte duplikat-komponenter: Header, Sidebar, MarketOverview, TopMovers, SignalCard, BTCDominanceCard, FearGreedCard, TradingViewWidget; fikset stray norsk/engelsk-blanding i ScannerTable)
 - [x] Optimalisere API-kall (MarketProvider/ScannerSignalsProvider begrenset til sidene som faktisk trenger dem, delt polling i stedet for duplisert)
 - [x] Forbedre feilhåndtering (Postgres-pool gjenoppretter seg selv etter inaktivitet i stedet for å krasje siden)
-- [ ] Redusere unødvendige re-renders
+- [~] Redusere unødvendige re-renders (målte faktisk ytelse i stedet for å gjette: produksjon svarer konsekvent under 1,2s på det tyngste endepunktet — /api/atlas/scanner, 20 mynter × 3 tidsrammer; de ekstreme responstidene jeg først så var kun et Turbopack/next-dev-artefakt, ikke et produksjonsproblem. Justerte likevel cache-TTL fra 25s til 35s og la til 10s timeout på Binance-kall som forsvarsmessig forbedring)
 - [x] Flere enhetstester (Vitest: atlasEngine, orderBlockEngine, fairValueGapEngine, aiDecisionEngine, liquidityEngine, marketStructureEngine, trendEngine — 20 tester totalt)
 
 ---
