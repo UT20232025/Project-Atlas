@@ -1,64 +1,66 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export const menu = [
   {
-    title: "Dashboard",
+    key: "dashboard",
     href: "/",
     icon: "🏠",
   },
   {
-    title: "Scanner",
+    key: "scanner",
     href: "/#scanner",
     icon: "📊",
   },
   {
-    title: "Markets",
+    key: "markets",
     href: "/#markets",
     icon: "📈",
   },
   {
-    title: "Alerts",
+    key: "alerts",
     href: "/#alerts",
     icon: "🔔",
   },
   {
-    title: "Watchlist",
+    key: "watchlist",
     href: "/#watchlist",
     icon: "⭐",
   },
   {
-    title: "Journal",
+    key: "journal",
     href: "/journal",
     icon: "📒",
   },
   {
-    title: "Track Record",
+    key: "trackRecord",
     href: "/track-record",
     icon: "🏆",
   },
   {
-    title: "Portfolio",
+    key: "portfolio",
     href: "/portfolio",
     icon: "💼",
   },
   {
-    title: "Upgrade to Pro",
+    key: "upgradeToPro",
     href: "/pricing",
     icon: "💎",
   },
   {
-    title: "Settings",
+    key: "settings",
     href: "/settings",
     icon: "⚙️",
   },
-];
+] as const;
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const t = useTranslations("Nav");
 
   return (
     <aside className="flex h-screen w-72 flex-col border-r border-zinc-800 bg-zinc-950">
@@ -66,7 +68,7 @@ export default function Sidebar() {
         <Link href="/">
           <Image
             src="/logo-full.png"
-            alt="Genwelth AI — Powered by Atlas"
+            alt={t("logoAlt")}
             width={1095}
             height={821}
             priority
@@ -81,7 +83,7 @@ export default function Sidebar() {
 
           return (
             <Link
-              key={item.title}
+              key={item.key}
               href={item.href}
               className={`flex items-center gap-4 rounded-xl px-4 py-3 transition ${
                 active
@@ -94,7 +96,7 @@ export default function Sidebar() {
               </span>
 
               <span className="font-medium">
-                {item.title}
+                {t(item.key)}
               </span>
             </Link>
           );

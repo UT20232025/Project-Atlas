@@ -1,49 +1,29 @@
 import Image from "next/image";
+import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 
 import Button from "@/components/ui/button";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import type { TrackRecordSummary } from "@/lib/atlas/trackRecord";
-
-const FEATURES = [
-  {
-    icon: "🤖",
-    title: "Atlas AI Engine",
-    description:
-      "Trend, RSI, MACD, volume, liquidity, market structure, order blocks, and multi-timeframe analysis in real time.",
-  },
-  {
-    icon: "🏆",
-    title: "Verified Track Record",
-    description:
-      "24h outcome for every LONG/SHORT signal, verified against real Binance prices — not just claims.",
-  },
-  {
-    icon: "💼",
-    title: "Portfolio",
-    description:
-      "Track open positions with live unrealized P&L.",
-  },
-  {
-    icon: "📒",
-    title: "Trading Journal",
-    description:
-      "Automatic logging from closed positions, manual entry, CSV export.",
-  },
-  {
-    icon: "⭐",
-    title: "Custom Watchlists",
-    description: "Multiple named lists for the coins you follow.",
-  },
-];
 
 type LandingPageProps = {
   trackRecord: TrackRecordSummary;
 };
 
-export default function LandingPage({
+export default async function LandingPage({
   trackRecord,
 }: LandingPageProps) {
+  const t = await getTranslations("Landing");
+  const locale = await getLocale();
   const hasClosedTrades = trackRecord.totalClosed > 0;
+
+  const FEATURES = [
+    { icon: "🤖", title: t("featureAtlasTitle"), description: t("featureAtlasDescription") },
+    { icon: "🏆", title: t("featureTrackRecordTitle"), description: t("featureTrackRecordDescription") },
+    { icon: "💼", title: t("featurePortfolioTitle"), description: t("featurePortfolioDescription") },
+    { icon: "📒", title: t("featureJournalTitle"), description: t("featureJournalDescription") },
+    { icon: "⭐", title: t("featureWatchlistsTitle"), description: t("featureWatchlistsDescription") },
+  ];
 
   return (
     <div
@@ -61,12 +41,14 @@ export default function LandingPage({
         />
 
         <div className="flex items-center gap-3">
+          <LanguageSwitcher locale={locale} className="!w-auto" />
+
           <Link href="/login">
-            <Button variant="secondary">Log in</Button>
+            <Button variant="secondary">{t("logInButton")}</Button>
           </Link>
 
           <Link href="/signup">
-            <Button>Sign up free</Button>
+            <Button>{t("signUpButton")}</Button>
           </Link>
         </div>
       </header>
@@ -74,27 +56,24 @@ export default function LandingPage({
       <main className="mx-auto max-w-5xl px-6 py-12 md:px-12 md:py-20">
         <section className="text-center">
           <p className="text-sm uppercase tracking-[0.2em] text-zinc-500">
-            Powered by Atlas Engine
+            {t("eyebrow")}
           </p>
 
           <h1 className="mt-4 text-4xl font-bold md:text-6xl">
-            AI-driven crypto analysis with a provable track record
+            {t("heroHeadline")}
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">
-            Genwelth AI analyzes the crypto market in real time and
-            gives you LONG/SHORT signals — and we show you honestly
-            how they&apos;ve actually performed, not just what they
-            claim.
+            {t("heroSubheadline")}
           </p>
 
           <p className="mt-3 text-sm font-medium uppercase tracking-[0.15em] text-blue-400">
-            Built for the marathon, not the sprint
+            {t("tagline")}
           </p>
 
           <div className="mt-8 flex justify-center gap-4">
             <Link href="/signup">
-              <Button size="lg">Get started free</Button>
+              <Button size="lg">{t("getStarted")}</Button>
             </Link>
 
             <a
@@ -103,7 +82,7 @@ export default function LandingPage({
               rel="noopener noreferrer"
             >
               <Button variant="secondary" size="lg">
-                Follow signals on Telegram
+                {t("followTelegram")}
               </Button>
             </a>
           </div>
@@ -111,18 +90,17 @@ export default function LandingPage({
 
         <section className="atlas-card mt-16 rounded-2xl p-8">
           <h2 className="text-center text-2xl font-bold">
-            Verified Track Record
+            {t("trackRecordTitle")}
           </h2>
 
           <p className="mt-1 text-center text-sm text-zinc-500">
-            Every LONG/SHORT signal is automatically evaluated
-            against real prices 24 hours after it was given
+            {t("trackRecordSubtitle")}
           </p>
 
           {hasClosedTrades ? (
             <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
               <div className="atlas-subcard rounded-xl p-6 text-center">
-                <p className="text-xs text-zinc-500">Win rate</p>
+                <p className="text-xs text-zinc-500">{t("winRate")}</p>
                 <p className="mt-2 text-3xl font-bold text-white">
                   {trackRecord.winRate.toFixed(1)}%
                 </p>
@@ -130,7 +108,7 @@ export default function LandingPage({
 
               <div className="atlas-subcard rounded-xl p-6 text-center">
                 <p className="text-xs text-zinc-500">
-                  Verified signals
+                  {t("verifiedSignals")}
                 </p>
                 <p className="mt-2 text-3xl font-bold text-white">
                   {trackRecord.totalClosed}
@@ -138,7 +116,7 @@ export default function LandingPage({
               </div>
 
               <div className="atlas-subcard rounded-xl p-6 text-center">
-                <p className="text-xs text-zinc-500">Avg P&L</p>
+                <p className="text-xs text-zinc-500">{t("avgPnl")}</p>
                 <p
                   className={`mt-2 text-3xl font-bold ${
                     trackRecord.avgPnlPercent >= 0
@@ -153,7 +131,7 @@ export default function LandingPage({
 
               <div className="atlas-subcard rounded-xl p-6 text-center">
                 <p className="text-xs text-zinc-500">
-                  Under evaluation
+                  {t("underEvaluation")}
                 </p>
                 <p className="mt-2 text-3xl font-bold text-white">
                   {trackRecord.openPositions.length}
@@ -166,11 +144,10 @@ export default function LandingPage({
                 {trackRecord.openPositions.length}
               </p>
               <p className="mt-2 text-zinc-400">
-                signals under real-time evaluation right now
+                {t("signalsEvaluating")}
               </p>
               <p className="mt-1 text-sm text-zinc-600">
-                Verified results will appear here as the 24-hour
-                window closes for each signal.
+                {t("evaluatingNote")}
               </p>
             </div>
           )}
@@ -180,15 +157,14 @@ export default function LandingPage({
               href="/signup"
               className="text-sm text-zinc-400 underline hover:text-white"
             >
-              Sign up to see the full history and per-coin
-              stats →
+              {t("signUpFullHistory")}
             </Link>
           </div>
         </section>
 
         <section className="mt-16">
           <h2 className="text-center text-2xl font-bold">
-            Everything you need to trade on data, not gut feeling
+            {t("featuresTitle")}
           </h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -212,28 +188,27 @@ export default function LandingPage({
         </section>
 
         <section className="atlas-card mt-16 rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-bold">Genwelth AI Pro</h2>
+          <h2 className="text-2xl font-bold">{t("proTitle")}</h2>
 
           <div className="mt-4 flex items-baseline justify-center gap-2">
-            <p className="text-4xl font-bold text-white">199 kr</p>
-            <p className="text-zinc-500">/ month</p>
+            <p className="text-4xl font-bold text-white">{t("proPrice")}</p>
+            <p className="text-zinc-500">{t("proPeriod")}</p>
           </div>
 
           <p className="mt-2 text-zinc-400">
-            7-day free trial. Unlocks Track Record, Portfolio,
-            Trading Journal, and Watchlists.
+            {t("proDescription")}
           </p>
 
           <div className="mt-6">
             <Link href="/signup">
-              <Button size="lg">Start free trial</Button>
+              <Button size="lg">{t("startTrial")}</Button>
             </Link>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-zinc-800 px-6 py-8 text-center text-sm text-zinc-600">
-        Genwelth AI — Powered by Atlas
+        {t("footer")}
       </footer>
     </div>
   );

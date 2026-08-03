@@ -1,6 +1,7 @@
 "use client";
 
 import { LogOut, User } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { logout } from "@/lib/auth/actions";
@@ -12,6 +13,7 @@ type UserMenuProps = {
 
 export default function UserMenu({ email, isPro }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations("UserMenu");
 
   if (!email) {
     return (
@@ -23,7 +25,7 @@ export default function UserMenu({ email, isPro }: UserMenuProps) {
     <div className="relative">
       <button
         type="button"
-        aria-label="Open user menu"
+        aria-label={t("openMenu")}
         onClick={() =>
           setIsOpen((currentValue) => !currentValue)
         }
@@ -39,7 +41,7 @@ export default function UserMenu({ email, isPro }: UserMenuProps) {
           </span>
 
           <span className="block text-xs text-zinc-500">
-            {isPro ? "Pro" : "Free Beta"}
+            {isPro ? t("pro") : t("freeBeta")}
           </span>
         </span>
       </button>
@@ -52,7 +54,7 @@ export default function UserMenu({ email, isPro }: UserMenuProps) {
               className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-zinc-300 transition hover:bg-zinc-900 hover:text-white"
             >
               <LogOut size={16} />
-              Log out
+              {t("logout")}
             </button>
           </form>
         </div>

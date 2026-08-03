@@ -1,4 +1,5 @@
 import { Bell, Search } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -21,7 +22,9 @@ type TopbarProps = {
   isPro?: boolean;
 };
 
-export default function Topbar({ marketTicker, userEmail, isPro }: TopbarProps) {
+export default async function Topbar({ marketTicker, userEmail, isPro }: TopbarProps) {
+  const t = await getTranslations("Topbar");
+
   return (
     <header className="border-b border-zinc-800 bg-zinc-950">
       <div className="flex min-h-20 items-center justify-between gap-2 px-3 py-4 sm:gap-4 sm:px-6">
@@ -46,11 +49,11 @@ export default function Topbar({ marketTicker, userEmail, isPro }: TopbarProps) 
 
           <div className="min-w-0">
             <p className="truncate text-sm text-zinc-500">
-              Trading Command Center
+              {t("eyebrow")}
             </p>
 
             <h2 className="truncate text-xl font-semibold text-white">
-              Dashboard
+              {t("heading")}
             </h2>
           </div>
         </div>
@@ -62,7 +65,7 @@ export default function Topbar({ marketTicker, userEmail, isPro }: TopbarProps) 
           >
             <Search size={18} />
 
-            <span>Search markets...</span>
+            <span>{t("searchPlaceholder")}</span>
 
             <span className="ml-2 rounded border border-zinc-700 px-2 py-0.5 text-xs text-zinc-500">
               Ctrl K
@@ -71,7 +74,7 @@ export default function Topbar({ marketTicker, userEmail, isPro }: TopbarProps) 
 
           <button
             type="button"
-            aria-label="Notifications"
+            aria-label={t("notifications")}
             className="hidden rounded-xl border border-zinc-800 bg-zinc-900 p-3 text-zinc-400 transition hover:border-zinc-700 hover:text-white sm:block"
           >
             <Bell size={19} />

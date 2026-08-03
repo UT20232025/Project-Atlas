@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,12 +6,6 @@ import Button from "@/components/ui/button";
 import Input from "@/components/ui/Input";
 
 import { signup } from "./actions";
-
-const ERROR_MESSAGES: Record<string, string> = {
-  invalid_input:
-    "Enter a valid email and a password with at least 8 characters.",
-  email_taken: "An account with this email already exists.",
-};
 
 type SignupPageProps = {
   searchParams: Promise<{ error?: string }>;
@@ -20,6 +15,11 @@ export default async function SignupPage({
   searchParams,
 }: SignupPageProps) {
   const { error } = await searchParams;
+  const t = await getTranslations("Signup");
+  const ERROR_MESSAGES: Record<string, string> = {
+    invalid_input: t("errorInvalidInput"),
+    email_taken: t("errorEmailTaken"),
+  };
   const errorMessage = error ? ERROR_MESSAGES[error] : undefined;
 
   return (
@@ -41,11 +41,11 @@ export default async function SignupPage({
 
         <div className="atlas-card rounded-2xl p-6">
           <h1 className="text-xl font-bold text-white">
-            Create account
+            {t("heading")}
           </h1>
 
           <p className="mt-1 text-sm text-zinc-500">
-            Get started with Genwelth AI
+            {t("subheading")}
           </p>
 
           {errorMessage && (
@@ -60,7 +60,7 @@ export default async function SignupPage({
                 htmlFor="email"
                 className="text-xs text-zinc-500"
               >
-                Email
+                {t("email")}
               </label>
 
               <Input
@@ -78,7 +78,7 @@ export default async function SignupPage({
                 htmlFor="password"
                 className="text-xs text-zinc-500"
               >
-                Password
+                {t("password")}
               </label>
 
               <Input
@@ -92,19 +92,19 @@ export default async function SignupPage({
               />
 
               <p className="text-xs text-zinc-600">
-                At least 8 characters.
+                {t("passwordHint")}
               </p>
             </div>
 
             <Button type="submit" className="w-full">
-              Sign up
+              {t("submit")}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            Already have an account?{" "}
+            {t("haveAccount")}{" "}
             <Link href="/login" className="text-white underline">
-              Log in
+              {t("logInLink")}
             </Link>
           </p>
         </div>

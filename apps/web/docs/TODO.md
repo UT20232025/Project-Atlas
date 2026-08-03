@@ -40,7 +40,7 @@
 
 - [x] Flere temaer (light/dark-bryter, `[data-theme]`-drevet CSS-variabel-omtema, ingen endring i eksisterende komponenter nødvendig)
 - [x] Mobiloptimalisering (revidert på 375px viewport: ingen horisontal overflow, mobilmeny fungerer, ett tap-mål forbedret)
-- [ ] Flere språk
+- [~] Flere språk (next-intl infra + engelsk/norsk/spansk/portugisisk/tysk på landingsside, login/signup, innstillinger og navigasjon; dashboard/analyse-komponentene er fortsatt kun engelsk)
 - [ ] Flere animasjoner
 - [ ] Tastatursnarveier
 - [x] Innstillinger (`/settings`: konto-info, abonnementsstatus + administrer-lenke, utlogging)

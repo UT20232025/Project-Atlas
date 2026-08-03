@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,10 +6,6 @@ import Button from "@/components/ui/button";
 import Input from "@/components/ui/Input";
 
 import { login } from "./actions";
-
-const ERROR_MESSAGES: Record<string, string> = {
-  invalid_credentials: "Incorrect email or password.",
-};
 
 type LoginPageProps = {
   searchParams: Promise<{ error?: string }>;
@@ -18,6 +15,10 @@ export default async function LoginPage({
   searchParams,
 }: LoginPageProps) {
   const { error } = await searchParams;
+  const t = await getTranslations("Login");
+  const ERROR_MESSAGES: Record<string, string> = {
+    invalid_credentials: t("errorInvalidCredentials"),
+  };
   const errorMessage = error ? ERROR_MESSAGES[error] : undefined;
 
   return (
@@ -39,11 +40,11 @@ export default async function LoginPage({
 
         <div className="atlas-card rounded-2xl p-6">
           <h1 className="text-xl font-bold text-white">
-            Log in
+            {t("heading")}
           </h1>
 
           <p className="mt-1 text-sm text-zinc-500">
-            Continue to Genwelth AI
+            {t("subheading")}
           </p>
 
           {errorMessage && (
@@ -58,7 +59,7 @@ export default async function LoginPage({
                 htmlFor="email"
                 className="text-xs text-zinc-500"
               >
-                Email
+                {t("email")}
               </label>
 
               <Input
@@ -76,7 +77,7 @@ export default async function LoginPage({
                 htmlFor="password"
                 className="text-xs text-zinc-500"
               >
-                Password
+                {t("password")}
               </label>
 
               <Input
@@ -90,17 +91,17 @@ export default async function LoginPage({
             </div>
 
             <Button type="submit" className="w-full">
-              Log in
+              {t("submit")}
             </Button>
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            No account?{" "}
+            {t("noAccount")}{" "}
             <Link
               href="/signup"
               className="text-white underline"
             >
-              Sign up
+              {t("signUpLink")}
             </Link>
           </p>
         </div>

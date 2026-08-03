@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -11,6 +12,7 @@ import { menu } from "./Sidebar";
 export default function MobileNav() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations("Nav");
 
   return (
     <>
@@ -37,7 +39,7 @@ export default function MobileNav() {
             <div className="flex items-center justify-between gap-3 border-b border-zinc-800 p-5">
               <Image
                 src="/logo-full.png"
-                alt="Genwelth AI — Powered by Atlas"
+                alt={t("logoAlt")}
                 width={1095}
                 height={821}
                 className="h-auto w-full max-w-[190px]"
@@ -59,7 +61,7 @@ export default function MobileNav() {
 
                 return (
                   <Link
-                    key={item.title}
+                    key={item.key}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
                     className={`flex items-center gap-4 rounded-xl px-4 py-3 transition ${
@@ -73,7 +75,7 @@ export default function MobileNav() {
                     </span>
 
                     <span className="font-medium">
-                      {item.title}
+                      {t(item.key)}
                     </span>
                   </Link>
                 );
