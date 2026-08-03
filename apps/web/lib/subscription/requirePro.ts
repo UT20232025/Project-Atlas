@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import { requireSession } from "@/lib/auth/session";
+import { clearSessionCookie, requireSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import type { User } from "@/lib/generated/prisma/client";
 
@@ -18,9 +18,19 @@ export function hasActiveSubscription(
 export async function getCurrentUser(): Promise<User> {
   const { userId } = await requireSession();
 
-  return prisma.user.findUniqueOrThrow({
+  const user = await prisma.user.findUnique({
     where: { id: userId },
   });
+
+  if (!user) {
+    // Session cookie refers to an account that no longer exists
+    // (e.g. deleted after the cookie was issued) — treat it the
+    // same as not being logged in rather than crashing the page.
+    await clearSessionCookie();
+    redirect("/login");
+  }
+
+  return user;
 }
 
 export async function requirePro(): Promise<User> {
