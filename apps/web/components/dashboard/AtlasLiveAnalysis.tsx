@@ -1,5 +1,6 @@
 "use client";
 import OrderBlockCard from "@/components/dashboard/OrderBlockCard";
+import { useSignalPulse } from "@/components/hooks/useSignalPulse";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -480,6 +481,10 @@ export default function AtlasLiveAnalysis() {
     data?.decision.explanation ?? ""
   );
 
+  const signalPulse = useSignalPulse(
+    data?.decision.signal
+  );
+
   return (
     <Section
       title={t("title")}
@@ -574,7 +579,11 @@ export default function AtlasLiveAnalysis() {
                       <p
                         className={`text-3xl font-bold tracking-tight ${getDecisionTextColor(
                           data.decision.signal
-                        )}`}
+                        )} ${
+                          signalPulse
+                            ? "atlas-signal-pulse"
+                            : ""
+                        }`}
                       >
                         {data.decision.signal}
                       </p>

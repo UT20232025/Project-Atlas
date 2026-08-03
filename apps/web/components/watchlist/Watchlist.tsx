@@ -5,8 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
+import { usePriceFlash } from "@/components/hooks/usePriceFlash";
+import { useSignalPulse } from "@/components/hooks/useSignalPulse";
 import { useMarket } from "@/components/providers/MarketProvider";
-import { useScannerSignals } from "@/components/providers/ScannerSignalsProvider";
+import {
+  useScannerSignals,
+  type AtlasSignalData,
+} from "@/components/providers/ScannerSignalsProvider";
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
 import type { WatchlistView } from "@/lib/watchlists/queries";
@@ -14,6 +19,7 @@ import {
   formatMarketPrice,
   formatMarketSymbol,
   WATCHLIST_FAVORITES_STORAGE_KEY,
+  type LiveMarketItem,
   type MarketSymbol,
 } from "@/lib/services/liveMarketService";
 
@@ -63,6 +69,126 @@ function getLegacyFavorites(): string[] {
   } catch {
     return [];
   }
+}
+
+type WatchlistRowProps = {
+  item: LiveMarketItem;
+  atlasSignal: AtlasSignalData | undefined;
+  isMember: boolean;
+  activeWatchlist: WatchlistView | null;
+  addSymbolToWatchlistAction: (formData: FormData) => void;
+  removeSymbolFromWatchlistAction: (
+    formData: FormData
+  ) => void;
+};
+
+function WatchlistRow({
+  item,
+  atlasSignal,
+  isMember,
+  activeWatchlist,
+  addSymbolToWatchlistAction,
+  removeSymbolFromWatchlistAction,
+}: WatchlistRowProps) {
+  const t = useTranslations("Watchlist");
+  const priceFlash = usePriceFlash(item.price);
+  const signalPulse = useSignalPulse(atlasSignal?.signal);
+  const isPositive = item.change24h >= 0;
+
+  return (
+    <div className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_24px] items-center gap-1.5 border-b border-zinc-800/70 px-3 py-3 last:border-b-0 hover:bg-zinc-900/40">
+      <Link
+        href={`/coin/${item.symbol}`}
+        className="min-w-0"
+      >
+        <p className="truncate font-semibold text-white">
+          {formatMarketSymbol(item.symbol)}
+        </p>
+      </Link>
+
+      <p
+        className={`text-right text-xs font-medium text-zinc-200 ${
+          priceFlash === "up"
+            ? "atlas-price-flash-up"
+            : priceFlash === "down"
+            ? "atlas-price-flash-down"
+            : ""
+        }`}
+      >
+        ${formatMarketPrice(item.price)}
+      </p>
+
+      <p
+        className={`text-right text-xs font-semibold ${
+          isPositive
+            ? "text-green-400"
+            : "text-red-400"
+        }`}
+      >
+        {isPositive ? "+" : ""}
+        {item.change24h.toFixed(2)}%
+      </p>
+
+      {atlasSignal ? (
+        <Badge
+          variant={getSignalBadgeVariant(
+            atlasSignal.signal
+          )}
+          className={
+            signalPulse ? "atlas-signal-pulse" : ""
+          }
+        >
+          {atlasSignal.signal}
+        </Badge>
+      ) : (
+        <span className="text-xs text-zinc-700">
+          —
+        </span>
+      )}
+
+      {activeWatchlist ? (
+        <form
+          action={
+            isMember
+              ? removeSymbolFromWatchlistAction
+              : addSymbolToWatchlistAction
+          }
+        >
+          <input
+            type="hidden"
+            name="watchlistId"
+            value={activeWatchlist.id}
+          />
+
+          <input
+            type="hidden"
+            name="symbol"
+            value={item.symbol}
+          />
+
+          <button
+            type="submit"
+            aria-label={
+              isMember
+                ? t("removeAria", { symbol: item.symbol, name: activeWatchlist.name })
+                : t("addAria", { symbol: item.symbol, name: activeWatchlist.name })
+            }
+            className={`text-lg transition ${
+              isMember
+                ? "text-yellow-400"
+                : "text-zinc-700 hover:text-yellow-400"
+            }`}
+          >
+            {isMember ? "★" : "☆"}
+          </button>
+        </form>
+      ) : (
+        <span className="text-xs text-zinc-700">
+          —
+        </span>
+      )}
+    </div>
+  );
 }
 
 export default function Watchlist({
@@ -359,95 +485,22 @@ export default function Watchlist({
                 item.symbol
               )
             );
-            const isPositive = item.change24h >= 0;
             const atlasSignal = atlasSignals[item.symbol];
 
             return (
-              <div
+              <WatchlistRow
                 key={item.symbol}
-                className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_24px] items-center gap-1.5 border-b border-zinc-800/70 px-3 py-3 last:border-b-0 hover:bg-zinc-900/40"
-              >
-                <Link
-                  href={`/coin/${item.symbol}`}
-                  className="min-w-0"
-                >
-                  <p className="truncate font-semibold text-white">
-                    {formatMarketSymbol(item.symbol)}
-                  </p>
-
-                </Link>
-
-                <p className="text-right text-xs font-medium text-zinc-200">
-                  ${formatMarketPrice(item.price)}
-                </p>
-
-                <p
-                  className={`text-right text-xs font-semibold ${
-                    isPositive
-                      ? "text-green-400"
-                      : "text-red-400"
-                  }`}
-                >
-                  {isPositive ? "+" : ""}
-                  {item.change24h.toFixed(2)}%
-                </p>
-
-                {atlasSignal ? (
-                  <Badge
-                    variant={getSignalBadgeVariant(
-                      atlasSignal.signal
-                    )}
-                  >
-                    {atlasSignal.signal}
-                  </Badge>
-                ) : (
-                  <span className="text-xs text-zinc-700">
-                    —
-                  </span>
-                )}
-
-                {activeWatchlist ? (
-                  <form
-                    action={
-                      isMember
-                        ? removeSymbolFromWatchlistAction
-                        : addSymbolToWatchlistAction
-                    }
-                  >
-                    <input
-                      type="hidden"
-                      name="watchlistId"
-                      value={activeWatchlist.id}
-                    />
-
-                    <input
-                      type="hidden"
-                      name="symbol"
-                      value={item.symbol}
-                    />
-
-                    <button
-                      type="submit"
-                      aria-label={
-                        isMember
-                          ? t("removeAria", { symbol: item.symbol, name: activeWatchlist.name })
-                          : t("addAria", { symbol: item.symbol, name: activeWatchlist.name })
-                      }
-                      className={`text-lg transition ${
-                        isMember
-                          ? "text-yellow-400"
-                          : "text-zinc-700 hover:text-yellow-400"
-                      }`}
-                    >
-                      {isMember ? "★" : "☆"}
-                    </button>
-                  </form>
-                ) : (
-                  <span className="text-xs text-zinc-700">
-                    —
-                  </span>
-                )}
-              </div>
+                item={item}
+                atlasSignal={atlasSignal}
+                isMember={isMember}
+                activeWatchlist={activeWatchlist}
+                addSymbolToWatchlistAction={
+                  addSymbolToWatchlistAction
+                }
+                removeSymbolFromWatchlistAction={
+                  removeSymbolFromWatchlistAction
+                }
+              />
             );
           })
         )}

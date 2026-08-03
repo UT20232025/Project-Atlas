@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { usePriceFlash } from "@/components/hooks/usePriceFlash";
 import { useMarket } from "@/components/providers/MarketProvider";
 import Badge from "@/components/ui/Badge";
 import Section from "@/components/ui/Section";
@@ -22,6 +23,177 @@ type PortfolioViewProps = {
   closePositionAction: (formData: FormData) => void;
   deletePositionAction: (formData: FormData) => void;
 };
+
+type PortfolioPositionRowProps = {
+  position: PortfolioPositionView;
+  currentPrice: number | undefined;
+  isClosing: boolean;
+  onToggleClosing: () => void;
+  closePositionAction: (formData: FormData) => void;
+  deletePositionAction: (formData: FormData) => void;
+  t: ReturnType<typeof useTranslations>;
+};
+
+function PortfolioPositionRow({
+  position,
+  currentPrice,
+  isClosing,
+  onToggleClosing,
+  closePositionAction,
+  deletePositionAction,
+  t,
+}: PortfolioPositionRowProps) {
+  const priceFlash = usePriceFlash(currentPrice ?? 0);
+
+  const unrealized =
+    currentPrice !== undefined
+      ? calculatePnl(
+          position.direction,
+          position.entryPrice,
+          currentPrice,
+          position.quantity
+        )
+      : null;
+
+  return (
+    <div className="atlas-subcard rounded-xl p-4">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <p className="font-semibold text-white">
+            {formatMarketSymbol(position.symbol)}
+          </p>
+
+          <Badge
+            variant={
+              position.direction === "LONG"
+                ? "green"
+                : "red"
+            }
+          >
+            {position.direction}
+          </Badge>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={onToggleClosing}
+            className="rounded-lg border border-zinc-800 px-3 py-2 text-xs text-zinc-400 transition hover:text-white"
+          >
+            {isClosing ? t("cancel") : t("close")}
+          </button>
+
+          <form action={deletePositionAction}>
+            <input
+              type="hidden"
+              name="positionId"
+              value={position.id}
+            />
+
+            <button
+              type="submit"
+              className="rounded-lg border border-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10"
+            >
+              {t("delete")}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+        <div>
+          <p className="text-xs text-zinc-500">
+            {t("entry")}
+          </p>
+          <p className="text-zinc-200">
+            {position.entryPrice}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-xs text-zinc-500">
+            {t("quantity")}
+          </p>
+          <p className="text-zinc-200">
+            {position.quantity}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-xs text-zinc-500">
+            {t("currentPrice")}
+          </p>
+          <p
+            className={`text-zinc-200 ${
+              priceFlash === "up"
+                ? "atlas-price-flash-up"
+                : priceFlash === "down"
+                ? "atlas-price-flash-down"
+                : ""
+            }`}
+          >
+            {currentPrice ?? "—"}
+          </p>
+        </div>
+
+        <div>
+          <p className="text-xs text-zinc-500">
+            {t("unrealizedPnl")}
+          </p>
+          <p
+            className={
+              unrealized && unrealized.pnl >= 0
+                ? "font-semibold text-green-400"
+                : unrealized
+                ? "font-semibold text-red-400"
+                : "text-zinc-600"
+            }
+          >
+            {unrealized
+              ? `${unrealized.pnl >= 0 ? "+" : ""}${unrealized.pnl.toFixed(2)} (${unrealized.pnlPercent.toFixed(2)}%)`
+              : "—"}
+          </p>
+        </div>
+      </div>
+
+      {position.note && (
+        <p className="mt-3 text-sm text-zinc-500">
+          {position.note}
+        </p>
+      )}
+
+      {isClosing && (
+        <form
+          action={closePositionAction}
+          className="atlas-subcard mt-4 flex flex-wrap items-center gap-3 rounded-xl p-3"
+        >
+          <input
+            type="hidden"
+            name="positionId"
+            value={position.id}
+          />
+
+          <input
+            type="number"
+            name="exitPrice"
+            placeholder={t("exitPricePlaceholder")}
+            step="any"
+            required
+            defaultValue={currentPrice}
+            className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
+          />
+
+          <button
+            type="submit"
+            className="rounded-lg bg-[#ffffff] px-4 py-2 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
+          >
+            {t("confirmClose")}
+          </button>
+        </form>
+      )}
+    </div>
+  );
+}
 
 export default function PortfolioView({
   positions,
@@ -111,155 +283,24 @@ export default function PortfolioView({
                 (item) => item.symbol === position.symbol
               )?.price;
 
-              const unrealized =
-                currentPrice !== undefined
-                  ? calculatePnl(
-                      position.direction,
-                      position.entryPrice,
-                      currentPrice,
-                      position.quantity
-                    )
-                  : null;
-
               const isClosing =
                 closingPositionId === position.id;
 
               return (
-                <div
+                <PortfolioPositionRow
                   key={position.id}
-                  className="atlas-subcard rounded-xl p-4"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <p className="font-semibold text-white">
-                        {formatMarketSymbol(position.symbol)}
-                      </p>
-
-                      <Badge
-                        variant={
-                          position.direction === "LONG"
-                            ? "green"
-                            : "red"
-                        }
-                      >
-                        {position.direction}
-                      </Badge>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setClosingPositionId(
-                            isClosing ? null : position.id
-                          )
-                        }
-                        className="rounded-lg border border-zinc-800 px-3 py-2 text-xs text-zinc-400 transition hover:text-white"
-                      >
-                        {isClosing ? t("cancel") : t("close")}
-                      </button>
-
-                      <form action={deletePositionAction}>
-                        <input
-                          type="hidden"
-                          name="positionId"
-                          value={position.id}
-                        />
-
-                        <button
-                          type="submit"
-                          className="rounded-lg border border-red-500/20 px-3 py-2 text-xs text-red-400 transition hover:bg-red-500/10"
-                        >
-                          {t("delete")}
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-                    <div>
-                      <p className="text-xs text-zinc-500">
-                        {t("entry")}
-                      </p>
-                      <p className="text-zinc-200">
-                        {position.entryPrice}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs text-zinc-500">
-                        {t("quantity")}
-                      </p>
-                      <p className="text-zinc-200">
-                        {position.quantity}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs text-zinc-500">
-                        {t("currentPrice")}
-                      </p>
-                      <p className="text-zinc-200">
-                        {currentPrice ?? "—"}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs text-zinc-500">
-                        {t("unrealizedPnl")}
-                      </p>
-                      <p
-                        className={
-                          unrealized && unrealized.pnl >= 0
-                            ? "font-semibold text-green-400"
-                            : unrealized
-                            ? "font-semibold text-red-400"
-                            : "text-zinc-600"
-                        }
-                      >
-                        {unrealized
-                          ? `${unrealized.pnl >= 0 ? "+" : ""}${unrealized.pnl.toFixed(2)} (${unrealized.pnlPercent.toFixed(2)}%)`
-                          : "—"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {position.note && (
-                    <p className="mt-3 text-sm text-zinc-500">
-                      {position.note}
-                    </p>
-                  )}
-
-                  {isClosing && (
-                    <form
-                      action={closePositionAction}
-                      className="atlas-subcard mt-4 flex flex-wrap items-center gap-3 rounded-xl p-3"
-                    >
-                      <input
-                        type="hidden"
-                        name="positionId"
-                        value={position.id}
-                      />
-
-                      <input
-                        type="number"
-                        name="exitPrice"
-                        placeholder={t("exitPricePlaceholder")}
-                        step="any"
-                        required
-                        defaultValue={currentPrice}
-                        className="flex-1 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-zinc-600"
-                      />
-
-                      <button
-                        type="submit"
-                        className="rounded-lg bg-[#ffffff] px-4 py-2 text-sm font-semibold text-[#000000] transition hover:bg-[#e4e4e7]"
-                      >
-                        {t("confirmClose")}
-                      </button>
-                    </form>
-                  )}
-                </div>
+                  position={position}
+                  currentPrice={currentPrice}
+                  isClosing={isClosing}
+                  onToggleClosing={() =>
+                    setClosingPositionId(
+                      isClosing ? null : position.id
+                    )
+                  }
+                  closePositionAction={closePositionAction}
+                  deletePositionAction={deletePositionAction}
+                  t={t}
+                />
               );
             })}
           </div>
