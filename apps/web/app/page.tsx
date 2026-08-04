@@ -17,7 +17,7 @@ import { ScannerSignalsProvider } from "../components/providers/ScannerSignalsPr
 import Watchlist from "../components/watchlist/Watchlist";
 import WatchlistUpsell from "../components/watchlist/WatchlistUpsell";
 import { getUpcomingMacroEvents } from "../lib/atlas/macroCalendarEngine";
-import { getTrackRecord } from "../lib/atlas/trackRecord";
+import { getCachedTrackRecord } from "../lib/atlas/trackRecordCache";
 import { getSession } from "../lib/auth/session";
 import { getDashboardData } from "../lib/services/dashboardService";
 import { getCurrentUser, hasActiveSubscription } from "../lib/subscription/requirePro";
@@ -34,7 +34,7 @@ export default async function HomePage() {
   const session = await getSession();
 
   if (!session) {
-    const trackRecord = await getTrackRecord();
+    const trackRecord = await getCachedTrackRecord();
     return <LandingPage trackRecord={trackRecord} />;
   }
 

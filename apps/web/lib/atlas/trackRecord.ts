@@ -51,47 +51,47 @@ function calculatePnlPercent(
   return signal === "SHORT" ? -rawChange : rawChange;
 }
 
-export async function getTrackRecord(): Promise<TrackRecordSummary> {
-  const snapshots = await prisma.signalSnapshot.findMany({
-    where: {
-      signal: { in: ["LONG", "SHORT"] },
-    },
-    orderBy: { createdAt: "asc" },
-  });
+type SnapshotResult =
+  | { type: "open"; trade: TrackRecordTrade }
+  | { type: "closed"; trade: TrackRecordTrade }
+  | { type: "skip" };
 
-  const closedTrades: TrackRecordTrade[] = [];
-  const openPositions: TrackRecordTrade[] = [];
+async function resolveSnapshot(
+  snapshot: Awaited<
+    ReturnType<typeof prisma.signalSnapshot.findMany>
+  >[number]
+): Promise<SnapshotResult> {
+  const symbol = snapshot.symbol as MarketSymbol;
+  const interval = snapshot.interval as BinanceInterval;
+  const signal = snapshot.signal as "LONG" | "SHORT";
+  const createdAtMs = snapshot.createdAt.getTime();
+  const horizonAtMs = createdAtMs + HORIZON_MS;
 
-  for (const snapshot of snapshots) {
-    const symbol = snapshot.symbol as MarketSymbol;
-    const interval = snapshot.interval as BinanceInterval;
-    const signal = snapshot.signal as "LONG" | "SHORT";
-    const createdAtMs = snapshot.createdAt.getTime();
-    const horizonAtMs = createdAtMs + HORIZON_MS;
+  let entryPrice = snapshot.price;
 
-    let entryPrice = snapshot.price;
+  if (entryPrice == null) {
+    entryPrice = await fetchHistoricalClosePrice(
+      symbol,
+      interval,
+      createdAtMs
+    );
 
-    if (entryPrice == null) {
-      entryPrice = await fetchHistoricalClosePrice(
-        symbol,
-        interval,
-        createdAtMs
-      );
-
-      if (entryPrice != null) {
-        await prisma.signalSnapshot.update({
-          where: { id: snapshot.id },
-          data: { price: entryPrice },
-        });
-      }
+    if (entryPrice != null) {
+      await prisma.signalSnapshot.update({
+        where: { id: snapshot.id },
+        data: { price: entryPrice },
+      });
     }
+  }
 
-    if (entryPrice == null) {
-      continue;
-    }
+  if (entryPrice == null) {
+    return { type: "skip" };
+  }
 
-    if (Date.now() < horizonAtMs) {
-      openPositions.push({
+  if (Date.now() < horizonAtMs) {
+    return {
+      type: "open",
+      trade: {
         id: snapshot.id,
         symbol,
         interval,
@@ -103,36 +103,37 @@ export async function getTrackRecord(): Promise<TrackRecordSummary> {
         status: "OPEN",
         exitPrice: null,
         pnlPercent: null,
+      },
+    };
+  }
+
+  let exitPrice = snapshot.outcomePrice;
+
+  if (exitPrice == null) {
+    exitPrice = await fetchHistoricalClosePrice(
+      symbol,
+      interval,
+      horizonAtMs
+    );
+
+    if (exitPrice != null) {
+      await prisma.signalSnapshot.update({
+        where: { id: snapshot.id },
+        data: {
+          outcomePrice: exitPrice,
+          outcomeAt: new Date(horizonAtMs),
+        },
       });
-
-      continue;
     }
+  }
 
-    let exitPrice = snapshot.outcomePrice;
+  if (exitPrice == null) {
+    return { type: "skip" };
+  }
 
-    if (exitPrice == null) {
-      exitPrice = await fetchHistoricalClosePrice(
-        symbol,
-        interval,
-        horizonAtMs
-      );
-
-      if (exitPrice != null) {
-        await prisma.signalSnapshot.update({
-          where: { id: snapshot.id },
-          data: {
-            outcomePrice: exitPrice,
-            outcomeAt: new Date(horizonAtMs),
-          },
-        });
-      }
-    }
-
-    if (exitPrice == null) {
-      continue;
-    }
-
-    closedTrades.push({
+  return {
+    type: "closed",
+    trade: {
       id: snapshot.id,
       symbol,
       interval,
@@ -148,7 +149,31 @@ export async function getTrackRecord(): Promise<TrackRecordSummary> {
         entryPrice,
         exitPrice
       ),
-    });
+    },
+  };
+}
+
+export async function getTrackRecord(): Promise<TrackRecordSummary> {
+  const snapshots = await prisma.signalSnapshot.findMany({
+    where: {
+      signal: { in: ["LONG", "SHORT"] },
+    },
+    orderBy: { createdAt: "asc" },
+  });
+
+  const results = await Promise.all(
+    snapshots.map(resolveSnapshot)
+  );
+
+  const closedTrades: TrackRecordTrade[] = [];
+  const openPositions: TrackRecordTrade[] = [];
+
+  for (const result of results) {
+    if (result.type === "open") {
+      openPositions.push(result.trade);
+    } else if (result.type === "closed") {
+      closedTrades.push(result.trade);
+    }
   }
 
   const wins = closedTrades.filter(

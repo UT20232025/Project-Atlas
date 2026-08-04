@@ -60,7 +60,7 @@
 ## Før v1.0
 
 - [x] Full mobiloptimalisering
-- [ ] Ytelsesoptimalisering
+- [x] Ytelsesoptimalisering (bundle-størrelse sjekket — kun 1,1MB totalt på tvers av alle ruter, ikke et problem; ingen N+1-spørringsmønstre funnet bortsett fra ett: `getTrackRecord()` skannet hele signal-historikken og gjorde sekvensielle Binance-kall + DB-skrivinger per rad på den offentlige landingssiden ved hvert anonyme besøk — lagt til en 5-minutters cache og parallellisert etterslepet på tvers av rader, verifisert byte-for-byte identisk resultat mot den gamle sekvensielle versjonen; fjernet også `getMarket`/`getTopMovers`/`getRSI`/`TopMover`-typen som var blitt død kode etter en tidligere komponentopprydning)
 - [x] Lukket betatest (forberedt teknisk: `/signup` krever nå en invitasjonskode når `BETA_INVITE_CODE` er satt i miljøet — allerede satt i produksjon, se Prisma Console → Project env vars for verdien; en flytende "Tilbakemelding"-knapp er lagt til i AppLayout som lagrer fri tekst + hvilken side testeren var på, i en ny `Feedback`-tabell. Selve rekrutteringen av testere er opp til deg)
 - [x] Feilretting (QA-runde gjennom dashboard, coin-side, Portfolio/Journal/Watchlist/Track Record med en midlertidig Pro-konto, Pricing, mobilvisning; fant og fikset `UserMenu.logout` som manglet i oversettelsene og viste rå nøkkeltekst; en periodisk P1017/`ConnectionClosed`-feil fra Postgres-poolen dukket opp under testing men ble bekreftet forbigående — retry løser den umiddelbart, og produksjon svarte 10/10 på gjentatte forespørsler, så ingen kodeendring var nødvendig der)
 - [ ] Endelig dokumentasjon

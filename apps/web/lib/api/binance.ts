@@ -1,7 +1,6 @@
 import type {
   BinanceTicker,
   MarketTicker,
-  TopMover,
 } from "../types/market";
 
 const BINANCE_API_URL = "https://api.binance.com/api/v3";
@@ -74,32 +73,3 @@ export async function fetchKlineCloses(
   return klines.map((candle) => Number(candle[4]));
 }
 
-export async function fetchTopMovers(): Promise<TopMover[]> {
-  const response = await fetch(
-    `${BINANCE_API_URL}/ticker/24hr`,
-    {
-      cache: "no-store",
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Could not fetch Top Movers");
-  }
-
-  const data = (await response.json()) as BinanceTicker[];
-
-  return data
-    .filter((item) => item.symbol.endsWith("USDT"))
-    .filter((item) => Number(item.quoteVolume) > 50_000_000)
-    .sort(
-      (a, b) =>
-        Math.abs(Number(b.priceChangePercent)) -
-        Math.abs(Number(a.priceChangePercent))
-    )
-    .slice(0, 5)
-    .map((item) => ({
-      coin: item.symbol,
-      price: Number(item.lastPrice).toFixed(4),
-      change: Number(item.priceChangePercent).toFixed(2),
-    }));
-}

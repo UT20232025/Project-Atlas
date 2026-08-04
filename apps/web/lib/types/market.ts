@@ -22,9 +22,3 @@ export type TechnicalIndicators = {
   ema50: number;
   trend: TrendType;
 };
-
-export type TopMover = {
-  coin: string;
-  price: string;
-  change: string;
-};

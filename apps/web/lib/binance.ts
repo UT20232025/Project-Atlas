@@ -7,9 +7,7 @@ import { calculateRSI } from "./analysis/rsi";
 import {
   fetchKlineCloses,
   fetchTicker,
-  fetchTopMovers,
 } from "./api/binance";
-import { MARKET_SYMBOLS } from "./config/markets";
 import type { TechnicalIndicators } from "./types/market";
 
 export async function getTicker(symbol: string) {
@@ -27,16 +25,6 @@ export async function getTicker(symbol: string) {
   };
 }
 
-export async function getMarket() {
-  return Promise.all(
-    MARKET_SYMBOLS.map((symbol) => getTicker(symbol))
-  );
-}
-
-export async function getTopMovers() {
-  return fetchTopMovers();
-}
-
 export async function getTechnicalIndicators(
   symbol: string
 ): Promise<TechnicalIndicators> {
@@ -52,9 +40,4 @@ export async function getTechnicalIndicators(
     ema50,
     trend: calculateEMATrend(ema20, ema50),
   };
-}
-
-export async function getRSI(symbol: string) {
-  const indicators = await getTechnicalIndicators(symbol);
-  return indicators.rsi;
 }
