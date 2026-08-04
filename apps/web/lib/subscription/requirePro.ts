@@ -9,14 +9,6 @@ const ACTIVE_STATUSES = ["trialing", "active"];
 export function hasActiveSubscription(
   user: Pick<User, "subscriptionStatus">
 ): boolean {
-  // Local preview only: let the owner browse every Pro-gated feature
-  // without a real Stripe subscription. Strictly gated to non-production
-  // NODE_ENV, so the deployed site (real paying users) is never affected.
-  // To test the real paywall locally, comment this out temporarily.
-  if (process.env.NODE_ENV !== "production") {
-    return true;
-  }
-
   return (
     user.subscriptionStatus != null &&
     ACTIVE_STATUSES.includes(user.subscriptionStatus)
