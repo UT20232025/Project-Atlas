@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import { useMarket } from "@/components/providers/MarketProvider";
 import {
@@ -129,14 +129,16 @@ export default function AtlasAlerts() {
   const { market, loading, error } = useMarket();
   const atlasSignals = useScannerSignals();
 
-  const [alerts, setAlerts] = useState<AtlasAlert[]>(
-    getStoredAlerts
-  );
+  const [alerts, setAlerts] = useState<AtlasAlert[]>([]);
   const [symbol, setSymbol] =
     useState<MarketSymbol>("BTCUSDT");
   const [rule, setRule] =
     useState<AlertRule>("price_above");
   const [target, setTarget] = useState("");
+
+  useEffect(() => {
+    setAlerts(getStoredAlerts());
+  }, []);
 
   function saveAlerts(nextAlerts: AtlasAlert[]) {
     setAlerts(nextAlerts);
