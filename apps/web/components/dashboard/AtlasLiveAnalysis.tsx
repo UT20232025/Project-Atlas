@@ -597,6 +597,10 @@ export default function AtlasLiveAnalysis() {
                     </div>
 
                     <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">
+                        {t("signalLabel")}
+                      </p>
+
                       <p
                         className={`text-3xl font-bold tracking-tight ${getDecisionTextColor(
                           data.decision.signal
@@ -627,7 +631,13 @@ export default function AtlasLiveAnalysis() {
                     </div>
                   </div>
 
-                  <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                  <div
+                    className={`mt-6 grid gap-3 ${
+                      data.decision.signal === "WAIT"
+                        ? "sm:grid-cols-2"
+                        : "sm:grid-cols-3"
+                    }`}
+                  >
                     <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
                       <p className="text-xs uppercase tracking-wide text-zinc-500">
                         {t("confidence")}
@@ -648,19 +658,21 @@ export default function AtlasLiveAnalysis() {
                       </p>
                     </div>
 
-                    <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
-                      <p className="text-xs uppercase tracking-wide text-zinc-500">
-                        {t("riskReward")}
-                      </p>
+                    {data.decision.signal !== "WAIT" && (
+                      <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+                        <p className="text-xs uppercase tracking-wide text-zinc-500">
+                          {t("riskReward")}
+                        </p>
 
-                      <p className="mt-2 text-xl font-semibold text-white">
-                        {formatRiskReward(
-                          t,
-                          data.decision
-                            .riskRewardRatio
-                        )}
-                      </p>
-                    </div>
+                        <p className="mt-2 text-xl font-semibold text-white">
+                          {formatRiskReward(
+                            t,
+                            data.decision
+                              .riskRewardRatio
+                          )}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -693,49 +705,92 @@ export default function AtlasLiveAnalysis() {
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
-                    <p className="text-xs uppercase tracking-wide text-zinc-500">
-                      {t("entry")}
-                    </p>
+                  {data.decision.signal === "WAIT" ? (
+                    <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 sm:col-span-2">
+                      <p className="text-xs font-medium uppercase tracking-widest text-amber-300">
+                        {t("waitingForTitle")}
+                      </p>
 
-                    <p className="mt-2 text-lg font-semibold text-white">
-                      {formatPrice(
-                        t,
-                        data.decision.entry,
-                        locale
+                      {data.decision.warnings.length > 0 ? (
+                        <>
+                          <p className="mt-2 text-sm text-zinc-400">
+                            {t("waitingForIntro")}
+                          </p>
+
+                          <div className="mt-3 space-y-2">
+                            {data.decision.warnings.map(
+                              (warning, index) => (
+                                <div
+                                  key={`${warning.code}-${index}`}
+                                  className="flex items-start gap-2 text-sm leading-6 text-zinc-300"
+                                >
+                                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
+
+                                  <span>
+                                    {resolveReasonText(
+                                      tReasons,
+                                      locale,
+                                      warning
+                                    )}
+                                  </span>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <p className="mt-2 text-sm text-zinc-400">
+                          {t("waitingForFallback")}
+                        </p>
                       )}
-                    </p>
-                  </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
+                        <p className="text-xs uppercase tracking-wide text-zinc-500">
+                          {t("entry")}
+                        </p>
 
-                  <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
-                    <p className="text-xs uppercase tracking-wide text-zinc-500">
-                      {t("stopLoss")}
-                    </p>
+                        <p className="mt-2 text-lg font-semibold text-white">
+                          {formatPrice(
+                            t,
+                            data.decision.entry,
+                            locale
+                          )}
+                        </p>
+                      </div>
 
-                    <p className="mt-2 text-lg font-semibold text-red-400">
-                      {formatPrice(
-                        t,
-                        data.decision
-                          .stopLoss,
-                        locale
-                      )}
-                    </p>
-                  </div>
+                      <div className="rounded-xl border border-red-500/20 bg-red-500/5 p-4">
+                        <p className="text-xs uppercase tracking-wide text-zinc-500">
+                          {t("stopLoss")}
+                        </p>
 
-                  <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 sm:col-span-2">
-                    <p className="text-xs uppercase tracking-wide text-zinc-500">
-                      {t("takeProfit")}
-                    </p>
+                        <p className="mt-2 text-lg font-semibold text-red-400">
+                          {formatPrice(
+                            t,
+                            data.decision
+                              .stopLoss,
+                            locale
+                          )}
+                        </p>
+                      </div>
 
-                    <p className="mt-2 text-lg font-semibold text-emerald-400">
-                      {formatPrice(
-                        t,
-                        data.decision
-                          .takeProfit,
-                        locale
-                      )}
-                    </p>
-                  </div>
+                      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 sm:col-span-2">
+                        <p className="text-xs uppercase tracking-wide text-zinc-500">
+                          {t("takeProfit")}
+                        </p>
+
+                        <p className="mt-2 text-lg font-semibold text-emerald-400">
+                          {formatPrice(
+                            t,
+                            data.decision
+                              .takeProfit,
+                            locale
+                          )}
+                        </p>
+                      </div>
+                    </>
+                  )}
 
                   <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4 sm:col-span-2">
                     <p className="text-xs font-medium uppercase tracking-widest text-zinc-500">
@@ -755,8 +810,9 @@ export default function AtlasLiveAnalysis() {
 
               {(data.decision.reasons
                 .length > 0 ||
-                data.decision.warnings
-                  .length > 0) && (
+                (data.decision.signal !== "WAIT" &&
+                  data.decision.warnings
+                    .length > 0)) && (
                 <div className="mt-6 grid gap-4 lg:grid-cols-2">
                   {data.decision.reasons
                     .length > 0 && (
@@ -790,8 +846,9 @@ export default function AtlasLiveAnalysis() {
                     </div>
                   )}
 
-                  {data.decision.warnings
-                    .length > 0 && (
+                  {data.decision.signal !== "WAIT" &&
+                    data.decision.warnings
+                      .length > 0 && (
                     <div className="rounded-xl border border-amber-500/15 bg-amber-500/5 p-4">
                       <p className="text-xs font-medium uppercase tracking-widest text-amber-300">
                         {t("riskWarnings")}
