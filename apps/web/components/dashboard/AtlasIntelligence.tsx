@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import Badge from "@/components/ui/Badge";
 import Progress from "@/components/ui/Progress";
 import Section from "@/components/ui/Section";
+import MarketBiasMascot from "@/components/dashboard/MarketBiasMascot";
 
 type IntelligenceItem = {
   coin: string;
@@ -113,6 +114,9 @@ export default async function AtlasIntelligence({
               {marketBias}
             </Badge>
           </div>
+
+          <MarketBiasMascot bias={marketBias} />
+
 
           <div className="mt-6">
             <div className="mb-2 flex items-center justify-between">
