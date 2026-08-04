@@ -1,93 +1,57 @@
-# Genwelth AI – Architecture
+# Genwelth AI – Release Notes
 
-## Oversikt
-
-Genwelth AI er bygget med en modulær arkitektur der hver komponent har ett tydelig ansvar. Målet er en kodebase som er enkel å vedlikeholde, teste og utvide.
-
----
-
-# Teknologistakk
-
-- Next.js 16
-- React
-- TypeScript
-- Tailwind CSS
-- App Router
+Nyeste versjon øverst. For en fil-for-fil-logg, se
+[`CHANGELOG.md`](./CHANGELOG.md).
 
 ---
 
-# Mappestruktur
+## v1.0 Beta — Lukket betatest
 
-```
-app/
-components/
-services/
-lib/
-types/
-docs/
-```
+- Invitasjonskode-gated `/signup` (`BETA_INVITE_CODE`)
+- Flytende tilbakemeldingsknapp, lagrer fri tekst + hvilken side testeren var på
+- Full i18n på tvers av hele appen, inkludert selve Atlas-motorens
+  forklaringstekst (tidligere kun UI-tekst) — engelsk, norsk, spansk,
+  portugisisk, tysk
+- Generell feilrettingsrunde og ytelsespass (cachet Track Record-beregningen,
+  parallelliserte etterslep-henting, fjernet dødt API-lag)
 
----
+## v0.8 — Brukeropplevelse
 
-# UI
+- Light/dark tema (CSS-variabel-drevet, ingen komponentendringer)
+- Mobiloptimalisering (revidert på 375px viewport)
+- Prisflash og signal-puls-animasjoner
+- Tastatursnarveier (Ctrl/Cmd+K-søk, `/` for søk, `?` for hjelp)
+- `/settings`-side
 
-Felles UI-komponenter ligger i:
+## v0.7 — Autentisering, abonnement, distribusjon
 
-```
-components/ui/
-```
+- Ekte innlogging (e-post/passord, ingen ekstern tjeneste)
+- Portfolio/Journal/Watchlists ble bruker-eid data
+- Stripe-abonnement (Genwelth AI Pro, 199 kr/mnd, 7 dagers prøve)
+- Telegram-kanal med automatiske signaler
+- Offentlig landingsside med live Track Record-tall for anonyme besøkende
 
-Disse brukes på tvers av hele applikasjonen:
+## v0.6 — Atlas AI (utvidet)
 
-- Card
-- Section
-- Button
-- Badge
-- Progress
+- Multi-timeframe-analyse, support/motstand, trendstyrke, volumanalyse
+- Verified Track Record — 24t-utfall for hvert LONG/SHORT-signal, verifisert
+  mot ekte Binance-priser
 
----
+## v0.5 — Trading
 
-# Services
+- Portfolio (live urealisert P&L), Trading Journal (auto-logging + CSV),
+  egendefinerte Watchlists, pris- og signalvarsler
 
-Forretningslogikk og API-kall ligger i service-laget.
+## v0.4 — Live Market
 
-Eksempler:
+- Live Watchlist, sanntidsoppdateringer, Opportunity Card, signalhistorikk
 
-- dashboardService
-- atlasEngine
-- score
+## v0.3 — Vacation Release
 
-Dette holder komponentene enkle og fokuserte på visning.
-
----
-
-# API-er
-
-Prosjektet benytter blant annet:
-
-- Binance
-- CoinGecko
-- Fear & Greed Index
-
-API-kall håndteres sentralt for enklere vedlikehold og feilhåndtering.
+- Første fungerende dashboard, Coin Terminal, Atlas Score, candlestick/RSI/
+  MACD-grafer, Ctrl+K-søk
 
 ---
 
-# Designprinsipper
-
-- Små komponenter
-- Gjenbruk fremfor duplisering
-- TypeScript overalt
-- Tydelig ansvarsfordeling
-- Konsistent design gjennom UI-kitet
-
----
-
-# Kvalitet
-
-Før hver release skal følgende være oppfylt:
-
-- TypeScript uten feil
-- Vellykket produksjonsbygg (`npm run build`)
-- Git commit og push
-- Oppdatert dokumentasjon
+Migrering fra SQLite til Prisma Postgres skjedde i forbindelse med v0.7
+(bruker-eid data + produksjonsdeploy krevde en ekte, delt database).

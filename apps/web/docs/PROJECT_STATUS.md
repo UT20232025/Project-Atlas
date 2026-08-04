@@ -2,7 +2,8 @@
 
 ## Nåværende versjon
 
-v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). v0.8 (brukeropplevelse) er delvis i gang — light/dark-tema er ferdig, mobiloptimalisering/animasjoner/ytelse gjenstår.
+v1.0 Beta — lukket betatest er forberedt og live. v0.4–v0.8 er alle
+fullført (se `docs/ROADMAP.md`).
 
 ---
 
@@ -10,10 +11,11 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 
 ## Infrastruktur
 
-- Next.js 16
-- TypeScript
-- Tailwind CSS
-- App Router
+- Next.js 16, TypeScript, Tailwind CSS 4, App Router
+- Prisma 7 (`@prisma/adapter-pg`) på **Prisma Postgres** (migrert fra SQLite
+  i forbindelse med v0.7, da data ble bruker-eid og appen fikk et ekte
+  produksjonsdeploy)
+- Deployet på Prisma Compute med egendomenet www.genwelth.com
 
 ---
 
@@ -47,7 +49,7 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 
 ## Analyse
 
-- Atlas Engine (trend, RSI, MACD, volum, liquidity, market structure, order blocks, fair value gaps, multi-timeframe, AI decision engine)
+- Atlas Engine (trend, RSI, MACD, volum, liquidity, market structure, order blocks, fair value gaps, multi-timeframe, whale activity, risk engine, trade setup, AI decision engine)
 - Dashboard Service
 - Score-beregning
 - Opportunity Card (ekte Atlas-analyse)
@@ -58,80 +60,90 @@ v0.7 — fullført (v0.4, v0.5 og v0.6 er også fullført, se docs/ROADMAP.md). 
 
 ## Kvalitet
 
-- Vitest satt opp med innledende dekning av kjernelogikken (atlasEngine, orderBlockEngine, fairValueGapEngine, aiDecisionEngine)
+- Vitest med dekning av kjernelogikken (atlasEngine, orderBlockEngine, fairValueGapEngine, aiDecisionEngine, liquidityEngine, marketStructureEngine, trendEngine — 20 tester)
+- Full i18n-verifisering (nøkkel-paritet på tvers av alle 5 språkfiler, sjekket programmatisk ved hver oversettelsesendring)
 
 ---
 
 ## Trading
 
-- Portfolio (`/portfolio`) — SQLite-database via Prisma, live urealisert P&L, låst til innlogget bruker
+- Portfolio (`/portfolio`) — live urealisert P&L, låst til innlogget bruker
 - Trading Journal (`/journal`) — lukkede posisjoner logges automatisk, manuell registrering, CSV-eksport, låst til innlogget bruker
 - Signalhistorikk — signalendringer logges automatisk (kun ved endring, ikke hver poll), vist per coin og som markedsbred feed på forsiden (delt data, ikke bruker-spesifikk)
-- Egendefinerte Watchlists — flere navngitte lister (SQLite via Prisma), erstatter den gamle enkle favoritt-listen; eksisterende favoritter migreres automatisk første gang, låst til innlogget bruker
-- Track Record (`/track-record`) — verifisert 24t-utfall for hvert LONG/SHORT Atlas-signal (entry-pris lagres ved signalet, exit-pris hentes 24t senere fra Binance); eksisterende signaler backfilles automatisk med historiske priser første gang siden lastes (delt data, ikke bruker-spesifikk)
+- Egendefinerte Watchlists — flere navngitte lister, låst til innlogget bruker
+- Track Record (`/track-record`) — verifisert 24t-utfall for hvert LONG/SHORT Atlas-signal (entry-pris lagres ved signalet, exit-pris hentes 24t senere fra Binance); cachet 5 minutter siden beregningen skanner hele signalhistorikken
 
 ---
 
 ## Autentisering
 
 - Ekte innlogging (`/login`, `/signup`) — e-post/passord med bcryptjs-hashing og signert JWT i httpOnly-cookie (jose), ingen ekstern tjeneste
-- `proxy.ts` beskytter alle sider unntatt `/login`/`/signup` og omdirigerer til innlogging
-- Portfolio, Trading Journal og Watchlists er nå bruker-eide (egen `userId` per rad); Signalhistorikk og Track Record forblir delt markedsdata
+- `proxy.ts` beskytter alle sider unntatt `/`, `/login`, `/signup`
+- Portfolio, Trading Journal og Watchlists er bruker-eide (egen `userId` per rad); Signalhistorikk og Track Record forblir delt markedsdata
 - Første konto som registreres arver automatisk alt eksisterende data fra før innlogging fantes
 
 ## Abonnement (Stripe)
 
 - Genwelth AI Pro (`/pricing`) — 199 kr/måned, 7 dagers gratis prøveperiode, Stripe Checkout (hostet side, ingen kortdata i egen kode)
 - Låser opp Track Record, Portfolio, Trading Journal og Watchlists; Dashboard og live Atlas-scanner forblir gratis
-- Stripe-webhook (`/api/stripe/webhook`) holder abonnementsstatus oppdatert (fornyelse, kansellering); i tillegg synkroniseres status umiddelbart ved retur fra Checkout så brukeren ikke venter på webhook
-- "Administrer abonnement" åpner Stripes hostede Billing Portal — ingen egenbygget kanselling/kortoppdatering-UI
+- Stripe-webhook (`/api/stripe/webhook`) holder abonnementsstatus oppdatert; status synkroniseres også umiddelbart ved retur fra Checkout
+- "Administrer abonnement" åpner Stripes hostede Billing Portal
+- Kjører nå på **live Stripe-nøkler** — ekte betalende abonnenter kan registrere seg
 
 ## Distribusjon (Telegram)
 
 - Offentlig Telegram-kanal (@GenwelthAiSignals) poster automatisk når Atlas gir et LONG/SHORT-signal med høy confidence (terskel 70%, konfigurerbar)
-- WAIT-signaler og lav-confidence-signaler filtreres bort for å unngå spam — gjenbruker den eksisterende signalendring-deteksjonen i `recordSignalIfChanged`, ikke en egen sjekk
-- Formålet er å demonstrere ekte, verifiserbare signaler for folk utenfor appen og drive dem til å registrere seg
+- WAIT-signaler og lav-confidence-signaler filtreres bort for å unngå spam
 
 ## Landingsside
 
-- "/" viser en offentlig markedsføringsside for besøkende uten innlogging (live Track Record-tall, funksjonsoversikt, prisoversikt, lenke til Telegram-kanalen), og den vanlige dashbordet for innloggede brukere — samme URL, ingen egen "/dashboard"-rute
-- `proxy.ts` slipper "/" gjennom uten omdirigering; alle andre sider er fortsatt beskyttet som før
+- "/" viser en offentlig markedsføringsside for besøkende uten innlogging (live Track Record-tall, funksjonsoversikt, prisoversikt, lenke til Telegram-kanalen), og det vanlige dashbordet for innloggede brukere — samme URL, ingen egen "/dashboard"-rute
+
+## Flerspråklighet (i18n)
+
+- Engelsk, norsk, spansk, portugisisk, tysk — hele appen, inkludert selve Atlas-motorens AI-genererte forklaringstekst (ikke bare UI-tekst)
+- ~13 delmotorer i `lib/atlas/` returnerer strukturerte "reason codes" i stedet for ferdige engelske strenger, oversatt via en delt `AtlasReasons`-namespace (209 nøkler × 5 språk)
+- Én reell parallell forklaringsseksjon (den eldre "Atlas Analysis"-motoren) ble fjernet i stedet for oversatt, siden den dupliserte den nyere motoren
+
+## Lukket betatest
+
+- `/signup` krever en invitasjonskode når `BETA_INVITE_CODE` er satt i miljøet
+- Flytende "Tilbakemelding"-knapp lagrer fri tekst + hvilken side testeren var på
 
 ---
 
-## Søk
+## Søk og navigasjon
 
-- Ctrl + K Search
-- Search Dialog
+- Ctrl/Cmd+K eller `/` åpner søk med hele markedslisten, piltaster + Enter navigerer
+- `?` åpner en hjelpemodal med full snarveisliste
+- Topbar-søkeknappen åpner samme dialog
 
 ---
 
 ## UI Kit
 
-- Card
-- Section
-- Button
-- Badge
-- Progress
-- Input
+- Card, Section, Button, Badge, Progress, Input
 - ThemeToggle (light/dark, persistert i localStorage, ingen flash ved lasting)
+- Prisflash- og signal-puls-animasjoner (respekterer `prefers-reduced-motion`)
 
 ---
 
-## API-er
+## Markedsdata
 
-- Binance
-- CoinGecko
-- Fear & Greed
+- Binance offentlige REST API (klines, ticker, siste trades) — eneste kilde, ingen API-nøkkel nødvendig
+- Fear & Greed Index
 
 ---
 
 # Neste prioriteringer
 
-1. v0.8 Brukeropplevelse — flere animasjoner, flere språk, tastatursnarveier gjenstår (tema, mobiloptimalisering og innstillinger er ferdig)
-2. Ytelsesoptimalisering, teknisk gjeld, lukket betatest
+Alle punkter fra v0.4–v1.0 Beta er fullført. `docs/TODO.md` (Norwegian,
+løpende oppdatert) er den autoritative kilden for hva som gjenstår —
+per nå kun åpne, ikke-bindende kategorier (flere animasjoner, videre
+ytelsesarbeid hvis det dukker opp reelle flaskehalser) og selve
+rekrutteringen av betatestere, som er opp til produkteier.
 
-Alle 4 pilarer i abonnements-strategien (Track Record, Stripe, Telegram, Landingsside) er fullført. Appen er deployet på Prisma Compute med egendomenet www.genwelth.com, og Stripe kjører nå på **live-nøkler** — ekte betalende abonnenter kan registrere seg.
+Alle 4 pilarer i abonnements-strategien (Track Record, Stripe, Telegram, Landingsside) er fullført. Appen er deployet på Prisma Compute med egendomenet www.genwelth.com, Stripe kjører på **live-nøkler**, og lukket betatest er teknisk klar.
 
 ---
 
@@ -145,4 +157,6 @@ Alle 4 pilarer i abonnements-strategien (Track Record, Stripe, Telegram, Landing
 
 ✅ Modulær struktur
 
-Prosjektet er stabilt og klart for videre utvikling.
+✅ Full i18n-dekning (inkl. Atlas-motoren)
+
+Prosjektet er stabilt og klart for lukket betatest.

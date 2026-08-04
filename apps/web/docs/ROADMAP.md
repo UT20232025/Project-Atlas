@@ -79,24 +79,25 @@
 
 ---
 
-# v0.8
+# v0.8 – ✅
 
 ## Brukeropplevelse
 
 - Mobiloptimalisering — revidert på 375px viewport, ingen reelle overflow-bugs funnet, forbedret ett tap-mål ✅
-- Flere animasjoner
-- Forbedret ytelse
+- Flere animasjoner — prisflash og signal-puls ✅
+- Flere språk — engelsk/norsk/spansk/portugisisk/tysk, inkludert Atlas-motorens egen forklaringstekst ✅
+- Tastatursnarveier — Ctrl/Cmd+K, `/`, `?` ✅
 - Flere temaer — Light/dark-bryter ✅
 
 ---
 
-# v1.0 Beta
+# v1.0 Beta – ✅
 
-- Lukket testgruppe
-- Innsamling av tilbakemeldinger
-- Feilretting
-- Optimalisering
-- Dokumentasjon
+- Lukket testgruppe — invitasjonskode-gated signup, klar til å deles ✅
+- Innsamling av tilbakemeldinger — flytende tilbakemeldingsknapp ✅
+- Feilretting — QA-runde gjennom alle hovedflyter ✅
+- Optimalisering — bundle-størrelse, N+1-spørringer og cache-strategi gjennomgått, Track Record-beregningen cachet og parallellisert ✅
+- Dokumentasjon — README, ARCHITECTURE, PROJECT_STATUS, CHANGELOG, RELEASE_NOTES oppdatert ✅
 
 ---
 
@@ -112,3 +113,6 @@ Første stabile versjon av Genwelth AI med:
 - Varsler
 - Watchlists
 - Stabil kodebase
+
+Gjenstår før dette kan erklæres: faktisk rekruttering og en periode med
+lukket betatesting (opp til produkteier), pluss eventuelle funn derfra.
