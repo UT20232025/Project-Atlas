@@ -1,6 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
-import AtlasAnalysis from "../../../components/AtlasAnalysis";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
@@ -200,15 +199,6 @@ export default async function CoinPage({ params }: Props) {
           reasons={decisionAnalysis.decision.reasons}
           warnings={decisionAnalysis.decision.warnings}
           explanation={decisionAnalysis.decision.explanation}
-        />
-      </div>
-
-      <div className="mt-8">
-        <AtlasAnalysis
-          signal={analysis.signal}
-          score={analysis.score}
-          change={analysis.change24h.toFixed(2)}
-          reasons={analysis.reasons}
         />
       </div>
 

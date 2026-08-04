@@ -24,7 +24,6 @@ export async function getTicker(symbol: string) {
     ...ticker,
     signal: atlas.signal,
     score: atlas.score,
-    reason: atlas.reason,
   };
 }
 

@@ -557,24 +557,6 @@
     "oversoldBelow": "Überverkauft unter 30",
     "overboughtAbove": "Überkauft über 70"
   },
-  "AtlasAnalysisLegacy": {
-    "title": "Atlas-Analyse",
-    "subtitleScore": "Erklärung basierend auf Atlas-Wert {score}",
-    "signalLabel": "Signal:",
-    "momentum": "Momentum",
-    "risk": "Risiko",
-    "momentumStrongBullish": "Stark bullisches Momentum",
-    "momentumStrongBearish": "Stark bearishes Momentum",
-    "momentumNeutral": "Neutrales Momentum",
-    "riskMedium": "Mittel",
-    "riskMediumHigh": "Mittel / hoch",
-    "riskWaitLowQuality": "Warten / niedrige Qualität",
-    "whyThis": "Warum Atlas das denkt",
-    "conclusion": "Fazit",
-    "conclusionLong": "Der Markt zeigt Stärke. Warte auf einen guten Einstieg und verwende einen klaren Stop-Loss.",
-    "conclusionShort": "Der Markt zeigt Schwäche. Warte vor dem Einstieg auf einen bestätigten Zusammenbruch oder Retest.",
-    "conclusionWait": "Der Markt ist unklar. Atlas empfiehlt, auf ein besseres Setup zu warten."
-  },
   "Pricing": {
     "title": "Genwelth AI Pro",
     "subtitle": "Schalte Erfolgsbilanz, Portfolio, Journal und Watchlists frei",

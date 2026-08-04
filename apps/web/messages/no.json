@@ -557,24 +557,6 @@
     "oversoldBelow": "Oversolgt under 30",
     "overboughtAbove": "Overkjøpt over 70"
   },
-  "AtlasAnalysisLegacy": {
-    "title": "Atlas-analyse",
-    "subtitleScore": "Forklaring basert på Atlas-score {score}",
-    "signalLabel": "Signal:",
-    "momentum": "Momentum",
-    "risk": "Risiko",
-    "momentumStrongBullish": "Sterkt bullish momentum",
-    "momentumStrongBearish": "Sterkt bearish momentum",
-    "momentumNeutral": "Nøytralt momentum",
-    "riskMedium": "Middels",
-    "riskMediumHigh": "Middels / høy",
-    "riskWaitLowQuality": "Vent / lav kvalitet",
-    "whyThis": "Hvorfor Atlas tror dette",
-    "conclusion": "Konklusjon",
-    "conclusionLong": "Markedet viser styrke. Vent på en god inngang og bruk en tydelig stop-loss.",
-    "conclusionShort": "Markedet viser svakhet. Vent på et bekreftet sammenbrudd eller retest før inngang.",
-    "conclusionWait": "Markedet er uklart. Atlas anbefaler å vente på et bedre oppsett."
-  },
   "Pricing": {
     "title": "Genwelth AI Pro",
     "subtitle": "Lås opp resultatoversikt, portefølje, journal og overvåkningslister",

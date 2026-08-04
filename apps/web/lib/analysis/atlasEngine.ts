@@ -20,7 +20,6 @@ export type AtlasAnalysisResult = {
   signal: SignalType;
   confidence: number;
   breakdown: AtlasScoreBreakdown;
-  reasons: string[];
 };
 
 export async function getAtlasAnalysis(
@@ -32,27 +31,15 @@ export async function getAtlasAnalysis(
   ]);
 
   let confidence = ticker.score;
-  const reasons = [...ticker.reason];
 
-  if (indicators.trend === "BULLISH") {
+  if (indicators.trend === "BULLISH" || indicators.trend === "BEARISH") {
     confidence += 8;
-    reasons.push("EMA 20 is above EMA 50");
-  }
-
-  if (indicators.trend === "BEARISH") {
-    confidence += 8;
-    reasons.push("EMA 20 is below EMA 50");
   }
 
   if (indicators.rsi >= 45 && indicators.rsi <= 65) {
     confidence += 7;
-    reasons.push("RSI shows balanced momentum");
-  } else if (indicators.rsi > 70) {
+  } else if (indicators.rsi > 70 || indicators.rsi < 30) {
     confidence -= 5;
-    reasons.push("RSI shows the market may be overbought");
-  } else if (indicators.rsi < 30) {
-    confidence -= 5;
-    reasons.push("RSI shows the market may be oversold");
   }
 
   confidence = Math.max(0, Math.min(100, confidence));
@@ -79,6 +66,5 @@ export async function getAtlasAnalysis(
     signal: ticker.signal,
     confidence,
     breakdown,
-    reasons,
   };
 }

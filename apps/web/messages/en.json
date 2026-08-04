@@ -557,24 +557,6 @@
     "oversoldBelow": "Oversold below 30",
     "overboughtAbove": "Overbought above 70"
   },
-  "AtlasAnalysisLegacy": {
-    "title": "Atlas Analysis",
-    "subtitleScore": "Explanation based on Atlas Score {score}",
-    "signalLabel": "Signal:",
-    "momentum": "Momentum",
-    "risk": "Risk",
-    "momentumStrongBullish": "Strong bullish momentum",
-    "momentumStrongBearish": "Strong bearish momentum",
-    "momentumNeutral": "Neutral momentum",
-    "riskMedium": "Medium",
-    "riskMediumHigh": "Medium / high",
-    "riskWaitLowQuality": "Wait / low quality",
-    "whyThis": "Why Atlas thinks this",
-    "conclusion": "Conclusion",
-    "conclusionLong": "The market is showing strength. Wait for a good entry and use a clear stop loss.",
-    "conclusionShort": "The market is showing weakness. Wait for a confirmed breakdown or retest before entry.",
-    "conclusionWait": "The market is unclear. Atlas recommends waiting for a better setup."
-  },
   "Pricing": {
     "title": "Genwelth AI Pro",
     "subtitle": "Unlock Track Record, Portfolio, Journal, and Watchlists",
