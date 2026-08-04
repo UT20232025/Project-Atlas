@@ -11,12 +11,14 @@ export type LiveMarketItem = {
   symbol: MarketSymbol;
   price: number;
   change24h: number;
+  volume24h: number;
 };
 
 type BinanceTickerResponse = {
   symbol: string;
   lastPrice: string;
   priceChangePercent: string;
+  quoteVolume: string;
 };
 
 function isMarketSymbol(symbol: string): symbol is MarketSymbol {
@@ -65,6 +67,10 @@ async function fetchMarketSymbol(
     change24h: parseNumber(
       data.priceChangePercent,
       `${symbol} 24h change`
+    ),
+    volume24h: parseNumber(
+      data.quoteVolume,
+      `${symbol} 24h volume`
     ),
   };
 }

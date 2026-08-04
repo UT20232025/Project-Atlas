@@ -13,7 +13,6 @@ import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
 import WhaleActivityCard from "../../../components/WhaleActivityCard";
-import { getAtlasAnalysis } from "../../../lib/analysis/atlasEngine";
 import { getChartCandles } from "../../../lib/analysis/candles";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
@@ -21,7 +20,10 @@ import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/a
 import { getSignalHistory } from "../../../lib/atlas/signalHistory";
 import { analyzeWhaleActivity } from "../../../lib/atlas/whaleEngine";
 import { fetchRecentTrades } from "../../../lib/services/binanceTradeService";
-import type { MarketSymbol } from "../../../lib/services/liveMarketService";
+import {
+  fetchLiveMarketData,
+  type MarketSymbol,
+} from "../../../lib/services/liveMarketService";
 import { getCurrentUser, hasActiveSubscription } from "../../../lib/subscription/requirePro";
 import { getWatchlists } from "../../../lib/watchlists/queries";
 import {
@@ -43,8 +45,11 @@ export default async function CoinPage({ params }: Props) {
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
 
+  const marketSymbol =
+    symbol.toUpperCase() as MarketSymbol;
+
   const [
-    analysis,
+    marketData,
     candles,
     rsiHistory,
     macdHistory,
@@ -53,38 +58,37 @@ export default async function CoinPage({ params }: Props) {
     watchlists,
     recentTrades,
   ] = await Promise.all([
-    getAtlasAnalysis(symbol),
+    fetchLiveMarketData([marketSymbol]),
     getChartCandles(symbol),
     getRSIHistory(symbol),
     getMACDHistory(symbol),
-    getAtlasDecision(symbol.toUpperCase() as MarketSymbol),
-    getSignalHistory(symbol.toUpperCase() as MarketSymbol, 20),
+    getAtlasDecision(marketSymbol),
+    getSignalHistory(marketSymbol, 20),
     isPro ? getWatchlists(userId) : Promise.resolve([]),
-    fetchRecentTrades(symbol.toUpperCase() as MarketSymbol),
+    fetchRecentTrades(marketSymbol),
   ]);
 
   const whaleActivity = analyzeWhaleActivity(recentTrades);
 
-  const trendScore =
-    analysis.trend === "BULLISH"
-      ? 85
-      : analysis.trend === "BEARISH"
-        ? 20
-        : 50;
+  // Single source of truth: the unified lib/atlas engine (same one the
+  // dashboard, scanner, and Telegram use) drives the signal/score, so the
+  // headline can no longer contradict the explanation below it.
+  const market = marketData[0];
+  const decision = decisionAnalysis.decision;
+  const indicators = decisionAnalysis.indicators;
+
+  const coin = marketSymbol.replace(/USDT$/, "");
+
+  const emaTrend =
+    decisionAnalysis.trend.direction === "BULLISH"
+      ? "BULLISH"
+      : decisionAnalysis.trend.direction === "BEARISH"
+        ? "BEARISH"
+        : "NEUTRAL";
 
   const momentumScore = Math.round(
-    Math.min(100, Math.max(20, analysis.rsi))
+    Math.min(100, Math.max(20, indicators.rawRsi))
   );
-
-  const volumeScore =
-    analysis.volume24h > 1_000_000_000 ? 85 : 55;
-
-  const riskScore =
-    Math.abs(analysis.change24h) > 6
-      ? 80
-      : Math.abs(analysis.change24h) > 3
-        ? 60
-        : 40;
 
   return (
     <AppLayout userEmail={email} isPro={isPro}>
@@ -119,11 +123,11 @@ export default async function CoinPage({ params }: Props) {
 
       <div className="mt-8">
         <CoinHero
-          coin={analysis.coin}
-          price={analysis.price}
-          signal={analysis.signal}
-          score={analysis.score}
-          confidence={analysis.confidence}
+          coin={coin}
+          price={market.price}
+          signal={decision.signal}
+          score={decision.score}
+          confidence={decision.confidence}
         />
       </div>
 
@@ -133,12 +137,12 @@ export default async function CoinPage({ params }: Props) {
 
           <p
             className={`mt-4 text-5xl font-bold ${
-              analysis.change24h >= 0
+              market.change24h >= 0
                 ? "text-green-400"
                 : "text-red-400"
             }`}
           >
-            {analysis.change24h.toFixed(2)}%
+            {market.change24h.toFixed(2)}%
           </p>
         </div>
 
@@ -146,16 +150,16 @@ export default async function CoinPage({ params }: Props) {
           <p className="text-zinc-400">{t("volume24h")}</p>
 
           <p className="mt-4 text-4xl font-bold">
-            ${analysis.volume24h.toLocaleString(locale)}
+            ${market.volume24h.toLocaleString(locale)}
           </p>
         </div>
 
-        <RSICard value={analysis.rsi} />
+        <RSICard value={indicators.rawRsi} />
 
         <EMACard
-          ema20={analysis.ema20}
-          ema50={analysis.ema50}
-          trend={analysis.trend}
+          ema20={indicators.ema20 ?? 0}
+          ema50={indicators.ema50 ?? 0}
+          trend={emaTrend}
         />
 
         <WhaleActivityCard activity={whaleActivity} />
@@ -163,12 +167,12 @@ export default async function CoinPage({ params }: Props) {
 
       <div className="mt-8">
         <AtlasScoreCard
-          score={analysis.score}
-          signal={analysis.signal}
-          trend={trendScore}
+          score={decision.score}
+          signal={decision.signal}
+          trend={Math.round(decisionAnalysis.trend.confidence)}
           momentum={momentumScore}
-          volume={volumeScore}
-          risk={riskScore}
+          volume={Math.round(decisionAnalysis.volume.confidence)}
+          risk={Math.round(decisionAnalysis.risk.confidence)}
         />
       </div>
 
