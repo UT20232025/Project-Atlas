@@ -28,7 +28,8 @@
   "UserMenu": {
     "openMenu": "Abrir menú de usuario",
     "pro": "Pro",
-    "freeBeta": "Beta gratis"
+    "freeBeta": "Beta gratis",
+    "logout": "Cerrar sesión"
   },
   "Landing": {
     "logInButton": "Iniciar sesión",
