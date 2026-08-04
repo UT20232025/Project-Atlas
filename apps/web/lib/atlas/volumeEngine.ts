@@ -1,4 +1,5 @@
 import type { AtlasCandle } from "@/lib/atlas/atlasIndicators";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type VolumeTrend =
   | "INCREASING"
@@ -26,7 +27,7 @@ export type VolumeAnalysisResult = {
   confidence: number;
   bullishVolume: number;
   bearishVolume: number;
-  explanation: string;
+  explanation: AtlasReasonCode[];
 };
 
 function clamp(
@@ -156,42 +157,48 @@ function buildExplanation(
   pressure: VolumePressure,
   spike: boolean,
   confirmation: VolumeConfirmation
-): string {
-  const relativeText =
+): AtlasReasonCode[] {
+  const relativeCode =
     relativeVolume >= 1.5
-      ? "Volume is significantly above average."
+      ? "VOLUME_RELATIVE_SIGNIFICANTLY_ABOVE"
       : relativeVolume >= 1.1
-        ? "Volume is moderately above average."
+        ? "VOLUME_RELATIVE_MODERATELY_ABOVE"
         : relativeVolume >= 0.8
-          ? "Volume is close to its recent average."
-          : "Volume is below its recent average.";
+          ? "VOLUME_RELATIVE_CLOSE_TO_AVERAGE"
+          : "VOLUME_RELATIVE_BELOW_AVERAGE";
 
-  const trendText =
+  const trendCode =
     trend === "INCREASING"
-      ? "Recent volume is increasing."
+      ? "VOLUME_TREND_INCREASING"
       : trend === "DECREASING"
-        ? "Recent volume is decreasing."
-        : "Recent volume is stable.";
+        ? "VOLUME_TREND_DECREASING"
+        : "VOLUME_TREND_STABLE";
 
-  const pressureText =
+  const pressureCode =
     pressure === "BULLISH"
-      ? "Buying pressure is dominant."
+      ? "VOLUME_PRESSURE_BUYING_DOMINANT"
       : pressure === "BEARISH"
-        ? "Selling pressure is dominant."
-        : "Buying and selling pressure are balanced.";
+        ? "VOLUME_PRESSURE_SELLING_DOMINANT"
+        : "VOLUME_PRESSURE_BALANCED";
 
-  const spikeText = spike
-    ? "A volume spike is present."
-    : "No significant volume spike is present.";
+  const spikeCode = spike
+    ? "VOLUME_SPIKE_PRESENT"
+    : "VOLUME_SPIKE_ABSENT";
 
-  const confirmationText =
+  const confirmationCode =
     confirmation === "CONFIRMED"
-      ? "Volume confirms the current directional move."
+      ? "VOLUME_CONFIRMATION_CONFIRMED"
       : confirmation === "WEAK"
-        ? "Volume provides only partial confirmation."
-        : "Volume does not confirm the current directional move.";
+        ? "VOLUME_CONFIRMATION_WEAK"
+        : "VOLUME_CONFIRMATION_NOT_CONFIRMED";
 
-  return `${relativeText} ${trendText} ${pressureText} ${spikeText} ${confirmationText}`;
+  return [
+    { code: relativeCode },
+    { code: trendCode },
+    { code: pressureCode },
+    { code: spikeCode },
+    { code: confirmationCode },
+  ];
 }
 
 export function analyzeVolume(
@@ -217,8 +224,9 @@ export function analyzeVolume(
       confidence: 0,
       bullishVolume: 0,
       bearishVolume: 0,
-      explanation:
-        "Not enough candle data was available for volume analysis.",
+      explanation: [
+        { code: "VOLUME_INSUFFICIENT_DATA" },
+      ],
     };
   }
 
@@ -240,8 +248,9 @@ export function analyzeVolume(
       confidence: 0,
       bullishVolume: 0,
       bearishVolume: 0,
-      explanation:
-        "No recent candle was available for volume analysis.",
+      explanation: [
+        { code: "VOLUME_NO_RECENT_CANDLE" },
+      ],
     };
   }
 

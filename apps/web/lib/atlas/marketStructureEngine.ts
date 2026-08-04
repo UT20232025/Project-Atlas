@@ -1,4 +1,5 @@
 import type { AtlasCandle } from "@/lib/atlas/atlasIndicators";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type MarketStructureTrend =
   | "BULLISH"
@@ -46,7 +47,7 @@ export type MarketStructureResult = {
   confidence: number;
 
   swingPoints: MarketSwingPoint[];
-  explanation: string;
+  explanation: AtlasReasonCode[];
 };
 
 type RawSwingPoint = {
@@ -247,34 +248,45 @@ function buildExplanation(
   event: MarketStructureEvent,
   swingHighType: SwingPointType | null,
   swingLowType: SwingPointType | null
-): string {
-  const trendText =
+): AtlasReasonCode[] {
+  const trendCode =
     trend === "BULLISH"
-      ? "Market structure is bullish."
+      ? "MARKET_STRUCTURE_TREND_BULLISH"
       : trend === "BEARISH"
-        ? "Market structure is bearish."
-        : "Market structure is currently ranging.";
+        ? "MARKET_STRUCTURE_TREND_BEARISH"
+        : "MARKET_STRUCTURE_TREND_RANGING";
 
-  const highText = swingHighType
-    ? `The latest swing high is classified as ${swingHighType}.`
-    : "There is not enough swing-high data.";
+  const high: AtlasReasonCode = swingHighType
+    ? {
+        code: "MARKET_STRUCTURE_HIGH_CLASSIFIED",
+        params: { type: swingHighType.replaceAll("_", " ") },
+      }
+    : { code: "MARKET_STRUCTURE_HIGH_INSUFFICIENT" };
 
-  const lowText = swingLowType
-    ? `The latest swing low is classified as ${swingLowType}.`
-    : "There is not enough swing-low data.";
+  const low: AtlasReasonCode = swingLowType
+    ? {
+        code: "MARKET_STRUCTURE_LOW_CLASSIFIED",
+        params: { type: swingLowType.replaceAll("_", " ") },
+      }
+    : { code: "MARKET_STRUCTURE_LOW_INSUFFICIENT" };
 
-  const eventText =
+  const eventCode =
     event === "BOS_BULLISH"
-      ? "A bullish break of structure is present."
+      ? "MARKET_STRUCTURE_EVENT_BOS_BULLISH"
       : event === "BOS_BEARISH"
-        ? "A bearish break of structure is present."
+        ? "MARKET_STRUCTURE_EVENT_BOS_BEARISH"
         : event === "CHOCH_BULLISH"
-          ? "A bullish change of character may signal a trend reversal."
+          ? "MARKET_STRUCTURE_EVENT_CHOCH_BULLISH"
           : event === "CHOCH_BEARISH"
-            ? "A bearish change of character may signal a trend reversal."
-            : "No confirmed break of structure or change of character is present.";
+            ? "MARKET_STRUCTURE_EVENT_CHOCH_BEARISH"
+            : "MARKET_STRUCTURE_EVENT_NONE";
 
-  return `${trendText} ${highText} ${lowText} ${eventText}`;
+  return [
+    { code: trendCode },
+    high,
+    low,
+    { code: eventCode },
+  ];
 }
 
 export function analyzeMarketStructure(
@@ -305,8 +317,9 @@ export function analyzeMarketStructure(
 
       swingPoints: [],
 
-      explanation:
-        "Not enough candle data was available for market structure analysis.",
+      explanation: [
+        { code: "MARKET_STRUCTURE_INSUFFICIENT_DATA" },
+      ],
     };
   }
 

@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import type { LiquidityResult } from "@/lib/atlas/liquidityEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type Props = {
   liquidity: LiquidityResult;
@@ -64,6 +65,7 @@ export default function LiquidityCard({
 }: Props) {
   const t = useTranslations("LiquidityCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
   const locale = useLocale();
 
   return (
@@ -171,7 +173,7 @@ export default function LiquidityCard({
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">
-          {liquidity.explanation}
+          {resolveReasonText(tReasons, locale, liquidity.explanation)}
         </p>
       </div>
     </div>

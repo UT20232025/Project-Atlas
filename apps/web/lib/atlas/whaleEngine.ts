@@ -1,3 +1,4 @@
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 import type { BinanceAggTrade } from "@/lib/services/binanceTradeService";
 
 export const WHALE_TRADE_THRESHOLD_USD = 100_000;
@@ -14,7 +15,7 @@ export type WhaleActivityResult = {
     side: "BUY" | "SELL";
     time: number;
   } | null;
-  explanation: string;
+  explanation: AtlasReasonCode;
 };
 
 export function analyzeWhaleActivity(
@@ -70,14 +71,23 @@ export function analyzeWhaleActivity(
     }
   }
 
-  const explanation =
+  const buyVolumeText = `$${Math.round(whaleBuyVolumeUsd).toLocaleString("en-US")}`;
+  const sellVolumeText = `$${Math.round(whaleSellVolumeUsd).toLocaleString("en-US")}`;
+
+  const explanation: AtlasReasonCode =
     whaleTrades.length === 0
-      ? "No large trades detected in the recent trade window."
+      ? { code: "WHALE_NO_LARGE_TRADES" }
       : netBias === "BULLISH"
-        ? `Aggressive buying dominates: $${Math.round(whaleBuyVolumeUsd).toLocaleString("en-US")} in large buys vs $${Math.round(whaleSellVolumeUsd).toLocaleString("en-US")} in large sells.`
+        ? {
+            code: "WHALE_BULLISH_DOMINANCE",
+            params: { buyVolume: buyVolumeText, sellVolume: sellVolumeText },
+          }
         : netBias === "BEARISH"
-          ? `Aggressive selling dominates: $${Math.round(whaleSellVolumeUsd).toLocaleString("en-US")} in large sells vs $${Math.round(whaleBuyVolumeUsd).toLocaleString("en-US")} in large buys.`
-          : "Large buy and sell volume are roughly balanced.";
+          ? {
+              code: "WHALE_BEARISH_DOMINANCE",
+              params: { buyVolume: buyVolumeText, sellVolume: sellVolumeText },
+            }
+          : { code: "WHALE_BALANCED" };
 
   return {
     windowTradeCount: trades.length,

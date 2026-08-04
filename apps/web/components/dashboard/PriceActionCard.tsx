@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import type { PriceActionResult } from "@/lib/atlas/priceActionEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type Props = {
   priceAction: PriceActionResult;
@@ -79,6 +80,7 @@ export default function PriceActionCard({
 }: Props) {
   const t = useTranslations("PriceActionCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
   const locale = useLocale();
 
   return (
@@ -254,7 +256,7 @@ export default function PriceActionCard({
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">
-          {priceAction.explanation}
+          {resolveReasonText(tReasons, locale, priceAction.explanation)}
         </p>
       </div>
     </div>

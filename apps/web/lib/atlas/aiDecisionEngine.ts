@@ -34,6 +34,8 @@ import type {
   TrendEngineResult,
 } from "@/lib/atlas/trendEngine";
 
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+
 export type AtlasDecisionStrength =
   | "STRONG"
   | "MODERATE"
@@ -73,18 +75,18 @@ export type AtlasDecisionEngineResult = {
   bullishScore: number;
   bearishScore: number;
 
-  reasons: string[];
-  warnings: string[];
+  reasons: AtlasReasonCode[];
+  warnings: AtlasReasonCode[];
 
-  explanation: string;
+  explanation: AtlasReasonCode;
 };
 
 type DirectionScore = {
   bullishScore: number;
   bearishScore: number;
-  bullishReasons: string[];
-  bearishReasons: string[];
-  warnings: string[];
+  bullishReasons: AtlasReasonCode[];
+  bearishReasons: AtlasReasonCode[];
+  warnings: AtlasReasonCode[];
 };
 
 const DEFAULT_MINIMUM_CONFIDENCE = 65;
@@ -106,30 +108,24 @@ function calculateDirectionScore(
   let bullishScore = 0;
   let bearishScore = 0;
 
-  const bullishReasons: string[] = [];
-  const bearishReasons: string[] = [];
-  const warnings: string[] = [];
+  const bullishReasons: AtlasReasonCode[] = [];
+  const bearishReasons: AtlasReasonCode[] = [];
+  const warnings: AtlasReasonCode[] = [];
 
   if (
     input.trend.direction === "BULLISH"
   ) {
     bullishScore += 22;
 
-    bullishReasons.push(
-      "Trend Engine confirms a bullish market direction."
-    );
+    bullishReasons.push({ code: "TREND_BULLISH_CONFIRMED" });
   } else if (
     input.trend.direction === "BEARISH"
   ) {
     bearishScore += 22;
 
-    bearishReasons.push(
-      "Trend Engine confirms a bearish market direction."
-    );
+    bearishReasons.push({ code: "TREND_BEARISH_CONFIRMED" });
   } else {
-    warnings.push(
-      "Trend Engine does not confirm a clear direction."
-    );
+    warnings.push({ code: "TREND_NO_CLEAR_DIRECTION" });
   }
 
   if (
@@ -141,9 +137,7 @@ function calculateDirectionScore(
     ) {
       bullishScore += 6;
 
-      bullishReasons.push(
-        "Bullish trend confidence is strong."
-      );
+      bullishReasons.push({ code: "TREND_BULLISH_CONFIDENCE_STRONG" });
     }
 
     if (
@@ -152,9 +146,7 @@ function calculateDirectionScore(
     ) {
       bearishScore += 6;
 
-      bearishReasons.push(
-        "Bearish trend confidence is strong."
-      );
+      bearishReasons.push({ code: "TREND_BEARISH_CONFIDENCE_STRONG" });
     }
   }
 
@@ -164,22 +156,16 @@ function calculateDirectionScore(
   ) {
     bullishScore += 24;
 
-    bullishReasons.push(
-      "Multi-timeframe analysis supports a long position."
-    );
+    bullishReasons.push({ code: "MTF_SUPPORTS_LONG" });
   } else if (
     input.multiTimeframe.signal ===
     "SHORT"
   ) {
     bearishScore += 24;
 
-    bearishReasons.push(
-      "Multi-timeframe analysis supports a short position."
-    );
+    bearishReasons.push({ code: "MTF_SUPPORTS_SHORT" });
   } else {
-    warnings.push(
-      "Multi-timeframe analysis is neutral."
-    );
+    warnings.push({ code: "MTF_NEUTRAL" });
   }
 
   if (
@@ -191,9 +177,7 @@ function calculateDirectionScore(
     ) {
       bullishScore += 8;
 
-      bullishReasons.push(
-        "Bullish timeframes are aligned."
-      );
+      bullishReasons.push({ code: "MTF_BULLISH_ALIGNED" });
     }
 
     if (
@@ -202,14 +186,10 @@ function calculateDirectionScore(
     ) {
       bearishScore += 8;
 
-      bearishReasons.push(
-        "Bearish timeframes are aligned."
-      );
+      bearishReasons.push({ code: "MTF_BEARISH_ALIGNED" });
     }
   } else {
-    warnings.push(
-      "The analyzed timeframes are not fully aligned."
-    );
+    warnings.push({ code: "MTF_NOT_ALIGNED" });
   }
 
   if (
@@ -218,22 +198,16 @@ function calculateDirectionScore(
   ) {
     bullishScore += 16;
 
-    bullishReasons.push(
-      "Price action shows higher highs and higher lows."
-    );
+    bullishReasons.push({ code: "PRICE_ACTION_BULLISH_STRUCTURE" });
   } else if (
     input.priceAction.structure ===
     "BEARISH"
   ) {
     bearishScore += 16;
 
-    bearishReasons.push(
-      "Price action shows lower highs and lower lows."
-    );
+    bearishReasons.push({ code: "PRICE_ACTION_BEARISH_STRUCTURE" });
   } else {
-    warnings.push(
-      "Price action is ranging or structurally mixed."
-    );
+    warnings.push({ code: "PRICE_ACTION_RANGING" });
   }
 
   if (
@@ -241,9 +215,7 @@ function calculateDirectionScore(
   ) {
     bullishScore += 14;
 
-    bullishReasons.push(
-      "A bullish break of structure is confirmed."
-    );
+    bullishReasons.push({ code: "PRICE_ACTION_BULLISH_BOS" });
   }
 
   if (
@@ -251,9 +223,7 @@ function calculateDirectionScore(
   ) {
     bearishScore += 14;
 
-    bearishReasons.push(
-      "A bearish break of structure is confirmed."
-    );
+    bearishReasons.push({ code: "PRICE_ACTION_BEARISH_BOS" });
   }
 
   if (
@@ -261,9 +231,7 @@ function calculateDirectionScore(
   ) {
     bullishScore += 12;
 
-    bullishReasons.push(
-      "A bullish change of character indicates a possible bullish transition."
-    );
+    bullishReasons.push({ code: "PRICE_ACTION_BULLISH_CHOCH" });
   }
 
   if (
@@ -271,9 +239,7 @@ function calculateDirectionScore(
   ) {
     bearishScore += 12;
 
-    bearishReasons.push(
-      "A bearish change of character indicates a possible bearish transition."
-    );
+    bearishReasons.push({ code: "PRICE_ACTION_BEARISH_CHOCH" });
   }
 
   if (
@@ -281,9 +247,7 @@ function calculateDirectionScore(
   ) {
     bullishScore += 14;
 
-    bullishReasons.push(
-      "A bullish liquidity sweep is confirmed below liquidity."
-    );
+    bullishReasons.push({ code: "LIQUIDITY_BULLISH_SWEEP" });
   }
 
   if (
@@ -291,18 +255,14 @@ function calculateDirectionScore(
   ) {
     bearishScore += 14;
 
-    bearishReasons.push(
-      "A bearish liquidity sweep is confirmed above liquidity."
-    );
+    bearishReasons.push({ code: "LIQUIDITY_BEARISH_SWEEP" });
   }
 
   if (
     input.liquidity.bullishSweep &&
     input.liquidity.bearishSweep
   ) {
-    warnings.push(
-      "Both bullish and bearish liquidity sweeps exist in the analyzed candle window."
-    );
+    warnings.push({ code: "LIQUIDITY_BOTH_SWEEPS" });
   }
 // ----- Volume Analysis -----
 
@@ -311,9 +271,7 @@ if (
 ) {
   bullishScore += 10;
 
-  bullishReasons.push(
-    "Volume analysis confirms bullish buying pressure."
-  );
+  bullishReasons.push({ code: "VOLUME_BULLISH_PRESSURE" });
 }
 
 if (
@@ -321,9 +279,7 @@ if (
 ) {
   bearishScore += 10;
 
-  bearishReasons.push(
-    "Volume analysis confirms bearish selling pressure."
-  );
+  bearishReasons.push({ code: "VOLUME_BEARISH_PRESSURE" });
 }
 
 if (
@@ -365,9 +321,7 @@ if (
 ) {
   bullishScore += 12;
 
-  bullishReasons.push(
-    "Market Structure Engine confirms a bullish structure."
-  );
+  bullishReasons.push({ code: "MARKET_STRUCTURE_BULLISH" });
 }
 
 if (
@@ -375,9 +329,7 @@ if (
 ) {
   bearishScore += 12;
 
-  bearishReasons.push(
-    "Market Structure Engine confirms a bearish structure."
-  );
+  bearishReasons.push({ code: "MARKET_STRUCTURE_BEARISH" });
 }
 
 if (
@@ -420,9 +372,7 @@ if (
       10
   );
 
-  bullishReasons.push(
-    "An active bullish order block is providing support near the current price."
-  );
+  bullishReasons.push({ code: "ORDER_BLOCK_BULLISH_SUPPORT" });
 }
 
 if (
@@ -435,9 +385,7 @@ if (
       10
   );
 
-  bearishReasons.push(
-    "An active bearish order block is providing resistance near the current price."
-  );
+  bearishReasons.push({ code: "ORDER_BLOCK_BEARISH_RESISTANCE" });
 }
 
 // ----- Fair Value Gaps -----
@@ -452,9 +400,7 @@ if (
       8
   );
 
-  bullishReasons.push(
-    "An unfilled bullish fair value gap supports upward continuation."
-  );
+  bullishReasons.push({ code: "FVG_BULLISH_CONTINUATION" });
 }
 
 if (
@@ -467,9 +413,7 @@ if (
       8
   );
 
-  bearishReasons.push(
-    "An unfilled bearish fair value gap supports downward continuation."
-  );
+  bearishReasons.push({ code: "FVG_BEARISH_CONTINUATION" });
 }
 
   if (
@@ -479,9 +423,7 @@ if (
     bullishScore -= 10;
     bearishScore += 5;
 
-    warnings.push(
-      "Bullish BOS conflicts with a bearish change of character."
-    );
+    warnings.push({ code: "BOS_CHOCH_BULLISH_CONFLICT" });
   }
 
   if (
@@ -491,9 +433,7 @@ if (
     bearishScore -= 10;
     bullishScore += 5;
 
-    warnings.push(
-      "Bearish BOS conflicts with a bullish change of character."
-    );
+    warnings.push({ code: "BOS_CHOCH_BEARISH_CONFLICT" });
   }
 
   return {
@@ -626,19 +566,13 @@ function determineStrength(
 }
 
 function buildWaitExplanation(
-  warnings: string[]
-): string {
+  warnings: AtlasReasonCode[]
+): AtlasReasonCode {
   if (warnings.length === 0) {
-    return (
-      "Atlas recommends WAIT because there is not enough directional confirmation " +
-      "to approve a long or short trade."
-    );
+    return { code: "WAIT_NO_CONFIRMATION" };
   }
 
-  return (
-    "Atlas recommends WAIT because the market signals are mixed, incomplete or " +
-    "do not satisfy the required risk conditions."
-  );
+  return { code: "WAIT_MIXED_SIGNALS" };
 }
 
 export function makeAtlasDecision(
@@ -670,9 +604,7 @@ export function makeAtlasDecision(
       "WAIT" &&
     calculatedSignal !== "WAIT"
   ) {
-    warnings.push(
-      "The upstream Atlas signal is WAIT, so the directional setup cannot be approved."
-    );
+    warnings.push({ code: "UPSTREAM_SIGNAL_WAIT_BLOCKS_DIRECTIONAL" });
 
     signal = "WAIT";
   }
@@ -685,9 +617,7 @@ export function makeAtlasDecision(
     input.proposedSignal !==
       calculatedSignal
   ) {
-    warnings.push(
-      "The proposed signal conflicts with the combined Atlas analysis."
-    );
+    warnings.push({ code: "PROPOSED_SIGNAL_CONFLICT" });
 
     signal = "WAIT";
   }
@@ -696,9 +626,7 @@ export function makeAtlasDecision(
     signal !== "WAIT" &&
     input.risk.direction !== signal
   ) {
-    warnings.push(
-      "Risk Engine evaluated a different trade direction than the final directional analysis."
-    );
+    warnings.push({ code: "RISK_DIRECTION_MISMATCH" });
 
     signal = "WAIT";
   }
@@ -707,9 +635,7 @@ export function makeAtlasDecision(
     signal !== "WAIT" &&
     !input.risk.validTrade
   ) {
-    warnings.push(
-      "Risk Engine rejected the proposed setup."
-    );
+    warnings.push({ code: "RISK_REJECTED_SETUP" });
 
     signal = "WAIT";
   }
@@ -727,9 +653,10 @@ export function makeAtlasDecision(
     confidence <
       minimumConfidence
   ) {
-    warnings.push(
-      `Decision confidence of ${confidence}% is below the required ${minimumConfidence}%.`
-    );
+    warnings.push({
+      code: "CONFIDENCE_BELOW_MINIMUM",
+      params: { confidence, minimumConfidence },
+    });
 
     signal = "WAIT";
 
@@ -767,22 +694,24 @@ export function makeAtlasDecision(
           ]
         : [];
 
-  let explanation: string;
+  let explanation: AtlasReasonCode;
 
   if (
     signal === "LONG" &&
     tradeApproved
   ) {
-    explanation =
-      `Atlas approved a LONG trade with ${confidence}% confidence. ` +
-      "Bullish trend, market structure, multi-timeframe confirmation and risk conditions support the setup.";
+    explanation = {
+      code: "DECISION_APPROVED_LONG",
+      params: { confidence },
+    };
   } else if (
     signal === "SHORT" &&
     tradeApproved
   ) {
-    explanation =
-      `Atlas approved a SHORT trade with ${confidence}% confidence. ` +
-      "Bearish trend, market structure, multi-timeframe confirmation and risk conditions support the setup.";
+    explanation = {
+      code: "DECISION_APPROVED_SHORT",
+      params: { confidence },
+    };
   } else {
     explanation =
       buildWaitExplanation(warnings);

@@ -10,6 +10,8 @@ import type {
   TrendEngineResult,
 } from "@/lib/atlas/trendEngine";
 
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+
 export type AtlasTimeframe =
   | "15m"
   | "1h"
@@ -46,7 +48,7 @@ export type AtlasMtfResult = {
   bullishScore: number;
   bearishScore: number;
   timeframeResults: AtlasMtfTimeframeResult[];
-  explanation: string;
+  explanation: AtlasReasonCode;
 };
 
 const TIMEFRAME_WEIGHT: Record<
@@ -180,72 +182,48 @@ function hasTrendConflict(
   );
 }
 
-function getTimeframeLabel(
-  timeframe: AtlasTimeframe
-): string {
-  switch (timeframe) {
-    case "15m":
-      return "15m timing";
-
-    case "1h":
-      return "1h primary trend";
-
-    case "4h":
-      return "4h macro trend";
-  }
-}
-
 function buildExplanation(
   signal: AtlasSignal,
   agreement: number,
-  conflict: boolean,
-  results: AtlasMtfTimeframeResult[]
-): string {
-  const timeframeSummary = results
-    .map((result) => {
-      return `${getTimeframeLabel(
-        result.timeframe
-      )}: ${result.signal}`;
-    })
-    .join(", ");
-
+  conflict: boolean
+): AtlasReasonCode {
   if (conflict) {
-    return `Timeframes conflict. Atlas recommends waiting. ${timeframeSummary}.`;
+    return { code: "MTF_CONFLICT" };
   }
 
   if (
     signal === "STRONG_LONG" &&
     agreement >= 90
   ) {
-    return `Strong bullish alignment across all timeframes. ${timeframeSummary}.`;
+    return { code: "MTF_STRONG_BULLISH_ALIGNED" };
   }
 
   if (
     signal === "STRONG_SHORT" &&
     agreement >= 90
   ) {
-    return `Strong bearish alignment across all timeframes. ${timeframeSummary}.`;
+    return { code: "MTF_STRONG_BEARISH_ALIGNED" };
   }
 
   if (
     signal === "LONG" &&
     agreement >= 70
   ) {
-    return `Bullish multi-timeframe confirmation. ${timeframeSummary}.`;
+    return { code: "MTF_BULLISH_CONFIRMATION" };
   }
 
   if (
     signal === "SHORT" &&
     agreement >= 70
   ) {
-    return `Bearish multi-timeframe confirmation. ${timeframeSummary}.`;
+    return { code: "MTF_BEARISH_CONFIRMATION" };
   }
 
   if (signal === "NEUTRAL") {
-    return `No clear multi-timeframe direction. Atlas recommends waiting. ${timeframeSummary}.`;
+    return { code: "MTF_NO_CLEAR_DIRECTION" };
   }
 
-  return `Partial multi-timeframe confirmation. ${timeframeSummary}.`;
+  return { code: "MTF_PARTIAL_CONFIRMATION" };
 }
 
 export function analyzeMultiTimeframe(
@@ -261,8 +239,7 @@ export function analyzeMultiTimeframe(
       bullishScore: 0,
       bearishScore: 0,
       timeframeResults: [],
-      explanation:
-        "No timeframe analyses were available.",
+      explanation: { code: "MTF_NO_ANALYSES" },
     };
   }
 
@@ -516,8 +493,7 @@ export function analyzeMultiTimeframe(
     explanation: buildExplanation(
       signal,
       agreement,
-      conflict,
-      timeframeResults
+      conflict
     ),
   };
 }

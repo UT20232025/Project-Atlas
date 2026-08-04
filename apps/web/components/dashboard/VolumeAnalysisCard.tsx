@@ -1,8 +1,9 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { VolumeAnalysisResult } from "@/lib/atlas/volumeEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type Props = {
   volume: VolumeAnalysisResult;
@@ -28,6 +29,8 @@ export default function VolumeAnalysisCard({
 }: Props) {
   const t = useTranslations("VolumeAnalysisCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
+  const locale = useLocale();
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-6">
@@ -133,7 +136,9 @@ export default function VolumeAnalysisCard({
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">
-          {volume.explanation}
+          {volume.explanation
+            .map((part) => resolveReasonText(tReasons, locale, part))
+            .join(" ")}
         </p>
       </div>
     </div>

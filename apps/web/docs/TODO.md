@@ -40,7 +40,7 @@
 
 - [x] Flere temaer (light/dark-bryter, `[data-theme]`-drevet CSS-variabel-omtema, ingen endring i eksisterende komponenter nødvendig)
 - [x] Mobiloptimalisering (revidert på 375px viewport: ingen horisontal overflow, mobilmeny fungerer, ett tap-mål forbedret)
-- [~] Flere språk (engelsk/norsk/spansk/portugisisk/tysk på hele dashbordet, coin-siden, portefølje/journal/track record og pricing; kun AI-genererte forklaringssetninger fra Atlas-motoren er fortsatt engelsk, siden det krever en refaktorering av selve motoren, ikke bare UI-tekst)
+- [x] Flere språk (engelsk/norsk/spansk/portugisisk/tysk på hele dashbordet, coin-siden, portefølje/journal/track record og pricing; refaktorerte til slutt også selve Atlas-motoren — de ~13 delmotorene (aiDecisionEngine, riskEngine, atlasEngine, trend/volume/priceAction/marketStructure/liquidity/multiTimeframe/orderBlock/fairValueGap/whale-engine, tradeSetup) returnerer nå reason-koder i stedet for engelske strenger, oversatt via ny delt "AtlasReasons"-namespace med 209 nøkler × 5 språk; fjernet også den gamle duplikate "Atlas Analysis"-seksjonen på coin-siden som samme jobb avdekket)
 - [~] Flere animasjoner (prisflash grønt/rødt ved endring i Watchlist/Portfolio, signal-puls når Atlas-signalet flipper i Watchlist og hoved-AI-beslutningspanelet — begge gjenbruker det eksisterende reveal/typing-cursor-mønsteret med prefers-reduced-motion-støtte)
 - [x] Tastatursnarveier (Ctrl/Cmd+K eller `/` åpner søk med hele markedslisten, piltaster + Enter navigerer, `?` åpner en hjelpemodal med full snarveisliste; Topbar-søkeknappen — tidligere dekorativ — åpner nå samme dialog via et window-event; alt oversatt til alle 5 språk)
 - [x] Innstillinger (`/settings`: konto-info, abonnementsstatus + administrer-lenke, utlogging)

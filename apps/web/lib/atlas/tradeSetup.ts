@@ -7,6 +7,7 @@ import {
   type AtlasCandle,
 } from "@/lib/atlas/atlasIndicators";
 import type { FairValueGapResult } from "@/lib/atlas/fairValueGapEngine";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 import type { AtlasPriceLevels } from "@/lib/atlas/supportResistance";
 
 export type TradeDirection = "LONG" | "SHORT" | "WAIT";
@@ -20,7 +21,7 @@ export type AtlasTradeSetup = {
   riskReward1: number | null;
   riskReward2: number | null;
   quality: "A" | "B" | "C" | "NO_TRADE";
-  explanation: string;
+  explanation: AtlasReasonCode[];
 };
 
 type CreateTradeSetupInput = {
@@ -380,28 +381,37 @@ function createExplanation({
   secondTargetLimitedByStructure: boolean;
   priceLevels: AtlasPriceLevels;
   fairValueGaps: FairValueGapResult;
-}): string {
-  const parts: string[] = [];
+}): AtlasReasonCode[] {
+  const parts: AtlasReasonCode[] = [];
 
   if (quality === "A") {
-    parts.push(
-      `Atlas detects a high-quality ${direction.toLowerCase()} setup with strong indicator alignment.`
-    );
+    parts.push({
+      code: "TRADE_SETUP_QUALITY_A",
+      params: { direction },
+    });
   } else if (quality === "B") {
-    parts.push(
-      `Atlas detects a valid ${direction.toLowerCase()} setup with acceptable market alignment.`
-    );
+    parts.push({
+      code: "TRADE_SETUP_QUALITY_B",
+      params: { direction },
+    });
   } else {
-    parts.push(
-      `Atlas detects a weaker ${direction.toLowerCase()} setup that requires careful risk control.`
-    );
+    parts.push({
+      code: "TRADE_SETUP_QUALITY_C",
+      params: { direction },
+    });
   }
 
-  parts.push(
-    `The 14-period ATR is ${formatPrice(
-      atr
-    )}, and relative risk is ${risk.toLowerCase()}.`
-  );
+  const atrRiskCode =
+    risk === "LOW"
+      ? "TRADE_SETUP_ATR_RISK_LOW"
+      : risk === "MODERATE"
+        ? "TRADE_SETUP_ATR_RISK_MODERATE"
+        : "TRADE_SETUP_ATR_RISK_HIGH";
+
+  parts.push({
+    code: atrRiskCode,
+    params: { atr: formatPrice(atr) },
+  });
 
   if (usedStructureStop) {
     const structureLevel =
@@ -409,71 +419,68 @@ function createExplanation({
         ? priceLevels.support
         : priceLevels.resistance;
 
-    const levelName =
-      direction === "LONG"
-        ? "support"
-        : "resistance";
-
     if (structureLevel !== null) {
-      parts.push(
-        `Stop loss is positioned beyond the nearest ${levelName} level at ${formatPrice(
-          structureLevel
-        )}, including an ATR safety buffer.`
-      );
+      parts.push({
+        code:
+          direction === "LONG"
+            ? "TRADE_SETUP_STOP_STRUCTURE_SUPPORT"
+            : "TRADE_SETUP_STOP_STRUCTURE_RESISTANCE",
+        params: { level: formatPrice(structureLevel) },
+      });
     }
   } else {
-    parts.push(
-      "Stop loss is positioned using ATR because no suitable nearby market-structure level was available."
-    );
+    parts.push({ code: "TRADE_SETUP_STOP_ATR" });
   }
 
   if (firstTargetLimitedByStructure) {
-    const levelName =
-      direction === "LONG"
-        ? "resistance"
-        : "support";
-
-    parts.push(
-      `The nearest ${levelName} limits the first profit target and reduces the available reward.`
-    );
+    parts.push({
+      code:
+        direction === "LONG"
+          ? "TRADE_SETUP_TARGET1_LIMITED_RESISTANCE"
+          : "TRADE_SETUP_TARGET1_LIMITED_SUPPORT",
+    });
   } else if (secondTargetLimitedByStructure) {
-    const levelName =
-      direction === "LONG"
-        ? "resistance"
-        : "support";
-
-    parts.push(
-      `The nearest ${levelName} is used as the second profit target.`
-    );
+    parts.push({
+      code:
+        direction === "LONG"
+          ? "TRADE_SETUP_TARGET2_LIMITED_RESISTANCE"
+          : "TRADE_SETUP_TARGET2_LIMITED_SUPPORT",
+    });
   }
 
   if (
     direction === "LONG" &&
     fairValueGaps.nearestBullishFairValueGap
   ) {
-    parts.push(
-      `A nearby bullish Fair Value Gap around ${formatPrice(
-        fairValueGaps.nearestBullishFairValueGap.midpoint
-      )} provides additional support for the setup.`
-    );
+    parts.push({
+      code: "TRADE_SETUP_FVG_BULLISH_SUPPORT",
+      params: {
+        level: formatPrice(
+          fairValueGaps.nearestBullishFairValueGap.midpoint
+        ),
+      },
+    });
   }
 
   if (
     direction === "SHORT" &&
     fairValueGaps.nearestBearishFairValueGap
   ) {
-    parts.push(
-      `A nearby bearish Fair Value Gap around ${formatPrice(
-        fairValueGaps.nearestBearishFairValueGap.midpoint
-      )} provides additional resistance for the setup.`
-    );
+    parts.push({
+      code: "TRADE_SETUP_FVG_BEARISH_RESISTANCE",
+      params: {
+        level: formatPrice(
+          fairValueGaps.nearestBearishFairValueGap.midpoint
+        ),
+      },
+    });
   }
 
-  return parts.join(" ");
+  return parts;
 }
 
 function createNoTradeSetup(
-  explanation: string
+  explanation: AtlasReasonCode[]
 ): AtlasTradeSetup {
   return {
     direction: "WAIT",
@@ -500,31 +507,31 @@ export function createTradeSetup({
   const latestCandle = candles.at(-1);
 
   if (!latestCandle) {
-    return createNoTradeSetup(
-      "Atlas could not generate a setup because the latest candle is unavailable."
-    );
+    return createNoTradeSetup([
+      { code: "TRADE_SETUP_NO_LATEST_CANDLE" },
+    ]);
   }
 
   if (direction === "WAIT") {
-    return createNoTradeSetup(
-      "Atlas does not detect a clear directional advantage. No trade setup is generated."
-    );
+    return createNoTradeSetup([
+      { code: "TRADE_SETUP_NO_DIRECTION" },
+    ]);
   }
 
   const atr = calculateAtr(candles, 14);
 
   if (!Number.isFinite(atr) || atr <= 0) {
-    return createNoTradeSetup(
-      "Atlas could not calculate a reliable ATR value for this setup."
-    );
+    return createNoTradeSetup([
+      { code: "TRADE_SETUP_NO_ATR" },
+    ]);
   }
 
   const entry = latestCandle.close;
 
   if (!Number.isFinite(entry) || entry <= 0) {
-    return createNoTradeSetup(
-      "Atlas could not determine a valid entry price."
-    );
+    return createNoTradeSetup([
+      { code: "TRADE_SETUP_NO_ENTRY" },
+    ]);
   }
 
   const initialQuality = getTradeQuality(
@@ -549,9 +556,9 @@ export function createTradeSetup({
     !Number.isFinite(riskDistance) ||
     riskDistance <= 0
   ) {
-    return createNoTradeSetup(
-      "Atlas could not calculate a valid stop-loss distance."
-    );
+    return createNoTradeSetup([
+      { code: "TRADE_SETUP_NO_STOP_DISTANCE" },
+    ]);
   }
 
   const targetResult = getTakeProfits({
@@ -590,24 +597,29 @@ export function createTradeSetup({
     riskReward1 === null ||
     riskReward2 === null
   ) {
-    return createNoTradeSetup(
-      "Atlas could not calculate reliable risk-to-reward values for this setup."
-    );
+    return createNoTradeSetup([
+      { code: "TRADE_SETUP_NO_RISK_REWARD" },
+    ]);
   }
 
   if (riskReward1 < MINIMUM_RISK_REWARD) {
-    const structureMessage =
-      targetResult.firstTargetLimitedByStructure
-        ? " The nearest market-structure level limits the available profit potential."
-        : "";
+    const explanation: AtlasReasonCode[] = [
+      {
+        code: "TRADE_SETUP_REJECTED_LOW_RR",
+        params: {
+          riskReward1: riskReward1.toFixed(2),
+          minimumRiskReward: MINIMUM_RISK_REWARD.toFixed(2),
+        },
+      },
+    ];
 
-    return createNoTradeSetup(
-      `Atlas rejected this setup because the first target only provides a ${riskReward1.toFixed(
-        2
-      )}:1 risk-to-reward ratio. A minimum of ${MINIMUM_RISK_REWARD.toFixed(
-        2
-      )}:1 is required.${structureMessage}`
-    );
+    if (targetResult.firstTargetLimitedByStructure) {
+      explanation.push({
+        code: "TRADE_SETUP_STRUCTURE_LIMITS_PROFIT",
+      });
+    }
+
+    return createNoTradeSetup(explanation);
   }
 
   const finalQuality = adjustQualityForReward(

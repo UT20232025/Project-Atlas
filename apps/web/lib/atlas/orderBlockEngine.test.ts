@@ -13,9 +13,9 @@ describe("analyzeOrderBlocks", () => {
 
     expect(result.bullishOrderBlocks).toEqual([]);
     expect(result.bearishOrderBlocks).toEqual([]);
-    expect(result.summary).toBe(
-      "Not enough candle data to detect order blocks."
-    );
+    expect(result.summary).toEqual({
+      code: "ORDER_BLOCK_INSUFFICIENT_DATA",
+    });
   });
 
   it("detects an active, unmitigated bullish order block", () => {

@@ -1,10 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import type {
   FairValueGapResult,
 } from "@/lib/atlas/fairValueGapEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type FairValueGapCardProps = {
   fairValueGaps: FairValueGapResult;
@@ -15,11 +16,13 @@ export default function FairValueGapCard({
 }: FairValueGapCardProps) {
   const t = useTranslations("FairValueGapCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
+  const locale = useLocale();
 
   return (
     <div className="space-y-2 text-sm">
       <p className="text-zinc-400">
-        {fairValueGaps.summary}
+        {resolveReasonText(tReasons, locale, fairValueGaps.summary)}
       </p>
 
       <p className="text-emerald-400">

@@ -1,3 +1,5 @@
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+
 export type FairValueGapDirection =
   | "BULLISH"
   | "BEARISH";
@@ -29,7 +31,7 @@ export type FairValueGapResult = {
 
   currentPrice: number;
 
-  summary: string;
+  summary: AtlasReasonCode;
 };
 export type AtlasCandle = {
   open: number;
@@ -225,9 +227,12 @@ export function analyzeFairValueGaps(
     nearestBullishFairValueGap,
     nearestBearishFairValueGap,
     currentPrice,
-    summary:
-      `${bullishFairValueGaps.length} bullish and ` +
-      `${bearishFairValueGaps.length} bearish ` +
-      `unfilled fair value gaps found.`,
+    summary: {
+      code: "FAIR_VALUE_GAP_SUMMARY",
+      params: {
+        bullishCount: bullishFairValueGaps.length,
+        bearishCount: bearishFairValueGaps.length,
+      },
+    },
   };
 }

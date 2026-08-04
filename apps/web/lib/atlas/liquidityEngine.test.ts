@@ -21,9 +21,9 @@ describe("analyzeLiquidity", () => {
 
     expect(result.equalHighs).toBe(false);
     expect(result.equalLows).toBe(false);
-    expect(result.explanation).toBe(
-      "Not enough candle data to analyze liquidity."
-    );
+    expect(result.explanation).toEqual({
+      code: "LIQUIDITY_INSUFFICIENT_DATA",
+    });
   });
 
   it("detects equal highs and a bearish liquidity sweep", () => {
@@ -60,8 +60,8 @@ describe("analyzeLiquidity", () => {
     expect(result.sweepCandleIndex).toBe(12);
     expect(result.confidence).toBe(81);
 
-    expect(result.explanation).toBe(
-      "Bearish liquidity sweep detected above equal highs. Price traded above the liquidity level and closed back below it."
-    );
+    expect(result.explanation).toEqual({
+      code: "LIQUIDITY_BEARISH_SWEEP_DETECTED",
+    });
   });
 });

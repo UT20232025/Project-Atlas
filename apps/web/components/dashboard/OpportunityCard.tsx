@@ -4,6 +4,8 @@ import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import Progress from "@/components/ui/Progress";
 import Section from "@/components/ui/Section";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type OpportunityCardProps = {
   coin: string;
@@ -11,7 +13,7 @@ type OpportunityCardProps = {
   score: number;
   price: number;
   change24h: number;
-  reason: string;
+  reason: AtlasReasonCode;
 };
 
 function getSignalVariant(
@@ -39,6 +41,7 @@ export default async function OpportunityCard({
   reason,
 }: OpportunityCardProps) {
   const t = await getTranslations("OpportunityCard");
+  const tReasons = await getTranslations("AtlasReasons");
   const locale = await getLocale();
   const safeScore = Math.max(0, Math.min(100, score));
 
@@ -86,7 +89,7 @@ export default async function OpportunityCard({
 
         <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-4">
           <p className="text-sm leading-6 text-zinc-300">
-            {reason}
+            {resolveReasonText(tReasons, locale, reason)}
           </p>
         </div>
 

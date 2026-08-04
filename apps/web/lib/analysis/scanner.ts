@@ -2,6 +2,7 @@ import { MARKET_SYMBOLS } from "../config/markets";
 import type { SignalType, TrendType } from "../types/market";
 import { getCachedAtlasAnalysis } from "../atlas/atlasAnalysisCache";
 import type { AtlasTrendStatus } from "../atlas/atlasIndicators";
+import type { AtlasReasonCode } from "../atlas/reasonCode";
 import { fetchLiveMarketData } from "../services/liveMarketService";
 
 export type ScannerItem = {
@@ -13,8 +14,8 @@ export type ScannerItem = {
   signal: SignalType;
   trend: TrendType;
   rsi: number;
-  reasons: string[];
-  explanation: string;
+  reasons: AtlasReasonCode[];
+  explanation: AtlasReasonCode;
 };
 
 function mapTrendStatus(

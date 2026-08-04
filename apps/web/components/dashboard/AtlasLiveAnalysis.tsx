@@ -32,6 +32,8 @@ import type { VolumeAnalysisResult } from "@/lib/atlas/volumeEngine";
 import type { MarketStructureResult } from "@/lib/atlas/marketStructureEngine";
 import type { OrderBlockResult } from "@/lib/atlas/orderBlockEngine";
 import type { FairValueGapResult } from "@/lib/atlas/fairValueGapEngine";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type TradeSetup = {
   direction: "LONG" | "SHORT" | "WAIT";
@@ -42,7 +44,7 @@ type TradeSetup = {
   riskReward1: number | null;
   riskReward2: number | null;
   quality: "A" | "B" | "C" | "NO_TRADE";
-  explanation: string;
+  explanation: AtlasReasonCode[];
 };
 
 type AtlasDecision = {
@@ -57,9 +59,9 @@ type AtlasDecision = {
   riskRewardRatio: number | null;
   bullishScore: number;
   bearishScore: number;
-  reasons: string[];
-  warnings: string[];
-  explanation: string;
+  reasons: AtlasReasonCode[];
+  warnings: AtlasReasonCode[];
+  explanation: AtlasReasonCode;
 };
 
 type AtlasApiResponse = {
@@ -388,6 +390,7 @@ function useTypewriter(text: string): string {
 
 export default function AtlasLiveAnalysis() {
   const t = useTranslations("AtlasLive");
+  const tReasons = useTranslations("AtlasReasons");
   const locale = useLocale();
 
   const [symbol, setSymbol] =
@@ -477,8 +480,16 @@ export default function AtlasLiveAnalysis() {
       )
     : [];
 
+  const resolvedExplanation = data
+    ? resolveReasonText(
+        tReasons,
+        locale,
+        data.decision.explanation
+      )
+    : "";
+
   const typedExplanation = useTypewriter(
-    data?.decision.explanation ?? ""
+    resolvedExplanation
   );
 
   const signalPulse = useSignalPulse(
@@ -724,7 +735,7 @@ export default function AtlasLiveAnalysis() {
                     <p className="mt-3 text-sm leading-6 text-zinc-300">
                       {typedExplanation}
                       {typedExplanation !==
-                        data.decision.explanation && (
+                        resolvedExplanation && (
                         <span className="atlas-typing-cursor" />
                       )}
                     </p>
@@ -751,7 +762,7 @@ export default function AtlasLiveAnalysis() {
                             index
                           ) => (
                             <div
-                              key={`${reason}-${index}`}
+                              key={`${reason.code}-${index}`}
                               className="atlas-reveal-item flex items-start gap-2 text-sm leading-6 text-zinc-300"
                               style={{
                                 animationDelay: `${index * 90}ms`,
@@ -760,7 +771,7 @@ export default function AtlasLiveAnalysis() {
                               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
 
                               <span>
-                                {reason}
+                                {resolveReasonText(tReasons, locale, reason)}
                               </span>
                             </div>
                           )
@@ -783,7 +794,7 @@ export default function AtlasLiveAnalysis() {
                             index
                           ) => (
                             <div
-                              key={`${warning}-${index}`}
+                              key={`${warning.code}-${index}`}
                               className="atlas-reveal-item flex items-start gap-2 text-sm leading-6 text-zinc-300"
                               style={{
                                 animationDelay: `${index * 90}ms`,
@@ -792,7 +803,7 @@ export default function AtlasLiveAnalysis() {
                               <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300" />
 
                               <span>
-                                {warning}
+                                {resolveReasonText(tReasons, locale, warning)}
                               </span>
                             </div>
                           )
@@ -881,7 +892,11 @@ export default function AtlasLiveAnalysis() {
             </p>
 
             <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-400">
-              {data.analysis.summary}
+              {data.analysis.summary
+                .map((part) =>
+                  resolveReasonText(tReasons, locale, part)
+                )
+                .join(" ")}
             </p>
           </div>
 
@@ -1020,9 +1035,11 @@ export default function AtlasLiveAnalysis() {
                       </div>
 
                       <p className="mt-1 text-sm leading-6 text-zinc-400">
-                        {
+                        {resolveReasonText(
+                          tReasons,
+                          locale,
                           factor.explanation
-                        }
+                        )}
                       </p>
                     </div>
                   </div>

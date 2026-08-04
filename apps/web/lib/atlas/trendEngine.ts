@@ -1,4 +1,5 @@
 import type { AtlasIndicatorResult } from "@/lib/atlas/atlasIndicators";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type TrendDirection =
   | "STRONG_BULLISH"
@@ -11,7 +12,7 @@ export type TrendEngineResult = {
   direction: TrendDirection;
   strength: number;
   confidence: number;
-  explanation: string;
+  explanation: AtlasReasonCode;
 };
 
 function clamp(
@@ -90,40 +91,43 @@ export function analyzeTrend(
     100
   );
 
-  let explanation: string;
+  let explanation: AtlasReasonCode;
 
   switch (trendStatus) {
     case "STRONG_BULLISH":
-      explanation =
-        hasFullEmaData
-          ? "Strong bullish trend across EMA20, EMA50 and EMA200."
-          : "Strong bullish trend detected, but complete EMA history is not yet available.";
+      explanation = {
+        code: hasFullEmaData
+          ? "TREND_STRONG_BULLISH_FULL_EMA"
+          : "TREND_STRONG_BULLISH_LIMITED_EMA",
+      };
       break;
 
     case "BULLISH":
-      explanation =
-        hasShortTermEmaData
-          ? "Bullish trend with positive short-term EMA alignment."
-          : "Bullish trend detected with limited EMA history.";
+      explanation = {
+        code: hasShortTermEmaData
+          ? "TREND_BULLISH_FULL_EMA"
+          : "TREND_BULLISH_LIMITED_EMA",
+      };
       break;
 
     case "SIDEWAYS":
-      explanation =
-        "Market is ranging without a clear directional trend.";
+      explanation = { code: "TREND_SIDEWAYS" };
       break;
 
     case "BEARISH":
-      explanation =
-        hasShortTermEmaData
-          ? "Bearish trend with negative short-term EMA alignment."
-          : "Bearish trend detected with limited EMA history.";
+      explanation = {
+        code: hasShortTermEmaData
+          ? "TREND_BEARISH_FULL_EMA"
+          : "TREND_BEARISH_LIMITED_EMA",
+      };
       break;
 
     case "STRONG_BEARISH":
-      explanation =
-        hasFullEmaData
-          ? "Strong bearish trend across EMA20, EMA50 and EMA200."
-          : "Strong bearish trend detected, but complete EMA history is not yet available.";
+      explanation = {
+        code: hasFullEmaData
+          ? "TREND_STRONG_BEARISH_FULL_EMA"
+          : "TREND_STRONG_BEARISH_LIMITED_EMA",
+      };
       break;
   }
 

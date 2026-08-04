@@ -1,3 +1,5 @@
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+
 export type OrderBlockDirection =
   | "BULLISH"
   | "BEARISH";
@@ -38,7 +40,7 @@ export type OrderBlockResult = {
 
   currentPrice: number;
 
-  summary: string;
+  summary: AtlasReasonCode;
 };
 
 function clamp(
@@ -345,8 +347,7 @@ export function analyzeOrderBlocks(
 
       currentPrice,
 
-      summary:
-        "Not enough candle data to detect order blocks.",
+      summary: { code: "ORDER_BLOCK_INSUFFICIENT_DATA" },
     };
   }
 
@@ -394,8 +395,12 @@ export function analyzeOrderBlocks(
 
     currentPrice,
 
-    summary:
-      `Detected ${activeBullishCount} active bullish order block(s) ` +
-      `and ${activeBearishCount} active bearish order block(s).`,
+    summary: {
+      code: "ORDER_BLOCK_SUMMARY",
+      params: {
+        bullishCount: activeBullishCount,
+        bearishCount: activeBearishCount,
+      },
+    },
   };
 }

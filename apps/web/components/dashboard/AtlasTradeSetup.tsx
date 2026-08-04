@@ -2,6 +2,9 @@
 
 import { useLocale, useTranslations } from "next-intl";
 
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
+
 type TradeSetup = {
   direction: string;
   entry: number | null;
@@ -11,7 +14,7 @@ type TradeSetup = {
   riskReward1: number | null;
   riskReward2: number | null;
   quality: string;
-  explanation: string;
+  explanation: AtlasReasonCode[];
 };
 
 type Props = {
@@ -68,7 +71,12 @@ export default function AtlasTradeSetup({
   tradeSetup,
 }: Props) {
   const t = useTranslations("AtlasTradeSetup");
+  const tReasons = useTranslations("AtlasReasons");
   const locale = useLocale();
+
+  const explanationText = tradeSetup.explanation
+    .map((part) => resolveReasonText(tReasons, locale, part))
+    .join(" ");
 
   const isNoTrade =
     tradeSetup.direction === "WAIT" ||
@@ -87,7 +95,7 @@ export default function AtlasTradeSetup({
           </p>
 
           <p className="mt-2 text-sm leading-6 text-zinc-400">
-            {tradeSetup.explanation}
+            {explanationText}
           </p>
         </div>
       </div>
@@ -181,7 +189,7 @@ export default function AtlasTradeSetup({
       </div>
 
       <p className="mt-5 text-sm leading-6 text-zinc-400">
-        {tradeSetup.explanation}
+        {explanationText}
       </p>
     </div>
   );

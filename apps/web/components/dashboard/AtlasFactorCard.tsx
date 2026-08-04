@@ -1,8 +1,9 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { AtlasFactorResult } from "@/lib/atlas/atlasEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type Props = {
   factor: AtlasFactorResult;
@@ -21,6 +22,8 @@ function getStatusColor(status: AtlasFactorResult["status"]) {
 
 export default function AtlasFactorCard({ factor }: Props) {
   const t = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
+  const locale = useLocale();
   const percent = (factor.score / factor.maxScore) * 100;
 
   return (
@@ -32,7 +35,7 @@ export default function AtlasFactorCard({ factor }: Props) {
           </h4>
 
           <p className="mt-1 text-sm text-zinc-500">
-            {factor.explanation}
+            {resolveReasonText(tReasons, locale, factor.explanation)}
           </p>
         </div>
 

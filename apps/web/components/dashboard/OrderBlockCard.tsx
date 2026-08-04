@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import type { OrderBlockResult } from "@/lib/atlas/orderBlockEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type OrderBlockCardProps = {
   orderBlocks: OrderBlockResult;
@@ -23,6 +24,7 @@ export default function OrderBlockCard({
 }: OrderBlockCardProps) {
   const t = useTranslations("OrderBlockCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
   const locale = useLocale();
 
   const bullish =
@@ -112,7 +114,7 @@ export default function OrderBlockCard({
       </div>
 
       <p className="mt-4 text-xs leading-5 text-zinc-500">
-        {orderBlocks.summary}
+        {resolveReasonText(tReasons, locale, orderBlocks.summary)}
       </p>
     </div>
   );

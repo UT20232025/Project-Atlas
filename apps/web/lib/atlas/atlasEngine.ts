@@ -1,3 +1,5 @@
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+
 export type AtlasSignal =
   | "STRONG_LONG"
   | "LONG"
@@ -28,7 +30,7 @@ export type AtlasFactorResult = {
   score: number;
   maxScore: number;
   status: "BULLISH" | "NEUTRAL" | "BEARISH";
-  explanation: string;
+  explanation: AtlasReasonCode;
 };
 
 export type AtlasAnalysis = {
@@ -37,7 +39,7 @@ export type AtlasAnalysis = {
   confidence: number;
   risk: AtlasRisk;
   factors: AtlasFactorResult[];
-  summary: string;
+  summary: AtlasReasonCode[];
 };
 
 const FACTOR_WEIGHTS: Record<AtlasFactorName, number> = {
@@ -86,60 +88,45 @@ function getFactorStatus(
 function getFactorExplanation(
   name: AtlasFactorName,
   value: number
-) {
+): AtlasReasonCode {
   const status = getFactorStatus(value);
 
-  const explanations: Record<
+  const codes: Record<
     AtlasFactorName,
     Record<AtlasFactorResult["status"], string>
   > = {
     trend: {
-      BULLISH:
-        "Price structure indicates an upward market trend.",
-      NEUTRAL:
-        "The market trend is currently unclear or ranging.",
-      BEARISH:
-        "Price structure indicates a downward market trend.",
+      BULLISH: "FACTOR_TREND_BULLISH",
+      NEUTRAL: "FACTOR_TREND_NEUTRAL",
+      BEARISH: "FACTOR_TREND_BEARISH",
     },
 
     rsi: {
-      BULLISH:
-        "RSI supports positive momentum without extreme weakness.",
-      NEUTRAL:
-        "RSI is balanced and provides no strong directional edge.",
-      BEARISH:
-        "RSI indicates weak or negative market momentum.",
+      BULLISH: "FACTOR_RSI_BULLISH",
+      NEUTRAL: "FACTOR_RSI_NEUTRAL",
+      BEARISH: "FACTOR_RSI_BEARISH",
     },
 
     macd: {
-      BULLISH:
-        "MACD momentum supports further upside.",
-      NEUTRAL:
-        "MACD momentum is currently mixed.",
-      BEARISH:
-        "MACD momentum supports further downside.",
+      BULLISH: "FACTOR_MACD_BULLISH",
+      NEUTRAL: "FACTOR_MACD_NEUTRAL",
+      BEARISH: "FACTOR_MACD_BEARISH",
     },
 
     volume: {
-      BULLISH:
-        "Volume confirms the current bullish move.",
-      NEUTRAL:
-        "Volume provides limited confirmation.",
-      BEARISH:
-        "Volume confirms increased selling pressure.",
+      BULLISH: "FACTOR_VOLUME_BULLISH",
+      NEUTRAL: "FACTOR_VOLUME_NEUTRAL",
+      BEARISH: "FACTOR_VOLUME_BEARISH",
     },
 
     momentum: {
-      BULLISH:
-        "Short-term momentum is accelerating upward.",
-      NEUTRAL:
-        "Short-term momentum is currently balanced.",
-      BEARISH:
-        "Short-term momentum is accelerating downward.",
+      BULLISH: "FACTOR_MOMENTUM_BULLISH",
+      NEUTRAL: "FACTOR_MOMENTUM_NEUTRAL",
+      BEARISH: "FACTOR_MOMENTUM_BEARISH",
     },
   };
 
-  return explanations[name][status];
+  return { code: codes[name][status] };
 }
 
 function createFactorResult(
@@ -225,128 +212,103 @@ function getRisk(
   return "MODERATE";
 }
 
-function formatFactorList(
-  factors: AtlasFactorResult[]
-) {
-  const labels = factors.map((factor) =>
-    factor.label.toLowerCase()
-  );
-
-  if (labels.length === 0) {
-    return "";
-  }
-
-  if (labels.length === 1) {
-    return labels[0];
-  }
-
-  if (labels.length === 2) {
-    return `${labels[0]} and ${labels[1]}`;
-  }
-
-  return `${labels
-    .slice(0, -1)
-    .join(", ")}, and ${labels.at(-1)}`;
-}
-
 function getSummary(
   signal: AtlasSignal,
   risk: AtlasRisk,
   factors: AtlasFactorResult[]
-) {
-  const bullishFactors = factors.filter(
-    (factor) => factor.status === "BULLISH"
-  );
+): AtlasReasonCode[] {
+  const bullishNames = factors
+    .filter((factor) => factor.status === "BULLISH")
+    .map((factor) => factor.name);
 
-  const bearishFactors = factors.filter(
-    (factor) => factor.status === "BEARISH"
-  );
+  const bearishNames = factors
+    .filter((factor) => factor.status === "BEARISH")
+    .map((factor) => factor.name);
 
-  const neutralFactors = factors.filter(
-    (factor) => factor.status === "NEUTRAL"
-  );
+  const neutralNames = factors
+    .filter((factor) => factor.status === "NEUTRAL")
+    .map((factor) => factor.name);
 
-  const bullishLabels =
-    formatFactorList(bullishFactors);
-
-  const bearishLabels =
-    formatFactorList(bearishFactors);
-
-  const neutralLabels =
-    formatFactorList(neutralFactors);
-
-  let directionSummary: string;
+  let directionSummary: AtlasReasonCode;
 
   switch (signal) {
     case "STRONG_LONG":
       directionSummary =
-        bullishFactors.length > 0
-          ? `Atlas detects strong bullish alignment, led by ${bullishLabels}.`
-          : "Atlas detects strong bullish alignment across the market indicators.";
+        bullishNames.length > 0
+          ? {
+              code: "SUMMARY_STRONG_LONG_WITH_FACTORS",
+              params: { factorList: bullishNames },
+            }
+          : { code: "SUMMARY_STRONG_LONG_NO_FACTORS" };
       break;
 
     case "LONG":
       directionSummary =
-        bullishFactors.length > 0
-          ? `Atlas detects a bullish market advantage, supported by ${bullishLabels}.`
-          : "Atlas detects a bullish market advantage.";
+        bullishNames.length > 0
+          ? {
+              code: "SUMMARY_LONG_WITH_FACTORS",
+              params: { factorList: bullishNames },
+            }
+          : { code: "SUMMARY_LONG_NO_FACTORS" };
       break;
 
     case "STRONG_SHORT":
       directionSummary =
-        bearishFactors.length > 0
-          ? `Atlas detects strong bearish alignment, led by ${bearishLabels}.`
-          : "Atlas detects strong bearish alignment across the market indicators.";
+        bearishNames.length > 0
+          ? {
+              code: "SUMMARY_STRONG_SHORT_WITH_FACTORS",
+              params: { factorList: bearishNames },
+            }
+          : { code: "SUMMARY_STRONG_SHORT_NO_FACTORS" };
       break;
 
     case "SHORT":
       directionSummary =
-        bearishFactors.length > 0
-          ? `Atlas detects a bearish market advantage, supported by ${bearishLabels}.`
-          : "Atlas detects a bearish market advantage.";
+        bearishNames.length > 0
+          ? {
+              code: "SUMMARY_SHORT_WITH_FACTORS",
+              params: { factorList: bearishNames },
+            }
+          : { code: "SUMMARY_SHORT_NO_FACTORS" };
       break;
 
     case "NEUTRAL":
       directionSummary =
-        bullishFactors.length > 0 &&
-        bearishFactors.length > 0
-          ? `Atlas detects conflicting conditions. ${bullishLabels} support buyers, while ${bearishLabels} support sellers.`
-          : "Atlas detects balanced conditions without a clear directional advantage.";
+        bullishNames.length > 0 &&
+        bearishNames.length > 0
+          ? {
+              code: "SUMMARY_NEUTRAL_CONFLICTING",
+              params: {
+                bullishList: bullishNames,
+                bearishList: bearishNames,
+              },
+            }
+          : { code: "SUMMARY_NEUTRAL_BALANCED" };
       break;
   }
 
-  let confirmationSummary = "";
+  const parts: AtlasReasonCode[] = [directionSummary];
 
   if (
-    neutralFactors.length > 0 &&
+    neutralNames.length > 0 &&
     signal !== "NEUTRAL"
   ) {
-    confirmationSummary = ` Confirmation remains limited from ${neutralLabels}.`;
+    parts.push({
+      code: "SUMMARY_CONFIRMATION_LIMITED",
+      params: { neutralList: neutralNames },
+    });
   }
 
-  let riskSummary: string;
+  const riskCode =
+    risk === "LOW"
+      ? "SUMMARY_RISK_LOW"
+      : risk === "MODERATE"
+        ? "SUMMARY_RISK_MODERATE"
+        : "SUMMARY_RISK_HIGH";
 
-  switch (risk) {
-    case "LOW":
-      riskSummary =
-        " Indicator alignment is strong, resulting in a lower relative setup risk.";
+  parts.push({ code: riskCode });
 
-      break;
-
-    case "MODERATE":
-      riskSummary =
-        " The setup has a directional advantage, but additional confirmation would improve its quality.";
-
-      break;
-
-    case "HIGH":
-      riskSummary =
-        " Conflicting or balanced indicators increase uncertainty, so caution is warranted.";
-
-      break;
-  }
-
-  return `${directionSummary}${confirmationSummary}${riskSummary}`;
+  return parts;
 }
 
 export function analyzeMarket(

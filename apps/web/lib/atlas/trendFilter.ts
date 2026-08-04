@@ -16,7 +16,6 @@ export type AtlasTrendFilterResult = {
   confidence: number;
   risk: AtlasRisk;
   allowed: boolean;
-  explanation: string;
 };
 
 function clamp(
@@ -101,8 +100,6 @@ export function applyTrendFilter({
       confidence,
       risk: "HIGH",
       allowed: false,
-      explanation:
-        "Atlas has no clear directional signal, so the EMA trend filter does not approve a trade.",
     };
   }
 
@@ -117,8 +114,6 @@ export function applyTrendFilter({
         ),
         risk: "LOW",
         allowed: true,
-        explanation:
-          "EMA20, EMA50 and EMA200 confirm a strong bullish trend. The LONG signal is approved and strengthened.",
       };
     }
 
@@ -131,8 +126,6 @@ export function applyTrendFilter({
       ),
       risk: "HIGH",
       allowed: false,
-      explanation:
-        "The SHORT signal conflicts with a strong bullish EMA trend and has been rejected.",
     };
   }
 
@@ -150,8 +143,6 @@ export function applyTrendFilter({
             ? "MODERATE"
             : risk,
         allowed: true,
-        explanation:
-          "The EMA trend is bullish and supports the LONG signal.",
       };
     }
 
@@ -164,8 +155,6 @@ export function applyTrendFilter({
       ),
       risk: "HIGH",
       allowed: false,
-      explanation:
-        "The SHORT signal conflicts with the bullish EMA trend and has been weakened.",
     };
   }
 
@@ -180,8 +169,6 @@ export function applyTrendFilter({
         ),
         risk: "LOW",
         allowed: true,
-        explanation:
-          "EMA20, EMA50 and EMA200 confirm a strong bearish trend. The SHORT signal is approved and strengthened.",
       };
     }
 
@@ -194,8 +181,6 @@ export function applyTrendFilter({
       ),
       risk: "HIGH",
       allowed: false,
-      explanation:
-        "The LONG signal conflicts with a strong bearish EMA trend and has been rejected.",
     };
   }
 
@@ -213,8 +198,6 @@ export function applyTrendFilter({
             ? "MODERATE"
             : risk,
         allowed: true,
-        explanation:
-          "The EMA trend is bearish and supports the SHORT signal.",
       };
     }
 
@@ -227,8 +210,6 @@ export function applyTrendFilter({
       ),
       risk: "HIGH",
       allowed: false,
-      explanation:
-        "The LONG signal conflicts with the bearish EMA trend and has been weakened.",
     };
   }
 
@@ -241,7 +222,5 @@ export function applyTrendFilter({
     ),
     risk: "HIGH",
     allowed: false,
-    explanation:
-      "The EMA structure is sideways. Atlas requires stronger confirmation before approving a trade.",
   };
 }

@@ -1,8 +1,12 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
-import type { AtlasMtfResult } from "@/lib/atlas/multiTimeframeEngine";
+import type {
+  AtlasMtfResult,
+  AtlasTimeframe,
+} from "@/lib/atlas/multiTimeframeEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type Props = {
   mtf: AtlasMtfResult;
@@ -35,11 +39,35 @@ function getTrendColor(direction: string) {
   return "text-zinc-400";
 }
 
+function getTimeframeLabelCode(
+  timeframe: AtlasTimeframe
+): string {
+  switch (timeframe) {
+    case "15m":
+      return "MTF_TIMEFRAME_LABEL_15M";
+
+    case "1h":
+      return "MTF_TIMEFRAME_LABEL_1H";
+
+    case "4h":
+      return "MTF_TIMEFRAME_LABEL_4H";
+  }
+}
+
 export default function MultiTimeframeCard({
   mtf,
 }: Props) {
   const t = useTranslations("MultiTimeframeCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
+  const locale = useLocale();
+
+  const timeframeSummary = mtf.timeframeResults
+    .map(
+      (result) =>
+        `${tReasons(getTimeframeLabelCode(result.timeframe))}: ${result.signal}`
+    )
+    .join(", ");
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-6">
@@ -201,7 +229,8 @@ export default function MultiTimeframeCard({
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">
-          {mtf.explanation}
+          {resolveReasonText(tReasons, locale, mtf.explanation)}{" "}
+          {timeframeSummary}.
         </p>
       </div>
     </div>

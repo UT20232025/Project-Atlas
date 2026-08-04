@@ -35,9 +35,9 @@ describe("analyzeTrend", () => {
     expect(result.direction).toBe("STRONG_BULLISH");
     expect(result.strength).toBe(95);
     expect(result.confidence).toBe(95);
-    expect(result.explanation).toBe(
-      "Strong bullish trend across EMA20, EMA50 and EMA200."
-    );
+    expect(result.explanation).toEqual({
+      code: "TREND_STRONG_BULLISH_FULL_EMA",
+    });
   });
 
   it("reports maximum strength for a full bearish EMA stack", () => {
@@ -65,9 +65,9 @@ describe("analyzeTrend", () => {
     );
 
     expect(result.strength).toBe(55);
-    expect(result.explanation).toBe(
-      "Market is ranging without a clear directional trend."
-    );
+    expect(result.explanation).toEqual({
+      code: "TREND_SIDEWAYS",
+    });
   });
 
   it("falls back to low strength when no EMA data is available", () => {
@@ -81,8 +81,8 @@ describe("analyzeTrend", () => {
     );
 
     expect(result.strength).toBe(40);
-    expect(result.explanation).toBe(
-      "Bullish trend detected with limited EMA history."
-    );
+    expect(result.explanation).toEqual({
+      code: "TREND_BULLISH_LIMITED_EMA",
+    });
   });
 });

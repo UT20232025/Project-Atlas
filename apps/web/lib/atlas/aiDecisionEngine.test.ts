@@ -192,8 +192,10 @@ describe("makeAtlasDecision", () => {
     expect(result.signal).toBe("WAIT");
     expect(result.tradeApproved).toBe(false);
     expect(
-      result.warnings.some((warning) =>
-        warning.includes("below the required 65%")
+      result.warnings.some(
+        (warning) =>
+          warning.code === "CONFIDENCE_BELOW_MINIMUM" &&
+          warning.params?.minimumConfidence === 65
       )
     ).toBe(true);
   });

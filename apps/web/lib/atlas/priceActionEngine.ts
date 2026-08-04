@@ -1,4 +1,5 @@
 import type { AtlasCandle } from "@/lib/atlas/atlasIndicators";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type MarketStructure =
   | "BULLISH"
@@ -47,7 +48,7 @@ export type PriceActionResult = {
 
   confidence: number;
 
-  explanation: string;
+  explanation: AtlasReasonCode;
 };
 
 function clamp(
@@ -188,8 +189,7 @@ export function analyzePriceAction(
 
       confidence: 0,
 
-      explanation:
-        "Not enough candle data to analyze price action.",
+      explanation: { code: "PRICE_ACTION_INSUFFICIENT_DATA" },
     };
   }
 
@@ -424,61 +424,53 @@ export function analyzePriceAction(
     100
   );
 
-  let explanation =
-    "No clear market structure, BOS or CHoCH detected.";
+  let explanation: AtlasReasonCode = {
+    code: "PRICE_ACTION_NO_CLEAR_STRUCTURE",
+  };
 
   if (
     latestEventIsChoch &&
     chochDirection === "BEARISH"
   ) {
-    explanation =
-      "Bearish change of character detected. Price closed below the latest protected swing low in a bullish structure.";
+    explanation = { code: "PRICE_ACTION_BEARISH_CHOCH_DETECTED" };
   } else if (
     latestEventIsChoch &&
     chochDirection === "BULLISH"
   ) {
-    explanation =
-      "Bullish change of character detected. Price closed above the latest protected swing high in a bearish structure.";
+    explanation = { code: "PRICE_ACTION_BULLISH_CHOCH_DETECTED" };
   } else if (
     structure === "BULLISH" &&
     bosDirection === "BULLISH"
   ) {
-    explanation =
-      "Bullish market structure confirmed with a close above the latest swing high.";
+    explanation = { code: "PRICE_ACTION_BULLISH_STRUCTURE_CONFIRMED" };
   } else if (
     structure === "BEARISH" &&
     bosDirection === "BEARISH"
   ) {
-    explanation =
-      "Bearish market structure confirmed with a close below the latest swing low.";
+    explanation = { code: "PRICE_ACTION_BEARISH_STRUCTURE_CONFIRMED" };
   } else if (
     structure === "BULLISH"
   ) {
-    explanation =
-      "Higher highs and higher lows detected without a new confirmed structural break.";
+    explanation = { code: "PRICE_ACTION_BULLISH_NO_BREAK" };
   } else if (
     structure === "BEARISH"
   ) {
-    explanation =
-      "Lower highs and lower lows detected without a new confirmed structural break.";
+    explanation = { code: "PRICE_ACTION_BEARISH_NO_BREAK" };
   } else if (
     bosDirection === "BULLISH"
   ) {
-    explanation =
-      "Bullish break above the latest swing high detected in a ranging market.";
+    explanation = { code: "PRICE_ACTION_BULLISH_BREAK_RANGING" };
   } else if (
     bosDirection === "BEARISH"
   ) {
-    explanation =
-      "Bearish break below the latest swing low detected in a ranging market.";
+    explanation = { code: "PRICE_ACTION_BEARISH_BREAK_RANGING" };
   } else if (
     higherHigh ||
     higherLow ||
     lowerHigh ||
     lowerLow
   ) {
-    explanation =
-      "Mixed market structure detected without a confirmed structural break.";
+    explanation = { code: "PRICE_ACTION_MIXED_STRUCTURE" };
   }
 
   return {

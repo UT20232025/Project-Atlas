@@ -1,6 +1,7 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 import type { MarketStructureResult } from "@/lib/atlas/marketStructureEngine";
 
@@ -39,6 +40,8 @@ export default function MarketStructureCard({
 }: Props) {
   const t = useTranslations("MarketStructureCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
+  const locale = useLocale();
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-6">
@@ -162,7 +165,9 @@ export default function MarketStructureCard({
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">
-          {structure.explanation}
+          {structure.explanation
+            .map((part) => resolveReasonText(tReasons, locale, part))
+            .join(" ")}
         </p>
       </div>
     </div>

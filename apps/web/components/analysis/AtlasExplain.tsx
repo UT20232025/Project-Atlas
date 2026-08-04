@@ -1,11 +1,14 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type AtlasExplainProps = {
   signal: "LONG" | "SHORT" | "WAIT";
   confidence: number;
-  reasons: string[];
-  warnings?: string[];
-  explanation?: string;
+  reasons: AtlasReasonCode[];
+  warnings?: AtlasReasonCode[];
+  explanation?: AtlasReasonCode;
 };
 
 export default async function AtlasExplain({
@@ -16,6 +19,8 @@ export default async function AtlasExplain({
   explanation,
 }: AtlasExplainProps) {
   const t = await getTranslations("AtlasExplain");
+  const tReasons = await getTranslations("AtlasReasons");
+  const locale = await getLocale();
 
   const signalColor =
     signal === "LONG"
@@ -57,7 +62,7 @@ export default async function AtlasExplain({
             <div className="flex gap-3">
               <span className="text-green-400">✓</span>
 
-              <p>{reason}</p>
+              <p>{resolveReasonText(tReasons, locale, reason)}</p>
             </div>
           </div>
         ))}
@@ -73,7 +78,7 @@ export default async function AtlasExplain({
               <div className="flex gap-3">
                 <span className="text-yellow-400">⚠</span>
 
-                <p className="text-zinc-300">{warning}</p>
+                <p className="text-zinc-300">{resolveReasonText(tReasons, locale, warning)}</p>
               </div>
             </div>
           ))}
@@ -86,7 +91,7 @@ export default async function AtlasExplain({
         </p>
 
         <p className="mt-2 text-zinc-300 leading-7">
-          {explanation ?? t("summaryFallback")}
+          {explanation ? resolveReasonText(tReasons, locale, explanation) : t("summaryFallback")}
         </p>
       </div>
     </section>

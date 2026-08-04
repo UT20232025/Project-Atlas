@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import type { WhaleActivityResult } from "@/lib/atlas/whaleEngine";
 import { WHALE_TRADE_THRESHOLD_USD } from "@/lib/atlas/whaleEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type WhaleActivityCardProps = {
   activity: WhaleActivityResult;
@@ -11,6 +12,7 @@ export default async function WhaleActivityCard({
   activity,
 }: WhaleActivityCardProps) {
   const t = await getTranslations("WhaleActivityCard");
+  const tReasons = await getTranslations("AtlasReasons");
   const locale = await getLocale();
 
   const toneClass =
@@ -54,7 +56,7 @@ export default async function WhaleActivityCard({
       </div>
 
       <p className="mt-4 text-sm text-zinc-400">
-        {activity.explanation}
+        {resolveReasonText(tReasons, locale, activity.explanation)}
       </p>
 
       {activity.largestTrade && (

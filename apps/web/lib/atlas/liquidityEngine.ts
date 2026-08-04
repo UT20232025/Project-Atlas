@@ -1,4 +1,5 @@
 import type { AtlasCandle } from "@/lib/atlas/atlasIndicators";
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type LiquiditySweepDirection =
   | "BULLISH"
@@ -39,7 +40,7 @@ export type LiquidityResult = {
   sweepCandleIndex: number | null;
 
   confidence: number;
-  explanation: string;
+  explanation: AtlasReasonCode;
 };
 
 type SwingPoint = {
@@ -612,8 +613,7 @@ export function analyzeLiquidity(
 
       confidence: 0,
 
-      explanation:
-        "Not enough candle data to analyze liquidity.",
+      explanation: { code: "LIQUIDITY_INSUFFICIENT_DATA" },
     };
   }
 
@@ -753,33 +753,29 @@ export function analyzeLiquidity(
   const equalLows =
     lowPool !== null;
 
-  let explanation =
-    "No clear liquidity pool or liquidity sweep detected.";
+  let explanation: AtlasReasonCode = {
+    code: "LIQUIDITY_NO_POOL_OR_SWEEP",
+  };
 
   if (
     selectedSweep?.direction ===
     "BULLISH"
   ) {
-    explanation =
-      "Bullish liquidity sweep detected below equal lows. Price traded below the liquidity level and closed back above it.";
+    explanation = { code: "LIQUIDITY_BULLISH_SWEEP_DETECTED" };
   } else if (
     selectedSweep?.direction ===
     "BEARISH"
   ) {
-    explanation =
-      "Bearish liquidity sweep detected above equal highs. Price traded above the liquidity level and closed back below it.";
+    explanation = { code: "LIQUIDITY_BEARISH_SWEEP_DETECTED" };
   } else if (
     equalHighs &&
     equalLows
   ) {
-    explanation =
-      "Liquidity pools detected above equal highs and below equal lows, but neither pool has been swept.";
+    explanation = { code: "LIQUIDITY_BOTH_POOLS_UNSWEPT" };
   } else if (equalHighs) {
-    explanation =
-      "Liquidity pool detected above equal highs, but no confirmed bearish sweep has occurred.";
+    explanation = { code: "LIQUIDITY_HIGH_POOL_UNSWEPT" };
   } else if (equalLows) {
-    explanation =
-      "Liquidity pool detected below equal lows, but no confirmed bullish sweep has occurred.";
+    explanation = { code: "LIQUIDITY_LOW_POOL_UNSWEPT" };
   }
 
   return {

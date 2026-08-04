@@ -1,8 +1,9 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import type { TrendEngineResult } from "@/lib/atlas/trendEngine";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type Props = {
   trend: TrendEngineResult;
@@ -28,6 +29,8 @@ export default function TrendEngineCard({
 }: Props) {
   const t = useTranslations("TrendEngineCard");
   const c = useTranslations("Cards");
+  const tReasons = useTranslations("AtlasReasons");
+  const locale = useLocale();
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-950/30 p-6">
@@ -79,7 +82,7 @@ export default function TrendEngineCard({
         </p>
 
         <p className="mt-3 text-sm leading-6 text-zinc-300">
-          {trend.explanation}
+          {resolveReasonText(tReasons, locale, trend.explanation)}
         </p>
       </div>
     </div>

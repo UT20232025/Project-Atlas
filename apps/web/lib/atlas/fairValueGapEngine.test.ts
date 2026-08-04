@@ -27,9 +27,10 @@ describe("analyzeFairValueGaps", () => {
     expect(gap.strength).toBe(100);
 
     expect(result.nearestBullishFairValueGap).toEqual(gap);
-    expect(result.summary).toBe(
-      "1 bullish and 0 bearish unfilled fair value gaps found."
-    );
+    expect(result.summary).toEqual({
+      code: "FAIR_VALUE_GAP_SUMMARY",
+      params: { bullishCount: 1, bearishCount: 0 },
+    });
   });
 
   it("excludes a gap once price trades back through its midpoint", () => {

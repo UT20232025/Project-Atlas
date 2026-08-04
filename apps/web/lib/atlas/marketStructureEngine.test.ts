@@ -25,9 +25,9 @@ describe("analyzeMarketStructure", () => {
 
     expect(result.trend).toBe("RANGING");
     expect(result.event).toBe("NONE");
-    expect(result.explanation).toBe(
-      "Not enough candle data was available for market structure analysis."
-    );
+    expect(result.explanation).toEqual([
+      { code: "MARKET_STRUCTURE_INSUFFICIENT_DATA" },
+    ]);
   });
 
   it("detects a bullish break of structure from higher highs and higher lows", () => {
