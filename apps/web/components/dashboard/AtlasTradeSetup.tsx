@@ -5,10 +5,20 @@ import { useLocale, useTranslations } from "next-intl";
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
+type StopLossOption = {
+  price: number;
+  type: "STRUCTURE" | "ATR";
+  distance: "TIGHT" | "WIDE" | null;
+  isPrimary: boolean;
+  riskReward1: number | null;
+  riskReward2: number | null;
+};
+
 type TradeSetup = {
   direction: string;
   entry: number | null;
   stopLoss: number | null;
+  stops: StopLossOption[];
   takeProfit1: number | null;
   takeProfit2: number | null;
   riskReward1: number | null;
@@ -67,6 +77,77 @@ function getQualityTextColor(quality: string) {
   return "text-zinc-400";
 }
 
+function getStopTypeLabel(
+  t: ReturnType<typeof useTranslations>,
+  type: StopLossOption["type"]
+) {
+  return type === "STRUCTURE"
+    ? t("stopStructure")
+    : t("stopAtr");
+}
+
+function getStopDistanceLabel(
+  t: ReturnType<typeof useTranslations>,
+  distance: StopLossOption["distance"]
+) {
+  if (distance === "TIGHT") {
+    return t("stopTight");
+  }
+
+  if (distance === "WIDE") {
+    return t("stopWide");
+  }
+
+  return null;
+}
+
+function StopCard({
+  stop,
+  t,
+  locale,
+}: {
+  stop: StopLossOption;
+  t: ReturnType<typeof useTranslations>;
+  locale: string;
+}) {
+  const distanceLabel = getStopDistanceLabel(
+    t,
+    stop.distance
+  );
+
+  return (
+    <div className="rounded-lg border border-zinc-800 p-4">
+      <div className="flex flex-wrap items-center gap-2">
+        <p className="text-xs font-medium text-zinc-400">
+          {getStopTypeLabel(t, stop.type)}
+        </p>
+
+        {distanceLabel && (
+          <span className="rounded-full bg-zinc-800 px-2 py-0.5 text-[10px] uppercase tracking-wide text-zinc-400">
+            {distanceLabel}
+          </span>
+        )}
+
+        {stop.isPrimary && (
+          <span className="rounded-full bg-red-500/15 px-2 py-0.5 text-[10px] uppercase tracking-wide text-red-300">
+            {t("stopRecommended")}
+          </span>
+        )}
+      </div>
+
+      <p className="mt-1 text-lg font-semibold text-red-400">
+        {formatPrice(stop.price, locale)}
+      </p>
+
+      <p className="mt-2 text-xs text-zinc-500">
+        {t("takeProfit1")}: {formatRiskReward(t, stop.riskReward1)}
+        {" · "}
+        {t("takeProfit2")}: {formatRiskReward(t, stop.riskReward2)}
+      </p>
+    </div>
+  );
+}
+
 export default function AtlasTradeSetup({
   tradeSetup,
 }: Props) {
@@ -77,6 +158,22 @@ export default function AtlasTradeSetup({
   const explanationText = tradeSetup.explanation
     .map((part) => resolveReasonText(tReasons, locale, part))
     .join(" ");
+
+  const stopOptions: StopLossOption[] =
+    tradeSetup.stops.length > 0
+      ? tradeSetup.stops
+      : tradeSetup.stopLoss !== null
+        ? [
+            {
+              price: tradeSetup.stopLoss,
+              type: "ATR",
+              distance: null,
+              isPrimary: true,
+              riskReward1: tradeSetup.riskReward1,
+              riskReward2: tradeSetup.riskReward2,
+            },
+          ]
+        : [];
 
   const isNoTrade =
     tradeSetup.direction === "WAIT" ||
@@ -108,7 +205,7 @@ export default function AtlasTradeSetup({
         {t("title")}
       </p>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-5 grid gap-4 md:grid-cols-3">
         <div>
           <p className="text-xs text-zinc-500">
             {t("direction")}
@@ -135,16 +232,6 @@ export default function AtlasTradeSetup({
 
         <div>
           <p className="text-xs text-zinc-500">
-            {t("stopLoss")}
-          </p>
-
-          <p className="mt-1 font-medium text-red-400">
-            {formatPrice(tradeSetup.stopLoss, locale)}
-          </p>
-        </div>
-
-        <div>
-          <p className="text-xs text-zinc-500">
             {t("quality")}
           </p>
 
@@ -155,6 +242,23 @@ export default function AtlasTradeSetup({
           >
             {tradeSetup.quality}
           </p>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <p className="text-xs text-zinc-500">
+          {t("stopLoss")}
+        </p>
+
+        <div className="mt-2 grid gap-4 md:grid-cols-2">
+          {stopOptions.map((stop, index) => (
+            <StopCard
+              key={`${stop.type}-${index}`}
+              stop={stop}
+              t={t}
+              locale={locale}
+            />
+          ))}
         </div>
       </div>
 

@@ -12,10 +12,25 @@ import type { AtlasPriceLevels } from "@/lib/atlas/supportResistance";
 
 export type TradeDirection = "LONG" | "SHORT" | "WAIT";
 
+export type StopLossType = "STRUCTURE" | "ATR";
+
+export type StopLossOption = {
+  price: number;
+  type: StopLossType;
+  // TIGHT = closer to entry (higher R:R, more prone to noise),
+  // WIDE = farther from entry. Null when there is only one stop.
+  distance: "TIGHT" | "WIDE" | null;
+  // The stop the engine uses for quality/validation/position sizing.
+  isPrimary: boolean;
+  riskReward1: number | null;
+  riskReward2: number | null;
+};
+
 export type AtlasTradeSetup = {
   direction: TradeDirection;
   entry: number | null;
   stopLoss: number | null;
+  stops: StopLossOption[];
   takeProfit1: number | null;
   takeProfit2: number | null;
   riskReward1: number | null;
@@ -34,8 +49,13 @@ type CreateTradeSetupInput = {
 };
 
 type StopLossResult = {
-  stopLoss: number;
-  usedStructure: boolean;
+  // The engine's chosen stop (structure if valid, else ATR fallback).
+  primary: number;
+  primaryType: StopLossType;
+  // The other candidate, shown as an alternative. Null when no valid
+  // structure level exists (only the ATR stop is available).
+  alternative: number | null;
+  alternativeType: StopLossType | null;
 };
 
 type TakeProfitResult = {
@@ -212,14 +232,18 @@ function getStopLoss({
       ? priceLevels.support
       : priceLevels.resistance;
 
+  const atrOnly: StopLossResult = {
+    primary: atrStopLoss,
+    primaryType: "ATR",
+    alternative: null,
+    alternativeType: null,
+  };
+
   if (
     structureLevel === null ||
     !Number.isFinite(structureLevel)
   ) {
-    return {
-      stopLoss: atrStopLoss,
-      usedStructure: false,
-    };
+    return atrOnly;
   }
 
   const validStructureLevel =
@@ -228,10 +252,7 @@ function getStopLoss({
       : structureLevel > entry;
 
   if (!validStructureLevel) {
-    return {
-      stopLoss: atrStopLoss,
-      usedStructure: false,
-    };
+    return atrOnly;
   }
 
   const structureBuffer =
@@ -253,16 +274,92 @@ function getStopLoss({
     structureStopDistance <= 0 ||
     structureStopDistance > maximumStructureDistance
   ) {
-    return {
-      stopLoss: atrStopLoss,
-      usedStructure: false,
-    };
+    return atrOnly;
   }
 
+  // Structure stop is valid: use it as primary, keep the ATR stop as the
+  // alternative so the UI can show both.
   return {
-    stopLoss: structureStopLoss,
-    usedStructure: true,
+    primary: structureStopLoss,
+    primaryType: "STRUCTURE",
+    alternative: atrStopLoss,
+    alternativeType: "ATR",
   };
+}
+
+function buildStopOptions({
+  entry,
+  stopResult,
+  takeProfit1,
+  takeProfit2,
+}: {
+  entry: number;
+  stopResult: StopLossResult;
+  takeProfit1: number;
+  takeProfit2: number;
+}): StopLossOption[] {
+  const candidates: Array<{
+    price: number;
+    type: StopLossType;
+    isPrimary: boolean;
+  }> = [
+    {
+      price: roundPrice(stopResult.primary),
+      type: stopResult.primaryType,
+      isPrimary: true,
+    },
+  ];
+
+  if (
+    stopResult.alternative !== null &&
+    stopResult.alternativeType !== null
+  ) {
+    candidates.push({
+      price: roundPrice(stopResult.alternative),
+      type: stopResult.alternativeType,
+      isPrimary: false,
+    });
+  }
+
+  const hasTwo = candidates.length === 2;
+
+  const options: StopLossOption[] = candidates.map(
+    (candidate) => ({
+      price: candidate.price,
+      type: candidate.type,
+      distance: hasTwo
+        ? Math.abs(entry - candidate.price) <=
+          Math.abs(
+            entry -
+              (candidate.isPrimary
+                ? (stopResult.alternative as number)
+                : stopResult.primary)
+          )
+          ? "TIGHT"
+          : "WIDE"
+        : null,
+      isPrimary: candidate.isPrimary,
+      riskReward1: calculateRiskReward(
+        entry,
+        candidate.price,
+        takeProfit1
+      ),
+      riskReward2: calculateRiskReward(
+        entry,
+        candidate.price,
+        takeProfit2
+      ),
+    })
+  );
+
+  // Show the tighter stop first when there are two.
+  return options.sort((first, second) => {
+    if (first.distance === second.distance) {
+      return 0;
+    }
+
+    return first.distance === "TIGHT" ? -1 : 1;
+  });
 }
 
 function getTakeProfits({
@@ -486,6 +583,7 @@ function createNoTradeSetup(
     direction: "WAIT",
     entry: null,
     stopLoss: null,
+    stops: [],
     takeProfit1: null,
     takeProfit2: null,
     riskReward1: null,
@@ -549,7 +647,7 @@ export function createTradeSetup({
   });
 
   const riskDistance = Math.abs(
-    entry - stopResult.stopLoss
+    entry - stopResult.primary
   );
 
   if (
@@ -572,7 +670,7 @@ export function createTradeSetup({
 
   const roundedEntry = roundPrice(entry);
   const roundedStopLoss = roundPrice(
-    stopResult.stopLoss
+    stopResult.primary
   );
   const roundedTakeProfit1 = roundPrice(
     targetResult.takeProfit1
@@ -628,10 +726,18 @@ export function createTradeSetup({
     riskReward2
   );
 
+  const stops = buildStopOptions({
+    entry: roundedEntry,
+    stopResult,
+    takeProfit1: roundedTakeProfit1,
+    takeProfit2: roundedTakeProfit2,
+  });
+
   return {
     direction,
     entry: roundedEntry,
     stopLoss: roundedStopLoss,
+    stops,
     takeProfit1: roundedTakeProfit1,
     takeProfit2: roundedTakeProfit2,
     riskReward1,
@@ -643,7 +749,7 @@ export function createTradeSetup({
       quality: finalQuality,
       atr,
       usedStructureStop:
-        stopResult.usedStructure,
+        stopResult.primaryType === "STRUCTURE",
       firstTargetLimitedByStructure:
         targetResult.firstTargetLimitedByStructure,
       secondTargetLimitedByStructure:

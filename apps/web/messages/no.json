@@ -168,7 +168,12 @@
     "quality": "Kvalitet",
     "takeProfit1": "Take-profit 1",
     "takeProfit2": "Take-profit 2",
-    "rr": "RR {value}"
+    "rr": "RR {value}",
+    "stopStructure": "Struktur",
+    "stopAtr": "ATR",
+    "stopTight": "Tett",
+    "stopWide": "Vid",
+    "stopRecommended": "Anbefalt"
   },
   "DashboardHero": {
     "eyebrow": "Drevet av Atlas Engine",

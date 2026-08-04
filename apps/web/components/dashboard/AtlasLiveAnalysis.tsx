@@ -35,10 +35,20 @@ import type { FairValueGapResult } from "@/lib/atlas/fairValueGapEngine";
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
+type StopLossOption = {
+  price: number;
+  type: "STRUCTURE" | "ATR";
+  distance: "TIGHT" | "WIDE" | null;
+  isPrimary: boolean;
+  riskReward1: number | null;
+  riskReward2: number | null;
+};
+
 type TradeSetup = {
   direction: "LONG" | "SHORT" | "WAIT";
   entry: number | null;
   stopLoss: number | null;
+  stops: StopLossOption[];
   takeProfit1: number | null;
   takeProfit2: number | null;
   riskReward1: number | null;

@@ -168,7 +168,12 @@
     "quality": "Qualität",
     "takeProfit1": "Take Profit 1",
     "takeProfit2": "Take Profit 2",
-    "rr": "RR {value}"
+    "rr": "RR {value}",
+    "stopStructure": "Struktur",
+    "stopAtr": "ATR",
+    "stopTight": "Eng",
+    "stopWide": "Weit",
+    "stopRecommended": "Empfohlen"
   },
   "DashboardHero": {
     "eyebrow": "Angetrieben von Atlas Engine",
