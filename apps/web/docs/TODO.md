@@ -62,5 +62,5 @@
 - [x] Full mobiloptimalisering
 - [ ] Ytelsesoptimalisering
 - [x] Lukket betatest (forberedt teknisk: `/signup` krever nå en invitasjonskode når `BETA_INVITE_CODE` er satt i miljøet — allerede satt i produksjon, se Prisma Console → Project env vars for verdien; en flytende "Tilbakemelding"-knapp er lagt til i AppLayout som lagrer fri tekst + hvilken side testeren var på, i en ny `Feedback`-tabell. Selve rekrutteringen av testere er opp til deg)
-- [ ] Feilretting
+- [x] Feilretting (QA-runde gjennom dashboard, coin-side, Portfolio/Journal/Watchlist/Track Record med en midlertidig Pro-konto, Pricing, mobilvisning; fant og fikset `UserMenu.logout` som manglet i oversettelsene og viste rå nøkkeltekst; en periodisk P1017/`ConnectionClosed`-feil fra Postgres-poolen dukket opp under testing men ble bekreftet forbigående — retry løser den umiddelbart, og produksjon svarte 10/10 på gjentatte forespørsler, så ingen kodeendring var nødvendig der)
 - [ ] Endelig dokumentasjon
