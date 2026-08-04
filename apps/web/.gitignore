@@ -48,6 +48,9 @@ next-env.d.ts
 /dev.db-shm
 /dev.db-wal
 
+# leftover SQLite migrations from the Postgres migration (kept locally as a backup)
+/prisma/migrations_sqlite_backup/
+
 # AI agent reference docs bundled by `prisma init` (local tooling aid, not project code)
 /.agents/skills/prisma-*
 /.claude/skills/prisma-*
