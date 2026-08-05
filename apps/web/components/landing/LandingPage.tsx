@@ -54,24 +54,46 @@ export default async function LandingPage({
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-12 md:px-12 md:py-20">
-        <section className="text-center">
-          <p className="text-sm uppercase tracking-[0.2em] text-zinc-500">
-            {t("eyebrow")}
-          </p>
+        <section className="relative overflow-hidden text-center">
+          <div
+            className="pointer-events-none absolute inset-x-0 -top-24 flex justify-center"
+            aria-hidden="true"
+          >
+            <Image
+              src="/logo-mark.png"
+              alt=""
+              width={900}
+              height={900}
+              priority
+              className="h-[320px] w-auto select-none opacity-[0.07] blur-[1px] md:h-[460px]"
+              style={{
+                maskImage:
+                  "radial-gradient(circle at center, black 55%, transparent 78%)",
+                WebkitMaskImage:
+                  "radial-gradient(circle at center, black 55%, transparent 78%)",
+              }}
+            />
+          </div>
 
-          <h1 className="mt-4 text-4xl font-bold md:text-6xl">
-            {t("heroHeadline")}
-          </h1>
+          <div className="relative">
+            <p className="text-sm uppercase tracking-[0.2em] text-zinc-500">
+              {t("eyebrow")}
+            </p>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">
-            {t("heroSubheadline")}
-          </p>
+            <h1 className="mt-4 text-4xl font-bold md:text-6xl">
+              {t("heroHeadline")}
+            </h1>
 
-          <p className="mt-3 text-sm font-medium uppercase tracking-[0.15em] text-blue-400">
-            {t("tagline")}
-          </p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400">
+              {t("heroSubheadline")}
+            </p>
 
-          <div className="mt-8 flex justify-center gap-4">
+            <p className="mt-3 text-sm font-medium uppercase tracking-[0.15em] text-blue-400">
+              {t("tagline")}
+            </p>
+          </div>
+
+          <div className="relative mt-8 flex justify-center gap-4">
             <Link href="/signup">
               <Button size="lg">{t("getStarted")}</Button>
             </Link>
