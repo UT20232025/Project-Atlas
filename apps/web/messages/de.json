@@ -542,6 +542,20 @@
     "summaryTitle": "Atlas-Zusammenfassung",
     "summaryFallback": "Atlas kombiniert Momentum, EMA-Trend, RSI-Stärke und Marktkonfidenz, um zu bestimmen, ob das aktuelle Setup statistisch LONG, SHORT oder WAIT begünstigt."
   },
+  "PortfolioGate": {
+    "title": "Portfolio",
+    "subtitle": "Verfolge deine Positionen mit Live-P&L",
+    "heading": "Portfolio ist eine Pro-Funktion",
+    "description": "Verfolge offene Positionen mit Echtzeit-P&L, Durchschnittspreis und Notizen. Upgrade zum Freischalten.",
+    "button": "Auf Pro upgraden"
+  },
+  "JournalGate": {
+    "title": "Journal",
+    "subtitle": "Protokolliere und lerne aus deinen Trades",
+    "heading": "Journal ist eine Pro-Funktion",
+    "description": "Protokolliere jeden Trade mit Einstieg, Ausstieg, P&L und Notizen und baue mit der Zeit Disziplin auf. Upgrade zum Freischalten.",
+    "button": "Auf Pro upgraden"
+  },
   "TrackRecordGate": {
     "lockedTitle": "Vollständige Historie freischalten",
     "lockedBody": "Sieh jedes verifizierte Signal, Statistiken pro Coin und die komplette Historie mit Genwelth AI Pro.",

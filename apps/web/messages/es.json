@@ -542,6 +542,20 @@
     "summaryTitle": "Resumen de Atlas",
     "summaryFallback": "Atlas combina el impulso, la tendencia EMA, la fuerza del RSI y la confianza del mercado para determinar si el setup actual favorece estadísticamente LONG, SHORT o WAIT."
   },
+  "PortfolioGate": {
+    "title": "Portafolio",
+    "subtitle": "Sigue tus posiciones con P&L en vivo",
+    "heading": "El portafolio es una función Pro",
+    "description": "Sigue posiciones abiertas con P&L en tiempo real, precio medio y notas. Actualiza para desbloquear.",
+    "button": "Actualizar a Pro"
+  },
+  "JournalGate": {
+    "title": "Diario",
+    "subtitle": "Registra y aprende de tus operaciones",
+    "heading": "El diario es una función Pro",
+    "description": "Registra cada operación con entrada, salida, P&L y notas, y desarrolla disciplina con el tiempo. Actualiza para desbloquear.",
+    "button": "Actualizar a Pro"
+  },
   "TrackRecordGate": {
     "lockedTitle": "Desbloquea el historial completo",
     "lockedBody": "Consulta cada señal verificada, estadísticas por moneda y el historial completo con Genwelth AI Pro.",

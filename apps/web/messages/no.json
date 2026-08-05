@@ -542,6 +542,20 @@
     "summaryTitle": "Atlas-sammendrag",
     "summaryFallback": "Atlas kombinerer momentum, EMA-trend, RSI-styrke og markedskonfidens for å avgjøre om det nåværende oppsettet statistisk favoriserer LONG, SHORT eller WAIT."
   },
+  "PortfolioGate": {
+    "title": "Portfolio",
+    "subtitle": "Følg posisjonene dine med live P&L",
+    "heading": "Portfolio er en Pro-funksjon",
+    "description": "Følg åpne posisjoner med sanntids P&L, snittpris og notater. Oppgrader for å låse opp.",
+    "button": "Oppgrader til Pro"
+  },
+  "JournalGate": {
+    "title": "Journal",
+    "subtitle": "Loggfør og lær av handlene dine",
+    "heading": "Journal er en Pro-funksjon",
+    "description": "Loggfør hver handel med inngang, exit, P&L og notater, og bygg disiplin over tid. Oppgrader for å låse opp.",
+    "button": "Oppgrader til Pro"
+  },
   "TrackRecordGate": {
     "lockedTitle": "Lås opp hele historikken",
     "lockedBody": "Se hvert verifiserte signal, statistikk per mynt og full historikk med Genwelth AI Pro.",

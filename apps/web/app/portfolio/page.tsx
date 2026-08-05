@@ -1,11 +1,17 @@
+import { getTranslations } from "next-intl/server";
+
 import AppLayout from "@/components/layout/AppLayout";
 import PortfolioView from "@/components/portfolio/PortfolioView";
 import { MarketProvider } from "@/components/providers/MarketProvider";
+import ProUpsell from "@/components/ui/ProUpsell";
 import { prisma } from "@/lib/db/client";
 import type {
   MarketSymbol,
 } from "@/lib/services/liveMarketService";
-import { requirePro } from "@/lib/subscription/requirePro";
+import {
+  getCurrentUser,
+  hasActiveSubscription,
+} from "@/lib/subscription/requirePro";
 import type {
   PortfolioPositionView,
   TradeDirection,
@@ -14,7 +20,26 @@ import type {
 import { closePosition, createPosition, deletePosition } from "./actions";
 
 export default async function PortfolioPage() {
-  const { id: userId, email } = await requirePro();
+  const user = await getCurrentUser();
+
+  if (!hasActiveSubscription(user)) {
+    const t = await getTranslations("PortfolioGate");
+
+    return (
+      <AppLayout userEmail={user.email} isPro={false}>
+        <ProUpsell
+          emoji="💼"
+          title={t("title")}
+          subtitle={t("subtitle")}
+          heading={t("heading")}
+          description={t("description")}
+          buttonLabel={t("button")}
+        />
+      </AppLayout>
+    );
+  }
+
+  const { id: userId, email } = user;
 
   const positions = await prisma.position.findMany({
     where: { userId },
