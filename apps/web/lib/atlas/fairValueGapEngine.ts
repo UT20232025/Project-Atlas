@@ -14,6 +14,8 @@ export type FairValueGap = {
   candleIndex: number;
 
   filled: boolean;
+  // 0 = untouched, 100 = price reached the midpoint (fully filled).
+  fillPercent: number;
   strength: number;
 };
 
@@ -82,6 +84,7 @@ function findBullishFairValueGaps(
         (third.low + first.high) / 2,
       candleIndex: i,
       filled: false,
+      fillPercent: 0,
       strength: Math.round(
         clamp(
           ((third.low - first.high) /
@@ -117,6 +120,7 @@ function findBearishFairValueGaps(
         (first.low + third.high) / 2,
       candleIndex: i,
       filled: false,
+      fillPercent: 0,
       strength: Math.round(
         clamp(
           ((first.low - third.high) /
@@ -136,14 +140,24 @@ function updateFilledStatus(
   candles: AtlasCandle[]
 ): FairValueGap[] {
   return gaps.map((gap) => {
+    const after = candles.slice(
+      gap.candleIndex + 1
+    );
+
     let filled = false;
 
-    for (
-      let i = gap.candleIndex + 1;
-      i < candles.length;
-      i += 1
-    ) {
-      const candle = candles[i];
+    // How far price has penetrated the gap toward its midpoint.
+    let deepest =
+      gap.direction === "BULLISH"
+        ? gap.high
+        : gap.low;
+
+    for (const candle of after) {
+      if (gap.direction === "BULLISH") {
+        deepest = Math.min(deepest, candle.low);
+      } else {
+        deepest = Math.max(deepest, candle.high);
+      }
 
       if (
         candle.low <= gap.midpoint &&
@@ -154,9 +168,32 @@ function updateFilledStatus(
       }
     }
 
+    const distanceToMidpoint =
+      gap.direction === "BULLISH"
+        ? gap.high - gap.midpoint
+        : gap.midpoint - gap.low;
+
+    const penetration =
+      gap.direction === "BULLISH"
+        ? gap.high - deepest
+        : deepest - gap.low;
+
+    const fillPercent = filled
+      ? 100
+      : distanceToMidpoint > 0
+      ? Math.round(
+          clamp(
+            (penetration / distanceToMidpoint) * 100,
+            0,
+            100
+          )
+        )
+      : 0;
+
     return {
       ...gap,
       filled,
+      fillPercent,
     };
   });
 }

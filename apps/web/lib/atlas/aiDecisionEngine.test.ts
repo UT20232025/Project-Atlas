@@ -27,6 +27,7 @@ function fakeFairValueGap(strength: number): FairValueGap {
     midpoint: 95,
     candleIndex: 0,
     filled: false,
+    fillPercent: 0,
     strength,
   };
 }
@@ -262,8 +263,10 @@ describe("makeAtlasDecision", () => {
       })
     );
 
+    // Order block: round(80/100*10)=8 plus a +3 bonus for strength >= 70,
+    // and fair value gap: round(100/100*8)=8 → 19.
     expect(
       withZones.bearishScore - withoutZones.bearishScore
-    ).toBe(16);
+    ).toBe(19);
   });
 });

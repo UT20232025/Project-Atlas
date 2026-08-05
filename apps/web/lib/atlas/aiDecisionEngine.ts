@@ -395,27 +395,35 @@ if (
 if (
   input.orderBlocks.nearestBullishOrderBlock
 ) {
-  bullishScore += Math.round(
-    (input.orderBlocks.nearestBullishOrderBlock
-      .strength /
-      100) *
-      10
-  );
+  const strength =
+    input.orderBlocks.nearestBullishOrderBlock
+      .strength;
 
-  bullishReasons.push({ code: "ORDER_BLOCK_BULLISH_SUPPORT" });
+  bullishScore +=
+    Math.round((strength / 100) * 10) +
+    (strength >= 70 ? 3 : 0);
+
+  bullishReasons.push({
+    code: "ORDER_BLOCK_BULLISH_SUPPORT",
+    params: { strength },
+  });
 }
 
 if (
   input.orderBlocks.nearestBearishOrderBlock
 ) {
-  bearishScore += Math.round(
-    (input.orderBlocks.nearestBearishOrderBlock
-      .strength /
-      100) *
-      10
-  );
+  const strength =
+    input.orderBlocks.nearestBearishOrderBlock
+      .strength;
 
-  bearishReasons.push({ code: "ORDER_BLOCK_BEARISH_RESISTANCE" });
+  bearishScore +=
+    Math.round((strength / 100) * 10) +
+    (strength >= 70 ? 3 : 0);
+
+  bearishReasons.push({
+    code: "ORDER_BLOCK_BEARISH_RESISTANCE",
+    params: { strength },
+  });
 }
 
 // ----- Fair Value Gaps -----
@@ -423,27 +431,39 @@ if (
 if (
   input.fairValueGaps.nearestBullishFairValueGap
 ) {
+  const gap =
+    input.fairValueGaps.nearestBullishFairValueGap;
+
   bullishScore += Math.round(
-    (input.fairValueGaps.nearestBullishFairValueGap
-      .strength /
-      100) *
-      8
+    (gap.strength / 100) * 8
   );
 
-  bullishReasons.push({ code: "FVG_BULLISH_CONTINUATION" });
+  bullishReasons.push({
+    code: "FVG_BULLISH_CONTINUATION",
+    params: {
+      strength: gap.strength,
+      fill: gap.fillPercent,
+    },
+  });
 }
 
 if (
   input.fairValueGaps.nearestBearishFairValueGap
 ) {
+  const gap =
+    input.fairValueGaps.nearestBearishFairValueGap;
+
   bearishScore += Math.round(
-    (input.fairValueGaps.nearestBearishFairValueGap
-      .strength /
-      100) *
-      8
+    (gap.strength / 100) * 8
   );
 
-  bearishReasons.push({ code: "FVG_BEARISH_CONTINUATION" });
+  bearishReasons.push({
+    code: "FVG_BEARISH_CONTINUATION",
+    params: {
+      strength: gap.strength,
+      fill: gap.fillPercent,
+    },
+  });
 }
 
 // ----- VWAP -----
