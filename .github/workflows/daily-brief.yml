@@ -1,0 +1,21 @@
+name: Daily market brief
+
+# Posts Genwelth's daily market brief to Telegram once a day.
+# Requires a repository secret CRON_SECRET matching the app's CRON_SECRET env.
+
+on:
+  schedule:
+    # 08:00 UTC every day. Adjust the time as you like.
+    - cron: "0 8 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  post-brief:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger daily brief endpoint
+        run: |
+          curl -fsS --max-time 120 \
+            "https://www.genwelth.com/api/cron/daily-brief?key=${CRON_SECRET}"
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
