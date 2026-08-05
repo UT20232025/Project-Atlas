@@ -54,6 +54,10 @@ import type {
   AdxResult,
 } from "@/lib/atlas/adxEngine";
 
+import type {
+  VolumeProfileResult,
+} from "@/lib/atlas/volumeProfileEngine";
+
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type AtlasDecisionStrength =
@@ -78,6 +82,7 @@ premiumDiscount: PremiumDiscountResult;
 session: SessionResult;
 fibonacci: FibonacciResult;
 adx: AdxResult;
+volumeProfile: VolumeProfileResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -544,6 +549,32 @@ if (
   bearishReasons.push({
     code: "ADX_TREND_BEARISH",
     params: { adx: Math.round(input.adx.adx) },
+  });
+}
+
+// ----- Volume Profile (Point of Control) -----
+
+if (
+  input.volumeProfile.bias === "BULLISH" &&
+  input.volumeProfile.poc !== null
+) {
+  bullishScore += 8;
+
+  bullishReasons.push({
+    code: "VOLUME_PROFILE_ABOVE_POC",
+    params: { poc: String(input.volumeProfile.poc) },
+  });
+}
+
+if (
+  input.volumeProfile.bias === "BEARISH" &&
+  input.volumeProfile.poc !== null
+) {
+  bearishScore += 8;
+
+  bearishReasons.push({
+    code: "VOLUME_PROFILE_BELOW_POC",
+    params: { poc: String(input.volumeProfile.poc) },
   });
 }
 

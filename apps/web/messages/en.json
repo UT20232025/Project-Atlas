@@ -701,6 +701,8 @@
     "FIB_GOLDEN_POCKET_SHORT": "Price is retesting the Fibonacci golden pocket (0.618–0.786) — bearish entry zone.",
     "ADX_TREND_BULLISH": "Strong directional uptrend — ADX {adx}.",
     "ADX_TREND_BEARISH": "Strong directional downtrend — ADX {adx}.",
+    "VOLUME_PROFILE_ABOVE_POC": "Price is above the point of control ({poc}) — buyers in control.",
+    "VOLUME_PROFILE_BELOW_POC": "Price is below the point of control ({poc}) — sellers in control.",
     "VOLUME_BEARISH_PRESSURE": "Volume analysis confirms bearish selling pressure.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine confirms a bullish structure.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine confirms a bearish structure.",

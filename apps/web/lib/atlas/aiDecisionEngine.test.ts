@@ -125,6 +125,13 @@ function buildInput(
       trend: "NONE",
     },
 
+    volumeProfile: {
+      poc: null,
+      bias: "NEUTRAL",
+      price: 0,
+      distancePercent: 0,
+    },
+
     risk: {
       confidence: 50,
       validTrade: true,

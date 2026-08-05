@@ -52,6 +52,10 @@ import {
   type AdxResult,
 } from "@/lib/atlas/adxEngine";
 import {
+  analyzeVolumeProfile,
+  type VolumeProfileResult,
+} from "@/lib/atlas/volumeProfileEngine";
+import {
   analyzeMarketStructure,
   type MarketStructureResult,
 } from "@/lib/atlas/marketStructureEngine";
@@ -128,6 +132,7 @@ premiumDiscount: PremiumDiscountResult;
 session: SessionResult;
 fibonacci: FibonacciResult;
 adx: AdxResult;
+volumeProfile: VolumeProfileResult;
 };
 
 export type AtlasAnalysisResponse = {
@@ -360,6 +365,9 @@ const fibonacci = analyzeFibonacci(candles);
 
 const adx = analyzeAdx(candles);
 
+const volumeProfile =
+  analyzeVolumeProfile(candles);
+
  return {
   interval,
   candles,
@@ -382,6 +390,7 @@ const adx = analyzeAdx(candles);
   session,
   fibonacci,
   adx,
+  volumeProfile,
 };
 }
 
@@ -542,6 +551,9 @@ const decision =
 
     adx:
       requestedSnapshot.adx,
+
+    volumeProfile:
+      requestedSnapshot.volumeProfile,
 
     risk,
   });
