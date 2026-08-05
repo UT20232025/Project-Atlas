@@ -697,6 +697,8 @@
     "PREMIUM_DISCOUNT_PREMIUM": "Prisen er i premium-sonen — gunstig for SHORT.",
     "SESSION_LONDON_KILLZONE": "Signalet kom i London-killzone — vindu med høy likviditet.",
     "SESSION_NY_KILLZONE": "Signalet kom i New York-killzone — vindu med høy likviditet.",
+    "FIB_GOLDEN_POCKET_LONG": "Prisen retester Fibonacci golden pocket (0.618–0.786) — bullish inngangssone.",
+    "FIB_GOLDEN_POCKET_SHORT": "Prisen retester Fibonacci golden pocket (0.618–0.786) — bearish inngangssone.",
     "VOLUME_BEARISH_PRESSURE": "Volumanalysen bekrefter bearish salgspress.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine bekrefter en bullish struktur.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine bekrefter en bearish struktur.",

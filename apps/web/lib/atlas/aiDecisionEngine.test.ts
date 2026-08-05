@@ -108,6 +108,15 @@ function buildInput(
       hourUtc: 20,
     },
 
+    fibonacci: {
+      inGoldenPocket: false,
+      direction: "NONE",
+      swingHigh: null,
+      swingLow: null,
+      goldenPocketLow: null,
+      goldenPocketHigh: null,
+    },
+
     risk: {
       confidence: 50,
       validTrade: true,

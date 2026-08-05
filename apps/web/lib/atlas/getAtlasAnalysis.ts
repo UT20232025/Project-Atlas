@@ -44,6 +44,10 @@ import {
   type SessionResult,
 } from "@/lib/atlas/sessionEngine";
 import {
+  analyzeFibonacci,
+  type FibonacciResult,
+} from "@/lib/atlas/fibonacciEngine";
+import {
   analyzeMarketStructure,
   type MarketStructureResult,
 } from "@/lib/atlas/marketStructureEngine";
@@ -118,6 +122,7 @@ fairValueGaps: FairValueGapResult;
 vwap: VwapResult;
 premiumDiscount: PremiumDiscountResult;
 session: SessionResult;
+fibonacci: FibonacciResult;
 };
 
 export type AtlasAnalysisResponse = {
@@ -346,6 +351,8 @@ const premiumDiscount =
 
 const session = analyzeSession();
 
+const fibonacci = analyzeFibonacci(candles);
+
  return {
   interval,
   candles,
@@ -366,6 +373,7 @@ const session = analyzeSession();
   vwap,
   premiumDiscount,
   session,
+  fibonacci,
 };
 }
 
@@ -520,6 +528,9 @@ const decision =
 
     session:
       requestedSnapshot.session,
+
+    fibonacci:
+      requestedSnapshot.fibonacci,
 
     risk,
   });

@@ -46,6 +46,10 @@ import type {
   SessionResult,
 } from "@/lib/atlas/sessionEngine";
 
+import type {
+  FibonacciResult,
+} from "@/lib/atlas/fibonacciEngine";
+
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type AtlasDecisionStrength =
@@ -68,6 +72,7 @@ fairValueGaps: FairValueGapResult;
 vwap: VwapResult;
 premiumDiscount: PremiumDiscountResult;
 session: SessionResult;
+fibonacci: FibonacciResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -489,6 +494,24 @@ if (
 
   bullishReasons.push({ code: "SESSION_NY_KILLZONE" });
   bearishReasons.push({ code: "SESSION_NY_KILLZONE" });
+}
+
+// ----- Fibonacci golden pocket -----
+
+if (
+  input.fibonacci.direction === "BULLISH"
+) {
+  bullishScore += 8;
+
+  bullishReasons.push({ code: "FIB_GOLDEN_POCKET_LONG" });
+}
+
+if (
+  input.fibonacci.direction === "BEARISH"
+) {
+  bearishScore += 8;
+
+  bearishReasons.push({ code: "FIB_GOLDEN_POCKET_SHORT" });
 }
 
   if (

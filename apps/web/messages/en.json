@@ -697,6 +697,8 @@
     "PREMIUM_DISCOUNT_PREMIUM": "Price is in the premium zone — favorable for shorts.",
     "SESSION_LONDON_KILLZONE": "Signal fired during the London killzone — high-liquidity window.",
     "SESSION_NY_KILLZONE": "Signal fired during the New York killzone — high-liquidity window.",
+    "FIB_GOLDEN_POCKET_LONG": "Price is retesting the Fibonacci golden pocket (0.618–0.786) — bullish entry zone.",
+    "FIB_GOLDEN_POCKET_SHORT": "Price is retesting the Fibonacci golden pocket (0.618–0.786) — bearish entry zone.",
     "VOLUME_BEARISH_PRESSURE": "Volume analysis confirms bearish selling pressure.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine confirms a bullish structure.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine confirms a bearish structure.",

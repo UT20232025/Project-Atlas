@@ -697,6 +697,8 @@
     "PREMIUM_DISCOUNT_PREMIUM": "Der Preis ist in der Premium-Zone — günstig für Shorts.",
     "SESSION_LONDON_KILLZONE": "Signal in der London-Killzone — Fenster hoher Liquidität.",
     "SESSION_NY_KILLZONE": "Signal in der New-York-Killzone — Fenster hoher Liquidität.",
+    "FIB_GOLDEN_POCKET_LONG": "Der Preis retestet die Fibonacci-Golden-Pocket (0.618–0.786) — bullische Einstiegszone.",
+    "FIB_GOLDEN_POCKET_SHORT": "Der Preis retestet die Fibonacci-Golden-Pocket (0.618–0.786) — bärische Einstiegszone.",
     "VOLUME_BEARISH_PRESSURE": "Die Volumenanalyse bestätigt bearischen Verkaufsdruck.",
     "MARKET_STRUCTURE_BULLISH": "Die Market Structure Engine bestätigt eine bullische Struktur.",
     "MARKET_STRUCTURE_BEARISH": "Die Market Structure Engine bestätigt eine bearische Struktur.",

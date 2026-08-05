@@ -697,6 +697,8 @@
     "PREMIUM_DISCOUNT_PREMIUM": "El precio está en la zona premium — favorable para cortos.",
     "SESSION_LONDON_KILLZONE": "Señal en la killzone de Londres — ventana de alta liquidez.",
     "SESSION_NY_KILLZONE": "Señal en la killzone de Nueva York — ventana de alta liquidez.",
+    "FIB_GOLDEN_POCKET_LONG": "El precio está retesteando el golden pocket de Fibonacci (0.618–0.786) — zona de entrada alcista.",
+    "FIB_GOLDEN_POCKET_SHORT": "El precio está retesteando el golden pocket de Fibonacci (0.618–0.786) — zona de entrada bajista.",
     "VOLUME_BEARISH_PRESSURE": "El análisis de volumen confirma presión vendedora bajista.",
     "MARKET_STRUCTURE_BULLISH": "El Market Structure Engine confirma una estructura alcista.",
     "MARKET_STRUCTURE_BEARISH": "El Market Structure Engine confirma una estructura bajista.",
