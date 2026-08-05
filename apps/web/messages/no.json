@@ -527,7 +527,14 @@
     "largestTrade": "Største enkelthandel: ${amount} ({side})"
   },
   "AtlasExplain": {
-    "whyChose": "🤖 Hvorfor Atlas valgte {signal}",
+    "whyChose": "Hvorfor Atlas valgte {signal}",
+    "eyebrow": "Atlas-vurdering",
+    "reasonsTitle": "Derfor",
+    "risksTitle": "Vær obs på",
+    "entry": "Inngang",
+    "stopLoss": "Stop-loss",
+    "takeProfit": "Take-profit",
+    "riskReward": "Risiko / gevinst",
     "subtitle": "AI-forklaring av det nåværende oppsettet",
     "confidence": "Konfidens",
     "summaryTitle": "Atlas-sammendrag",

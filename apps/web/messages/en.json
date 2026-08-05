@@ -527,7 +527,14 @@
     "largestTrade": "Largest single trade: ${amount} ({side})"
   },
   "AtlasExplain": {
-    "whyChose": "🤖 Why Atlas chose {signal}",
+    "whyChose": "Why Atlas chose {signal}",
+    "eyebrow": "Atlas verdict",
+    "reasonsTitle": "Why",
+    "risksTitle": "Watch for",
+    "entry": "Entry",
+    "stopLoss": "Stop-loss",
+    "takeProfit": "Take-profit",
+    "riskReward": "Risk / reward",
     "subtitle": "AI explanation of the current setup",
     "confidence": "Confidence",
     "summaryTitle": "Atlas Summary",

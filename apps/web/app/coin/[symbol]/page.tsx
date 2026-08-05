@@ -131,6 +131,20 @@ export default async function CoinPage({ params }: Props) {
         />
       </div>
 
+      <div className="mt-6">
+        <AtlasExplain
+          signal={decision.signal}
+          confidence={decision.confidence}
+          reasons={decision.reasons}
+          warnings={decision.warnings}
+          explanation={decision.explanation}
+          entry={decision.entry}
+          stopLoss={decision.stopLoss}
+          takeProfit={decision.takeProfit}
+          riskRewardRatio={decision.riskRewardRatio}
+        />
+      </div>
+
       <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">
           <p className="text-zinc-400">{t("change24h")}</p>
@@ -194,16 +208,6 @@ export default async function CoinPage({ params }: Props) {
 
       <div className="mt-8">
         <MACDChart values={macdHistory} />
-      </div>
-
-      <div className="mt-8">
-        <AtlasExplain
-          signal={decisionAnalysis.decision.signal}
-          confidence={decisionAnalysis.decision.confidence}
-          reasons={decisionAnalysis.decision.reasons}
-          warnings={decisionAnalysis.decision.warnings}
-          explanation={decisionAnalysis.decision.explanation}
-        />
       </div>
 
       <div className="mt-8">
