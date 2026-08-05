@@ -691,6 +691,8 @@
     "LIQUIDITY_BEARISH_SWEEP": "Uma varredura de liquidez de baixa é confirmada acima da liquidez.",
     "LIQUIDITY_BOTH_SWEEPS": "Existem varreduras de liquidez de alta e de baixa na janela de candles analisada.",
     "VOLUME_BULLISH_PRESSURE": "A análise de volume confirma pressão compradora de alta.",
+    "VWAP_PRICE_ABOVE": "O preço está a negociar acima do VWAP diário — viés de alta.",
+    "VWAP_PRICE_BELOW": "O preço está a negociar abaixo do VWAP diário — viés de baixa.",
     "VOLUME_BEARISH_PRESSURE": "A análise de volume confirma pressão vendedora de baixa.",
     "MARKET_STRUCTURE_BULLISH": "O Market Structure Engine confirma uma estrutura de alta.",
     "MARKET_STRUCTURE_BEARISH": "O Market Structure Engine confirma uma estrutura de baixa.",

@@ -32,6 +32,10 @@ import {
   type VolumeAnalysisResult,
 } from "@/lib/atlas/volumeEngine";
 import {
+  analyzeVwap,
+  type VwapResult,
+} from "@/lib/atlas/vwapEngine";
+import {
   analyzeMarketStructure,
   type MarketStructureResult,
 } from "@/lib/atlas/marketStructureEngine";
@@ -103,6 +107,7 @@ volume: VolumeAnalysisResult;
 marketStructure: MarketStructureResult;
 orderBlocks: ReturnType<typeof analyzeOrderBlocks>;
 fairValueGaps: FairValueGapResult;
+vwap: VwapResult;
 };
 
 export type AtlasAnalysisResponse = {
@@ -324,6 +329,8 @@ const orderBlocks = analyzeOrderBlocks(candles);
 const fairValueGaps =
   analyzeFairValueGaps(candles);
 
+const vwap = analyzeVwap(candles);
+
  return {
   interval,
   candles,
@@ -341,6 +348,7 @@ const fairValueGaps =
   marketStructure,
   orderBlocks,
   fairValueGaps,
+  vwap,
 };
 }
 
@@ -486,6 +494,9 @@ const decision =
 
     fairValueGaps:
       requestedSnapshot.fairValueGaps,
+
+    vwap:
+      requestedSnapshot.vwap,
 
     risk,
   });

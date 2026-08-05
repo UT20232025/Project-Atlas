@@ -691,6 +691,8 @@
     "LIQUIDITY_BEARISH_SWEEP": "A bearish liquidity sweep is confirmed above liquidity.",
     "LIQUIDITY_BOTH_SWEEPS": "Both bullish and bearish liquidity sweeps exist in the analyzed candle window.",
     "VOLUME_BULLISH_PRESSURE": "Volume analysis confirms bullish buying pressure.",
+    "VWAP_PRICE_ABOVE": "Price is trading above the daily VWAP — bullish bias.",
+    "VWAP_PRICE_BELOW": "Price is trading below the daily VWAP — bearish bias.",
     "VOLUME_BEARISH_PRESSURE": "Volume analysis confirms bearish selling pressure.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine confirms a bullish structure.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine confirms a bearish structure.",

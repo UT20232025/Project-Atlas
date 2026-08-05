@@ -87,6 +87,13 @@ function buildInput(
       nearestBearishFairValueGap: null,
     },
 
+    vwap: {
+      vwap: null,
+      price: 0,
+      bias: "NEUTRAL",
+      distancePercent: 0,
+    },
+
     risk: {
       confidence: 50,
       validTrade: true,

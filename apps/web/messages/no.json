@@ -691,6 +691,8 @@
     "LIQUIDITY_BEARISH_SWEEP": "En bearish likviditetsfeiing er bekreftet over likviditeten.",
     "LIQUIDITY_BOTH_SWEEPS": "Både bullish og bearish likviditetsfeiing finnes i det analyserte candle-vinduet.",
     "VOLUME_BULLISH_PRESSURE": "Volumanalysen bekrefter bullish kjøpspress.",
+    "VWAP_PRICE_ABOVE": "Prisen handles over daglig VWAP — bullish bias.",
+    "VWAP_PRICE_BELOW": "Prisen handles under daglig VWAP — bearish bias.",
     "VOLUME_BEARISH_PRESSURE": "Volumanalysen bekrefter bearish salgspress.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine bekrefter en bullish struktur.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine bekrefter en bearish struktur.",

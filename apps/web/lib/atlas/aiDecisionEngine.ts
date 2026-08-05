@@ -34,6 +34,10 @@ import type {
   TrendEngineResult,
 } from "@/lib/atlas/trendEngine";
 
+import type {
+  VwapResult,
+} from "@/lib/atlas/vwapEngine";
+
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type AtlasDecisionStrength =
@@ -53,6 +57,7 @@ volume: VolumeAnalysisResult;
 marketStructure: MarketStructureResult;
 orderBlocks: OrderBlockResult;
 fairValueGaps: FairValueGapResult;
+vwap: VwapResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -414,6 +419,24 @@ if (
   );
 
   bearishReasons.push({ code: "FVG_BEARISH_CONTINUATION" });
+}
+
+// ----- VWAP -----
+
+if (
+  input.vwap.bias === "BULLISH"
+) {
+  bullishScore += 8;
+
+  bullishReasons.push({ code: "VWAP_PRICE_ABOVE" });
+}
+
+if (
+  input.vwap.bias === "BEARISH"
+) {
+  bearishScore += 8;
+
+  bearishReasons.push({ code: "VWAP_PRICE_BELOW" });
 }
 
   if (

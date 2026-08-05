@@ -691,6 +691,8 @@
     "LIQUIDITY_BEARISH_SWEEP": "Se confirma un barrido de liquidez bajista por encima de la liquidez.",
     "LIQUIDITY_BOTH_SWEEPS": "Existen barridos de liquidez alcistas y bajistas en la ventana de velas analizada.",
     "VOLUME_BULLISH_PRESSURE": "El análisis de volumen confirma presión compradora alcista.",
+    "VWAP_PRICE_ABOVE": "El precio cotiza por encima del VWAP diario — sesgo alcista.",
+    "VWAP_PRICE_BELOW": "El precio cotiza por debajo del VWAP diario — sesgo bajista.",
     "VOLUME_BEARISH_PRESSURE": "El análisis de volumen confirma presión vendedora bajista.",
     "MARKET_STRUCTURE_BULLISH": "El Market Structure Engine confirma una estructura alcista.",
     "MARKET_STRUCTURE_BEARISH": "El Market Structure Engine confirma una estructura bajista.",
