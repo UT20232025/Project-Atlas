@@ -693,6 +693,8 @@
     "VOLUME_BULLISH_PRESSURE": "Volume analysis confirms bullish buying pressure.",
     "VWAP_PRICE_ABOVE": "Price is trading above the daily VWAP — bullish bias.",
     "VWAP_PRICE_BELOW": "Price is trading below the daily VWAP — bearish bias.",
+    "PREMIUM_DISCOUNT_DISCOUNT": "Price is in the discount zone — favorable for longs.",
+    "PREMIUM_DISCOUNT_PREMIUM": "Price is in the premium zone — favorable for shorts.",
     "VOLUME_BEARISH_PRESSURE": "Volume analysis confirms bearish selling pressure.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine confirms a bullish structure.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine confirms a bearish structure.",

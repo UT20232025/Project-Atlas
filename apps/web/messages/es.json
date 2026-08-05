@@ -693,6 +693,8 @@
     "VOLUME_BULLISH_PRESSURE": "El análisis de volumen confirma presión compradora alcista.",
     "VWAP_PRICE_ABOVE": "El precio cotiza por encima del VWAP diario — sesgo alcista.",
     "VWAP_PRICE_BELOW": "El precio cotiza por debajo del VWAP diario — sesgo bajista.",
+    "PREMIUM_DISCOUNT_DISCOUNT": "El precio está en la zona de descuento — favorable para largos.",
+    "PREMIUM_DISCOUNT_PREMIUM": "El precio está en la zona premium — favorable para cortos.",
     "VOLUME_BEARISH_PRESSURE": "El análisis de volumen confirma presión vendedora bajista.",
     "MARKET_STRUCTURE_BULLISH": "El Market Structure Engine confirma una estructura alcista.",
     "MARKET_STRUCTURE_BEARISH": "El Market Structure Engine confirma una estructura bajista.",

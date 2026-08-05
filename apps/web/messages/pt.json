@@ -693,6 +693,8 @@
     "VOLUME_BULLISH_PRESSURE": "A análise de volume confirma pressão compradora de alta.",
     "VWAP_PRICE_ABOVE": "O preço está a negociar acima do VWAP diário — viés de alta.",
     "VWAP_PRICE_BELOW": "O preço está a negociar abaixo do VWAP diário — viés de baixa.",
+    "PREMIUM_DISCOUNT_DISCOUNT": "O preço está na zona de desconto — favorável para longs.",
+    "PREMIUM_DISCOUNT_PREMIUM": "O preço está na zona premium — favorável para shorts.",
     "VOLUME_BEARISH_PRESSURE": "A análise de volume confirma pressão vendedora de baixa.",
     "MARKET_STRUCTURE_BULLISH": "O Market Structure Engine confirma uma estrutura de alta.",
     "MARKET_STRUCTURE_BEARISH": "O Market Structure Engine confirma uma estrutura de baixa.",

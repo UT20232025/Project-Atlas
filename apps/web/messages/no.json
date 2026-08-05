@@ -693,6 +693,8 @@
     "VOLUME_BULLISH_PRESSURE": "Volumanalysen bekrefter bullish kjøpspress.",
     "VWAP_PRICE_ABOVE": "Prisen handles over daglig VWAP — bullish bias.",
     "VWAP_PRICE_BELOW": "Prisen handles under daglig VWAP — bearish bias.",
+    "PREMIUM_DISCOUNT_DISCOUNT": "Prisen er i discount-sonen — gunstig for LONG.",
+    "PREMIUM_DISCOUNT_PREMIUM": "Prisen er i premium-sonen — gunstig for SHORT.",
     "VOLUME_BEARISH_PRESSURE": "Volumanalysen bekrefter bearish salgspress.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine bekrefter en bullish struktur.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine bekrefter en bearish struktur.",

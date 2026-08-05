@@ -38,6 +38,10 @@ import type {
   VwapResult,
 } from "@/lib/atlas/vwapEngine";
 
+import type {
+  PremiumDiscountResult,
+} from "@/lib/atlas/premiumDiscountEngine";
+
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type AtlasDecisionStrength =
@@ -58,6 +62,7 @@ marketStructure: MarketStructureResult;
 orderBlocks: OrderBlockResult;
 fairValueGaps: FairValueGapResult;
 vwap: VwapResult;
+premiumDiscount: PremiumDiscountResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -437,6 +442,24 @@ if (
   bearishScore += 8;
 
   bearishReasons.push({ code: "VWAP_PRICE_BELOW" });
+}
+
+// ----- Premium / Discount -----
+
+if (
+  input.premiumDiscount.zone === "DISCOUNT"
+) {
+  bullishScore += 8;
+
+  bullishReasons.push({ code: "PREMIUM_DISCOUNT_DISCOUNT" });
+}
+
+if (
+  input.premiumDiscount.zone === "PREMIUM"
+) {
+  bearishScore += 8;
+
+  bearishReasons.push({ code: "PREMIUM_DISCOUNT_PREMIUM" });
 }
 
   if (

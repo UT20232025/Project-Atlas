@@ -94,6 +94,14 @@ function buildInput(
       distancePercent: 0,
     },
 
+    premiumDiscount: {
+      zone: "EQUILIBRIUM",
+      rangeHigh: null,
+      rangeLow: null,
+      equilibrium: null,
+      positionPercent: 50,
+    },
+
     risk: {
       confidence: 50,
       validTrade: true,
