@@ -455,6 +455,8 @@
     "csvNote": "Nota"
   },
   "TrackRecord": {
+    "methodologyTitle": "Como medimos isto",
+    "methodologyBody": "Cada sinal LONG/SHORT é registado no momento em que é dado e avaliado automaticamente 24 horas depois face ao preço real de mercado. Uma vitória significa que o preço se moveu na direção do sinal. As perdas são incluídas — nada é ocultado ou editado depois.",
     "title": "Histórico",
     "subtitle": "Resultado verificado em 24h de cada sinal Atlas LONG/SHORT",
     "winRate": "Taxa de acerto",

@@ -455,6 +455,8 @@
     "csvNote": "Nota"
   },
   "TrackRecord": {
+    "methodologyTitle": "Cómo lo medimos",
+    "methodologyBody": "Cada señal LONG/SHORT se registra en el momento en que se emite y se evalúa automáticamente 24 horas después frente al precio real de mercado. Una victoria significa que el precio se movió en la dirección de la señal. Las pérdidas se incluyen: nada se oculta ni se edita a posteriori.",
     "title": "Historial",
     "subtitle": "Resultado verificado a 24h de cada señal Atlas LONG/SHORT",
     "winRate": "Tasa de acierto",

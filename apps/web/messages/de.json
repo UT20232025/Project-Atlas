@@ -455,6 +455,8 @@
     "csvNote": "Notiz"
   },
   "TrackRecord": {
+    "methodologyTitle": "So messen wir das",
+    "methodologyBody": "Jedes LONG/SHORT-Signal wird im Moment der Ausgabe erfasst und 24 Stunden später automatisch am realen Marktpreis ausgewertet. Ein Gewinn bedeutet, der Preis bewegte sich in Signalrichtung. Verluste zählen mit — nichts wird nachträglich versteckt oder bearbeitet.",
     "title": "Erfolgsbilanz",
     "subtitle": "Verifiziertes 24h-Ergebnis für jedes Atlas LONG/SHORT-Signal",
     "winRate": "Trefferquote",

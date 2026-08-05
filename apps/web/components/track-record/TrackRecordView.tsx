@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 
 import Badge from "@/components/ui/Badge";
+import Disclaimer from "@/components/ui/Disclaimer";
 import Section from "@/components/ui/Section";
 import { formatMarketSymbol } from "@/lib/services/liveMarketService";
 import type { TrackRecordSummary } from "@/lib/atlas/trackRecord";
@@ -109,6 +110,15 @@ export default async function TrackRecordView({
                 : "—"}
             </p>
           </div>
+        </div>
+
+        <div className="mt-6 rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+          <p className="text-xs font-semibold uppercase tracking-widest text-zinc-500">
+            {t("methodologyTitle")}
+          </p>
+          <p className="mt-2 text-sm leading-6 text-zinc-400">
+            {t("methodologyBody")}
+          </p>
         </div>
       </Section>
 
@@ -311,6 +321,8 @@ export default async function TrackRecordView({
           </div>
         )}
       </Section>
+
+      <Disclaimer className="pt-2" />
     </div>
   );
 }

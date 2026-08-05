@@ -455,6 +455,8 @@
     "csvNote": "Note"
   },
   "TrackRecord": {
+    "methodologyTitle": "How we measure this",
+    "methodologyBody": "Every LONG/SHORT signal is recorded the moment it's given and evaluated automatically 24 hours later against the real market price. A win means price moved in the signal's direction. Losses are included — nothing is hidden or edited after the fact.",
     "title": "Track Record",
     "subtitle": "Verified 24h outcome of every Atlas LONG/SHORT signal",
     "winRate": "Win rate",

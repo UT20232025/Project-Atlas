@@ -455,6 +455,8 @@
     "csvNote": "Notat"
   },
   "TrackRecord": {
+    "methodologyTitle": "Slik måler vi dette",
+    "methodologyBody": "Hvert LONG/SHORT-signal lagres i det øyeblikket det gis, og evalueres automatisk 24 timer senere mot faktisk markedspris. En «vinner» betyr at prisen beveget seg i signalets retning. Tap telles med — ingenting skjules eller redigeres i etterkant.",
     "title": "Resultatoversikt",
     "subtitle": "Verifisert 24t-utfall for hvert Atlas LONG/SHORT-signal",
     "winRate": "Treffprosent",
