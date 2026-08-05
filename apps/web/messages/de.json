@@ -695,6 +695,8 @@
     "VWAP_PRICE_BELOW": "Der Preis handelt unter dem Tages-VWAP — bärische Tendenz.",
     "PREMIUM_DISCOUNT_DISCOUNT": "Der Preis ist in der Discount-Zone — günstig für Longs.",
     "PREMIUM_DISCOUNT_PREMIUM": "Der Preis ist in der Premium-Zone — günstig für Shorts.",
+    "SESSION_LONDON_KILLZONE": "Signal in der London-Killzone — Fenster hoher Liquidität.",
+    "SESSION_NY_KILLZONE": "Signal in der New-York-Killzone — Fenster hoher Liquidität.",
     "VOLUME_BEARISH_PRESSURE": "Die Volumenanalyse bestätigt bearischen Verkaufsdruck.",
     "MARKET_STRUCTURE_BULLISH": "Die Market Structure Engine bestätigt eine bullische Struktur.",
     "MARKET_STRUCTURE_BEARISH": "Die Market Structure Engine bestätigt eine bearische Struktur.",

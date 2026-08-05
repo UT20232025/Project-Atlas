@@ -40,6 +40,10 @@ import {
   type PremiumDiscountResult,
 } from "@/lib/atlas/premiumDiscountEngine";
 import {
+  analyzeSession,
+  type SessionResult,
+} from "@/lib/atlas/sessionEngine";
+import {
   analyzeMarketStructure,
   type MarketStructureResult,
 } from "@/lib/atlas/marketStructureEngine";
@@ -113,6 +117,7 @@ orderBlocks: ReturnType<typeof analyzeOrderBlocks>;
 fairValueGaps: FairValueGapResult;
 vwap: VwapResult;
 premiumDiscount: PremiumDiscountResult;
+session: SessionResult;
 };
 
 export type AtlasAnalysisResponse = {
@@ -339,6 +344,8 @@ const vwap = analyzeVwap(candles);
 const premiumDiscount =
   analyzePremiumDiscount(candles);
 
+const session = analyzeSession();
+
  return {
   interval,
   candles,
@@ -358,6 +365,7 @@ const premiumDiscount =
   fairValueGaps,
   vwap,
   premiumDiscount,
+  session,
 };
 }
 
@@ -509,6 +517,9 @@ const decision =
 
     premiumDiscount:
       requestedSnapshot.premiumDiscount,
+
+    session:
+      requestedSnapshot.session,
 
     risk,
   });

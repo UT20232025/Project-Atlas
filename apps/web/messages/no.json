@@ -695,6 +695,8 @@
     "VWAP_PRICE_BELOW": "Prisen handles under daglig VWAP — bearish bias.",
     "PREMIUM_DISCOUNT_DISCOUNT": "Prisen er i discount-sonen — gunstig for LONG.",
     "PREMIUM_DISCOUNT_PREMIUM": "Prisen er i premium-sonen — gunstig for SHORT.",
+    "SESSION_LONDON_KILLZONE": "Signalet kom i London-killzone — vindu med høy likviditet.",
+    "SESSION_NY_KILLZONE": "Signalet kom i New York-killzone — vindu med høy likviditet.",
     "VOLUME_BEARISH_PRESSURE": "Volumanalysen bekrefter bearish salgspress.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine bekrefter en bullish struktur.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine bekrefter en bearish struktur.",

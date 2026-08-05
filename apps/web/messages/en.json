@@ -695,6 +695,8 @@
     "VWAP_PRICE_BELOW": "Price is trading below the daily VWAP — bearish bias.",
     "PREMIUM_DISCOUNT_DISCOUNT": "Price is in the discount zone — favorable for longs.",
     "PREMIUM_DISCOUNT_PREMIUM": "Price is in the premium zone — favorable for shorts.",
+    "SESSION_LONDON_KILLZONE": "Signal fired during the London killzone — high-liquidity window.",
+    "SESSION_NY_KILLZONE": "Signal fired during the New York killzone — high-liquidity window.",
     "VOLUME_BEARISH_PRESSURE": "Volume analysis confirms bearish selling pressure.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine confirms a bullish structure.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine confirms a bearish structure.",

@@ -102,6 +102,12 @@ function buildInput(
       positionPercent: 50,
     },
 
+    session: {
+      zone: "OFF_HOURS",
+      inKillzone: false,
+      hourUtc: 20,
+    },
+
     risk: {
       confidence: 50,
       validTrade: true,

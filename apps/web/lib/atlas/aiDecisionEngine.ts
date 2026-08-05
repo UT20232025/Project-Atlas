@@ -42,6 +42,10 @@ import type {
   PremiumDiscountResult,
 } from "@/lib/atlas/premiumDiscountEngine";
 
+import type {
+  SessionResult,
+} from "@/lib/atlas/sessionEngine";
+
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type AtlasDecisionStrength =
@@ -63,6 +67,7 @@ orderBlocks: OrderBlockResult;
 fairValueGaps: FairValueGapResult;
 vwap: VwapResult;
 premiumDiscount: PremiumDiscountResult;
+session: SessionResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -460,6 +465,30 @@ if (
   bearishScore += 8;
 
   bearishReasons.push({ code: "PREMIUM_DISCOUNT_PREMIUM" });
+}
+
+// ----- Session (killzone timing) -----
+// Non-directional: reinforces whichever side leads and surfaces as a
+// timing-quality reason regardless of the final direction.
+
+if (
+  input.session.zone === "LONDON_KILLZONE"
+) {
+  bullishScore += 4;
+  bearishScore += 4;
+
+  bullishReasons.push({ code: "SESSION_LONDON_KILLZONE" });
+  bearishReasons.push({ code: "SESSION_LONDON_KILLZONE" });
+}
+
+if (
+  input.session.zone === "NEW_YORK_KILLZONE"
+) {
+  bullishScore += 4;
+  bearishScore += 4;
+
+  bullishReasons.push({ code: "SESSION_NY_KILLZONE" });
+  bearishReasons.push({ code: "SESSION_NY_KILLZONE" });
 }
 
   if (
