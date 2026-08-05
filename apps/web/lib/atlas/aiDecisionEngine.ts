@@ -50,6 +50,10 @@ import type {
   FibonacciResult,
 } from "@/lib/atlas/fibonacciEngine";
 
+import type {
+  AdxResult,
+} from "@/lib/atlas/adxEngine";
+
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type AtlasDecisionStrength =
@@ -73,6 +77,7 @@ vwap: VwapResult;
 premiumDiscount: PremiumDiscountResult;
 session: SessionResult;
 fibonacci: FibonacciResult;
+adx: AdxResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -512,6 +517,34 @@ if (
   bearishScore += 8;
 
   bearishReasons.push({ code: "FIB_GOLDEN_POCKET_SHORT" });
+}
+
+// ----- ADX (trend strength) -----
+
+if (
+  input.adx.trend === "BULLISH" &&
+  input.adx.adx !== null
+) {
+  bullishScore +=
+    input.adx.strength === "STRONG" ? 10 : 6;
+
+  bullishReasons.push({
+    code: "ADX_TREND_BULLISH",
+    params: { adx: Math.round(input.adx.adx) },
+  });
+}
+
+if (
+  input.adx.trend === "BEARISH" &&
+  input.adx.adx !== null
+) {
+  bearishScore +=
+    input.adx.strength === "STRONG" ? 10 : 6;
+
+  bearishReasons.push({
+    code: "ADX_TREND_BEARISH",
+    params: { adx: Math.round(input.adx.adx) },
+  });
 }
 
   if (

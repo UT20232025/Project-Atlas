@@ -699,6 +699,8 @@
     "SESSION_NY_KILLZONE": "Signalet kom i New York-killzone — vindu med høy likviditet.",
     "FIB_GOLDEN_POCKET_LONG": "Prisen retester Fibonacci golden pocket (0.618–0.786) — bullish inngangssone.",
     "FIB_GOLDEN_POCKET_SHORT": "Prisen retester Fibonacci golden pocket (0.618–0.786) — bearish inngangssone.",
+    "ADX_TREND_BULLISH": "Sterk trend opp — ADX {adx}.",
+    "ADX_TREND_BEARISH": "Sterk trend ned — ADX {adx}.",
     "VOLUME_BEARISH_PRESSURE": "Volumanalysen bekrefter bearish salgspress.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine bekrefter en bullish struktur.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine bekrefter en bearish struktur.",

@@ -117,6 +117,14 @@ function buildInput(
       goldenPocketHigh: null,
     },
 
+    adx: {
+      adx: null,
+      plusDi: null,
+      minusDi: null,
+      strength: "NONE",
+      trend: "NONE",
+    },
+
     risk: {
       confidence: 50,
       validTrade: true,

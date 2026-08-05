@@ -699,6 +699,8 @@
     "SESSION_NY_KILLZONE": "Señal en la killzone de Nueva York — ventana de alta liquidez.",
     "FIB_GOLDEN_POCKET_LONG": "El precio está retesteando el golden pocket de Fibonacci (0.618–0.786) — zona de entrada alcista.",
     "FIB_GOLDEN_POCKET_SHORT": "El precio está retesteando el golden pocket de Fibonacci (0.618–0.786) — zona de entrada bajista.",
+    "ADX_TREND_BULLISH": "Tendencia direccional fuerte al alza — ADX {adx}.",
+    "ADX_TREND_BEARISH": "Tendencia direccional fuerte a la baja — ADX {adx}.",
     "VOLUME_BEARISH_PRESSURE": "El análisis de volumen confirma presión vendedora bajista.",
     "MARKET_STRUCTURE_BULLISH": "El Market Structure Engine confirma una estructura alcista.",
     "MARKET_STRUCTURE_BEARISH": "El Market Structure Engine confirma una estructura bajista.",
