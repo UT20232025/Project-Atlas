@@ -540,6 +540,14 @@
     "summaryTitle": "Atlas-sammendrag",
     "summaryFallback": "Atlas kombinerer momentum, EMA-trend, RSI-styrke og markedskonfidens for å avgjøre om det nåværende oppsettet statistisk favoriserer LONG, SHORT eller WAIT."
   },
+  "TrackRecordGate": {
+    "lockedTitle": "Lås opp hele historikken",
+    "lockedBody": "Se hvert verifiserte signal, statistikk per mynt og full historikk med Genwelth AI Pro.",
+    "unlockButton": "Oppgrader til Pro"
+  },
+  "Disclaimer": {
+    "text": "Genwelth leverer analyse og signaler til informasjonsformål, ikke finansiell rådgivning. Kryptohandel innebærer betydelig risiko — du handler på eget ansvar."
+  },
   "AtlasScoreBreakdown": {
     "title": "Atlas-score oppdeling",
     "subtitle": "Hvordan den kombinerte scoren beregnes",

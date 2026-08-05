@@ -540,6 +540,14 @@
     "summaryTitle": "Atlas Summary",
     "summaryFallback": "Atlas combines momentum, EMA trend, RSI strength and market confidence to determine whether the current setup statistically favors LONG, SHORT or WAIT."
   },
+  "TrackRecordGate": {
+    "lockedTitle": "Unlock the full history",
+    "lockedBody": "See every verified signal, per-coin stats, and the complete history with Genwelth AI Pro.",
+    "unlockButton": "Upgrade to Pro"
+  },
+  "Disclaimer": {
+    "text": "Genwelth provides analysis and signals for informational purposes, not financial advice. Crypto trading carries significant risk — you trade at your own responsibility."
+  },
   "AtlasScoreBreakdown": {
     "title": "Atlas Score Breakdown",
     "subtitle": "How the combined score is calculated",

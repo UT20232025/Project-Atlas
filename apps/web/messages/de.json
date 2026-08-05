@@ -540,6 +540,14 @@
     "summaryTitle": "Atlas-Zusammenfassung",
     "summaryFallback": "Atlas kombiniert Momentum, EMA-Trend, RSI-Stärke und Marktkonfidenz, um zu bestimmen, ob das aktuelle Setup statistisch LONG, SHORT oder WAIT begünstigt."
   },
+  "TrackRecordGate": {
+    "lockedTitle": "Vollständige Historie freischalten",
+    "lockedBody": "Sieh jedes verifizierte Signal, Statistiken pro Coin und die komplette Historie mit Genwelth AI Pro.",
+    "unlockButton": "Auf Pro upgraden"
+  },
+  "Disclaimer": {
+    "text": "Genwelth stellt Analysen und Signale zu Informationszwecken bereit, keine Finanzberatung. Krypto-Handel birgt erhebliche Risiken — Handeln auf eigene Verantwortung."
+  },
   "AtlasScoreBreakdown": {
     "title": "Atlas-Wert-Aufschlüsselung",
     "subtitle": "Wie der kombinierte Wert berechnet wird",

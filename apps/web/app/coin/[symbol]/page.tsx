@@ -6,6 +6,7 @@ import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBrea
 import SignalHistoryCard from "../../../components/analysis/SignalHistoryCard";
 import CandlestickChart from "../../../components/CandlestickChart";
 import CoinHero from "../../../components/CoinHero";
+import Disclaimer from "../../../components/ui/Disclaimer";
 import EMACard from "../../../components/EMACard";
 import AppLayout from "../../../components/layout/AppLayout";
 import WatchlistButton from "../../../components/watchlist/WatchlistButton";
@@ -143,6 +144,8 @@ export default async function CoinPage({ params }: Props) {
           takeProfit={decision.takeProfit}
           riskRewardRatio={decision.riskRewardRatio}
         />
+
+        <Disclaimer className="mt-3 px-1" />
       </div>
 
       <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
