@@ -8,6 +8,7 @@ import {
   createChart,
   HistogramSeries,
   LineSeries,
+  LineStyle,
   type CandlestickData,
   type HistogramData,
   type LineData,
@@ -25,12 +26,20 @@ type Candle = {
   ema50?: number;
 };
 
+export type ChartPriceLevel = {
+  price: number;
+  color: string;
+  title: string;
+};
+
 type CandlestickChartProps = {
   candles: Candle[];
+  levels?: ChartPriceLevel[];
 };
 
 export default function CandlestickChart({
   candles,
+  levels = [],
 }: CandlestickChartProps) {
   const t = useTranslations("CandlestickChart");
   const chartContainerRef = useRef<HTMLDivElement | null>(null);
@@ -135,6 +144,19 @@ export default function CandlestickChart({
     ema20Series.setData(ema20Data);
     ema50Series.setData(ema50Data);
 
+    // Atlas's key levels as horizontal price lines. lightweight-charts
+    // positions each one on the price scale automatically.
+    for (const level of levels) {
+      candlestickSeries.createPriceLine({
+        price: level.price,
+        color: level.color,
+        lineWidth: 1,
+        lineStyle: LineStyle.Dashed,
+        axisLabelVisible: true,
+        title: level.title,
+      });
+    }
+
     chart.timeScale().fitContent();
 
     const resizeObserver = new ResizeObserver(() => {
@@ -153,7 +175,7 @@ export default function CandlestickChart({
       resizeObserver.disconnect();
       chart.remove();
     };
-  }, [candles]);
+  }, [candles, levels]);
 
   return (
     <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">

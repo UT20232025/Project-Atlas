@@ -93,6 +93,73 @@ export default async function CoinPage({ params }: Props) {
     Math.min(100, Math.max(20, indicators.rawRsi))
   );
 
+  const chartLevels = [
+    decisionAnalysis.priceLevels.resistance !== null && {
+      price: decisionAnalysis.priceLevels.resistance,
+      color: "#ef4444",
+      title: "Resistance",
+    },
+    decisionAnalysis.priceLevels.support !== null && {
+      price: decisionAnalysis.priceLevels.support,
+      color: "#22c55e",
+      title: "Support",
+    },
+    decisionAnalysis.volumeProfile.poc !== null && {
+      price: decisionAnalysis.volumeProfile.poc,
+      color: "#3b82f6",
+      title: "POC",
+    },
+    decisionAnalysis.vwap.vwap !== null && {
+      price: decisionAnalysis.vwap.vwap,
+      color: "#38bdf8",
+      title: "VWAP",
+    },
+    decisionAnalysis.orderBlocks.nearestBullishOrderBlock && {
+      price:
+        decisionAnalysis.orderBlocks
+          .nearestBullishOrderBlock.midpoint,
+      color: "#22c55e",
+      title: "OB↑",
+    },
+    decisionAnalysis.orderBlocks.nearestBearishOrderBlock && {
+      price:
+        decisionAnalysis.orderBlocks
+          .nearestBearishOrderBlock.midpoint,
+      color: "#ef4444",
+      title: "OB↓",
+    },
+    decisionAnalysis.fairValueGaps
+      .nearestBullishFairValueGap && {
+      price:
+        decisionAnalysis.fairValueGaps
+          .nearestBullishFairValueGap.midpoint,
+      color: "#4ade80",
+      title: "FVG↑",
+    },
+    decisionAnalysis.fairValueGaps
+      .nearestBearishFairValueGap && {
+      price:
+        decisionAnalysis.fairValueGaps
+          .nearestBearishFairValueGap.midpoint,
+      color: "#f87171",
+      title: "FVG↓",
+    },
+    decisionAnalysis.fibonacci.goldenPocketLow !== null && {
+      price: decisionAnalysis.fibonacci.goldenPocketLow,
+      color: "#f59e0b",
+      title: "GP",
+    },
+    decisionAnalysis.fibonacci.goldenPocketHigh !== null && {
+      price: decisionAnalysis.fibonacci.goldenPocketHigh,
+      color: "#f59e0b",
+      title: "GP",
+    },
+  ].filter(Boolean) as {
+    price: number;
+    color: string;
+    title: string;
+  }[];
+
   return (
     <AppLayout userEmail={email} isPro={isPro}>
    <div className="flex flex-wrap items-center justify-between gap-4">
@@ -246,7 +313,10 @@ export default async function CoinPage({ params }: Props) {
       </div>
 
       <div className="mt-8">
-        <CandlestickChart candles={candles} />
+        <CandlestickChart
+          candles={candles}
+          levels={chartLevels}
+        />
       </div>
 
       <div className="mt-8">
