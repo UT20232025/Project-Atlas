@@ -1,10 +1,14 @@
-// Admin access is gated by an allowlist of emails in the ADMIN_EMAILS
-// env (comma-separated), kept out of source so it isn't committed.
+// The founder/owner always has admin access. Additional admins can be
+// added via the ADMIN_EMAILS env (comma-separated). The hardcoded owner
+// keeps the admin panel working even if the runtime env isn't set.
+const OWNER_EMAILS = ["christer_gramstad@hotmail.com"];
+
 function getAdminEmails(): string[] {
-  return (process.env.ADMIN_EMAILS ?? "")
+  const fromEnv = (process.env.ADMIN_EMAILS ?? "")
     .split(",")
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean);
+  return [...OWNER_EMAILS.map((e) => e.toLowerCase()), ...fromEnv];
 }
 
 export function isAdmin(email: string): boolean {
