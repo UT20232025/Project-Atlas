@@ -3,6 +3,9 @@ export type VolumeProfileBias = "BULLISH" | "BEARISH" | "NEUTRAL";
 export type VolumeProfileResult = {
   // Point of Control: the most-traded price over the window.
   poc: number | null;
+  // Value area: the price range around the POC holding ~70% of volume.
+  valueAreaHigh: number | null;
+  valueAreaLow: number | null;
   bias: VolumeProfileBias;
   price: number;
   distancePercent: number;
@@ -34,6 +37,8 @@ export function analyzeVolumeProfile(
 
   const none: VolumeProfileResult = {
     poc: null,
+    valueAreaHigh: null,
+    valueAreaLow: null,
     bias: "NEUTRAL",
     price,
     distancePercent: 0,
@@ -113,8 +118,33 @@ export function analyzeVolumeProfile(
       ? "BEARISH"
       : "NEUTRAL";
 
+  // Value area: expand out from the POC bin toward whichever adjacent bin
+  // holds more volume until ~70% of total volume is covered.
+  const targetVolume = totalVolume * 0.7;
+  let low = pocIndex;
+  let high = pocIndex;
+  let covered = bins[pocIndex];
+
+  while (
+    covered < targetVolume &&
+    (low > 0 || high < BINS - 1)
+  ) {
+    const below = low > 0 ? bins[low - 1] : -1;
+    const above = high < BINS - 1 ? bins[high + 1] : -1;
+
+    if (above >= below) {
+      high += 1;
+      covered += above;
+    } else {
+      low -= 1;
+      covered += below;
+    }
+  }
+
   return {
     poc: round(poc),
+    valueAreaHigh: round(rangeLow + (high + 1) * binSize),
+    valueAreaLow: round(rangeLow + low * binSize),
     bias,
     price,
     distancePercent: Number(distancePercent.toFixed(2)),

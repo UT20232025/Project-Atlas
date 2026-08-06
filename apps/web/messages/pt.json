@@ -574,6 +574,8 @@
     "support": "Suporte",
     "resistance": "Resistência",
     "poc": "Ponto de controlo",
+    "valueAreaHigh": "Value area high",
+    "valueAreaLow": "Value area low",
     "vwap": "VWAP",
     "bullishOrderBlock": "Order block de alta",
     "bearishOrderBlock": "Order block de baixa",

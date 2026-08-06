@@ -23,6 +23,16 @@ describe("analyzeVolumeProfile", () => {
     expect(result.poc).not.toBeNull();
     expect(result.poc as number).toBeLessThan(115);
     expect(result.bias).toBe("BULLISH");
+
+    // Value area brackets the POC.
+    expect(result.valueAreaLow).not.toBeNull();
+    expect(result.valueAreaHigh).not.toBeNull();
+    expect(
+      result.valueAreaLow as number
+    ).toBeLessThanOrEqual(result.poc as number);
+    expect(
+      result.valueAreaHigh as number
+    ).toBeGreaterThanOrEqual(result.poc as number);
   });
 
   it("is BEARISH when price trades below the POC", () => {

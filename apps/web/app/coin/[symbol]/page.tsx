@@ -109,6 +109,16 @@ export default async function CoinPage({ params }: Props) {
       color: "#3b82f6",
       title: "POC",
     },
+    decisionAnalysis.volumeProfile.valueAreaHigh !== null && {
+      price: decisionAnalysis.volumeProfile.valueAreaHigh,
+      color: "#7dd3fc",
+      title: "VAH",
+    },
+    decisionAnalysis.volumeProfile.valueAreaLow !== null && {
+      price: decisionAnalysis.volumeProfile.valueAreaLow,
+      color: "#7dd3fc",
+      title: "VAL",
+    },
     decisionAnalysis.vwap.vwap !== null && {
       price: decisionAnalysis.vwap.vwap,
       color: "#38bdf8",
@@ -287,6 +297,12 @@ export default async function CoinPage({ params }: Props) {
           support={decisionAnalysis.priceLevels.support}
           resistance={decisionAnalysis.priceLevels.resistance}
           poc={decisionAnalysis.volumeProfile.poc}
+          valueAreaHigh={
+            decisionAnalysis.volumeProfile.valueAreaHigh
+          }
+          valueAreaLow={
+            decisionAnalysis.volumeProfile.valueAreaLow
+          }
           vwap={decisionAnalysis.vwap.vwap}
           bullishOrderBlock={
             decisionAnalysis.orderBlocks

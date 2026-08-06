@@ -6,6 +6,8 @@ type KeyLevelsCardProps = {
   support: number | null;
   resistance: number | null;
   poc: number | null;
+  valueAreaHigh: number | null;
+  valueAreaLow: number | null;
   vwap: number | null;
   bullishOrderBlock: number | null;
   bearishOrderBlock: number | null;
@@ -35,6 +37,7 @@ export default async function KeyLevelsCard(
     down: "text-red-400",
     neutral: "text-white",
     accent: "text-amber-300",
+    va: "text-sky-300",
   };
 
   const levels: Array<{
@@ -60,6 +63,8 @@ export default async function KeyLevelsCard(
   add(props.resistance, t("resistance"), tone.down);
   add(props.support, t("support"), tone.up);
   add(props.poc, t("poc"), tone.neutral);
+  add(props.valueAreaHigh, t("valueAreaHigh"), tone.va);
+  add(props.valueAreaLow, t("valueAreaLow"), tone.va);
   add(props.vwap, t("vwap"), tone.neutral);
   add(
     props.bullishOrderBlock,
