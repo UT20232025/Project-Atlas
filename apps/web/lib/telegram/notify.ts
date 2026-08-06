@@ -33,11 +33,9 @@ function formatMessage(
 
   lines.push("", "Genwelth AI");
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-
-  if (appUrl) {
-    lines.push(`${appUrl}/login`);
-  }
+  // Branded domain (not build-time NEXT_PUBLIC_APP_URL, which bakes to the
+  // raw Compute URL).
+  lines.push("https://www.genwelth.com/login");
 
   return lines.join("\n");
 }

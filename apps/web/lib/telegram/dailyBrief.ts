@@ -23,10 +23,9 @@ function getMinConfidence(): number {
 }
 
 function getAppUrl(): string {
-  return (
-    process.env.NEXT_PUBLIC_APP_URL ??
-    "https://www.genwelth.com"
-  );
+  // Public marketing post — always link to the branded domain. Not
+  // NEXT_PUBLIC_APP_URL, which bakes to the raw Compute URL at build time.
+  return "https://www.genwelth.com";
 }
 
 /**
