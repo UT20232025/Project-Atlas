@@ -542,6 +542,16 @@
     "summaryTitle": "Atlas-Zusammenfassung",
     "summaryFallback": "Atlas kombiniert Momentum, EMA-Trend, RSI-Stärke und Marktkonfidenz, um zu bestimmen, ob das aktuelle Setup statistisch LONG, SHORT oder WAIT begünstigt."
   },
+  "Admin": {
+    "title": "Admin",
+    "subtitle": "Genwelth-Kennzahlen — nur für dich sichtbar",
+    "totalUsers": "Nutzer gesamt",
+    "activeSubscribers": "Aktive Abonnenten",
+    "paying": "Zahlend (aktiv)",
+    "trialing": "In Testphase",
+    "conversion": "Conversion-Rate",
+    "newThisWeek": "Neu in 7 Tagen"
+  },
   "Onboarding": {
     "eyebrow": "Erste Schritte",
     "heading": "Hol das Meiste aus Genwelth heraus",

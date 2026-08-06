@@ -542,6 +542,16 @@
     "summaryTitle": "Atlas-sammendrag",
     "summaryFallback": "Atlas kombinerer momentum, EMA-trend, RSI-styrke og markedskonfidens for å avgjøre om det nåværende oppsettet statistisk favoriserer LONG, SHORT eller WAIT."
   },
+  "Admin": {
+    "title": "Admin",
+    "subtitle": "Nøkkeltall for Genwelth — kun synlig for deg",
+    "totalUsers": "Totalt antall brukere",
+    "activeSubscribers": "Aktive abonnenter",
+    "paying": "Betalende (aktiv)",
+    "trialing": "På prøveperiode",
+    "conversion": "Konverteringsrate",
+    "newThisWeek": "Nye siste 7 dager"
+  },
   "Onboarding": {
     "eyebrow": "Kom i gang",
     "heading": "Slik får du mest ut av Genwelth",

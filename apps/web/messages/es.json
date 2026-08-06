@@ -542,6 +542,16 @@
     "summaryTitle": "Resumen de Atlas",
     "summaryFallback": "Atlas combina el impulso, la tendencia EMA, la fuerza del RSI y la confianza del mercado para determinar si el setup actual favorece estadísticamente LONG, SHORT o WAIT."
   },
+  "Admin": {
+    "title": "Admin",
+    "subtitle": "Métricas clave de Genwelth — solo visible para ti",
+    "totalUsers": "Usuarios totales",
+    "activeSubscribers": "Suscriptores activos",
+    "paying": "De pago (activo)",
+    "trialing": "En prueba",
+    "conversion": "Tasa de conversión",
+    "newThisWeek": "Nuevos en 7 días"
+  },
   "Onboarding": {
     "eyebrow": "Primeros pasos",
     "heading": "Aprovecha Genwelth al máximo",
