@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
+import KeyLevelsCard from "../../../components/analysis/KeyLevelsCard";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
 import SignalHistoryCard from "../../../components/analysis/SignalHistoryCard";
 import CandlestickChart from "../../../components/CandlestickChart";
@@ -198,6 +199,37 @@ export default async function CoinPage({ params }: Props) {
           analysis={decisionAnalysis.analysis}
           bullishScore={decisionAnalysis.decision.bullishScore}
           bearishScore={decisionAnalysis.decision.bearishScore}
+        />
+      </div>
+
+      <div className="mt-8">
+        <KeyLevelsCard
+          support={decisionAnalysis.priceLevels.support}
+          resistance={decisionAnalysis.priceLevels.resistance}
+          poc={decisionAnalysis.volumeProfile.poc}
+          vwap={decisionAnalysis.vwap.vwap}
+          bullishOrderBlock={
+            decisionAnalysis.orderBlocks
+              .nearestBullishOrderBlock?.midpoint ?? null
+          }
+          bearishOrderBlock={
+            decisionAnalysis.orderBlocks
+              .nearestBearishOrderBlock?.midpoint ?? null
+          }
+          bullishFvg={
+            decisionAnalysis.fairValueGaps
+              .nearestBullishFairValueGap?.midpoint ?? null
+          }
+          bearishFvg={
+            decisionAnalysis.fairValueGaps
+              .nearestBearishFairValueGap?.midpoint ?? null
+          }
+          goldenPocketLow={
+            decisionAnalysis.fibonacci.goldenPocketLow
+          }
+          goldenPocketHigh={
+            decisionAnalysis.fibonacci.goldenPocketHigh
+          }
         />
       </div>
 

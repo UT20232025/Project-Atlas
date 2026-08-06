@@ -160,6 +160,11 @@ priceAction: PriceActionResult;
 liquidity: LiquidityResult;
 volume: VolumeAnalysisResult;
 marketStructure: MarketStructureResult;
+vwap: VwapResult;
+premiumDiscount: PremiumDiscountResult;
+fibonacci: FibonacciResult;
+adx: AdxResult;
+volumeProfile: VolumeProfileResult;
 
   risk: AtlasRiskEngineResult;
   decision: AtlasDecisionEngineResult;
@@ -649,6 +654,21 @@ volume:
 marketStructure:
   requestedSnapshot
     .marketStructure,
+
+vwap:
+  requestedSnapshot.vwap,
+
+premiumDiscount:
+  requestedSnapshot.premiumDiscount,
+
+fibonacci:
+  requestedSnapshot.fibonacci,
+
+adx:
+  requestedSnapshot.adx,
+
+volumeProfile:
+  requestedSnapshot.volumeProfile,
 
 risk,
 decision,

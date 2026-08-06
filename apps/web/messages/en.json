@@ -542,6 +542,19 @@
     "summaryTitle": "Atlas Summary",
     "summaryFallback": "Atlas combines momentum, EMA trend, RSI strength and market confidence to determine whether the current setup statistically favors LONG, SHORT or WAIT."
   },
+  "KeyLevels": {
+    "title": "Key levels",
+    "subtitle": "The concrete price levels Atlas is tracking right now",
+    "support": "Support",
+    "resistance": "Resistance",
+    "poc": "Point of control",
+    "vwap": "VWAP",
+    "bullishOrderBlock": "Bullish order block",
+    "bearishOrderBlock": "Bearish order block",
+    "bullishFvg": "Bullish FVG",
+    "bearishFvg": "Bearish FVG",
+    "goldenPocket": "Golden pocket"
+  },
   "PortfolioGate": {
     "title": "Portfolio",
     "subtitle": "Track your positions with live P&L",

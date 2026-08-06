@@ -542,6 +542,19 @@
     "summaryTitle": "Atlas-Zusammenfassung",
     "summaryFallback": "Atlas kombiniert Momentum, EMA-Trend, RSI-Stärke und Marktkonfidenz, um zu bestimmen, ob das aktuelle Setup statistisch LONG, SHORT oder WAIT begünstigt."
   },
+  "KeyLevels": {
+    "title": "Schlüsselniveaus",
+    "subtitle": "Die konkreten Kursniveaus, die Atlas gerade verfolgt",
+    "support": "Unterstützung",
+    "resistance": "Widerstand",
+    "poc": "Point of Control",
+    "vwap": "VWAP",
+    "bullishOrderBlock": "Bullischer Order Block",
+    "bearishOrderBlock": "Bearischer Order Block",
+    "bullishFvg": "Bullische FVG",
+    "bearishFvg": "Bearische FVG",
+    "goldenPocket": "Golden Pocket"
+  },
   "PortfolioGate": {
     "title": "Portfolio",
     "subtitle": "Verfolge deine Positionen mit Live-P&L",

@@ -542,6 +542,19 @@
     "summaryTitle": "Resumo da Atlas",
     "summaryFallback": "A Atlas combina momentum, tendência EMA, força do RSI e confiança de mercado para determinar se o setup atual favorece estatisticamente LONG, SHORT ou WAIT."
   },
+  "KeyLevels": {
+    "title": "Níveis-chave",
+    "subtitle": "Os níveis de preço concretos que a Atlas acompanha agora",
+    "support": "Suporte",
+    "resistance": "Resistência",
+    "poc": "Ponto de controlo",
+    "vwap": "VWAP",
+    "bullishOrderBlock": "Order block de alta",
+    "bearishOrderBlock": "Order block de baixa",
+    "bullishFvg": "FVG de alta",
+    "bearishFvg": "FVG de baixa",
+    "goldenPocket": "Golden pocket"
+  },
   "PortfolioGate": {
     "title": "Portefólio",
     "subtitle": "Acompanhe as suas posições com P&L ao vivo",

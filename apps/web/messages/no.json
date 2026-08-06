@@ -542,6 +542,19 @@
     "summaryTitle": "Atlas-sammendrag",
     "summaryFallback": "Atlas kombinerer momentum, EMA-trend, RSI-styrke og markedskonfidens for å avgjøre om det nåværende oppsettet statistisk favoriserer LONG, SHORT eller WAIT."
   },
+  "KeyLevels": {
+    "title": "Nøkkelnivåer",
+    "subtitle": "Konkrete prisnivåer Atlas følger akkurat nå",
+    "support": "Støtte",
+    "resistance": "Motstand",
+    "poc": "Point of Control",
+    "vwap": "VWAP",
+    "bullishOrderBlock": "Bullish order block",
+    "bearishOrderBlock": "Bearish order block",
+    "bullishFvg": "Bullish FVG",
+    "bearishFvg": "Bearish FVG",
+    "goldenPocket": "Golden pocket"
+  },
   "PortfolioGate": {
     "title": "Portfolio",
     "subtitle": "Følg posisjonene dine med live P&L",
