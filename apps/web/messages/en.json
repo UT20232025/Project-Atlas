@@ -542,6 +542,19 @@
     "summaryTitle": "Atlas Summary",
     "summaryFallback": "Atlas combines momentum, EMA trend, RSI strength and market confidence to determine whether the current setup statistically favors LONG, SHORT or WAIT."
   },
+  "Onboarding": {
+    "eyebrow": "Getting started",
+    "heading": "Get the most out of Genwelth",
+    "dismiss": "Dismiss",
+    "seeAnalysis": "See a live analysis",
+    "seeAnalysisDesc": "Open a coin and see why Atlas says LONG, SHORT or WAIT.",
+    "trackRecord": "Check the track record",
+    "trackRecordDesc": "See the verified win rate behind the signals.",
+    "telegram": "Follow on Telegram",
+    "telegramDesc": "Get the strongest signals straight to your pocket.",
+    "upgrade": "Unlock Pro",
+    "upgradeDesc": "Portfolio, journal, watchlists, and the full history."
+  },
   "KeyLevels": {
     "title": "Key levels",
     "subtitle": "The concrete price levels Atlas is tracking right now",

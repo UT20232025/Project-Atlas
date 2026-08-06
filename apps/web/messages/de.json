@@ -542,6 +542,19 @@
     "summaryTitle": "Atlas-Zusammenfassung",
     "summaryFallback": "Atlas kombiniert Momentum, EMA-Trend, RSI-Stärke und Marktkonfidenz, um zu bestimmen, ob das aktuelle Setup statistisch LONG, SHORT oder WAIT begünstigt."
   },
+  "Onboarding": {
+    "eyebrow": "Erste Schritte",
+    "heading": "Hol das Meiste aus Genwelth heraus",
+    "dismiss": "Schließen",
+    "seeAnalysis": "Sieh eine Live-Analyse",
+    "seeAnalysisDesc": "Öffne einen Coin und sieh, warum Atlas LONG, SHORT oder WAIT sagt.",
+    "trackRecord": "Track Record ansehen",
+    "trackRecordDesc": "Sieh die verifizierte Trefferquote hinter den Signalen.",
+    "telegram": "Auf Telegram folgen",
+    "telegramDesc": "Erhalte die stärksten Signale direkt aufs Handy.",
+    "upgrade": "Pro freischalten",
+    "upgradeDesc": "Portfolio, Journal, Watchlists und die komplette Historie."
+  },
   "KeyLevels": {
     "title": "Schlüsselniveaus",
     "subtitle": "Die konkreten Kursniveaus, die Atlas gerade verfolgt",

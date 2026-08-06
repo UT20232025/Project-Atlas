@@ -542,6 +542,19 @@
     "summaryTitle": "Resumen de Atlas",
     "summaryFallback": "Atlas combina el impulso, la tendencia EMA, la fuerza del RSI y la confianza del mercado para determinar si el setup actual favorece estadísticamente LONG, SHORT o WAIT."
   },
+  "Onboarding": {
+    "eyebrow": "Primeros pasos",
+    "heading": "Aprovecha Genwelth al máximo",
+    "dismiss": "Cerrar",
+    "seeAnalysis": "Ve un análisis en vivo",
+    "seeAnalysisDesc": "Abre una moneda y ve por qué Atlas dice LONG, SHORT o WAIT.",
+    "trackRecord": "Consulta el track record",
+    "trackRecordDesc": "Mira el win rate verificado detrás de las señales.",
+    "telegram": "Sigue en Telegram",
+    "telegramDesc": "Recibe las señales más fuertes en tu bolsillo.",
+    "upgrade": "Desbloquea Pro",
+    "upgradeDesc": "Portafolio, diario, watchlists y el historial completo."
+  },
   "KeyLevels": {
     "title": "Niveles clave",
     "subtitle": "Los niveles de precio concretos que Atlas sigue ahora mismo",

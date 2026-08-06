@@ -542,6 +542,19 @@
     "summaryTitle": "Atlas-sammendrag",
     "summaryFallback": "Atlas kombinerer momentum, EMA-trend, RSI-styrke og markedskonfidens for å avgjøre om det nåværende oppsettet statistisk favoriserer LONG, SHORT eller WAIT."
   },
+  "Onboarding": {
+    "eyebrow": "Kom i gang",
+    "heading": "Slik får du mest ut av Genwelth",
+    "dismiss": "Lukk",
+    "seeAnalysis": "Se en live analyse",
+    "seeAnalysisDesc": "Åpne en mynt og se hvorfor Atlas mener LONG, SHORT eller VENT.",
+    "trackRecord": "Sjekk track record",
+    "trackRecordDesc": "Se den verifiserte treffprosenten bak signalene.",
+    "telegram": "Følg på Telegram",
+    "telegramDesc": "Få de sterkeste signalene rett i lomma.",
+    "upgrade": "Lås opp Pro",
+    "upgradeDesc": "Portefølje, journal, watchlists og full historikk."
+  },
   "KeyLevels": {
     "title": "Nøkkelnivåer",
     "subtitle": "Konkrete prisnivåer Atlas følger akkurat nå",

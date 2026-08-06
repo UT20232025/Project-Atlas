@@ -3,6 +3,7 @@ import AtlasAlerts from "../components/dashboard/AtlasAlerts";
 import AtlasIntelligence from "../components/dashboard/AtlasIntelligence";
 import DailyBrief from "../components/dashboard/DailyBrief";
 import DashboardHero from "../components/dashboard/DashboardHero";
+import GettingStarted from "../components/onboarding/GettingStarted";
 import MacroEventsCard from "../components/dashboard/MacroEventsCard";
 import MarketAlerts from "../components/dashboard/MarketAlerts";
 import MarketHeatmap from "../components/dashboard/MarketHeatmap";
@@ -69,6 +70,10 @@ export default async function HomePage() {
       isPro={isPro}
     >
       <DashboardHero />
+
+      <div className="mb-8">
+        <GettingStarted isPro={isPro} />
+      </div>
 
       <MacroEventsCard events={upcomingMacroEvents} />
 
