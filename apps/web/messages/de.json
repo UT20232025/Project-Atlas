@@ -32,6 +32,10 @@
     "logout": "Abmelden"
   },
   "Landing": {
+    "liveProofTitle": "Sieh, wie Atlas jedes Signal erklärt",
+    "liveProofSubtitle": "Live-Signale genau jetzt — mit den echten Gründen dahinter. Genau das bekommst du drinnen.",
+    "liveProofWhy": "Warum:",
+    "liveProofCta": "Alle Live-Signale ansehen →",
     "logInButton": "Anmelden",
     "signUpButton": "Kostenlos registrieren",
     "eyebrow": "Angetrieben von Atlas Engine",

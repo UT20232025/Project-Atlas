@@ -5,16 +5,25 @@ import Link from "next/link";
 import Button from "@/components/ui/button";
 import Disclaimer from "@/components/ui/Disclaimer";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
+import type { ScannerItem } from "@/lib/analysis/scanner";
 import type { TrackRecordSummary } from "@/lib/atlas/trackRecord";
+import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
 type LandingPageProps = {
   trackRecord: TrackRecordSummary;
+  topSetups: ScannerItem[];
 };
+
+function displayCoin(coin: string): string {
+  return coin.replace(/USDT$/, "");
+}
 
 export default async function LandingPage({
   trackRecord,
+  topSetups,
 }: LandingPageProps) {
   const t = await getTranslations("Landing");
+  const tReasons = await getTranslations("AtlasReasons");
   const locale = await getLocale();
   const hasClosedTrades = trackRecord.totalClosed > 0;
 
@@ -110,6 +119,88 @@ export default async function LandingPage({
             </a>
           </div>
         </section>
+
+        {topSetups.length > 0 && (
+          <section className="mt-16">
+            <h2 className="text-center text-2xl font-bold">
+              {t("liveProofTitle")}
+            </h2>
+
+            <p className="mx-auto mt-1 max-w-2xl text-center text-sm text-zinc-500">
+              {t("liveProofSubtitle")}
+            </p>
+
+            <div className="mt-8 grid gap-4 md:grid-cols-3">
+              {topSetups.map((setup) => {
+                const isLong = setup.signal === "LONG";
+
+                return (
+                  <div
+                    key={setup.coin}
+                    className="atlas-card rounded-2xl p-6"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-white">
+                        {displayCoin(setup.coin)}
+                      </span>
+
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-bold ${
+                          isLong
+                            ? "bg-green-500/15 text-green-400"
+                            : "bg-red-500/15 text-red-400"
+                        }`}
+                      >
+                        {isLong ? "🟢" : "🔴"} {setup.signal}{" "}
+                        {setup.confidence}%
+                      </span>
+                    </div>
+
+                    <p className="mt-4 text-sm text-zinc-300">
+                      <span className="text-zinc-500">
+                        {t("liveProofWhy")}{" "}
+                      </span>
+                      {resolveReasonText(
+                        tReasons,
+                        locale,
+                        setup.explanation
+                      )}
+                    </p>
+
+                    {setup.reasons.length > 0 && (
+                      <ul className="mt-3 space-y-1">
+                        {setup.reasons
+                          .slice(0, 3)
+                          .map((reason, index) => (
+                            <li
+                              key={`${reason.code}-${index}`}
+                              className="text-xs text-zinc-500"
+                            >
+                              •{" "}
+                              {resolveReasonText(
+                                tReasons,
+                                locale,
+                                reason
+                              )}
+                            </li>
+                          ))}
+                      </ul>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 text-center">
+              <Link
+                href="/signup"
+                className="text-sm text-zinc-400 underline hover:text-white"
+              >
+                {t("liveProofCta")}
+              </Link>
+            </div>
+          </section>
+        )}
 
         <section className="atlas-card mt-16 rounded-2xl p-8">
           <h2 className="text-center text-2xl font-bold">

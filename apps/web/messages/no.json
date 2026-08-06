@@ -32,6 +32,10 @@
     "logout": "Logg ut"
   },
   "Landing": {
+    "liveProofTitle": "Se Atlas forklare hvert signal",
+    "liveProofSubtitle": "Live-signaler akkurat nå — med de faktiske grunnene bak. Dette er nøyaktig hva du får inne.",
+    "liveProofWhy": "Hvorfor:",
+    "liveProofCta": "Se alle live-signaler →",
     "logInButton": "Logg inn",
     "signUpButton": "Registrer deg gratis",
     "eyebrow": "Drevet av Atlas Engine",

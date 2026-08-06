@@ -12,6 +12,7 @@ import OpportunityCard from "../components/dashboard/OpportunityCard";
 import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import LandingPage from "../components/landing/LandingPage";
+import { getAtlasScanner } from "../lib/analysis/scanner";
 import AppLayout from "../components/layout/AppLayout";
 import { MarketProvider } from "../components/providers/MarketProvider";
 import { ScannerSignalsProvider } from "../components/providers/ScannerSignalsProvider";
@@ -35,8 +36,27 @@ export default async function HomePage() {
   const session = await getSession();
 
   if (!session) {
-    const trackRecord = await getCachedTrackRecord();
-    return <LandingPage trackRecord={trackRecord} />;
+    const [trackRecord, scanner] = await Promise.all([
+      getCachedTrackRecord(),
+      getAtlasScanner(),
+    ]);
+
+    // Scanner is pre-sorted by confidence; take the strongest live
+    // directional calls so the landing page proves the "explains why"
+    // value with real data.
+    const topSetups = scanner
+      .filter(
+        (item) =>
+          item.signal === "LONG" || item.signal === "SHORT"
+      )
+      .slice(0, 3);
+
+    return (
+      <LandingPage
+        trackRecord={trackRecord}
+        topSetups={topSetups}
+      />
+    );
   }
 
   const user = await getCurrentUser();
