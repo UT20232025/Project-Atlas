@@ -742,6 +742,8 @@
     "ADX_TREND_BEARISH": "Strong directional downtrend — ADX {adx}.",
     "VOLUME_PROFILE_ABOVE_POC": "Price is above the point of control ({poc}) — buyers in control.",
     "VOLUME_PROFILE_BELOW_POC": "Price is below the point of control ({poc}) — sellers in control.",
+    "RSI_DIVERGENCE_BULLISH": "Bullish RSI divergence — momentum turning up.",
+    "RSI_DIVERGENCE_BEARISH": "Bearish RSI divergence — momentum turning down.",
     "VOLUME_BEARISH_PRESSURE": "Volume analysis confirms bearish selling pressure.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine confirms a bullish structure.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine confirms a bearish structure.",

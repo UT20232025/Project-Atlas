@@ -742,6 +742,8 @@
     "ADX_TREND_BEARISH": "Sterk trend ned — ADX {adx}.",
     "VOLUME_PROFILE_ABOVE_POC": "Prisen er over Point of Control ({poc}) — kjøperne har kontroll.",
     "VOLUME_PROFILE_BELOW_POC": "Prisen er under Point of Control ({poc}) — selgerne har kontroll.",
+    "RSI_DIVERGENCE_BULLISH": "Bullish RSI-divergens — momentum snur oppover.",
+    "RSI_DIVERGENCE_BEARISH": "Bearish RSI-divergens — momentum snur nedover.",
     "VOLUME_BEARISH_PRESSURE": "Volumanalysen bekrefter bearish salgspress.",
     "MARKET_STRUCTURE_BULLISH": "Market Structure Engine bekrefter en bullish struktur.",
     "MARKET_STRUCTURE_BEARISH": "Market Structure Engine bekrefter en bearish struktur.",

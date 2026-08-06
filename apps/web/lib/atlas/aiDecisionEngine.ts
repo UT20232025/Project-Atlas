@@ -58,6 +58,10 @@ import type {
   VolumeProfileResult,
 } from "@/lib/atlas/volumeProfileEngine";
 
+import type {
+  RsiDivergenceResult,
+} from "@/lib/atlas/rsiDivergenceEngine";
+
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 
 export type AtlasDecisionStrength =
@@ -83,6 +87,7 @@ session: SessionResult;
 fibonacci: FibonacciResult;
 adx: AdxResult;
 volumeProfile: VolumeProfileResult;
+rsiDivergence: RsiDivergenceResult;
 risk: AtlasRiskEngineResult;
 
 minimumConfidence?: number;
@@ -596,6 +601,24 @@ if (
     code: "VOLUME_PROFILE_BELOW_POC",
     params: { poc: String(input.volumeProfile.poc) },
   });
+}
+
+// ----- RSI Divergence -----
+
+if (
+  input.rsiDivergence.divergence === "BULLISH"
+) {
+  bullishScore += 8;
+
+  bullishReasons.push({ code: "RSI_DIVERGENCE_BULLISH" });
+}
+
+if (
+  input.rsiDivergence.divergence === "BEARISH"
+) {
+  bearishScore += 8;
+
+  bearishReasons.push({ code: "RSI_DIVERGENCE_BEARISH" });
 }
 
   if (

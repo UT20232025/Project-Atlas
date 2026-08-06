@@ -56,6 +56,10 @@ import {
   type VolumeProfileResult,
 } from "@/lib/atlas/volumeProfileEngine";
 import {
+  analyzeRsiDivergence,
+  type RsiDivergenceResult,
+} from "@/lib/atlas/rsiDivergenceEngine";
+import {
   analyzeMarketStructure,
   type MarketStructureResult,
 } from "@/lib/atlas/marketStructureEngine";
@@ -133,6 +137,7 @@ session: SessionResult;
 fibonacci: FibonacciResult;
 adx: AdxResult;
 volumeProfile: VolumeProfileResult;
+rsiDivergence: RsiDivergenceResult;
 };
 
 export type AtlasAnalysisResponse = {
@@ -373,6 +378,9 @@ const adx = analyzeAdx(candles);
 const volumeProfile =
   analyzeVolumeProfile(candles);
 
+const rsiDivergence =
+  analyzeRsiDivergence(candles);
+
  return {
   interval,
   candles,
@@ -396,6 +404,7 @@ const volumeProfile =
   fibonacci,
   adx,
   volumeProfile,
+  rsiDivergence,
 };
 }
 
@@ -559,6 +568,9 @@ const decision =
 
     volumeProfile:
       requestedSnapshot.volumeProfile,
+
+    rsiDivergence:
+      requestedSnapshot.rsiDivergence,
 
     risk,
   });

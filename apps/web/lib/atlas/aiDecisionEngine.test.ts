@@ -133,6 +133,10 @@ function buildInput(
       distancePercent: 0,
     },
 
+    rsiDivergence: {
+      divergence: "NONE",
+    },
+
     risk: {
       confidence: 50,
       validTrade: true,

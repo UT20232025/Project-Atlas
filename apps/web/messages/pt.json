@@ -742,6 +742,8 @@
     "ADX_TREND_BEARISH": "Tendência direcional forte de baixa — ADX {adx}.",
     "VOLUME_PROFILE_ABOVE_POC": "O preço está acima do ponto de controlo ({poc}) — compradores no comando.",
     "VOLUME_PROFILE_BELOW_POC": "O preço está abaixo do ponto de controlo ({poc}) — vendedores no comando.",
+    "RSI_DIVERGENCE_BULLISH": "Divergência de alta no RSI — o momentum vira para cima.",
+    "RSI_DIVERGENCE_BEARISH": "Divergência de baixa no RSI — o momentum vira para baixo.",
     "VOLUME_BEARISH_PRESSURE": "A análise de volume confirma pressão vendedora de baixa.",
     "MARKET_STRUCTURE_BULLISH": "O Market Structure Engine confirma uma estrutura de alta.",
     "MARKET_STRUCTURE_BEARISH": "O Market Structure Engine confirma uma estrutura de baixa.",
