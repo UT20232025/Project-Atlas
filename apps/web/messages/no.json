@@ -555,6 +555,17 @@
     "upgrade": "Lås opp Pro",
     "upgradeDesc": "Portefølje, journal, watchlists og full historikk."
   },
+  "PositionSize": {
+    "eyebrow": "Risikostyring",
+    "heading": "Posisjons-kalkulator",
+    "accountLabel": "Kontostørrelse ($)",
+    "riskLabel": "Risiko per handel (%)",
+    "dollarRisk": "Dollar-risiko",
+    "positionSize": "Posisjonsstørrelse",
+    "positionValue": "Posisjonsverdi",
+    "invalid": "Fyll inn en gyldig kontostørrelse og risiko-prosent.",
+    "note": "Beregnet fra Atlas' entry og stop-loss. Ikke finansiell rådgivning."
+  },
   "KeyLevels": {
     "title": "Nøkkelnivåer",
     "subtitle": "Konkrete prisnivåer Atlas følger akkurat nå",

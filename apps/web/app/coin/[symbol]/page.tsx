@@ -3,6 +3,7 @@ import Link from "next/link";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
 import KeyLevelsCard from "../../../components/analysis/KeyLevelsCard";
+import PositionSizeCalculator from "../../../components/analysis/PositionSizeCalculator";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
 import SignalHistoryCard from "../../../components/analysis/SignalHistoryCard";
 import CandlestickChart from "../../../components/CandlestickChart";
@@ -148,6 +149,17 @@ export default async function CoinPage({ params }: Props) {
 
         <Disclaimer className="mt-3 px-1" />
       </div>
+
+      {decision.entry !== null &&
+        decision.stopLoss !== null && (
+          <div className="mt-6">
+            <PositionSizeCalculator
+              entry={decision.entry}
+              stopLoss={decision.stopLoss}
+              symbol={coin}
+            />
+          </div>
+        )}
 
       <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-6">

@@ -555,6 +555,17 @@
     "upgrade": "Desbloqueie o Pro",
     "upgradeDesc": "Portefólio, diário, watchlists e o histórico completo."
   },
+  "PositionSize": {
+    "eyebrow": "Gestão de risco",
+    "heading": "Calculadora de tamanho de posição",
+    "accountLabel": "Tamanho da conta ($)",
+    "riskLabel": "Risco por operação (%)",
+    "dollarRisk": "Risco em dólares",
+    "positionSize": "Tamanho da posição",
+    "positionValue": "Valor da posição",
+    "invalid": "Introduza um tamanho de conta e uma percentagem de risco válidos.",
+    "note": "Calculado a partir do entry e stop-loss da Atlas. Não é aconselhamento financeiro."
+  },
   "KeyLevels": {
     "title": "Níveis-chave",
     "subtitle": "Os níveis de preço concretos que a Atlas acompanha agora",

@@ -555,6 +555,17 @@
     "upgrade": "Pro freischalten",
     "upgradeDesc": "Portfolio, Journal, Watchlists und die komplette Historie."
   },
+  "PositionSize": {
+    "eyebrow": "Risikomanagement",
+    "heading": "Positionsgrößen-Rechner",
+    "accountLabel": "Kontogröße ($)",
+    "riskLabel": "Risiko pro Trade (%)",
+    "dollarRisk": "Dollar-Risiko",
+    "positionSize": "Positionsgröße",
+    "positionValue": "Positionswert",
+    "invalid": "Gib eine gültige Kontogröße und Risiko-Prozent ein.",
+    "note": "Berechnet aus Atlas' Einstieg und Stop-Loss. Keine Finanzberatung."
+  },
   "KeyLevels": {
     "title": "Schlüsselniveaus",
     "subtitle": "Die konkreten Kursniveaus, die Atlas gerade verfolgt",

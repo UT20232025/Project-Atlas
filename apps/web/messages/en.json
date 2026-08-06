@@ -555,6 +555,17 @@
     "upgrade": "Unlock Pro",
     "upgradeDesc": "Portfolio, journal, watchlists, and the full history."
   },
+  "PositionSize": {
+    "eyebrow": "Risk management",
+    "heading": "Position size calculator",
+    "accountLabel": "Account size ($)",
+    "riskLabel": "Risk per trade (%)",
+    "dollarRisk": "Dollar risk",
+    "positionSize": "Position size",
+    "positionValue": "Position value",
+    "invalid": "Enter a valid account size and risk percent.",
+    "note": "Calculated from Atlas's entry and stop-loss. Not financial advice."
+  },
   "KeyLevels": {
     "title": "Key levels",
     "subtitle": "The concrete price levels Atlas is tracking right now",
