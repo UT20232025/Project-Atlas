@@ -8,6 +8,7 @@ import { calculatePositionSize } from "@/lib/trading/positionSize";
 type PositionSizeCalculatorProps = {
   entry: number;
   stopLoss: number;
+  takeProfit: number | null;
   symbol: string;
 };
 
@@ -17,6 +18,7 @@ const RISK_KEY = "genwelth-calc-risk";
 export default function PositionSizeCalculator({
   entry,
   stopLoss,
+  takeProfit,
   symbol,
 }: PositionSizeCalculatorProps) {
   const t = useTranslations("PositionSize");
@@ -50,6 +52,7 @@ export default function PositionSizeCalculator({
     riskPercent: Number(risk),
     entry,
     stopLoss,
+    takeProfit: takeProfit ?? undefined,
   });
 
   const fmt = (value: number, decimals = 2) =>
@@ -129,6 +132,28 @@ export default function PositionSizeCalculator({
               ${fmt(result.positionValue)}
             </p>
           </div>
+
+          {result.reward !== null && (
+            <div className="rounded-xl border border-emerald-500/15 bg-emerald-500/5 p-4">
+              <p className="text-xs uppercase tracking-wide text-zinc-500">
+                {t("reward")}
+              </p>
+              <p className="mt-1 font-semibold tabular-nums text-emerald-400">
+                ${fmt(result.reward)}
+              </p>
+            </div>
+          )}
+
+          {result.rMultiple !== null && (
+            <div className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4">
+              <p className="text-xs uppercase tracking-wide text-zinc-500">
+                {t("rMultiple")}
+              </p>
+              <p className="mt-1 font-semibold tabular-nums text-white">
+                {fmt(result.rMultiple)}R
+              </p>
+            </div>
+          )}
         </div>
       ) : (
         <p className="mt-5 text-sm text-zinc-500">

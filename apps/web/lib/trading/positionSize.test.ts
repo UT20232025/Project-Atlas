@@ -16,6 +16,22 @@ describe("calculatePositionSize", () => {
     expect(result?.riskPerUnit).toBe(5);
     expect(result?.positionSize).toBe(2);
     expect(result?.positionValue).toBe(200);
+    expect(result?.reward).toBeNull();
+    expect(result?.rMultiple).toBeNull();
+  });
+
+  it("computes reward and R-multiple when a target is given", () => {
+    const result = calculatePositionSize({
+      accountSize: 1000,
+      riskPercent: 1,
+      entry: 100,
+      stopLoss: 95,
+      takeProfit: 115,
+    });
+
+    // risk/unit 5, reward/unit 15 → 3R; 2 units × 15 = $30 reward.
+    expect(result?.rMultiple).toBe(3);
+    expect(result?.reward).toBe(30);
   });
 
   it("scales with the risk percent", () => {

@@ -223,6 +223,7 @@ export default async function CoinPage({ params }: Props) {
             <PositionSizeCalculator
               entry={decision.entry}
               stopLoss={decision.stopLoss}
+              takeProfit={decision.takeProfit}
               symbol={coin}
             />
           </div>

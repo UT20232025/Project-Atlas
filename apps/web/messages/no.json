@@ -563,6 +563,8 @@
     "dollarRisk": "Dollar-risiko",
     "positionSize": "Posisjonsstørrelse",
     "positionValue": "Posisjonsverdi",
+    "reward": "Potensiell gevinst",
+    "rMultiple": "R-multippel",
     "invalid": "Fyll inn en gyldig kontostørrelse og risiko-prosent.",
     "note": "Beregnet fra Atlas' entry og stop-loss. Ikke finansiell rådgivning."
   },

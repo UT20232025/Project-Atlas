@@ -563,6 +563,8 @@
     "dollarRisk": "Risco em dólares",
     "positionSize": "Tamanho da posição",
     "positionValue": "Valor da posição",
+    "reward": "Ganho potencial",
+    "rMultiple": "Múltiplo R",
     "invalid": "Introduza um tamanho de conta e uma percentagem de risco válidos.",
     "note": "Calculado a partir do entry e stop-loss da Atlas. Não é aconselhamento financeiro."
   },
