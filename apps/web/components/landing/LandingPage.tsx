@@ -25,6 +25,7 @@ export default async function LandingPage({
   const t = await getTranslations("Landing");
   const tReasons = await getTranslations("AtlasReasons");
   const tPricing = await getTranslations("Pricing");
+  const tTrack = await getTranslations("TrackRecord");
   const locale = await getLocale();
 
   const proFeatures = [
@@ -281,6 +282,66 @@ export default async function LandingPage({
               <p className="mt-1 text-sm text-zinc-600">
                 {t("evaluatingNote")}
               </p>
+            </div>
+          )}
+
+          {hasClosedTrades && trackRecord.bySymbol.length > 0 && (
+            <div className="mt-8">
+              <p className="text-center text-xs font-semibold uppercase tracking-widest text-zinc-500">
+                {tTrack("perSymbolTitle")}
+              </p>
+
+              <div className="mx-auto mt-4 max-w-xl overflow-x-auto">
+                <table className="w-full text-left text-sm">
+                  <thead>
+                    <tr className="text-xs text-zinc-500">
+                      <th className="pb-2 font-medium">
+                        {tTrack("colSymbol")}
+                      </th>
+                      <th className="pb-2 font-medium">
+                        {tTrack("colTrades")}
+                      </th>
+                      <th className="pb-2 font-medium">
+                        {tTrack("colWinRate")}
+                      </th>
+                      <th className="pb-2 font-medium">
+                        {tTrack("colAvgPnl")}
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {trackRecord.bySymbol
+                      .slice(0, 5)
+                      .map((row) => (
+                        <tr
+                          key={row.symbol}
+                          className="border-t border-zinc-800"
+                        >
+                          <td className="py-2 font-medium text-white">
+                            {displayCoin(row.symbol)}
+                          </td>
+                          <td className="py-2 text-zinc-400">
+                            {row.trades}
+                          </td>
+                          <td className="py-2 text-zinc-300">
+                            {row.winRate.toFixed(0)}%
+                          </td>
+                          <td
+                            className={`py-2 font-medium ${
+                              row.avgPnlPercent >= 0
+                                ? "text-green-400"
+                                : "text-red-400"
+                            }`}
+                          >
+                            {row.avgPnlPercent >= 0 ? "+" : ""}
+                            {row.avgPnlPercent.toFixed(2)}%
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
 
