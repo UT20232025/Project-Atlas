@@ -6,7 +6,26 @@
     "signup": "Sign up",
     "language": "Language"
   },
+  "AskAtlas": {
+    "title": "Ask Atlas",
+    "subtitle": "Chat with the Atlas engine — ask about any coin and get its read, with the reasons.",
+    "placeholder": "Ask about any coin — e.g. what do you think about a long on SOL?",
+    "send": "Send",
+    "thinking": "Atlas is thinking…",
+    "emptyTitle": "Ask Atlas anything about crypto",
+    "emptyBody": "Type a coin or a trade idea and Atlas answers with its live signal, key levels, and the reasoning behind them.",
+    "suggestion1": "What do you think about BTC right now?",
+    "suggestion2": "Is ETH a long or a short?",
+    "suggestion3": "Give me your read on SOL",
+    "disclaimer": "Educational market analysis — not financial advice.",
+    "proRequired": "Ask Atlas is a Genwelth AI Pro feature.",
+    "error": "Something went wrong — please try again.",
+    "lockedHeading": "Chat with Atlas",
+    "lockedBody": "Ask Atlas about any coin and get its live signal and reasoning in plain language. Unlock it with Genwelth AI Pro.",
+    "unlockButton": "Unlock with Pro"
+  },
   "Nav": {
+    "askAtlas": "Ask Atlas",
     "dashboard": "Dashboard",
     "scanner": "Scanner",
     "markets": "Markets",

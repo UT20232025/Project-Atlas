@@ -6,7 +6,26 @@
     "signup": "Registrarse",
     "language": "Idioma"
   },
+  "AskAtlas": {
+    "title": "Pregunta a Atlas",
+    "subtitle": "Chatea con el motor Atlas — pregunta por cualquier moneda y obtén su lectura, con las razones.",
+    "placeholder": "Pregunta por cualquier moneda — p. ej. ¿qué opinas de un long en SOL?",
+    "send": "Enviar",
+    "thinking": "Atlas está pensando…",
+    "emptyTitle": "Pregunta a Atlas lo que quieras sobre cripto",
+    "emptyBody": "Escribe una moneda o una idea de trade y Atlas responde con su señal en vivo, niveles clave y el razonamiento detrás.",
+    "suggestion1": "¿Qué opinas de BTC ahora mismo?",
+    "suggestion2": "¿ETH es long o short?",
+    "suggestion3": "Dame tu lectura de SOL",
+    "disclaimer": "Análisis de mercado educativo — no es asesoramiento financiero.",
+    "proRequired": "Pregunta a Atlas es una función de Genwelth AI Pro.",
+    "error": "Algo salió mal — inténtalo de nuevo.",
+    "lockedHeading": "Chatea con Atlas",
+    "lockedBody": "Pregunta a Atlas por cualquier moneda y obtén su señal en vivo y razonamiento en lenguaje claro. Desbloquéalo con Genwelth AI Pro.",
+    "unlockButton": "Desbloquear con Pro"
+  },
   "Nav": {
+    "askAtlas": "Pregunta a Atlas",
     "dashboard": "Panel",
     "scanner": "Escáner",
     "markets": "Mercados",

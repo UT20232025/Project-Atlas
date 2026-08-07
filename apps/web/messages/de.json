@@ -6,7 +6,26 @@
     "signup": "Registrieren",
     "language": "Sprache"
   },
+  "AskAtlas": {
+    "title": "Frag Atlas",
+    "subtitle": "Chatte mit der Atlas-Engine — frag nach jeder Coin und erhalte ihre Einschätzung, mit Begründung.",
+    "placeholder": "Frag nach jeder Coin — z. B. was hältst du von einem Long auf SOL?",
+    "send": "Senden",
+    "thinking": "Atlas denkt nach…",
+    "emptyTitle": "Frag Atlas alles über Krypto",
+    "emptyBody": "Gib eine Coin oder eine Trade-Idee ein, und Atlas antwortet mit seinem Live-Signal, Schlüssellevels und der Begründung dahinter.",
+    "suggestion1": "Was hältst du gerade von BTC?",
+    "suggestion2": "Ist ETH long oder short?",
+    "suggestion3": "Gib mir deine Einschätzung zu SOL",
+    "disclaimer": "Bildende Marktanalyse — keine Finanzberatung.",
+    "proRequired": "Frag Atlas ist eine Genwelth AI Pro-Funktion.",
+    "error": "Etwas ist schiefgelaufen — bitte versuch es erneut.",
+    "lockedHeading": "Chatte mit Atlas",
+    "lockedBody": "Frag Atlas nach jeder Coin und erhalte sein Live-Signal und die Begründung in klarer Sprache. Schalte es mit Genwelth AI Pro frei.",
+    "unlockButton": "Mit Pro freischalten"
+  },
   "Nav": {
+    "askAtlas": "Frag Atlas",
     "dashboard": "Dashboard",
     "scanner": "Scanner",
     "markets": "Märkte",

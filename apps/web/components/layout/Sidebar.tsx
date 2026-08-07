@@ -12,6 +12,11 @@ export const menu = [
     icon: "🏠",
   },
   {
+    key: "askAtlas",
+    href: "/ask",
+    icon: "🧭",
+  },
+  {
     key: "scanner",
     href: "/#scanner",
     icon: "📊",

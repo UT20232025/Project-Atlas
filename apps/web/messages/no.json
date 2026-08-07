@@ -6,7 +6,26 @@
     "signup": "Registrer deg",
     "language": "Språk"
   },
+  "AskAtlas": {
+    "title": "Spør Atlas",
+    "subtitle": "Chat med Atlas-motoren — spør om hvilken som helst mynt og få dens vurdering, med begrunnelsene.",
+    "placeholder": "Spør om hvilken som helst mynt — f.eks. hva tenker du om en long på SOL?",
+    "send": "Send",
+    "thinking": "Atlas tenker…",
+    "emptyTitle": "Spør Atlas om hva som helst innen krypto",
+    "emptyBody": "Skriv en mynt eller en trade-idé, så svarer Atlas med sitt live-signal, nøkkelnivåer og begrunnelsen bak.",
+    "suggestion1": "Hva tenker du om BTC akkurat nå?",
+    "suggestion2": "Er ETH en long eller en short?",
+    "suggestion3": "Gi meg vurderingen din på SOL",
+    "disclaimer": "Pedagogisk markedsanalyse — ikke finansiell rådgivning.",
+    "proRequired": "Spør Atlas er en Genwelth AI Pro-funksjon.",
+    "error": "Noe gikk galt — prøv igjen.",
+    "lockedHeading": "Chat med Atlas",
+    "lockedBody": "Spør Atlas om hvilken som helst mynt og få live-signal og begrunnelse i klartekst. Lås det opp med Genwelth AI Pro.",
+    "unlockButton": "Lås opp med Pro"
+  },
   "Nav": {
+    "askAtlas": "Spør Atlas",
     "dashboard": "Dashboard",
     "scanner": "Skanner",
     "markets": "Markeder",
