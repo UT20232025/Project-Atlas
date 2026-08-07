@@ -32,6 +32,8 @@
     "logout": "Log out"
   },
   "Landing": {
+    "recentWinsTitle": "Recently closed winners",
+    "recentWinsSubtitle": "A sample of Atlas calls that hit their 24h target — see the full record, wins and losses, above.",
     "liveProofTitle": "See Atlas explain every call",
     "liveProofSubtitle": "Live signals right now — with the actual reasons behind them. This is exactly what you get inside.",
     "liveProofWhy": "Why:",

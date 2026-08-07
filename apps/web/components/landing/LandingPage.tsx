@@ -34,6 +34,12 @@ export default async function LandingPage({
     tPricing("feature3"),
     tPricing("feature4"),
   ];
+
+  // closedTrades is already most-recent-first; surface the latest
+  // winning calls as fresh social proof.
+  const recentWins = trackRecord.closedTrades
+    .filter((trade) => (trade.pnlPercent ?? 0) > 0)
+    .slice(0, 5);
   const hasClosedTrades = trackRecord.totalClosed > 0;
 
   const FEATURES = [
@@ -354,6 +360,60 @@ export default async function LandingPage({
             </Link>
           </div>
         </section>
+
+        {recentWins.length > 0 && (
+          <section className="mt-16">
+            <h2 className="text-center text-2xl font-bold">
+              {t("recentWinsTitle")}
+            </h2>
+
+            <p className="mx-auto mt-1 max-w-2xl text-center text-sm text-zinc-500">
+              {t("recentWinsSubtitle")}
+            </p>
+
+            <div className="mx-auto mt-8 max-w-2xl space-y-3">
+              {recentWins.map((trade) => {
+                const isLong = trade.signal === "LONG";
+
+                return (
+                  <div
+                    key={trade.id}
+                    className="atlas-card flex items-center justify-between rounded-xl p-4"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold text-white">
+                        {displayCoin(trade.symbol)}
+                      </span>
+
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                          isLong
+                            ? "bg-green-500/15 text-green-400"
+                            : "bg-red-500/15 text-red-400"
+                        }`}
+                      >
+                        {isLong ? "🟢" : "🔴"} {trade.signal}
+                      </span>
+
+                      <span className="text-xs text-zinc-500">
+                        {new Date(
+                          trade.createdAt
+                        ).toLocaleDateString(locale, {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </span>
+                    </div>
+
+                    <span className="text-lg font-bold text-green-400">
+                      +{(trade.pnlPercent ?? 0).toFixed(2)}%
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <section className="mt-16">
           <h2 className="text-center text-2xl font-bold">

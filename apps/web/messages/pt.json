@@ -32,6 +32,8 @@
     "logout": "Sair"
   },
   "Landing": {
+    "recentWinsTitle": "Vencedoras fechadas recentemente",
+    "recentWinsSubtitle": "Uma amostra de sinais do Atlas que atingiram o alvo de 24h — vê o registo completo, ganhos e perdas, acima.",
     "liveProofTitle": "Vê o Atlas explicar cada sinal",
     "liveProofSubtitle": "Sinais ao vivo agora mesmo — com as razões reais por trás. É exatamente isto que recebes lá dentro.",
     "liveProofWhy": "Porquê:",

@@ -32,6 +32,8 @@
     "logout": "Abmelden"
   },
   "Landing": {
+    "recentWinsTitle": "Kürzlich geschlossene Gewinner",
+    "recentWinsSubtitle": "Eine Auswahl an Atlas-Signalen, die ihr 24h-Ziel erreichten — sieh oben den vollständigen Verlauf, Gewinne und Verluste.",
     "liveProofTitle": "Sieh, wie Atlas jedes Signal erklärt",
     "liveProofSubtitle": "Live-Signale genau jetzt — mit den echten Gründen dahinter. Genau das bekommst du drinnen.",
     "liveProofWhy": "Warum:",

@@ -32,6 +32,8 @@
     "logout": "Cerrar sesión"
   },
   "Landing": {
+    "recentWinsTitle": "Ganadoras cerradas recientemente",
+    "recentWinsSubtitle": "Una muestra de señales de Atlas que alcanzaron su objetivo de 24h — mira el registro completo, aciertos y fallos, arriba.",
     "liveProofTitle": "Mira a Atlas explicar cada señal",
     "liveProofSubtitle": "Señales en vivo ahora mismo — con las razones reales detrás. Esto es exactamente lo que obtienes dentro.",
     "liveProofWhy": "Por qué:",

@@ -32,6 +32,8 @@
     "logout": "Logg ut"
   },
   "Landing": {
+    "recentWinsTitle": "Nylig lukkede vinnere",
+    "recentWinsSubtitle": "Et utvalg av Atlas-signaler som traff 24-timersmålet — se hele oversikten, gevinster og tap, over.",
     "liveProofTitle": "Se Atlas forklare hvert signal",
     "liveProofSubtitle": "Live-signaler akkurat nå — med de faktiske grunnene bak. Dette er nøyaktig hva du får inne.",
     "liveProofWhy": "Hvorfor:",
