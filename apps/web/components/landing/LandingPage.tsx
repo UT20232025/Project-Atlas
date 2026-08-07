@@ -24,7 +24,15 @@ export default async function LandingPage({
 }: LandingPageProps) {
   const t = await getTranslations("Landing");
   const tReasons = await getTranslations("AtlasReasons");
+  const tPricing = await getTranslations("Pricing");
   const locale = await getLocale();
+
+  const proFeatures = [
+    tPricing("feature1"),
+    tPricing("feature2"),
+    tPricing("feature3"),
+    tPricing("feature4"),
+  ];
   const hasClosedTrades = trackRecord.totalClosed > 0;
 
   const FEATURES = [
@@ -319,11 +327,23 @@ export default async function LandingPage({
             <p className="text-zinc-500">{t("proPeriod")}</p>
           </div>
 
-          <p className="mt-2 text-zinc-400">
-            {t("proDescription")}
+          <p className="mt-2 text-sm font-medium text-green-400">
+            {tPricing("trialNote")}
           </p>
 
-          <div className="mt-6">
+          <ul className="mx-auto mt-6 max-w-md space-y-3 text-left">
+            {proFeatures.map((feature) => (
+              <li
+                key={feature}
+                className="flex items-start gap-3 text-sm text-zinc-300"
+              >
+                <span className="mt-0.5 text-green-400">✓</span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-8">
             <Link href="/signup">
               <Button size="lg">{t("startTrial")}</Button>
             </Link>
