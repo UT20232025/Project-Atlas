@@ -548,6 +548,9 @@
     "summaryTitle": "Atlas Summary",
     "summaryFallback": "Atlas combines momentum, EMA trend, RSI strength and market confidence to determine whether the current setup statistically favors LONG, SHORT or WAIT."
   },
+  "CoinSearch": {
+    "placeholder": "Search any coin — e.g. BTC, WIF, TAO…"
+  },
   "Admin": {
     "title": "Admin",
     "subtitle": "Genwelth key metrics — visible only to you",

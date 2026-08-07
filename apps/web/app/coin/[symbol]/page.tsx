@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
@@ -24,7 +25,7 @@ import { getSignalHistory } from "../../../lib/atlas/signalHistory";
 import { analyzeWhaleActivity } from "../../../lib/atlas/whaleEngine";
 import { fetchRecentTrades } from "../../../lib/services/binanceTradeService";
 import {
-  fetchLiveMarketData,
+  fetchSingleMarket,
   type MarketSymbol,
 } from "../../../lib/services/liveMarketService";
 import { getCurrentUser, hasActiveSubscription } from "../../../lib/subscription/requirePro";
@@ -51,8 +52,16 @@ export default async function CoinPage({ params }: Props) {
   const marketSymbol =
     symbol.toUpperCase() as MarketSymbol;
 
+  // Validate the symbol against Binance first so an unknown coin 404s
+  // cleanly instead of throwing eight downstream fetches. This is what
+  // lets the search analyze ANY Binance coin, not just the curated list.
+  const market = await fetchSingleMarket(marketSymbol);
+
+  if (!market) {
+    notFound();
+  }
+
   const [
-    marketData,
     candles,
     rsiHistory,
     macdHistory,
@@ -61,7 +70,6 @@ export default async function CoinPage({ params }: Props) {
     watchlists,
     recentTrades,
   ] = await Promise.all([
-    fetchLiveMarketData([marketSymbol]),
     getChartCandles(symbol),
     getRSIHistory(symbol),
     getMACDHistory(symbol),
@@ -76,7 +84,6 @@ export default async function CoinPage({ params }: Props) {
   // Single source of truth: the unified lib/atlas engine (same one the
   // dashboard, scanner, and Telegram use) drives the signal/score, so the
   // headline can no longer contradict the explanation below it.
-  const market = marketData[0];
   const decision = decisionAnalysis.decision;
   const indicators = decisionAnalysis.indicators;
 

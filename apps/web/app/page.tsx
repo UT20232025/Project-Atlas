@@ -12,6 +12,7 @@ import OpportunityCard from "../components/dashboard/OpportunityCard";
 import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import LandingPage from "../components/landing/LandingPage";
+import CoinSearch from "../components/search/CoinSearch";
 import { getAtlasScanner } from "../lib/analysis/scanner";
 import AppLayout from "../components/layout/AppLayout";
 import { MarketProvider } from "../components/providers/MarketProvider";
@@ -95,6 +96,10 @@ export default async function HomePage() {
       isPro={isPro}
     >
       <DashboardHero />
+
+      <div className="mb-8">
+        <CoinSearch />
+      </div>
 
       <div className="mb-8">
         <GettingStarted isPro={isPro} />

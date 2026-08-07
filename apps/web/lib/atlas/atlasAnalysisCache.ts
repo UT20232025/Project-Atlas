@@ -1,3 +1,4 @@
+import { MARKET_SYMBOLS } from "@/lib/config/markets";
 import {
   getAtlasAnalysis,
   type AtlasAnalysisResponse,
@@ -51,17 +52,27 @@ export function getCachedAtlasAnalysis(
     }
   });
 
-  promise.then(async (result) => {
-    const { changed } = await recordSignalIfChanged(
-      symbol,
-      interval,
-      result.decision
-    );
+  // Only the curated MARKET_SYMBOLS feed the verified track record and
+  // the Telegram channel. Ad-hoc coins reached via search are analyzed
+  // and cached, but never recorded or broadcast — so the public track
+  // record stays "our 20 curated calls", not "anything anyone searched".
+  const isCurated = (MARKET_SYMBOLS as readonly string[]).includes(
+    symbol
+  );
 
-    if (changed) {
-      void notifySignalChange(symbol, result.decision);
-    }
-  });
+  if (isCurated) {
+    promise.then(async (result) => {
+      const { changed } = await recordSignalIfChanged(
+        symbol,
+        interval,
+        result.decision
+      );
+
+      if (changed) {
+        void notifySignalChange(symbol, result.decision);
+      }
+    });
+  }
 
   return promise;
 }

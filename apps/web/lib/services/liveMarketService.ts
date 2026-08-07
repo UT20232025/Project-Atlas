@@ -84,6 +84,54 @@ export async function fetchLiveMarketData(
   );
 }
 
+export type SingleMarketItem = {
+  symbol: string;
+  price: number;
+  change24h: number;
+  volume24h: number;
+};
+
+/**
+ * Fetches one symbol's 24h ticker WITHOUT restricting to the curated
+ * MARKET_SYMBOLS list — powers the "analyze any coin" search. Returns
+ * null when Binance doesn't recognize the symbol (it answers 400 for an
+ * unknown/non-spot pair) so callers can 404 gracefully instead of
+ * throwing.
+ */
+export async function fetchSingleMarket(
+  symbol: string,
+  signal?: AbortSignal
+): Promise<SingleMarketItem | null> {
+  const response = await fetch(
+    `https://api.binance.com/api/v3/ticker/24hr?symbol=${encodeURIComponent(
+      symbol
+    )}`,
+    {
+      cache: "no-store",
+      signal,
+    }
+  );
+
+  if (!response.ok) {
+    return null;
+  }
+
+  const data = (await response.json()) as BinanceTickerResponse;
+
+  return {
+    symbol: data.symbol,
+    price: parseNumber(data.lastPrice, `${symbol} price`),
+    change24h: parseNumber(
+      data.priceChangePercent,
+      `${symbol} 24h change`
+    ),
+    volume24h: parseNumber(
+      data.quoteVolume,
+      `${symbol} 24h volume`
+    ),
+  };
+}
+
 export function formatMarketSymbol(symbol: MarketSymbol) {
   return symbol.replace("USDT", "");
 }

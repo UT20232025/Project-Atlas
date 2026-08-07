@@ -548,6 +548,9 @@
     "summaryTitle": "Atlas-sammendrag",
     "summaryFallback": "Atlas kombinerer momentum, EMA-trend, RSI-styrke og markedskonfidens for å avgjøre om det nåværende oppsettet statistisk favoriserer LONG, SHORT eller WAIT."
   },
+  "CoinSearch": {
+    "placeholder": "Søk hvilken som helst mynt — f.eks. BTC, WIF, TAO…"
+  },
   "Admin": {
     "title": "Admin",
     "subtitle": "Nøkkeltall for Genwelth — kun synlig for deg",

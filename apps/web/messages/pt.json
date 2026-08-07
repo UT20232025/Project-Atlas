@@ -548,6 +548,9 @@
     "summaryTitle": "Resumo da Atlas",
     "summaryFallback": "A Atlas combina momentum, tendência EMA, força do RSI e confiança de mercado para determinar se o setup atual favorece estatisticamente LONG, SHORT ou WAIT."
   },
+  "CoinSearch": {
+    "placeholder": "Procura qualquer moeda — ex. BTC, WIF, TAO…"
+  },
   "Admin": {
     "title": "Admin",
     "subtitle": "Métricas-chave da Genwelth — visível apenas para ti",
