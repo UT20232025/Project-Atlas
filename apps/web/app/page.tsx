@@ -41,15 +41,20 @@ export default async function HomePage() {
       getAtlasScanner(),
     ]);
 
-    // Scanner is pre-sorted by confidence; take the strongest live
-    // directional calls so the landing page proves the "explains why"
-    // value with real data.
-    const topSetups = scanner
-      .filter(
-        (item) =>
-          item.signal === "LONG" || item.signal === "SHORT"
-      )
-      .slice(0, 3);
+    // Scanner is pre-sorted by confidence. Show directional calls
+    // (LONG/SHORT) first since they're the most compelling, but pad
+    // with the highest-confidence remaining analyses so the "explains
+    // why" section always renders real reasoning — even in a quiet
+    // market where every coin is WAIT.
+    const directional = scanner.filter(
+      (item) =>
+        item.signal === "LONG" || item.signal === "SHORT"
+    );
+    const others = scanner.filter(
+      (item) =>
+        item.signal !== "LONG" && item.signal !== "SHORT"
+    );
+    const topSetups = [...directional, ...others].slice(0, 3);
 
     return (
       <LandingPage

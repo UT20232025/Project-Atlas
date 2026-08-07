@@ -132,7 +132,21 @@ export default async function LandingPage({
 
             <div className="mt-8 grid gap-4 md:grid-cols-3">
               {topSetups.map((setup) => {
-                const isLong = setup.signal === "LONG";
+                const tone =
+                  setup.signal === "LONG"
+                    ? {
+                        badge: "bg-green-500/15 text-green-400",
+                        icon: "🟢",
+                      }
+                    : setup.signal === "SHORT"
+                    ? {
+                        badge: "bg-red-500/15 text-red-400",
+                        icon: "🔴",
+                      }
+                    : {
+                        badge: "bg-amber-500/15 text-amber-400",
+                        icon: "⏳",
+                      };
 
                 return (
                   <div
@@ -145,13 +159,9 @@ export default async function LandingPage({
                       </span>
 
                       <span
-                        className={`rounded-full px-3 py-1 text-xs font-bold ${
-                          isLong
-                            ? "bg-green-500/15 text-green-400"
-                            : "bg-red-500/15 text-red-400"
-                        }`}
+                        className={`rounded-full px-3 py-1 text-xs font-bold ${tone.badge}`}
                       >
-                        {isLong ? "🟢" : "🔴"} {setup.signal}{" "}
+                        {tone.icon} {setup.signal}{" "}
                         {setup.confidence}%
                       </span>
                     </div>
