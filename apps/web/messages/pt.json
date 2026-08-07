@@ -20,6 +20,7 @@
     "disclaimer": "Análise de mercado educativa — não é aconselhamento financeiro.",
     "proRequired": "Pergunta ao Atlas é uma funcionalidade Genwelth AI Pro.",
     "error": "Algo correu mal — tenta novamente.",
+    "limitReached": "Atingiste o limite de hoje do Pergunta ao Atlas — tenta novamente amanhã.",
     "lockedHeading": "Conversa com o Atlas",
     "lockedBody": "Pergunta ao Atlas sobre qualquer moeda e recebe o seu sinal ao vivo e raciocínio em linguagem simples. Desbloqueia com Genwelth AI Pro.",
     "unlockButton": "Desbloquear com Pro"

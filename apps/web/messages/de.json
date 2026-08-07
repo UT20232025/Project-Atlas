@@ -20,6 +20,7 @@
     "disclaimer": "Bildende Marktanalyse — keine Finanzberatung.",
     "proRequired": "Frag Atlas ist eine Genwelth AI Pro-Funktion.",
     "error": "Etwas ist schiefgelaufen — bitte versuch es erneut.",
+    "limitReached": "Du hast das heutige Limit von Frag Atlas erreicht — versuch es morgen erneut.",
     "lockedHeading": "Chatte mit Atlas",
     "lockedBody": "Frag Atlas nach jeder Coin und erhalte sein Live-Signal und die Begründung in klarer Sprache. Schalte es mit Genwelth AI Pro frei.",
     "unlockButton": "Mit Pro freischalten"

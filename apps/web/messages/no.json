@@ -20,6 +20,7 @@
     "disclaimer": "Pedagogisk markedsanalyse — ikke finansiell rådgivning.",
     "proRequired": "Spør Atlas er en Genwelth AI Pro-funksjon.",
     "error": "Noe gikk galt — prøv igjen.",
+    "limitReached": "Du har nådd dagens grense for Spør Atlas — prøv igjen i morgen.",
     "lockedHeading": "Chat med Atlas",
     "lockedBody": "Spør Atlas om hvilken som helst mynt og få live-signal og begrunnelse i klartekst. Lås det opp med Genwelth AI Pro.",
     "unlockButton": "Lås opp med Pro"

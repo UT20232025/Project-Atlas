@@ -179,6 +179,10 @@ Hard rules:
 export type AtlasChatResult = {
   reply: string;
   symbol: string | null;
+  usage: {
+    inputTokens: number;
+    outputTokens: number;
+  };
 };
 
 /**
@@ -222,5 +226,9 @@ export async function runAtlasChat(
       reply ||
       "I couldn't put together a read just now — try asking again in a moment.",
     symbol: grounding ? symbol : null,
+    usage: {
+      inputTokens: response.usage.input_tokens,
+      outputTokens: response.usage.output_tokens,
+    },
   };
 }

@@ -5,6 +5,7 @@ import {
   runAtlasChat,
   type AtlasChatMessage,
 } from "@/lib/atlas/atlasChat";
+import { consumeChatQuota } from "@/lib/atlas/chatRateLimit";
 import { getSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/client";
 import { hasActiveSubscription } from "@/lib/subscription/requirePro";
@@ -82,10 +83,34 @@ export async function POST(request: Request) {
 
   const history = sanitizeHistory((body as { history?: unknown })?.history);
 
+  // Cost guard: cap paid model calls per user per day.
+  const quota = consumeChatQuota(session.userId);
+
+  if (!quota.allowed) {
+    return NextResponse.json({
+      reply: null,
+      symbol: null,
+      limited: true,
+    });
+  }
+
   try {
     const result = await runAtlasChat(history, message.slice(0, 2000));
 
-    return NextResponse.json(result);
+    // Usage log — visible via `prisma-cli app logs` for cost monitoring.
+    console.log(
+      `[atlas-chat] user=${session.email} symbol=${
+        result.symbol ?? "none"
+      } in=${result.usage.inputTokens} out=${
+        result.usage.outputTokens
+      } remaining_today=${quota.remaining}`
+    );
+
+    return NextResponse.json({
+      reply: result.reply,
+      symbol: result.symbol,
+      limited: false,
+    });
   } catch (error) {
     console.error("Atlas chat failed:", error);
 

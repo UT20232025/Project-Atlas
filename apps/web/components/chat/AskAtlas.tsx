@@ -49,13 +49,15 @@ export default function AskAtlas() {
       });
 
       const data = (await response.json()) as {
-        reply?: string;
+        reply?: string | null;
         error?: string;
+        limited?: boolean;
       };
 
-      const reply =
-        data.reply ??
-        (response.status === 403 ? t("proRequired") : t("error"));
+      const reply = data.limited
+        ? t("limitReached")
+        : data.reply ??
+          (response.status === 403 ? t("proRequired") : t("error"));
 
       setMessages([
         ...nextMessages,

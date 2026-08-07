@@ -20,6 +20,7 @@
     "disclaimer": "Educational market analysis — not financial advice.",
     "proRequired": "Ask Atlas is a Genwelth AI Pro feature.",
     "error": "Something went wrong — please try again.",
+    "limitReached": "You've reached today's Ask Atlas limit — try again tomorrow.",
     "lockedHeading": "Chat with Atlas",
     "lockedBody": "Ask Atlas about any coin and get its live signal and reasoning in plain language. Unlock it with Genwelth AI Pro.",
     "unlockButton": "Unlock with Pro"
