@@ -54,6 +54,12 @@
   "Landing": {
     "recentWinsTitle": "Kürzlich geschlossene Gewinner",
     "recentWinsSubtitle": "Eine Auswahl an Atlas-Signalen, die ihr 24h-Ziel erreichten — sieh oben den vollständigen Verlauf, Gewinne und Verluste.",
+    "askTeaserTitle": "Sprich mit Atlas",
+    "askTeaserSubtitle": "Frag nach jeder Coin in natürlicher Sprache und erhalte Atlas' echte Einschätzung — Signal, Levels und die Begründung dahinter.",
+    "askTeaserQuestion": "Was hältst du gerade von ETH?",
+    "askTeaserAnswer": "Gerade stehe ich bei ETH auf WAIT (77 % Konfidenz). Der Preis klebt am VWAP in einer engen Spanne, der RSI ist völlig neutral, und meine Zeitrahmen stimmen nicht überein — noch kein klarer Long oder Short, den ich stützen würde. Ich würde Unterstützung und Widerstand für das nächste echte Signal beobachten. Keine Finanzberatung.",
+    "askTeaserExampleNote": "Beispielgespräch · Pro-Mitglieder fragen live nach jeder Coin",
+    "askTeaserCta": "Registriere dich, um Atlas zu fragen",
     "liveProofTitle": "Sieh, wie Atlas jedes Signal erklärt",
     "liveProofSubtitle": "Live-Signale genau jetzt — mit den echten Gründen dahinter. Genau das bekommst du drinnen.",
     "liveProofWhy": "Warum:",

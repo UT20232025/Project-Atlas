@@ -135,6 +135,42 @@ export default async function LandingPage({
           </div>
         </section>
 
+        <section className="atlas-card mt-16 rounded-2xl p-8">
+          <div className="text-center">
+            <span className="text-3xl">🧭</span>
+            <h2 className="mt-2 text-2xl font-bold">
+              {t("askTeaserTitle")}
+            </h2>
+            <p className="mx-auto mt-1 max-w-2xl text-sm text-zinc-500">
+              {t("askTeaserSubtitle")}
+            </p>
+          </div>
+
+          <div className="mx-auto mt-8 max-w-2xl space-y-3">
+            <div className="flex justify-end">
+              <div className="max-w-[85%] rounded-2xl bg-blue-600 px-4 py-3 text-sm text-white">
+                {t("askTeaserQuestion")}
+              </div>
+            </div>
+
+            <div className="flex justify-start">
+              <div className="atlas-subcard max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-3 text-sm text-zinc-200">
+                {t("askTeaserAnswer")}
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-4 text-center text-xs text-zinc-600">
+            {t("askTeaserExampleNote")}
+          </p>
+
+          <div className="mt-6 text-center">
+            <Link href="/signup">
+              <Button size="lg">{t("askTeaserCta")}</Button>
+            </Link>
+          </div>
+        </section>
+
         {topSetups.length > 0 && (
           <section className="mt-16">
             <h2 className="text-center text-2xl font-bold">

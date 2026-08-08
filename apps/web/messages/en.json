@@ -54,6 +54,12 @@
   "Landing": {
     "recentWinsTitle": "Recently closed winners",
     "recentWinsSubtitle": "A sample of Atlas calls that hit their 24h target — see the full record, wins and losses, above.",
+    "askTeaserTitle": "Talk to Atlas",
+    "askTeaserSubtitle": "Ask about any coin in plain language and get Atlas's real read — signal, levels, and the reasoning behind it.",
+    "askTeaserQuestion": "What do you think about ETH right now?",
+    "askTeaserAnswer": "Right now I'm on WAIT for ETH (77% confidence). Price is pinned to VWAP in a tight range, RSI is dead-neutral, and my timeframes don't line up — no clean long or short to back yet. I'd watch support and resistance for the next real signal. Not financial advice.",
+    "askTeaserExampleNote": "Example conversation · Pro members ask about any coin, live",
+    "askTeaserCta": "Sign up to ask Atlas",
     "liveProofTitle": "See Atlas explain every call",
     "liveProofSubtitle": "Live signals right now — with the actual reasons behind them. This is exactly what you get inside.",
     "liveProofWhy": "Why:",

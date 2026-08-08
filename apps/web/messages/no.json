@@ -54,6 +54,12 @@
   "Landing": {
     "recentWinsTitle": "Nylig lukkede vinnere",
     "recentWinsSubtitle": "Et utvalg av Atlas-signaler som traff 24-timersmålet — se hele oversikten, gevinster og tap, over.",
+    "askTeaserTitle": "Snakk med Atlas",
+    "askTeaserSubtitle": "Spør om hvilken som helst mynt i naturlig språk og få Atlas' ekte vurdering — signal, nivåer og begrunnelsen bak.",
+    "askTeaserQuestion": "Hva tenker du om ETH akkurat nå?",
+    "askTeaserAnswer": "Akkurat nå står jeg på WAIT for ETH (77 % konfidens). Prisen er klistret til VWAP i et trangt spenn, RSI er helt nøytral, og tidsrammene mine er ikke enige — ingen ren long eller short å satse på ennå. Jeg ville fulgt med på støtte og motstand for neste ekte signal. Ikke finansiell rådgivning.",
+    "askTeaserExampleNote": "Eksempelsamtale · Pro-medlemmer spør om hvilken som helst mynt, live",
+    "askTeaserCta": "Registrer deg for å spørre Atlas",
     "liveProofTitle": "Se Atlas forklare hvert signal",
     "liveProofSubtitle": "Live-signaler akkurat nå — med de faktiske grunnene bak. Dette er nøyaktig hva du får inne.",
     "liveProofWhy": "Hvorfor:",

@@ -54,6 +54,12 @@
   "Landing": {
     "recentWinsTitle": "Vencedoras fechadas recentemente",
     "recentWinsSubtitle": "Uma amostra de sinais do Atlas que atingiram o alvo de 24h — vê o registo completo, ganhos e perdas, acima.",
+    "askTeaserTitle": "Fala com o Atlas",
+    "askTeaserSubtitle": "Pergunta sobre qualquer moeda em linguagem natural e recebe a leitura real do Atlas — sinal, níveis e o raciocínio por trás.",
+    "askTeaserQuestion": "O que achas do ETH agora?",
+    "askTeaserAnswer": "Neste momento estou em WAIT para o ETH (77 % de confiança). O preço está colado ao VWAP num intervalo apertado, o RSI está totalmente neutro e os meus períodos não estão alinhados — ainda não há um long ou short claro para apoiar. Ficaria atento ao suporte e à resistência para o próximo sinal real. Não é aconselhamento financeiro.",
+    "askTeaserExampleNote": "Conversa de exemplo · Membros Pro perguntam sobre qualquer moeda, ao vivo",
+    "askTeaserCta": "Regista-te para perguntar ao Atlas",
     "liveProofTitle": "Vê o Atlas explicar cada sinal",
     "liveProofSubtitle": "Sinais ao vivo agora mesmo — com as razões reais por trás. É exatamente isto que recebes lá dentro.",
     "liveProofWhy": "Porquê:",
