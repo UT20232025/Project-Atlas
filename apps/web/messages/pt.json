@@ -373,6 +373,13 @@
     "empty": "Sem mudanças de sinal nas tuas moedas nas últimas 2 semanas. Adiciona moedas a uma watchlist para receber alertas aqui.",
     "count": "{count} mudanças de sinal recentes em moedas que segues"
   },
+  "WatchlistSignalBoard": {
+    "title": "A leitura da Atlas da tua lista",
+    "subtitle": "O sinal atual da Atlas para cada ativo que segues.",
+    "confidence": "Confiança",
+    "score": "Pontuação",
+    "disclaimer": "Não é aconselhamento financeiro — gere o teu próprio risco."
+  },
   "RecentSignalChanges": {
     "title": "Mudanças recentes de sinal",
     "subtitle": "Sinais da Atlas que acabaram de mudar",

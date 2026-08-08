@@ -373,6 +373,13 @@
     "empty": "Ingen signalendringer på myntene dine de siste to ukene. Legg mynter i en overvåkningsliste for å få varsler her.",
     "count": "{count} nylige signalendringer på mynter du følger"
   },
+  "WatchlistSignalBoard": {
+    "title": "Atlas' read på lista di",
+    "subtitle": "Signalet Atlas gir akkurat nå for hver ting du følger.",
+    "confidence": "Konfidens",
+    "score": "Score",
+    "disclaimer": "Ikke finansiell rådgivning – styr din egen risiko."
+  },
   "RecentSignalChanges": {
     "title": "Nylige signalendringer",
     "subtitle": "Atlas-signaler som nettopp har snudd",

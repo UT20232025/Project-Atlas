@@ -373,6 +373,13 @@
     "empty": "No signal changes on your watched coins in the last 2 weeks. Add coins to a watchlist to get alerts here.",
     "count": "{count} recent signal changes on coins you follow"
   },
+  "WatchlistSignalBoard": {
+    "title": "Atlas's read on your list",
+    "subtitle": "Atlas's current signal for each asset you follow.",
+    "confidence": "Confidence",
+    "score": "Score",
+    "disclaimer": "Not financial advice — manage your own risk."
+  },
   "RecentSignalChanges": {
     "title": "Recent Signal Changes",
     "subtitle": "Atlas signals that just flipped",

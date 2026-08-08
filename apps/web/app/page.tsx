@@ -12,6 +12,7 @@ import OpportunityCard from "../components/dashboard/OpportunityCard";
 import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import WatchlistAlerts from "../components/dashboard/WatchlistAlerts";
+import WatchlistSignalBoard from "../components/dashboard/WatchlistSignalBoard";
 import LandingPage from "../components/landing/LandingPage";
 import CoinSearch from "../components/search/CoinSearch";
 import { getAtlasScanner } from "../lib/analysis/scanner";
@@ -23,6 +24,7 @@ import WatchlistUpsell from "../components/watchlist/WatchlistUpsell";
 import { getUpcomingMacroEvents } from "../lib/atlas/macroCalendarEngine";
 import { getCachedTrackRecord } from "../lib/atlas/trackRecordCache";
 import { getWatchlistAlerts } from "../lib/atlas/signalHistory";
+import { getWatchlistSignalBoard } from "../lib/watchlists/signalBoard";
 import { getSession } from "../lib/auth/session";
 import { getDashboardData } from "../lib/services/dashboardService";
 import { getCurrentUser, hasActiveSubscription } from "../lib/subscription/requirePro";
@@ -71,11 +73,13 @@ export default async function HomePage() {
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
 
-  const [dashboard, watchlists, watchlistAlerts] = await Promise.all([
-    getDashboardData(),
-    isPro ? getWatchlists(userId) : Promise.resolve([]),
-    isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
-  ]);
+  const [dashboard, watchlists, watchlistAlerts, watchlistBoard] =
+    await Promise.all([
+      getDashboardData(),
+      isPro ? getWatchlists(userId) : Promise.resolve([]),
+      isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
+      isPro ? getWatchlistSignalBoard(userId) : Promise.resolve([]),
+    ]);
 
   const opportunity = [...dashboard.scanner].sort(
     (first, second) => second.score - first.score
@@ -107,6 +111,12 @@ export default async function HomePage() {
       {isPro && (
         <div className="mb-8">
           <WatchlistAlerts items={watchlistAlerts} />
+        </div>
+      )}
+
+      {isPro && watchlistBoard.length > 0 && (
+        <div className="mb-8">
+          <WatchlistSignalBoard items={watchlistBoard} />
         </div>
       )}
 
