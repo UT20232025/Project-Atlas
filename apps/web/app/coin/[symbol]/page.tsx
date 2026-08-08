@@ -28,6 +28,10 @@ import {
   fetchSingleMarket,
   type MarketSymbol,
 } from "../../../lib/services/liveMarketService";
+import {
+  fetchStockQuote,
+  isStockSymbol,
+} from "../../../lib/services/twelveDataService";
 import { getCurrentUser, hasActiveSubscription } from "../../../lib/subscription/requirePro";
 import { getWatchlists } from "../../../lib/watchlists/queries";
 import {
@@ -52,15 +56,22 @@ export default async function CoinPage({ params }: Props) {
   const marketSymbol =
     symbol.toUpperCase() as MarketSymbol;
 
-  // Validate the symbol against Binance first so an unknown coin 404s
-  // cleanly instead of throwing eight downstream fetches. This is what
-  // lets the search analyze ANY Binance coin, not just the curated list.
-  const market = await fetchSingleMarket(marketSymbol);
+  const isStock = isStockSymbol(marketSymbol);
+
+  // Validate the symbol first so an unknown asset 404s cleanly instead of
+  // throwing downstream fetches. Stocks come from Twelve Data, everything
+  // else from Binance.
+  const market = isStock
+    ? await fetchStockQuote(marketSymbol)
+    : await fetchSingleMarket(marketSymbol);
 
   if (!market) {
     notFound();
   }
 
+  // Charts, signal history, and whale trades are Binance-only — skip them for
+  // stocks (Twelve Data has no order-flow feed and stocks aren't recorded to
+  // the crypto signal history). The Atlas decision engine works for both.
   const [
     candles,
     rsiHistory,
@@ -70,13 +81,15 @@ export default async function CoinPage({ params }: Props) {
     watchlists,
     recentTrades,
   ] = await Promise.all([
-    getChartCandles(symbol),
-    getRSIHistory(symbol),
-    getMACDHistory(symbol),
+    isStock ? Promise.resolve([]) : getChartCandles(symbol),
+    isStock ? Promise.resolve([]) : getRSIHistory(symbol),
+    isStock ? Promise.resolve([]) : getMACDHistory(symbol),
     getAtlasDecision(marketSymbol),
-    getSignalHistory(marketSymbol, 20),
+    isStock
+      ? Promise.resolve([])
+      : getSignalHistory(marketSymbol, 20),
     isPro ? getWatchlists(userId) : Promise.resolve([]),
-    fetchRecentTrades(marketSymbol),
+    isStock ? Promise.resolve([]) : fetchRecentTrades(marketSymbol),
   ]);
 
   const whaleActivity = analyzeWhaleActivity(recentTrades);
@@ -277,7 +290,9 @@ export default async function CoinPage({ params }: Props) {
           trend={emaTrend}
         />
 
-        <WhaleActivityCard activity={whaleActivity} />
+        {!isStock && (
+          <WhaleActivityCard activity={whaleActivity} />
+        )}
       </div>
 
       <div className="mt-8">
@@ -336,24 +351,28 @@ export default async function CoinPage({ params }: Props) {
         />
       </div>
 
-      <div className="mt-8">
-        <CandlestickChart
-          candles={candles}
-          levels={chartLevels}
-        />
-      </div>
+      {!isStock && (
+        <>
+          <div className="mt-8">
+            <CandlestickChart
+              candles={candles}
+              levels={chartLevels}
+            />
+          </div>
 
-      <div className="mt-8">
-        <RSIChart values={rsiHistory} />
-      </div>
+          <div className="mt-8">
+            <RSIChart values={rsiHistory} />
+          </div>
 
-      <div className="mt-8">
-        <MACDChart values={macdHistory} />
-      </div>
+          <div className="mt-8">
+            <MACDChart values={macdHistory} />
+          </div>
 
-      <div className="mt-8">
-        <SignalHistoryCard history={signalHistory} />
-      </div>
+          <div className="mt-8">
+            <SignalHistoryCard history={signalHistory} />
+          </div>
+        </>
+      )}
     </AppLayout>
   );
 }

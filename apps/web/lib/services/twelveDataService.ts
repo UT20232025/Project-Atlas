@@ -169,7 +169,43 @@ export type StockQuote = {
   symbol: string;
   price: number;
   change24h: number;
+  volume24h: number;
 };
+
+/**
+ * Searches the curated stock universe by ticker or company name — for the
+ * coin/asset search box. Returns `{symbol, base}` matching the crypto search
+ * shape so the UI treats results uniformly.
+ */
+export function searchStocks(
+  query: string,
+  limit = 4
+): Array<{ symbol: string; base: string }> {
+  const q = query.trim().toUpperCase();
+
+  if (!q) {
+    return [];
+  }
+
+  const seen = new Set<string>();
+  const results: Array<{ symbol: string; base: string }> = [];
+
+  for (const ticker of STOCK_SYMBOLS) {
+    if (ticker.includes(q) && !seen.has(ticker)) {
+      seen.add(ticker);
+      results.push({ symbol: ticker, base: ticker });
+    }
+  }
+
+  for (const [name, ticker] of Object.entries(STOCK_ALIASES)) {
+    if (name.includes(q) && !seen.has(ticker)) {
+      seen.add(ticker);
+      results.push({ symbol: ticker, base: ticker });
+    }
+  }
+
+  return results.slice(0, limit);
+}
 
 /**
  * Live-ish stock quote (last price + session % change). Returns null when
@@ -206,6 +242,7 @@ export async function fetchStockQuote(
     status?: string;
     close?: string;
     percent_change?: string;
+    volume?: string;
   };
 
   if (data.status === "error" || data.close == null) {
@@ -222,5 +259,6 @@ export async function fetchStockQuote(
     symbol: symbol.toUpperCase(),
     price,
     change24h: Number(data.percent_change ?? 0),
+    volume24h: Number(data.volume ?? 0),
   };
 }
