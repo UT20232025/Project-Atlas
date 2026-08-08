@@ -9,7 +9,7 @@
   "AskAtlas": {
     "title": "Frag Atlas",
     "subtitle": "Chatte mit der Atlas-Engine — frag nach jeder Coin und erhalte ihre Einschätzung, mit Begründung.",
-    "placeholder": "Frag nach jeder Coin — z. B. was hältst du von einem Long auf SOL?",
+    "placeholder": "Frag nach jeder Coin oder Aktie — z. B. was hältst du von einem Long auf TSLA?",
     "send": "Senden",
     "thinking": "Atlas denkt nach…",
     "emptyTitle": "Frag Atlas alles über Krypto",

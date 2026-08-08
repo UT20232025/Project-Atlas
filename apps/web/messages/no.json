@@ -9,7 +9,7 @@
   "AskAtlas": {
     "title": "Spør Atlas",
     "subtitle": "Chat med Atlas-motoren — spør om hvilken som helst mynt og få dens vurdering, med begrunnelsene.",
-    "placeholder": "Spør om hvilken som helst mynt — f.eks. hva tenker du om en long på SOL?",
+    "placeholder": "Spør om mynt eller aksje — f.eks. hva tenker du om en long på TSLA?",
     "send": "Send",
     "thinking": "Atlas tenker…",
     "emptyTitle": "Spør Atlas om hva som helst innen krypto",

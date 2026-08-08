@@ -9,6 +9,11 @@ import {
   fetchSingleMarket,
   type MarketSymbol,
 } from "@/lib/services/liveMarketService";
+import {
+  fetchStockQuote,
+  isStockSymbol,
+  isStocksConfigured,
+} from "@/lib/services/twelveDataService";
 
 // Default to the most capable model; the owner can point this at a cheaper
 // model (e.g. claude-sonnet-5 or claude-haiku-4-5) via env to cut per-message
@@ -90,6 +95,8 @@ async function detectSymbol(message: string): Promise<string | null> {
     new Set(message.toUpperCase().match(/\b[A-Z0-9]{2,6}\b/g) ?? [])
   );
 
+  // 1. Exact crypto base match (crypto-first, so ambiguous tickers like SOL
+  //    resolve to the coin).
   for (const token of tokens) {
     if (STOP_WORDS.has(token)) {
       continue;
@@ -102,6 +109,14 @@ async function detectSymbol(message: string): Promise<string | null> {
     }
   }
 
+  // 2. Known US stock ticker (TSLA, AAPL, …).
+  for (const token of tokens) {
+    if (!STOP_WORDS.has(token) && isStockSymbol(token)) {
+      return token;
+    }
+  }
+
+  // 3. Loose crypto search.
   for (const token of tokens) {
     if (STOP_WORDS.has(token) || token.length < 3) {
       continue;
@@ -122,26 +137,55 @@ function formatNumber(value: number | null): string {
 }
 
 /**
- * Builds a factual, engine-grounded context block for a single coin. Every
- * number here comes straight from the deterministic Atlas engine — Claude is
- * only allowed to phrase and explain what's in this block.
+ * Builds a factual, engine-grounded context block for a single asset (crypto
+ * or stock). Every number here comes straight from the deterministic Atlas
+ * engine — Claude is only allowed to phrase and explain what's in this block.
  */
 async function buildCoinGrounding(symbol: string): Promise<string | null> {
-  const market = await fetchSingleMarket(symbol);
+  const isStock = isStockSymbol(symbol);
 
-  if (!market) {
-    return null;
+  let price: number;
+  let change: number;
+  let unit: string;
+  let assetLabel: string;
+  let display: string;
+
+  if (isStock) {
+    if (!isStocksConfigured()) {
+      return null;
+    }
+
+    const quote = await fetchStockQuote(symbol);
+
+    if (!quote) {
+      return null;
+    }
+
+    price = quote.price;
+    change = quote.change24h;
+    unit = "USD";
+    assetLabel = "STOCK";
+    display = symbol.toUpperCase();
+  } else {
+    const market = await fetchSingleMarket(symbol);
+
+    if (!market) {
+      return null;
+    }
+
+    price = market.price;
+    change = market.change24h;
+    unit = "USDT";
+    assetLabel = "CRYPTO";
+    display = symbol.replace(/USDT$/, "");
   }
 
   const analysis = await getCachedAtlasAnalysis(symbol as MarketSymbol);
   const decision = analysis.decision;
-  const coin = symbol.replace(/USDT$/, "");
 
   return [
-    `COIN: ${coin} (${symbol})`,
-    `LIVE PRICE: ${market.price} USDT (24h change ${market.change24h.toFixed(
-      2
-    )}%)`,
+    `ASSET: ${display} (${symbol}) · ${assetLabel}`,
+    `LIVE PRICE: ${price} ${unit} (change ${change.toFixed(2)}%)`,
     `ATLAS SIGNAL: ${decision.signal} · confidence ${decision.confidence}% · score ${decision.score}/100 · trade approved: ${decision.tradeApproved}`,
     `TREND: ${analysis.trend.direction} · RSI: ${analysis.indicators.rawRsi.toFixed(
       1
@@ -164,14 +208,14 @@ async function buildCoinGrounding(symbol: string): Promise<string | null> {
   ].join("\n");
 }
 
-const PERSONA = `You are Atlas, the analysis engine behind Genwelth AI — a crypto trading-signals platform.
+const PERSONA = `You are Atlas, the analysis engine behind Genwelth AI — a crypto and stock trading-signals platform.
 
-You speak in the first person as Atlas. Your job is to explain your OWN read on a coin in plain, confident, conversational language, grounded ONLY in the ATLAS DATA block provided for this turn.
+You speak in the first person as Atlas. Your job is to explain your OWN read on an asset (a crypto coin or a stock) in plain, confident, conversational language, grounded ONLY in the ATLAS DATA block provided for this turn. The block's ASSET line says whether it's CRYPTO or a STOCK — speak accordingly.
 
 Hard rules:
 - Use ONLY the numbers and reasons in the ATLAS DATA block. Never invent prices, levels, percentages, or reasons. If a value is "n/a", say you don't have it.
-- If no ATLAS DATA block is present, ask the user which crypto coin they want you to look at (you cover any Binance USDT pair). Do not guess.
-- You analyze crypto only. If asked about stocks, forex, or anything non-crypto, say that's not something you cover yet.
+- If no ATLAS DATA block is present, ask the user which crypto coin or stock they want you to look at (you cover any Binance coin, plus major US stocks like TSLA, AAPL, NVDA). Do not guess.
+- If asked about forex, commodities, or anything that isn't a crypto coin or a stock, say that's not something you cover yet.
 - This is educational market analysis, NOT financial advice. Weave in a brief, natural "this isn't financial advice — manage your own risk" note; do not tell the user what they personally should do with their money.
 - Be concise: a short paragraph or a few tight bullet points. Lead with your signal and confidence, then the "why".
 - Do not include any internal or system XML tags in your response.`;

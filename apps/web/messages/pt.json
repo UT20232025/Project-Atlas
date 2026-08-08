@@ -9,7 +9,7 @@
   "AskAtlas": {
     "title": "Pergunta ao Atlas",
     "subtitle": "Conversa com o motor Atlas — pergunta sobre qualquer moeda e recebe a sua leitura, com as razões.",
-    "placeholder": "Pergunta sobre qualquer moeda — ex. o que achas de um long em SOL?",
+    "placeholder": "Pergunta sobre qualquer moeda ou ação — ex. o que achas de um long em TSLA?",
     "send": "Enviar",
     "thinking": "O Atlas está a pensar…",
     "emptyTitle": "Pergunta ao Atlas tudo sobre cripto",

@@ -105,6 +105,7 @@ import {
   fetchBinanceCandles,
   type BinanceInterval,
 } from "@/lib/services/binanceCandleService";
+import { fetchMarketCandles } from "@/lib/services/marketCandles";
 
 import type {
   MarketSymbol,
@@ -413,7 +414,7 @@ async function createTimeframeSnapshot(
   interval: BinanceInterval
 ): Promise<AtlasTimeframeSnapshot> {
   const candles =
-    await fetchBinanceCandles(
+    await fetchMarketCandles(
       symbol,
       interval,
       250

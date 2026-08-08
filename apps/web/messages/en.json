@@ -9,7 +9,7 @@
   "AskAtlas": {
     "title": "Ask Atlas",
     "subtitle": "Chat with the Atlas engine — ask about any coin and get its read, with the reasons.",
-    "placeholder": "Ask about any coin — e.g. what do you think about a long on SOL?",
+    "placeholder": "Ask about any coin or stock — e.g. what do you think about a long on TSLA?",
     "send": "Send",
     "thinking": "Atlas is thinking…",
     "emptyTitle": "Ask Atlas anything about crypto",
