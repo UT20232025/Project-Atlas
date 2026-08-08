@@ -227,34 +227,37 @@ Hard rules:
 - Be concise: a short paragraph or a few tight bullet points. Lead with your signal and confidence, then the "why".
 - Do not include any internal or system XML tags in your response.`;
 
-export type AtlasChatResult = {
-  reply: string;
-  symbol: string | null;
-  usage: {
-    inputTokens: number;
-    outputTokens: number;
-  };
+export const STOCK_NOT_CONFIGURED_REPLY =
+  "Stock analysis isn't switched on yet — the workspace still needs a market-data (Twelve Data) key configured. I can still look at any crypto coin in the meantime.";
+
+type ChatTurn = {
+  role: "user" | "assistant";
+  content: string;
 };
 
+export type AtlasChatPrep =
+  | {
+      kind: "answer";
+      system: string;
+      messages: ChatTurn[];
+      symbol: string | null;
+    }
+  | { kind: "stock_not_configured" };
+
 /**
- * Runs one turn of the "Ask Atlas" chat: detects the coin, grounds Claude in
- * the real engine analysis, and returns Atlas's natural-language explanation.
+ * Prepares one Ask Atlas turn: detects the asset, grounds the system prompt in
+ * the real engine analysis, and assembles the messages. Returns a
+ * "stock_not_configured" signal when a stock is recognized but the market-data
+ * key is missing, so the route can answer clearly without a model call.
  */
-export async function runAtlasChat(
+export async function prepareAtlasChat(
   history: AtlasChatMessage[],
   userMessage: string
-): Promise<AtlasChatResult> {
+): Promise<AtlasChatPrep> {
   const symbol = await detectSymbol(userMessage);
 
-  // Distinguish "stock recognized but market-data key missing" from a generic
-  // no-match, so the owner gets a clear signal to configure the key.
   if (symbol && isStockSymbol(symbol) && !isStocksConfigured()) {
-    return {
-      reply:
-        "Stock analysis isn't switched on yet — the workspace still needs a market-data (Twelve Data) key configured. I can still look at any crypto coin in the meantime.",
-      symbol: null,
-      usage: { inputTokens: 0, outputTokens: 0 },
-    };
+    return { kind: "stock_not_configured" };
   }
 
   const grounding = symbol ? await buildCoinGrounding(symbol) : null;
@@ -263,11 +266,8 @@ export async function runAtlasChat(
     ? `${PERSONA}\n\nATLAS DATA (this turn):\n${grounding}`
     : PERSONA;
 
-  const client = new Anthropic();
-
-  const response = await client.messages.create({
-    model: MODEL,
-    max_tokens: 4096,
+  return {
+    kind: "answer",
     system,
     messages: [
       ...history.slice(-8).map((message) => ({
@@ -276,22 +276,24 @@ export async function runAtlasChat(
       })),
       { role: "user" as const, content: userMessage },
     ],
-  });
-
-  const reply = response.content
-    .filter((block) => block.type === "text")
-    .map((block) => (block as { text: string }).text)
-    .join("\n")
-    .trim();
-
-  return {
-    reply:
-      reply ||
-      "I couldn't put together a read just now — try asking again in a moment.",
     symbol: grounding ? symbol : null,
-    usage: {
-      inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens,
-    },
   };
+}
+
+/**
+ * Opens a streaming Claude response for a prepared turn. The caller pipes
+ * `.on("text", …)` deltas to the client and awaits `.finalMessage()` for usage.
+ */
+export function streamAtlasReply(prep: {
+  system: string;
+  messages: ChatTurn[];
+}) {
+  const client = new Anthropic();
+
+  return client.messages.stream({
+    model: MODEL,
+    max_tokens: 4096,
+    system: prep.system,
+    messages: prep.messages,
+  });
 }

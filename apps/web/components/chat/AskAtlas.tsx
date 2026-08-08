@@ -48,21 +48,82 @@ export default function AskAtlas() {
         body: JSON.stringify({ message: trimmed, history }),
       });
 
-      const data = (await response.json()) as {
-        reply?: string | null;
-        error?: string;
-        limited?: boolean;
-      };
+      if (!response.ok) {
+        setMessages([
+          ...nextMessages,
+          {
+            role: "assistant",
+            content:
+              response.status === 403
+                ? t("proRequired")
+                : t("error"),
+          },
+        ]);
+        return;
+      }
 
-      const reply = data.limited
-        ? t("limitReached")
-        : data.reply ??
-          (response.status === 403 ? t("proRequired") : t("error"));
+      const contentType =
+        response.headers.get("content-type") ?? "";
 
-      setMessages([
-        ...nextMessages,
-        { role: "assistant", content: reply },
-      ]);
+      // Control responses (limited / not-configured) come back as JSON.
+      if (contentType.includes("application/json")) {
+        const data = (await response.json()) as {
+          reply?: string | null;
+          limited?: boolean;
+        };
+
+        setMessages([
+          ...nextMessages,
+          {
+            role: "assistant",
+            content: data.limited
+              ? t("limitReached")
+              : data.reply ?? t("error"),
+          },
+        ]);
+        return;
+      }
+
+      // The answer streams as plain text — fill the bubble token by token.
+      if (!response.body) {
+        setMessages([
+          ...nextMessages,
+          { role: "assistant", content: t("error") },
+        ]);
+        return;
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let acc = "";
+      let started = false;
+
+      for (;;) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        acc += decoder.decode(value, { stream: true });
+
+        if (!started) {
+          started = true;
+          setLoading(false);
+        }
+
+        setMessages([
+          ...nextMessages,
+          { role: "assistant", content: acc },
+        ]);
+      }
+
+      if (!acc.trim()) {
+        setMessages([
+          ...nextMessages,
+          { role: "assistant", content: t("error") },
+        ]);
+      }
     } catch {
       setMessages([
         ...nextMessages,

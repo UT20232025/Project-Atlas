@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 
 import {
   isAtlasChatConfigured,
-  runAtlasChat,
+  prepareAtlasChat,
+  streamAtlasReply,
+  STOCK_NOT_CONFIGURED_REPLY,
   type AtlasChatMessage,
 } from "@/lib/atlas/atlasChat";
 import { consumeChatQuota } from "@/lib/atlas/chatRateLimit";
@@ -94,29 +96,63 @@ export async function POST(request: Request) {
     });
   }
 
-  try {
-    const result = await runAtlasChat(history, message.slice(0, 2000));
+  const prep = await prepareAtlasChat(history, message.slice(0, 2000));
 
-    // Usage log — visible via `prisma-cli app logs` for cost monitoring.
-    console.log(
-      `[atlas-chat] user=${session.email} symbol=${
-        result.symbol ?? "none"
-      } in=${result.usage.inputTokens} out=${
-        result.usage.outputTokens
-      } remaining_today=${quota.remaining}`
-    );
-
+  // Stock recognized but market-data key missing — answer clearly, no model call.
+  if (prep.kind === "stock_not_configured") {
     return NextResponse.json({
-      reply: result.reply,
-      symbol: result.symbol,
+      reply: STOCK_NOT_CONFIGURED_REPLY,
+      symbol: null,
       limited: false,
     });
-  } catch (error) {
-    console.error("Atlas chat failed:", error);
-
-    return NextResponse.json(
-      { error: "Atlas chat failed." },
-      { status: 500 }
-    );
   }
+
+  // Stream the model's answer token-by-token to the client.
+  const encoder = new TextEncoder();
+
+  const stream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      try {
+        const anthropicStream = streamAtlasReply(prep);
+
+        anthropicStream.on("text", (delta) => {
+          controller.enqueue(encoder.encode(delta));
+        });
+
+        const final = await anthropicStream.finalMessage();
+
+        // Usage log — visible via `prisma-cli app logs` for cost monitoring.
+        console.log(
+          `[atlas-chat] user=${session.email} symbol=${
+            prep.symbol ?? "none"
+          } in=${final.usage.input_tokens} out=${
+            final.usage.output_tokens
+          } remaining_today=${quota.remaining}`
+        );
+
+        controller.close();
+      } catch (error) {
+        console.error("Atlas chat stream failed:", error);
+
+        try {
+          controller.enqueue(
+            encoder.encode(
+              "\n\n(Atlas hit a snag — please try again.)"
+            )
+          );
+        } catch {
+          // controller may already be closed
+        }
+
+        controller.close();
+      }
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "no-store",
+    },
+  });
 }
