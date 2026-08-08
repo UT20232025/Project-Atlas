@@ -96,7 +96,11 @@ export async function POST(request: Request) {
     });
   }
 
-  const prep = await prepareAtlasChat(history, message.slice(0, 2000));
+  const prep = await prepareAtlasChat(
+    history,
+    message.slice(0, 2000),
+    session.userId
+  );
 
   // Stock recognized but market-data key missing — answer clearly, no model call.
   if (prep.kind === "stock_not_configured") {

@@ -4,9 +4,11 @@ import enMessages from "@/messages/en.json";
 import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
+import { prisma } from "@/lib/db/client";
 import { searchCoins } from "@/lib/services/binanceUniverse";
 import {
   fetchSingleMarket,
+  formatMarketSymbol,
   type MarketSymbol,
 } from "@/lib/services/liveMarketService";
 import {
@@ -15,6 +17,8 @@ import {
   isStocksConfigured,
   resolveStockSymbol,
 } from "@/lib/services/twelveDataService";
+import { calculatePnl, type TradeDirection } from "@/lib/trading/pnl";
+import { getWatchlistSignalBoard } from "@/lib/watchlists/signalBoard";
 
 // Default to the most capable model; the owner can point this at a cheaper
 // model (e.g. claude-sonnet-5 or claude-haiku-4-5) via env to cut per-message
@@ -215,13 +219,185 @@ async function buildCoinGrounding(symbol: string): Promise<string | null> {
   ].join("\n");
 }
 
+type AccountIntent = "portfolio" | "watchlist";
+
+const PORTFOLIO_HINTS = [
+  "portfolio",
+  "portefølje",
+  "porteføljen",
+  "portefolje",
+  "porteføljemin",
+  "holding",
+  "posisjon",
+  "posisjonene",
+  "beholdning",
+  "my positions",
+  "my holdings",
+  "how am i doing",
+  "how are my",
+  "hvordan ligger jeg",
+  "hvordan går det med",
+  "unrealized",
+];
+
+const WATCHLIST_HINTS = [
+  "watchlist",
+  "watch list",
+  "overvåkning",
+  "overvåkningsliste",
+  "følger jeg",
+  "what i follow",
+  "what i'm following",
+  "things i follow",
+  "i'm watching",
+  "am i watching",
+];
+
+/**
+ * Detects whether the user is asking about their OWN account data (open
+ * positions or watched symbols) rather than a single asset. Portfolio wins
+ * ties since it's the richer, more personal signal.
+ */
+function detectAccountIntent(message: string): AccountIntent | null {
+  const text = message.toLowerCase();
+
+  if (PORTFOLIO_HINTS.some((hint) => text.includes(hint))) {
+    return "portfolio";
+  }
+
+  if (WATCHLIST_HINTS.some((hint) => text.includes(hint))) {
+    return "watchlist";
+  }
+
+  return null;
+}
+
+// Cap so a large account can't fan out into a burst of live price + engine
+// calls (and, for any stocks held, blow Twelve Data's rate limit).
+const MAX_ACCOUNT_SYMBOLS = 10;
+
+/**
+ * Builds an engine-grounded snapshot of the user's OPEN POSITIONS: entry, size,
+ * current price, unrealized P&L, and Atlas's current signal per holding. Every
+ * number comes from live market data + the deterministic engine — Claude only
+ * phrases it. Returns a clear "no positions" note (not null) so Atlas can still
+ * answer helpfully.
+ */
+async function buildPortfolioGrounding(userId: string): Promise<string> {
+  const positions = await prisma.position.findMany({
+    where: { userId },
+    orderBy: { openedAt: "desc" },
+    take: MAX_ACCOUNT_SYMBOLS,
+  });
+
+  if (positions.length === 0) {
+    return "PORTFOLIO: The user has no open positions recorded in Genwelth AI.";
+  }
+
+  let totalPnl = 0;
+  let pricedCount = 0;
+
+  const lines = await Promise.all(
+    positions.map(async (position) => {
+      const symbol = position.symbol as MarketSymbol;
+      const direction = position.direction as TradeDirection;
+      const isStock = isStockSymbol(symbol);
+
+      let price: number | null = null;
+
+      if (isStock) {
+        if (isStocksConfigured()) {
+          const quote = await fetchStockQuote(symbol);
+          price = quote?.price ?? null;
+        }
+      } else {
+        const market = await fetchSingleMarket(symbol);
+        price = market?.price ?? null;
+      }
+
+      let pnlText = "n/a";
+
+      if (price != null) {
+        const { pnl, pnlPercent } = calculatePnl(
+          direction,
+          position.entryPrice,
+          price,
+          position.quantity
+        );
+        totalPnl += pnl;
+        pricedCount += 1;
+        pnlText = `${pnlPercent >= 0 ? "+" : ""}${pnlPercent.toFixed(
+          2
+        )}% (${pnl >= 0 ? "+" : ""}${pnl.toFixed(2)})`;
+      }
+
+      let signalText = "n/a";
+
+      try {
+        const analysis = await getCachedAtlasAnalysis(symbol);
+        signalText = `${analysis.decision.signal} conf ${analysis.decision.confidence}%`;
+      } catch {
+        // Leave "n/a" — one bad symbol shouldn't blank the snapshot.
+      }
+
+      return `- ${formatMarketSymbol(symbol)} ${direction} · entry ${
+        position.entryPrice
+      } · qty ${position.quantity} · now ${
+        price ?? "n/a"
+      } · unrealized ${pnlText} · Atlas now: ${signalText}`;
+    })
+  );
+
+  const totalLine =
+    pricedCount > 0
+      ? `TOTAL unrealized P&L (priced positions): ${
+          totalPnl >= 0 ? "+" : ""
+        }${totalPnl.toFixed(2)}`
+      : "TOTAL unrealized P&L: n/a (live prices unavailable)";
+
+  return `PORTFOLIO (open positions: ${positions.length}):\n${lines.join(
+    "\n"
+  )}\n${totalLine}`;
+}
+
+/**
+ * Builds an engine-grounded snapshot of the user's WATCHLIST: Atlas's current
+ * signal, confidence, score, and headline reason for each watched symbol.
+ */
+async function buildWatchlistGrounding(userId: string): Promise<string> {
+  const board = await getWatchlistSignalBoard(userId, MAX_ACCOUNT_SYMBOLS);
+
+  if (board.length === 0) {
+    return "WATCHLIST: The user isn't watching any symbols yet.";
+  }
+
+  const lines = board.map(
+    (card) =>
+      `- ${formatMarketSymbol(card.symbol)} · Atlas: ${
+        card.signal
+      } conf ${card.confidence}% score ${card.score}/100 · ${resolveReasonText(
+        tReason,
+        "en",
+        card.explanation
+      )}`
+  );
+
+  return `WATCHLIST (${board.length} symbols):\n${lines.join("\n")}`;
+}
+
 const PERSONA = `You are Atlas, the analysis engine behind Genwelth AI — a crypto and stock trading-signals platform.
 
-You speak in the first person as Atlas. Your job is to explain your OWN read on an asset (a crypto coin or a stock) in plain, confident, conversational language, grounded ONLY in the ATLAS DATA block provided for this turn. The block's ASSET line says whether it's CRYPTO or a STOCK — speak accordingly.
+You speak in the first person as Atlas. Your job is to explain your OWN read in plain, confident, conversational language, grounded ONLY in the ATLAS DATA block provided for this turn.
+
+The ATLAS DATA block can take three shapes:
+- A single ASSET (a crypto coin or a stock — the ASSET line says which). Give your read on it.
+- The user's PORTFOLIO (their open positions with entry, size, current price, unrealized P&L, and my current signal per holding). Summarize how their positions are doing and what my current signal is on each — highlight the notable ones, mention the total unrealized P&L if present.
+- The user's WATCHLIST (my current signal, confidence, score, and headline reason per watched symbol). Summarize what I'm seeing across what they follow.
 
 Hard rules:
-- Use ONLY the numbers and reasons in the ATLAS DATA block. Never invent prices, levels, percentages, or reasons. If a value is "n/a", say you don't have it.
-- If no ATLAS DATA block is present, ask the user which crypto coin or stock they want you to look at (you cover any Binance coin, plus major US stocks like TSLA, AAPL, NVDA). Do not guess.
+- Use ONLY the numbers and reasons in the ATLAS DATA block. Never invent prices, levels, percentages, positions, or reasons. If a value is "n/a", say you don't have it.
+- For PORTFOLIO/WATCHLIST: describe only what's listed. If it says the user has no open positions or isn't watching anything, tell them plainly and offer to look at a specific coin or stock instead.
+- If no ATLAS DATA block is present, ask the user which crypto coin or stock they want you to look at, or whether they'd like a read on their portfolio or watchlist (you cover any Binance coin, plus major US stocks like TSLA, AAPL, NVDA). Do not guess.
 - If asked about forex, commodities, or anything that isn't a crypto coin or a stock, say that's not something you cover yet.
 - This is educational market analysis, NOT financial advice. Weave in a brief, natural "this isn't financial advice — manage your own risk" note; do not tell the user what they personally should do with their money.
 - Be concise: a short paragraph or a few tight bullet points. Lead with your signal and confidence, then the "why".
@@ -252,7 +428,8 @@ export type AtlasChatPrep =
  */
 export async function prepareAtlasChat(
   history: AtlasChatMessage[],
-  userMessage: string
+  userMessage: string,
+  userId: string
 ): Promise<AtlasChatPrep> {
   const symbol = await detectSymbol(userMessage);
 
@@ -260,7 +437,23 @@ export async function prepareAtlasChat(
     return { kind: "stock_not_configured" };
   }
 
-  const grounding = symbol ? await buildCoinGrounding(symbol) : null;
+  // A specific asset wins; otherwise fall back to the user's own account data
+  // (portfolio / watchlist) when they're clearly asking about it.
+  let grounding: string | null = null;
+  let groundedSymbol: string | null = null;
+
+  if (symbol) {
+    grounding = await buildCoinGrounding(symbol);
+    groundedSymbol = grounding ? symbol : null;
+  } else {
+    const intent = detectAccountIntent(userMessage);
+
+    if (intent === "portfolio") {
+      grounding = await buildPortfolioGrounding(userId);
+    } else if (intent === "watchlist") {
+      grounding = await buildWatchlistGrounding(userId);
+    }
+  }
 
   const system = grounding
     ? `${PERSONA}\n\nATLAS DATA (this turn):\n${grounding}`
@@ -276,7 +469,7 @@ export async function prepareAtlasChat(
       })),
       { role: "user" as const, content: userMessage },
     ],
-    symbol: grounding ? symbol : null,
+    symbol: groundedSymbol,
   };
 }
 
