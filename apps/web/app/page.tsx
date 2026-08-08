@@ -11,6 +11,7 @@ import MarketStats from "../components/dashboard/MarketStats";
 import OpportunityCard from "../components/dashboard/OpportunityCard";
 import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
+import WatchlistAlerts from "../components/dashboard/WatchlistAlerts";
 import LandingPage from "../components/landing/LandingPage";
 import CoinSearch from "../components/search/CoinSearch";
 import { getAtlasScanner } from "../lib/analysis/scanner";
@@ -21,6 +22,7 @@ import Watchlist from "../components/watchlist/Watchlist";
 import WatchlistUpsell from "../components/watchlist/WatchlistUpsell";
 import { getUpcomingMacroEvents } from "../lib/atlas/macroCalendarEngine";
 import { getCachedTrackRecord } from "../lib/atlas/trackRecordCache";
+import { getWatchlistAlerts } from "../lib/atlas/signalHistory";
 import { getSession } from "../lib/auth/session";
 import { getDashboardData } from "../lib/services/dashboardService";
 import { getCurrentUser, hasActiveSubscription } from "../lib/subscription/requirePro";
@@ -69,9 +71,10 @@ export default async function HomePage() {
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
 
-  const [dashboard, watchlists] = await Promise.all([
+  const [dashboard, watchlists, watchlistAlerts] = await Promise.all([
     getDashboardData(),
     isPro ? getWatchlists(userId) : Promise.resolve([]),
+    isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
   ]);
 
   const opportunity = [...dashboard.scanner].sort(
@@ -100,6 +103,12 @@ export default async function HomePage() {
       <div className="mb-8">
         <CoinSearch />
       </div>
+
+      {isPro && (
+        <div className="mb-8">
+          <WatchlistAlerts items={watchlistAlerts} />
+        </div>
+      )}
 
       <div className="mb-8">
         <GettingStarted isPro={isPro} />

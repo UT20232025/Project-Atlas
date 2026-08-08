@@ -367,6 +367,12 @@
     "changeLabel": "24-Stunden-Änderung",
     "openMarket": "Markt öffnen"
   },
+  "WatchlistAlerts": {
+    "title": "Alerts für deine Watchlist",
+    "subtitle": "Signaländerungen bei den Coins, denen du folgst, erscheinen hier.",
+    "empty": "Keine Signaländerungen bei deinen Coins in den letzten 2 Wochen. Füge Coins zu einer Watchlist hinzu, um hier Alerts zu bekommen.",
+    "count": "{count} aktuelle Signaländerungen bei Coins, denen du folgst"
+  },
   "RecentSignalChanges": {
     "title": "Kürzliche Signaländerungen",
     "subtitle": "Atlas-Signale, die sich gerade geändert haben",

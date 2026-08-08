@@ -367,6 +367,12 @@
     "changeLabel": "24h change",
     "openMarket": "Open Market"
   },
+  "WatchlistAlerts": {
+    "title": "Alerts on your watchlist",
+    "subtitle": "Signal changes on the coins you follow show up here.",
+    "empty": "No signal changes on your watched coins in the last 2 weeks. Add coins to a watchlist to get alerts here.",
+    "count": "{count} recent signal changes on coins you follow"
+  },
   "RecentSignalChanges": {
     "title": "Recent Signal Changes",
     "subtitle": "Atlas signals that just flipped",

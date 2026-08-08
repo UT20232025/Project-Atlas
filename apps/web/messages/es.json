@@ -367,6 +367,12 @@
     "changeLabel": "Cambio 24h",
     "openMarket": "Abrir mercado"
   },
+  "WatchlistAlerts": {
+    "title": "Alertas de tu lista de seguimiento",
+    "subtitle": "Los cambios de señal en las monedas que sigues aparecen aquí.",
+    "empty": "Sin cambios de señal en tus monedas en las últimas 2 semanas. Añade monedas a una lista para recibir alertas aquí.",
+    "count": "{count} cambios de señal recientes en monedas que sigues"
+  },
   "RecentSignalChanges": {
     "title": "Cambios de señal recientes",
     "subtitle": "Señales de Atlas que acaban de cambiar",

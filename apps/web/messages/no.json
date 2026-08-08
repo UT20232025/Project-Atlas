@@ -367,6 +367,12 @@
     "changeLabel": "24t-endring",
     "openMarket": "Åpne marked"
   },
+  "WatchlistAlerts": {
+    "title": "Varsler for overvåkningslista di",
+    "subtitle": "Signalendringer på myntene du følger dukker opp her.",
+    "empty": "Ingen signalendringer på myntene dine de siste to ukene. Legg mynter i en overvåkningsliste for å få varsler her.",
+    "count": "{count} nylige signalendringer på mynter du følger"
+  },
   "RecentSignalChanges": {
     "title": "Nylige signalendringer",
     "subtitle": "Atlas-signaler som nettopp har snudd",
