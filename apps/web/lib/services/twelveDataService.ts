@@ -33,8 +33,47 @@ export const STOCK_SYMBOLS = [
 
 const STOCK_SET = new Set<string>(STOCK_SYMBOLS);
 
+// Common company names → ticker, so users can type "Tesla" not just "TSLA".
+const STOCK_ALIASES: Record<string, string> = {
+  TESLA: "TSLA",
+  APPLE: "AAPL",
+  MICROSOFT: "MSFT",
+  NVIDIA: "NVDA",
+  AMAZON: "AMZN",
+  GOOGLE: "GOOGL",
+  ALPHABET: "GOOGL",
+  FACEBOOK: "META",
+  NETFLIX: "NFLX",
+  INTEL: "INTC",
+  DISNEY: "DIS",
+  BOEING: "BA",
+  VISA: "V",
+  PAYPAL: "PYPL",
+  COINBASE: "COIN",
+  PALANTIR: "PLTR",
+  MICROSTRATEGY: "MSTR",
+  MARATHON: "MARA",
+  SHOPIFY: "SHOP",
+  ALIBABA: "BABA",
+};
+
 export function isStockSymbol(symbol: string): boolean {
   return STOCK_SET.has(symbol.toUpperCase());
+}
+
+/**
+ * Resolves a user-typed token to a canonical stock ticker — accepts the
+ * ticker itself (TSLA) or a common company name (Tesla). Returns null if it's
+ * not a known stock.
+ */
+export function resolveStockSymbol(token: string): string | null {
+  const upper = token.toUpperCase();
+
+  if (STOCK_SET.has(upper)) {
+    return upper;
+  }
+
+  return STOCK_ALIASES[upper] ?? null;
 }
 
 export function isStocksConfigured(): boolean {

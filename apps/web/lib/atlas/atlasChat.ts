@@ -13,6 +13,7 @@ import {
   fetchStockQuote,
   isStockSymbol,
   isStocksConfigured,
+  resolveStockSymbol,
 } from "@/lib/services/twelveDataService";
 
 // Default to the most capable model; the owner can point this at a cheaper
@@ -109,10 +110,16 @@ async function detectSymbol(message: string): Promise<string | null> {
     }
   }
 
-  // 2. Known US stock ticker (TSLA, AAPL, …).
+  // 2. Known US stock — by ticker (TSLA) or company name (Tesla).
   for (const token of tokens) {
-    if (!STOP_WORDS.has(token) && isStockSymbol(token)) {
-      return token;
+    if (STOP_WORDS.has(token)) {
+      continue;
+    }
+
+    const stock = resolveStockSymbol(token);
+
+    if (stock) {
+      return stock;
     }
   }
 
@@ -238,6 +245,18 @@ export async function runAtlasChat(
   userMessage: string
 ): Promise<AtlasChatResult> {
   const symbol = await detectSymbol(userMessage);
+
+  // Distinguish "stock recognized but market-data key missing" from a generic
+  // no-match, so the owner gets a clear signal to configure the key.
+  if (symbol && isStockSymbol(symbol) && !isStocksConfigured()) {
+    return {
+      reply:
+        "Stock analysis isn't switched on yet — the workspace still needs a market-data (Twelve Data) key configured. I can still look at any crypto coin in the meantime.",
+      symbol: null,
+      usage: { inputTokens: 0, outputTokens: 0 },
+    };
+  }
+
   const grounding = symbol ? await buildCoinGrounding(symbol) : null;
 
   const system = grounding
