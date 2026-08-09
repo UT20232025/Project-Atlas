@@ -8,7 +8,6 @@ _Sist oppdatert: 2026-08-09_
 
 ## 🎯 Vil ha / bygge
 
-- [ ] **PDH / PDL-indikator (MÅ-HA).** Previous Day High / Previous Day Low — forrige (fullførte) dags høy og lav som nøkkelnivåer. Vises som linjer på coin-chartet + i «Nøkkelnivåer»-kortet, og kan mates inn i Atlas' støtte/motstand-kontekst. Beregnes fra forrige daglige candle.
 - [ ] **Prisvarsel (in-app).** Sett et målnivå på en mynt/aksje, få varsel når det treffes (uten epost — in-app / evt. Telegram). _(Godkjent av Christer.)_
 - [ ] **Ytelse per tidsramme/signaltype.** Vis hvilken ramme/strategi som treffer best historisk. _(Godkjent.)_
 - [ ] **«Del signal»-kort (bilde).** Auto-generert delbart bilde av et signal for sosiale medier — kobler på promo-kanalene når de er live. _(Godkjent.)_
@@ -38,6 +37,7 @@ _Sist oppdatert: 2026-08-09_
 - [x] Sammenlign to assets (`/compare`)
 - [x] Ny maskot — kinematisk okse/bjørn (front-okse + brølende bjørn + face-off)
 - [x] Ytelsesfiks — swing streames via Suspense + 10 min cache på 1d/4t
+- [x] PDH/PDL-indikator — forrige dags høy/lav på chart + Nøkkelnivåer (krypto + aksjer) — venter på deploy
 
 ## 🚫 Bestemt: ikke nå
 
