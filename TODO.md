@@ -24,7 +24,7 @@ _Sist oppdatert: 2026-08-08_
 ### Claude foreslår (til vurdering)
 - [x] **Portefølje vs. Atlas-uenighet.** Flagg per posisjon: «Atlas enig / uenig / nøytral» ift. retningen din. — venter på deploy
 - [ ] **Posisjonsstørrelse-kalkulator.** Skriv inn risiko (% av kapital) + SL-avstand → Atlas foreslår størrelse. Passer naturlig med TP/SL-anbefalingene.
-- [ ] **Sammenlign to assets side om side.** "BTC vs ETH akkurat nå" — signal, confidence og nøkkelnivåer ved siden av hverandre.
+- [x] **Sammenlign to assets side om side.** `/compare` — velg to mynter, Atlas' read side om side + «Atlas heller mot X»-vurdering. — venter på deploy
 - [ ] **Prisvarsel (in-app).** Sett et målnivå på en mynt/aksje, få varsel når det treffes (uten epost — in-app / evt. Telegram).
 - [ ] **Ytelse per tidsramme/signaltype.** Når timeframe-valget er på plass: vis hvilken ramme/strategi som treffer best historisk.
 - [ ] **"Del signal"-kort (bilde).** Auto-generert delbart bilde av et signal for sosiale medier — kobler rett på promo-kanalene (X/TikTok/IG) når de er live.
