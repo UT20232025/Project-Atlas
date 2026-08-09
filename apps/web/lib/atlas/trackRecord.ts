@@ -27,6 +27,59 @@ export type TrackRecordSymbolBreakdown = {
   avgPnlPercent: number;
 };
 
+export type TrackRecordGroupBreakdown = {
+  key: string;
+  trades: number;
+  wins: number;
+  winRate: number;
+  avgPnlPercent: number;
+};
+
+const CONFIDENCE_BUCKET_ORDER = [
+  "<60",
+  "60–69",
+  "70–79",
+  "80–89",
+  "90–100",
+];
+
+function confidenceBucket(confidence: number): string {
+  if (confidence >= 90) return "90–100";
+  if (confidence >= 80) return "80–89";
+  if (confidence >= 70) return "70–79";
+  if (confidence >= 60) return "60–69";
+  return "<60";
+}
+
+function groupBreakdown(
+  trades: TrackRecordTrade[],
+  keyOf: (trade: TrackRecordTrade) => string
+): TrackRecordGroupBreakdown[] {
+  const map = new Map<
+    string,
+    { trades: number; wins: number; pnlSum: number }
+  >();
+
+  for (const trade of trades) {
+    const key = keyOf(trade);
+    const entry = map.get(key) ?? { trades: 0, wins: 0, pnlSum: 0 };
+
+    entry.trades += 1;
+    entry.wins += (trade.pnlPercent ?? 0) > 0 ? 1 : 0;
+    entry.pnlSum += trade.pnlPercent ?? 0;
+
+    map.set(key, entry);
+  }
+
+  return Array.from(map.entries()).map(([key, entry]) => ({
+    key,
+    trades: entry.trades,
+    wins: entry.wins,
+    winRate: (entry.wins / entry.trades) * 100,
+    avgPnlPercent: entry.pnlSum / entry.trades,
+  }));
+}
+
 export type TrackRecordSummary = {
   totalClosed: number;
   wins: number;
@@ -38,6 +91,8 @@ export type TrackRecordSummary = {
   closedTrades: TrackRecordTrade[];
   openPositions: TrackRecordTrade[];
   bySymbol: TrackRecordSymbolBreakdown[];
+  bySignal: TrackRecordGroupBreakdown[];
+  byConfidence: TrackRecordGroupBreakdown[];
 };
 
 function calculatePnlPercent(
@@ -239,6 +294,20 @@ export async function getTrackRecord(): Promise<TrackRecordSummary> {
     }))
     .sort((a, b) => b.trades - a.trades);
 
+  const bySignal = groupBreakdown(
+    closedTrades,
+    (trade) => trade.signal
+  ).sort((a, b) => b.trades - a.trades);
+
+  const byConfidence = groupBreakdown(
+    closedTrades,
+    (trade) => confidenceBucket(trade.confidence)
+  ).sort(
+    (a, b) =>
+      CONFIDENCE_BUCKET_ORDER.indexOf(a.key) -
+      CONFIDENCE_BUCKET_ORDER.indexOf(b.key)
+  );
+
   return {
     totalClosed,
     wins,
@@ -250,5 +319,7 @@ export async function getTrackRecord(): Promise<TrackRecordSummary> {
     closedTrades: closedTrades.slice().reverse(),
     openPositions: openPositions.slice().reverse(),
     bySymbol,
+    bySignal,
+    byConfidence,
   };
 }

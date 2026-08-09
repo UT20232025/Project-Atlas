@@ -49,6 +49,8 @@ export default async function TrackRecordView({
     closedTrades,
     openPositions,
     bySymbol,
+    bySignal,
+    byConfidence,
   } = trackRecord;
 
   return (
@@ -146,6 +148,110 @@ export default async function TrackRecordView({
                   >
                     <td className="py-3 font-medium text-white">
                       {formatMarketSymbol(row.symbol)}
+                    </td>
+                    <td className="py-3 text-zinc-300">
+                      {row.trades}
+                    </td>
+                    <td className="py-3 text-zinc-300">
+                      {row.winRate.toFixed(1)}%
+                    </td>
+                    <td
+                      className={`py-3 font-medium ${
+                        row.avgPnlPercent >= 0
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {formatPnl(row.avgPnlPercent)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
+      )}
+
+      {bySignal.length > 0 && (
+        <Section
+          title={t("perSignalTitle")}
+          subtitle={t("perSignalSubtitle")}
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="text-xs text-zinc-500">
+                  <th className="pb-3 font-medium">{t("colSignal")}</th>
+                  <th className="pb-3 font-medium">{t("colTrades")}</th>
+                  <th className="pb-3 font-medium">{t("colWinRate")}</th>
+                  <th className="pb-3 font-medium">{t("colAvgPnl")}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {bySignal.map((row) => (
+                  <tr
+                    key={row.key}
+                    className="border-t border-zinc-800"
+                  >
+                    <td
+                      className={`py-3 font-medium ${
+                        row.key === "LONG"
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {row.key}
+                    </td>
+                    <td className="py-3 text-zinc-300">
+                      {row.trades}
+                    </td>
+                    <td className="py-3 text-zinc-300">
+                      {row.winRate.toFixed(1)}%
+                    </td>
+                    <td
+                      className={`py-3 font-medium ${
+                        row.avgPnlPercent >= 0
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {formatPnl(row.avgPnlPercent)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Section>
+      )}
+
+      {byConfidence.length > 0 && (
+        <Section
+          title={t("perConfidenceTitle")}
+          subtitle={t("perConfidenceSubtitle")}
+        >
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead>
+                <tr className="text-xs text-zinc-500">
+                  <th className="pb-3 font-medium">
+                    {t("colConfidence")}
+                  </th>
+                  <th className="pb-3 font-medium">{t("colTrades")}</th>
+                  <th className="pb-3 font-medium">{t("colWinRate")}</th>
+                  <th className="pb-3 font-medium">{t("colAvgPnl")}</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {byConfidence.map((row) => (
+                  <tr
+                    key={row.key}
+                    className="border-t border-zinc-800"
+                  >
+                    <td className="py-3 font-medium text-white">
+                      {row.key}%
                     </td>
                     <td className="py-3 text-zinc-300">
                       {row.trades}
