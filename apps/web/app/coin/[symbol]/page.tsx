@@ -21,6 +21,7 @@ import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
 import WhaleActivityCard from "../../../components/WhaleActivityCard";
 import { getChartCandles } from "../../../lib/analysis/candles";
+import { getPreviousDayLevels } from "../../../lib/analysis/previousDayLevels";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
@@ -88,6 +89,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
     signalHistory,
     watchlists,
     recentTrades,
+    pdLevels,
   ] = await Promise.all([
     isStock ? Promise.resolve([]) : getChartCandles(symbol, timeframe),
     isStock ? Promise.resolve([]) : getRSIHistory(symbol, timeframe),
@@ -98,6 +100,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
       : getSignalHistory(marketSymbol, 20),
     isPro ? getWatchlists(userId) : Promise.resolve([]),
     isStock ? Promise.resolve([]) : fetchRecentTrades(marketSymbol),
+    getPreviousDayLevels(marketSymbol),
   ]);
 
   const whaleActivity = analyzeWhaleActivity(recentTrades);
@@ -191,6 +194,16 @@ export default async function CoinPage({ params, searchParams }: Props) {
       price: decisionAnalysis.fibonacci.goldenPocketHigh,
       color: "#f59e0b",
       title: "GP",
+    },
+    pdLevels.pdh !== null && {
+      price: pdLevels.pdh,
+      color: "#a855f7",
+      title: "PDH",
+    },
+    pdLevels.pdl !== null && {
+      price: pdLevels.pdl,
+      color: "#a855f7",
+      title: "PDL",
     },
   ].filter(Boolean) as {
     price: number;
@@ -360,6 +373,8 @@ export default async function CoinPage({ params, searchParams }: Props) {
           goldenPocketHigh={
             decisionAnalysis.fibonacci.goldenPocketHigh
           }
+          pdh={pdLevels.pdh}
+          pdl={pdLevels.pdl}
         />
       </div>
 

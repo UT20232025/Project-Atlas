@@ -675,7 +675,9 @@
     "bearishOrderBlock": "Bearish order block",
     "bullishFvg": "Bullish FVG",
     "bearishFvg": "Bearish FVG",
-    "goldenPocket": "Golden pocket"
+    "goldenPocket": "Golden pocket",
+    "pdh": "PDH · prev day high",
+    "pdl": "PDL · prev day low"
   },
   "PortfolioGate": {
     "title": "Portfolio",

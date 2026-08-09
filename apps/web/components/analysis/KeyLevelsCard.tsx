@@ -15,6 +15,8 @@ type KeyLevelsCardProps = {
   bearishFvg: number | null;
   goldenPocketLow: number | null;
   goldenPocketHigh: number | null;
+  pdh: number | null;
+  pdl: number | null;
 };
 
 function formatPrice(
@@ -38,6 +40,7 @@ export default async function KeyLevelsCard(
     neutral: "text-white",
     accent: "text-amber-300",
     va: "text-sky-300",
+    pd: "text-purple-300",
   };
 
   const levels: Array<{
@@ -78,6 +81,8 @@ export default async function KeyLevelsCard(
   );
   add(props.bullishFvg, t("bullishFvg"), tone.up);
   add(props.bearishFvg, t("bearishFvg"), tone.down);
+  add(props.pdh, t("pdh"), tone.pd);
+  add(props.pdl, t("pdl"), tone.pd);
 
   if (
     props.goldenPocketLow !== null &&

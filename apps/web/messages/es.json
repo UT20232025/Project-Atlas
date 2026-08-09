@@ -675,7 +675,9 @@
     "bearishOrderBlock": "Order block bajista",
     "bullishFvg": "FVG alcista",
     "bearishFvg": "FVG bajista",
-    "goldenPocket": "Golden pocket"
+    "goldenPocket": "Golden pocket",
+    "pdh": "PDH · máx. día ant.",
+    "pdl": "PDL · mín. día ant."
   },
   "PortfolioGate": {
     "title": "Portafolio",
