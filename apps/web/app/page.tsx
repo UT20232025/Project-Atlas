@@ -164,6 +164,10 @@ export default async function HomePage() {
             price={opportunity.price}
             change24h={opportunity.change24h}
             reason={opportunity.explanation}
+            entry={opportunity.entry}
+            stopLoss={opportunity.stopLoss}
+            takeProfit={opportunity.takeProfit}
+            riskRewardRatio={opportunity.riskRewardRatio}
           />
         </div>
       )}

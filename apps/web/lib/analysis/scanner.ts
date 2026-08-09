@@ -16,6 +16,10 @@ export type ScannerItem = {
   rsi: number;
   reasons: AtlasReasonCode[];
   explanation: AtlasReasonCode;
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
+  riskRewardRatio: number | null;
 };
 
 function mapTrendStatus(
@@ -67,6 +71,10 @@ export async function getAtlasScanner(): Promise<ScannerItem[]> {
       rsi: analysis.indicators.rawRsi,
       reasons: analysis.decision.reasons,
       explanation: analysis.decision.explanation,
+      entry: analysis.decision.entry,
+      stopLoss: analysis.decision.stopLoss,
+      takeProfit: analysis.decision.takeProfit,
+      riskRewardRatio: analysis.decision.riskRewardRatio,
     };
   });
 

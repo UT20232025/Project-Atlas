@@ -4,6 +4,7 @@ import Badge from "@/components/ui/Badge";
 import Progress from "@/components/ui/Progress";
 import Section from "@/components/ui/Section";
 import MarketBiasMascot from "@/components/dashboard/MarketBiasMascot";
+import TradeLevels from "@/components/dashboard/TradeLevels";
 
 type IntelligenceItem = {
   coin: string;
@@ -11,6 +12,10 @@ type IntelligenceItem = {
   signal: "LONG" | "SHORT" | "WAIT";
   score: number;
   change24h: number;
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
+  riskRewardRatio: number | null;
 };
 
 type AtlasIntelligenceProps = {
@@ -178,6 +183,19 @@ export default async function AtlasIntelligence({
             <p className="mt-1 text-sm text-green-400">
               {t("atlasScore", { score: strongestCoin?.score ?? 0 })}
             </p>
+
+            {strongestCoin && (
+              <div className="mt-3">
+                <TradeLevels
+                  compact
+                  signal={strongestCoin.signal}
+                  entry={strongestCoin.entry}
+                  stopLoss={strongestCoin.stopLoss}
+                  takeProfit={strongestCoin.takeProfit}
+                  riskRewardRatio={strongestCoin.riskRewardRatio}
+                />
+              </div>
+            )}
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">
@@ -192,6 +210,19 @@ export default async function AtlasIntelligence({
             <p className="mt-1 text-sm text-red-400">
               {t("atlasScore", { score: weakestCoin?.score ?? 0 })}
             </p>
+
+            {weakestCoin && (
+              <div className="mt-3">
+                <TradeLevels
+                  compact
+                  signal={weakestCoin.signal}
+                  entry={weakestCoin.entry}
+                  stopLoss={weakestCoin.stopLoss}
+                  takeProfit={weakestCoin.takeProfit}
+                  riskRewardRatio={weakestCoin.riskRewardRatio}
+                />
+              </div>
+            )}
           </div>
 
           <div className="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-5">

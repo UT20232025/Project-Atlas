@@ -373,6 +373,16 @@
     "empty": "No signal changes on your watched coins in the last 2 weeks. Add coins to a watchlist to get alerts here.",
     "count": "{count} recent signal changes on coins you follow"
   },
+  "TradeLevels": {
+    "entry": "Entry",
+    "stopLoss": "Stop-loss",
+    "takeProfit": "Take-profit",
+    "riskReward": "R:R",
+    "noSetup": "WAIT — no active setup right now",
+    "tpShort": "TP",
+    "slShort": "SL",
+    "rrShort": "R:R"
+  },
   "WatchlistSignalBoard": {
     "title": "Atlas's read on your list",
     "subtitle": "Atlas's current signal for each asset you follow.",

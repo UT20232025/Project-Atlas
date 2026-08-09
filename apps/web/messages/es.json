@@ -373,6 +373,16 @@
     "empty": "Sin cambios de señal en tus monedas en las últimas 2 semanas. Añade monedas a una lista para recibir alertas aquí.",
     "count": "{count} cambios de señal recientes en monedas que sigues"
   },
+  "TradeLevels": {
+    "entry": "Entrada",
+    "stopLoss": "Stop-loss",
+    "takeProfit": "Take-profit",
+    "riskReward": "R:R",
+    "noSetup": "WAIT — sin configuración activa ahora",
+    "tpShort": "TP",
+    "slShort": "SL",
+    "rrShort": "R:R"
+  },
   "WatchlistSignalBoard": {
     "title": "La lectura de Atlas de tu lista",
     "subtitle": "La señal actual de Atlas para cada activo que sigues.",

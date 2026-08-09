@@ -4,6 +4,7 @@ import Link from "next/link";
 import Badge from "@/components/ui/Badge";
 import Progress from "@/components/ui/Progress";
 import Section from "@/components/ui/Section";
+import TradeLevels from "@/components/dashboard/TradeLevels";
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 
@@ -14,6 +15,10 @@ type OpportunityCardProps = {
   price: number;
   change24h: number;
   reason: AtlasReasonCode;
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
+  riskRewardRatio: number | null;
 };
 
 function getSignalVariant(
@@ -39,6 +44,10 @@ export default async function OpportunityCard({
   price,
   change24h,
   reason,
+  entry,
+  stopLoss,
+  takeProfit,
+  riskRewardRatio,
 }: OpportunityCardProps) {
   const t = await getTranslations("OpportunityCard");
   const tReasons = await getTranslations("AtlasReasons");
@@ -92,6 +101,14 @@ export default async function OpportunityCard({
             {resolveReasonText(tReasons, locale, reason)}
           </p>
         </div>
+
+        <TradeLevels
+          signal={signal}
+          entry={entry}
+          stopLoss={stopLoss}
+          takeProfit={takeProfit}
+          riskRewardRatio={riskRewardRatio}
+        />
 
         <div className="flex items-center justify-between gap-4">
           <div>

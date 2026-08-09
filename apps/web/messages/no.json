@@ -373,6 +373,16 @@
     "empty": "Ingen signalendringer på myntene dine de siste to ukene. Legg mynter i en overvåkningsliste for å få varsler her.",
     "count": "{count} nylige signalendringer på mynter du følger"
   },
+  "TradeLevels": {
+    "entry": "Inngang",
+    "stopLoss": "Stop-loss",
+    "takeProfit": "Take-profit",
+    "riskReward": "R:R",
+    "noSetup": "WAIT — ingen aktiv trade akkurat nå",
+    "tpShort": "TP",
+    "slShort": "SL",
+    "rrShort": "R:R"
+  },
   "WatchlistSignalBoard": {
     "title": "Atlas' read på lista di",
     "subtitle": "Signalet Atlas gir akkurat nå for hver ting du følger.",

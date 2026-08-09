@@ -18,6 +18,20 @@ function getTrendSymbol(trend: ScannerItem["trend"]) {
   return "→";
 }
 
+function formatLevel(
+  signal: ScannerItem["signal"],
+  value: number | null,
+  locale: string
+) {
+  if (signal === "WAIT" || value === null || !Number.isFinite(value)) {
+    return "—";
+  }
+
+  return value.toLocaleString(locale, {
+    maximumFractionDigits: value < 1 ? 6 : 2,
+  });
+}
+
 export default async function ScannerTable({ items }: ScannerTableProps) {
   const t = await getTranslations("ScannerTable");
   const locale = await getLocale();
@@ -32,13 +46,15 @@ export default async function ScannerTable({ items }: ScannerTableProps) {
       </div>
 
       <div className="overflow-x-auto">
-        <div className="min-w-[760px]">
-          <div className="grid grid-cols-7 gap-4 border-b border-zinc-800 px-6 py-3 text-sm text-zinc-500">
+        <div className="min-w-[900px]">
+          <div className="grid grid-cols-9 gap-4 border-b border-zinc-800 px-6 py-3 text-sm text-zinc-500">
             <span>#</span>
             <span>{t("colMarket")}</span>
             <span>{t("colPrice")}</span>
             <span>{t("col24h")}</span>
             <span>{t("colSignal")}</span>
+            <span>TP</span>
+            <span>SL</span>
             <span>{t("colRsi")}</span>
             <span className="text-right">{t("colConfidence")}</span>
           </div>
@@ -52,7 +68,7 @@ export default async function ScannerTable({ items }: ScannerTableProps) {
                 <Link
                   key={item.coin}
                   href={`/coin/${item.coin}`}
-                  className="grid grid-cols-7 items-center gap-4 px-6 py-4 transition hover:bg-zinc-800/60"
+                  className="grid grid-cols-9 items-center gap-4 px-6 py-4 transition hover:bg-zinc-800/60"
                 >
                   <span className="text-zinc-500">{index + 1}</span>
 
@@ -73,6 +89,14 @@ export default async function ScannerTable({ items }: ScannerTableProps) {
 
                   <span className={`font-semibold ${getSignalColor(item.signal)}`}>
                     {item.signal}
+                  </span>
+
+                  <span className="text-emerald-400">
+                    {formatLevel(item.signal, item.takeProfit, locale)}
+                  </span>
+
+                  <span className="text-red-400">
+                    {formatLevel(item.signal, item.stopLoss, locale)}
                   </span>
 
                   <span>{item.rsi.toFixed(1)}</span>

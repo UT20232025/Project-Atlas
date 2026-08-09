@@ -373,6 +373,16 @@
     "empty": "Keine Signaländerungen bei deinen Coins in den letzten 2 Wochen. Füge Coins zu einer Watchlist hinzu, um hier Alerts zu bekommen.",
     "count": "{count} aktuelle Signaländerungen bei Coins, denen du folgst"
   },
+  "TradeLevels": {
+    "entry": "Einstieg",
+    "stopLoss": "Stop-Loss",
+    "takeProfit": "Take-Profit",
+    "riskReward": "R:R",
+    "noSetup": "WAIT — aktuell kein aktives Setup",
+    "tpShort": "TP",
+    "slShort": "SL",
+    "rrShort": "R:R"
+  },
   "WatchlistSignalBoard": {
     "title": "Atlas' Einschätzung deiner Liste",
     "subtitle": "Das aktuelle Atlas-Signal für jeden Wert, dem du folgst.",
