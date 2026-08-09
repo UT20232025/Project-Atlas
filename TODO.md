@@ -9,14 +9,13 @@ _Sist oppdatert: 2026-08-08_
 ## 🎯 Vil ha / bygge
 
 - [ ] **Velg tidsramme overalt.** Alle candlestick-charts (og RSI, se under) må ha en timeframe-velger — f.eks. 5 min, 15 min, 1t, 4t, 12t, 1d. Motoren støtter allerede flere intervaller; dette er å eksponere valget i UI-et og la analysen kjøre på valgt ramme.
-- [ ] **TP & SL-anbefalinger på ALLE signaler.** Atlas Intelligens skal gi konkrete take-profit- og stop-loss-nivåer på hvert signal, ikke bare på noen. (Motoren regner allerede entry/SL/TP/R:R — sikre at det vises konsekvent på alle kort.)
 - [ ] **Long-term & swing-trading-signaler.** En egen Atlas Intelligens-modus/visning som gir signaler for lengre horisont (swing / posisjon), ikke bare kortsiktig. Trolig koblet til tidsramme-valget over (høyere timeframes = swing/long).
 - [ ] **Linktre til promo-kanaler.** Lenker til X, TikTok og Instagram, synlig et fornuftig sted (footer / landingsside / meny).
 
 ## 🐞 Utbedre / bugs / polish
 
 - [ ] **RSI ser "jalla" ut.** Dagens RSI-visning må pusses opp — ser rotete/uferdig ut. Skal også kunne justeres på tidsramme (5–15 min, 1–4–12 t osv.), som resten av chartene.
-- [ ] **Okse & bjørn (markedshumør-maskoten) er ikke bra nok.** Christer er ikke fornøyd med dagens bull/bear-figur. → **Christer sender bilder som inspirasjon; Claude redesigner ut fra dem.** _(Komponent: `components/dashboard/MarketBiasMascot.tsx`)_
+- [ ] **Okse & bjørn (markedshumør-maskoten) er ikke bra nok.** Christer er ikke fornøyd med dagens bull/bear-figur. Konklusjon: håndkodet SVG kan ikke matche de fotorealistiske rendersene — vi bruker Christers egne genererte bilder som asset i stedet. **VENTER PÅ:** Christer legger valgt okse + bjørn som `apps/web/public/mascots/bull.png` + `bear.png`. Så kobler Claude dem til `bias` (bull=bullish, bear=bearish, begge=neutral) med subtil glød. _(Komponent: `components/dashboard/MarketBiasMascot.tsx`)_
 
 ## 💡 Ideer (kanskje senere)
 
@@ -36,7 +35,8 @@ _Sist oppdatert: 2026-08-08_
 
 - [x] Flere aksjer + ETF-er i Atlas (SPY, QQQ, ~65 tickere + firmanavn-søk) — deployet
 - [x] Live signaltavle på watchlist (Atlas' nåværende signal per fulgt symbol) — deployet
-- [x] Porteføljebevisst «Spør Atlas» (svarer på «hvordan ligger porteføljen min an?») — venter på deploy
+- [x] Porteføljebevisst «Spør Atlas» (svarer på «hvordan ligger porteføljen min an?») — deployet
+- [x] TP & SL-anbefalinger på alle signaler (Opportunity-kort, Atlas Intelligens sterkeste/svakeste, scanner-tabell) — venter på deploy
 
 ## 🚫 Bestemt: ikke nå
 
