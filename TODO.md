@@ -22,7 +22,7 @@ _Sist oppdatert: 2026-08-08_
 - [ ] _(løse tanker, ikke bestemt ennå — kast inn her)_
 
 ### Claude foreslår (til vurdering)
-- [ ] **Portefølje vs. Atlas-uenighet.** Flagg tydelig når din åpne posisjon går MOT Atlas' nåværende signal (du er LONG, Atlas sier SHORT) — tidlig varsel om at noe har snudd.
+- [x] **Portefølje vs. Atlas-uenighet.** Flagg per posisjon: «Atlas enig / uenig / nøytral» ift. retningen din. — venter på deploy
 - [ ] **Posisjonsstørrelse-kalkulator.** Skriv inn risiko (% av kapital) + SL-avstand → Atlas foreslår størrelse. Passer naturlig med TP/SL-anbefalingene.
 - [ ] **Sammenlign to assets side om side.** "BTC vs ETH akkurat nå" — signal, confidence og nøkkelnivåer ved siden av hverandre.
 - [ ] **Prisvarsel (in-app).** Sett et målnivå på en mynt/aksje, få varsel når det treffes (uten epost — in-app / evt. Telegram).
