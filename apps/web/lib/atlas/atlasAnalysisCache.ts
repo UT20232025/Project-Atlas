@@ -14,6 +14,17 @@ import { notifySignalChange } from "@/lib/telegram/notify";
 // 20 symbols x 3 timeframes) instead of reusing the cached result.
 const CACHE_TTL_MS = 35_000;
 
+// Higher timeframes barely move intraday, so cache them far longer — this
+// keeps the daily swing scanner (20 symbols x 1d) from cold-recomputing on
+// every dashboard load, which was the main source of dashboard slowness.
+const LONG_CACHE_TTL_MS = 10 * 60_000;
+
+function ttlForInterval(interval: BinanceInterval): number {
+  return interval === "4h" || interval === "1d"
+    ? LONG_CACHE_TTL_MS
+    : CACHE_TTL_MS;
+}
+
 type CacheEntry = {
   expiresAt: number;
   promise: Promise<AtlasAnalysisResponse>;
@@ -42,7 +53,7 @@ export function getCachedAtlasAnalysis(
   const promise = getAtlasAnalysis(symbol, interval);
 
   cache.set(key, {
-    expiresAt: Date.now() + CACHE_TTL_MS,
+    expiresAt: Date.now() + ttlForInterval(interval),
     promise,
   });
 

@@ -14,12 +14,12 @@ const CONFIG: Record<
 > = {
   BULLISH: {
     src: "/mascots/bull.png",
-    fit: "contain",
+    fit: "cover",
     alt: "Oksemarked (bullish)",
   },
   BEARISH: {
     src: "/mascots/bear.png",
-    fit: "contain",
+    fit: "cover",
     alt: "Bjørnemarked (bearish)",
   },
   NEUTRAL: {

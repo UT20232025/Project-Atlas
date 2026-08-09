@@ -10,8 +10,9 @@ import MarketHeatmap from "../components/dashboard/MarketHeatmap";
 import MarketStats from "../components/dashboard/MarketStats";
 import OpportunityCard from "../components/dashboard/OpportunityCard";
 import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
+import { Suspense } from "react";
 import ScannerSection from "../components/dashboard/ScannerSection";
-import SwingSignals from "../components/dashboard/SwingSignals";
+import SwingSignalsSection from "../components/dashboard/SwingSignalsSection";
 import WatchlistAlerts from "../components/dashboard/WatchlistAlerts";
 import WatchlistSignalBoard from "../components/dashboard/WatchlistSignalBoard";
 import LandingPage from "../components/landing/LandingPage";
@@ -74,19 +75,13 @@ export default async function HomePage() {
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
 
-  const [
-    dashboard,
-    watchlists,
-    watchlistAlerts,
-    watchlistBoard,
-    swingScanner,
-  ] = await Promise.all([
-    getDashboardData(),
-    isPro ? getWatchlists(userId) : Promise.resolve([]),
-    isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
-    isPro ? getWatchlistSignalBoard(userId) : Promise.resolve([]),
-    isPro ? getAtlasScanner("1d") : Promise.resolve([]),
-  ]);
+  const [dashboard, watchlists, watchlistAlerts, watchlistBoard] =
+    await Promise.all([
+      getDashboardData(),
+      isPro ? getWatchlists(userId) : Promise.resolve([]),
+      isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
+      isPro ? getWatchlistSignalBoard(userId) : Promise.resolve([]),
+    ]);
 
   const opportunity = [...dashboard.scanner].sort(
     (first, second) => second.score - first.score
@@ -148,7 +143,19 @@ export default async function HomePage() {
 
       {isPro && (
         <div className="mb-8">
-          <SwingSignals items={swingScanner} />
+          <Suspense
+            fallback={
+              <div className="atlas-card rounded-2xl p-8">
+                <div className="h-6 w-56 animate-pulse rounded bg-zinc-800" />
+                <div className="mt-5 grid gap-3 md:grid-cols-2">
+                  <div className="h-28 animate-pulse rounded-xl bg-zinc-900" />
+                  <div className="h-28 animate-pulse rounded-xl bg-zinc-900" />
+                </div>
+              </div>
+            }
+          >
+            <SwingSignalsSection />
+          </Suspense>
         </div>
       )}
 
