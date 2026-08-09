@@ -373,6 +373,12 @@
     "empty": "Sin cambios de señal en tus monedas en las últimas 2 semanas. Añade monedas a una lista para recibir alertas aquí.",
     "count": "{count} cambios de señal recientes en monedas que sigues"
   },
+  "SwingSignals": {
+    "title": "Señales swing (diario)",
+    "subtitle": "La lectura de Atlas en el marco diario — para operaciones swing/posición más largas.",
+    "empty": "Sin señales swing direccionales ahora — Atlas está en WAIT en el marco diario.",
+    "disclaimer": "Análisis educativo — no es asesoramiento financiero."
+  },
   "TimeframeSelector": {
     "label": "Marco temporal"
   },

@@ -373,6 +373,12 @@
     "empty": "Sem mudanças de sinal nas tuas moedas nas últimas 2 semanas. Adiciona moedas a uma watchlist para receber alertas aqui.",
     "count": "{count} mudanças de sinal recentes em moedas que segues"
   },
+  "SwingSignals": {
+    "title": "Sinais de swing (diário)",
+    "subtitle": "A leitura da Atlas no período diário — para trades de swing/posição mais longas.",
+    "empty": "Sem sinais de swing direcionais agora — a Atlas está em WAIT no período diário.",
+    "disclaimer": "Análise educativa — não é aconselhamento financeiro."
+  },
   "TimeframeSelector": {
     "label": "Período"
   },

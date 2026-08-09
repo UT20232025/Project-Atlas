@@ -373,6 +373,12 @@
     "empty": "Ingen signalendringer på myntene dine de siste to ukene. Legg mynter i en overvåkningsliste for å få varsler her.",
     "count": "{count} nylige signalendringer på mynter du følger"
   },
+  "SwingSignals": {
+    "title": "Swing-signaler (daglig)",
+    "subtitle": "Atlas' read på daglig tidsramme — for lengre swing/posisjon-trades.",
+    "empty": "Ingen retningsbestemte swing-signaler akkurat nå — Atlas venter på daglig ramme.",
+    "disclaimer": "Pedagogisk analyse — ikke finansiell rådgivning."
+  },
   "TimeframeSelector": {
     "label": "Tidsramme"
   },

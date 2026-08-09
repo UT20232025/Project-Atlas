@@ -1,6 +1,7 @@
 import { MARKET_SYMBOLS } from "../config/markets";
 import type { SignalType, TrendType } from "../types/market";
 import { getCachedAtlasAnalysis } from "../atlas/atlasAnalysisCache";
+import type { BinanceInterval } from "../services/binanceCandleService";
 import type { AtlasTrendStatus } from "../atlas/atlasIndicators";
 import type { AtlasReasonCode } from "../atlas/reasonCode";
 import { fetchLiveMarketData } from "../services/liveMarketService";
@@ -42,11 +43,13 @@ function mapTrendStatus(
   return "NEUTRAL";
 }
 
-export async function getAtlasScanner(): Promise<ScannerItem[]> {
+export async function getAtlasScanner(
+  interval: BinanceInterval = "1h"
+): Promise<ScannerItem[]> {
   const [analyses, marketData] = await Promise.all([
     Promise.all(
       MARKET_SYMBOLS.map((symbol) =>
-        getCachedAtlasAnalysis(symbol)
+        getCachedAtlasAnalysis(symbol, interval)
       )
     ),
     fetchLiveMarketData(MARKET_SYMBOLS),

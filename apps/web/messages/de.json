@@ -373,6 +373,12 @@
     "empty": "Keine Signaländerungen bei deinen Coins in den letzten 2 Wochen. Füge Coins zu einer Watchlist hinzu, um hier Alerts zu bekommen.",
     "count": "{count} aktuelle Signaländerungen bei Coins, denen du folgst"
   },
+  "SwingSignals": {
+    "title": "Swing-Signale (täglich)",
+    "subtitle": "Atlas' Einschätzung im Tageszeitrahmen — für längere Swing-/Positions-Trades.",
+    "empty": "Aktuell keine gerichteten Swing-Signale — Atlas steht im Tageszeitrahmen auf WAIT.",
+    "disclaimer": "Bildungsanalyse — keine Finanzberatung."
+  },
   "TimeframeSelector": {
     "label": "Zeitrahmen"
   },

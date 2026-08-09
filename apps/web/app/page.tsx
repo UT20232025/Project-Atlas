@@ -11,6 +11,7 @@ import MarketStats from "../components/dashboard/MarketStats";
 import OpportunityCard from "../components/dashboard/OpportunityCard";
 import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import ScannerSection from "../components/dashboard/ScannerSection";
+import SwingSignals from "../components/dashboard/SwingSignals";
 import WatchlistAlerts from "../components/dashboard/WatchlistAlerts";
 import WatchlistSignalBoard from "../components/dashboard/WatchlistSignalBoard";
 import LandingPage from "../components/landing/LandingPage";
@@ -73,13 +74,19 @@ export default async function HomePage() {
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
 
-  const [dashboard, watchlists, watchlistAlerts, watchlistBoard] =
-    await Promise.all([
-      getDashboardData(),
-      isPro ? getWatchlists(userId) : Promise.resolve([]),
-      isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
-      isPro ? getWatchlistSignalBoard(userId) : Promise.resolve([]),
-    ]);
+  const [
+    dashboard,
+    watchlists,
+    watchlistAlerts,
+    watchlistBoard,
+    swingScanner,
+  ] = await Promise.all([
+    getDashboardData(),
+    isPro ? getWatchlists(userId) : Promise.resolve([]),
+    isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
+    isPro ? getWatchlistSignalBoard(userId) : Promise.resolve([]),
+    isPro ? getAtlasScanner("1d") : Promise.resolve([]),
+  ]);
 
   const opportunity = [...dashboard.scanner].sort(
     (first, second) => second.score - first.score
@@ -138,6 +145,12 @@ export default async function HomePage() {
           neutral={dashboard.neutral}
         />
       </div>
+
+      {isPro && (
+        <div className="mb-8">
+          <SwingSignals items={swingScanner} />
+        </div>
+      )}
 
       <MarketStats
         scanner={dashboard.scanner}
