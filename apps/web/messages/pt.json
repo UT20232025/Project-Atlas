@@ -374,6 +374,20 @@
     "empty": "Sem mudanças de sinal nas tuas moedas nas últimas 2 semanas. Adiciona moedas a uma watchlist para receber alertas aqui.",
     "count": "{count} mudanças de sinal recentes em moedas que segues"
   },
+  "PriceAlerts": {
+    "title": "Alerta de preço",
+    "subtitle": "Recebe aviso quando {symbol} atingir um nível (in-app).",
+    "direction": "Direção",
+    "above": "Acima",
+    "below": "Abaixo",
+    "targetPrice": "Preço-alvo",
+    "add": "Adicionar",
+    "now": "Agora:",
+    "remove": "Remover alerta",
+    "panelTitle": "Alertas de preço",
+    "panelSubtitle": "Níveis que estás a acompanhar.",
+    "hit": "{symbol} atingiu {direction} {target}"
+  },
   "Compare": {
     "title": "Comparar dois ativos",
     "subtitle": "A leitura da Atlas sobre duas moedas lado a lado — para escolher a mais forte.",

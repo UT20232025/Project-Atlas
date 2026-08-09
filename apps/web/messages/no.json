@@ -374,6 +374,20 @@
     "empty": "Ingen signalendringer på myntene dine de siste to ukene. Legg mynter i en overvåkningsliste for å få varsler her.",
     "count": "{count} nylige signalendringer på mynter du følger"
   },
+  "PriceAlerts": {
+    "title": "Prisvarsel",
+    "subtitle": "Få varsel når {symbol} treffer et nivå (in-app).",
+    "direction": "Retning",
+    "above": "Over",
+    "below": "Under",
+    "targetPrice": "Målpris",
+    "add": "Legg til",
+    "now": "Nå:",
+    "remove": "Fjern varsel",
+    "panelTitle": "Prisvarsel",
+    "panelSubtitle": "Nivåene du følger med på.",
+    "hit": "{symbol} traff {direction} {target}"
+  },
   "Compare": {
     "title": "Sammenlign to assets",
     "subtitle": "Atlas' read på to mynter side om side — for å velge den sterkeste.",

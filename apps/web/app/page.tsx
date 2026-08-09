@@ -13,6 +13,7 @@ import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import { Suspense } from "react";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import SwingSignalsSection from "../components/dashboard/SwingSignalsSection";
+import PriceAlertsSection from "../components/dashboard/PriceAlertsSection";
 import WatchlistAlerts from "../components/dashboard/WatchlistAlerts";
 import WatchlistSignalBoard from "../components/dashboard/WatchlistSignalBoard";
 import LandingPage from "../components/landing/LandingPage";
@@ -109,6 +110,10 @@ export default async function HomePage() {
       <div className="mb-8">
         <CoinSearch />
       </div>
+
+      <Suspense fallback={null}>
+        <PriceAlertsSection userId={userId} />
+      </Suspense>
 
       {isPro && (
         <div className="mb-8">

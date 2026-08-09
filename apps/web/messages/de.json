@@ -374,6 +374,20 @@
     "empty": "Keine Signaländerungen bei deinen Coins in den letzten 2 Wochen. Füge Coins zu einer Watchlist hinzu, um hier Alerts zu bekommen.",
     "count": "{count} aktuelle Signaländerungen bei Coins, denen du folgst"
   },
+  "PriceAlerts": {
+    "title": "Preisalarm",
+    "subtitle": "Werde benachrichtigt, wenn {symbol} ein Niveau erreicht (in-app).",
+    "direction": "Richtung",
+    "above": "Über",
+    "below": "Unter",
+    "targetPrice": "Zielpreis",
+    "add": "Hinzufügen",
+    "now": "Jetzt:",
+    "remove": "Alarm entfernen",
+    "panelTitle": "Preisalarme",
+    "panelSubtitle": "Niveaus, die du beobachtest.",
+    "hit": "{symbol} erreichte {direction} {target}"
+  },
   "Compare": {
     "title": "Zwei Assets vergleichen",
     "subtitle": "Atlas' Einschätzung zu zwei Coins nebeneinander — um das stärkere zu wählen.",

@@ -20,8 +20,14 @@ import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
 import WhaleActivityCard from "../../../components/WhaleActivityCard";
+import PriceAlerts from "../../../components/alerts/PriceAlerts";
 import { getChartCandles } from "../../../lib/analysis/candles";
 import { getPreviousDayLevels } from "../../../lib/analysis/previousDayLevels";
+import { getPriceAlertsForSymbol } from "../../../lib/alerts/priceAlerts";
+import {
+  createPriceAlert,
+  deletePriceAlert,
+} from "../../price-alerts/actions";
 import { getMACDHistory } from "../../../lib/analysis/macdHistory";
 import { getRSIHistory } from "../../../lib/analysis/rsiHistory";
 import { getCachedAtlasAnalysis as getAtlasDecision } from "../../../lib/atlas/atlasAnalysisCache";
@@ -90,6 +96,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
     watchlists,
     recentTrades,
     pdLevels,
+    priceAlerts,
   ] = await Promise.all([
     isStock ? Promise.resolve([]) : getChartCandles(symbol, timeframe),
     isStock ? Promise.resolve([]) : getRSIHistory(symbol, timeframe),
@@ -101,6 +108,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
     isPro ? getWatchlists(userId) : Promise.resolve([]),
     isStock ? Promise.resolve([]) : fetchRecentTrades(marketSymbol),
     getPreviousDayLevels(marketSymbol),
+    getPriceAlertsForSymbol(userId, marketSymbol),
   ]);
 
   const whaleActivity = analyzeWhaleActivity(recentTrades);
@@ -375,6 +383,17 @@ export default async function CoinPage({ params, searchParams }: Props) {
           }
           pdh={pdLevels.pdh}
           pdl={pdLevels.pdl}
+        />
+      </div>
+
+      <div className="mt-8">
+        <PriceAlerts
+          symbol={marketSymbol}
+          displaySymbol={coin}
+          currentPrice={market.price}
+          alerts={priceAlerts}
+          createAction={createPriceAlert}
+          deleteAction={deletePriceAlert}
         />
       </div>
 
