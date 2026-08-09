@@ -8,7 +8,7 @@ _Sist oppdatert: 2026-08-08_
 
 ## 🎯 Vil ha / bygge
 
-- [ ] **Velg tidsramme overalt.** Alle candlestick-charts (og RSI, se under) må ha en timeframe-velger — f.eks. 5 min, 15 min, 1t, 4t, 12t, 1d. Motoren støtter allerede flere intervaller; dette er å eksponere valget i UI-et og la analysen kjøre på valgt ramme.
+- [ ] **Velg tidsramme overalt.** ~~Coin-siden~~ har nå en tidsramme-velger (5m/15m/1t/4t/1d) som kjører hele analysen + RSI + MACD + candles på valgt ramme (server-side via URL). **Gjenstår:** samme velger på dashbordets charts/scanner hvis ønskelig, og evt. flere rammer (2t/12t krever utvidelse av intervall-typen).
 - [ ] **Long-term & swing-trading-signaler.** En egen Atlas Intelligens-modus/visning som gir signaler for lengre horisont (swing / posisjon), ikke bare kortsiktig. Trolig koblet til tidsramme-valget over (høyere timeframes = swing/long).
 - [ ] **Linktre til promo-kanaler.** Lenker til X, TikTok og Instagram, synlig et fornuftig sted (footer / landingsside / meny).
 
