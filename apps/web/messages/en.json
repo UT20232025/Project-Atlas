@@ -465,6 +465,9 @@
     "upgradeButton": "Upgrade to Pro"
   },
   "Portfolio": {
+    "atlasAgree": "Atlas agrees",
+    "atlasDisagree": "Atlas disagrees",
+    "atlasNeutral": "Atlas neutral",
     "title": "Portfolio",
     "subtitle": "Track your open positions",
     "entryPricePlaceholder": "Entry price",

@@ -465,6 +465,9 @@
     "upgradeButton": "Assinar Pro"
   },
   "Portfolio": {
+    "atlasAgree": "Atlas concorda",
+    "atlasDisagree": "Atlas discorda",
+    "atlasNeutral": "Atlas neutro",
     "title": "Carteira",
     "subtitle": "Acompanhe suas posições abertas",
     "entryPricePlaceholder": "Preço de entrada",

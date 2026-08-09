@@ -465,6 +465,9 @@
     "upgradeButton": "Oppgrader til Pro"
   },
   "Portfolio": {
+    "atlasAgree": "Atlas enig",
+    "atlasDisagree": "Atlas uenig",
+    "atlasNeutral": "Atlas nøytral",
     "title": "Portefølje",
     "subtitle": "Følg dine åpne posisjoner",
     "entryPricePlaceholder": "Inngangspris",

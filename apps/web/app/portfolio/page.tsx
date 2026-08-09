@@ -4,6 +4,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import PortfolioView from "@/components/portfolio/PortfolioView";
 import { MarketProvider } from "@/components/providers/MarketProvider";
 import ProUpsell from "@/components/ui/ProUpsell";
+import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
 import { prisma } from "@/lib/db/client";
 import type {
   MarketSymbol,
@@ -58,11 +59,31 @@ export default async function PortfolioPage() {
     })
   );
 
+  // Atlas's current read per held symbol, so the view can flag positions that
+  // run against the engine. Reuses the shared analysis cache and tolerates
+  // per-symbol failures (a bad symbol just gets no flag).
+  const heldSymbols = Array.from(
+    new Set(positionViews.map((position) => position.symbol))
+  );
+
+  const analyses = await Promise.allSettled(
+    heldSymbols.map((symbol) => getCachedAtlasAnalysis(symbol))
+  );
+
+  const atlasSignals: Record<string, "LONG" | "SHORT" | "WAIT"> = {};
+
+  analyses.forEach((result, index) => {
+    if (result.status === "fulfilled") {
+      atlasSignals[heldSymbols[index]] = result.value.decision.signal;
+    }
+  });
+
   return (
     <MarketProvider>
       <AppLayout userEmail={email} isPro>
         <PortfolioView
           positions={positionViews}
+          atlasSignals={atlasSignals}
           createPositionAction={createPosition}
           closePositionAction={closePosition}
           deletePositionAction={deletePosition}

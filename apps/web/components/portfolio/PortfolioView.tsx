@@ -17,8 +17,11 @@ import {
   type PortfolioPositionView,
 } from "@/lib/trading/pnl";
 
+type AtlasSignal = "LONG" | "SHORT" | "WAIT";
+
 type PortfolioViewProps = {
   positions: PortfolioPositionView[];
+  atlasSignals: Record<string, AtlasSignal>;
   createPositionAction: (formData: FormData) => void;
   closePositionAction: (formData: FormData) => void;
   deletePositionAction: (formData: FormData) => void;
@@ -26,6 +29,7 @@ type PortfolioViewProps = {
 
 type PortfolioPositionRowProps = {
   position: PortfolioPositionView;
+  atlasSignal: AtlasSignal | undefined;
   currentPrice: number | undefined;
   isClosing: boolean;
   onToggleClosing: () => void;
@@ -36,6 +40,7 @@ type PortfolioPositionRowProps = {
 
 function PortfolioPositionRow({
   position,
+  atlasSignal,
   currentPrice,
   isClosing,
   onToggleClosing,
@@ -44,6 +49,15 @@ function PortfolioPositionRow({
   t,
 }: PortfolioPositionRowProps) {
   const priceFlash = usePriceFlash(currentPrice ?? 0);
+
+  // Compare Atlas's current read with the direction the user is holding, so a
+  // position that's gone against the engine surfaces immediately.
+  const alignment =
+    atlasSignal === undefined || atlasSignal === "WAIT"
+      ? { variant: "yellow" as const, label: t("atlasNeutral") }
+      : atlasSignal === position.direction
+        ? { variant: "green" as const, label: t("atlasAgree") }
+        : { variant: "red" as const, label: t("atlasDisagree") };
 
   const unrealized =
     currentPrice !== undefined
@@ -71,6 +85,10 @@ function PortfolioPositionRow({
             }
           >
             {position.direction}
+          </Badge>
+
+          <Badge variant={alignment.variant}>
+            {alignment.label}
           </Badge>
         </div>
 
@@ -197,6 +215,7 @@ function PortfolioPositionRow({
 
 export default function PortfolioView({
   positions,
+  atlasSignals,
   createPositionAction,
   closePositionAction,
   deletePositionAction,
@@ -290,6 +309,7 @@ export default function PortfolioView({
                 <PortfolioPositionRow
                   key={position.id}
                   position={position}
+                  atlasSignal={atlasSignals[position.symbol]}
                   currentPrice={currentPrice}
                   isClosing={isClosing}
                   onToggleClosing={() =>
