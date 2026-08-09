@@ -373,6 +373,9 @@
     "empty": "Ingen signalendringer på myntene dine de siste to ukene. Legg mynter i en overvåkningsliste for å få varsler her.",
     "count": "{count} nylige signalendringer på mynter du følger"
   },
+  "TimeframeSelector": {
+    "label": "Tidsramme"
+  },
   "TradeLevels": {
     "entry": "Inngang",
     "stopLoss": "Stop-loss",

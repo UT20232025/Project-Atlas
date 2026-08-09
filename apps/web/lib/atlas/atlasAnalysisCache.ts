@@ -56,9 +56,12 @@ export function getCachedAtlasAnalysis(
   // the Telegram channel. Ad-hoc coins reached via search are analyzed
   // and cached, but never recorded or broadcast — so the public track
   // record stays "our 20 curated calls", not "anything anyone searched".
-  const isCurated = (MARKET_SYMBOLS as readonly string[]).includes(
-    symbol
-  );
+  // And only the canonical 1h timeframe is recorded/broadcast: coin pages
+  // can now request other timeframes (4h, 1d, …) for browsing, and those
+  // must not pollute the 1h-based track record or spam the channel.
+  const isCurated =
+    interval === "1h" &&
+    (MARKET_SYMBOLS as readonly string[]).includes(symbol);
 
   if (isCurated) {
     promise.then(async (result) => {

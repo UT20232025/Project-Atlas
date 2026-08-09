@@ -1,5 +1,6 @@
 import { EMA } from "technicalindicators";
 import { fetchKlines } from "../api/binance";
+import type { BinanceInterval } from "../services/binanceCandleService";
 
 export type ChartCandle = {
   time: number;
@@ -13,9 +14,10 @@ export type ChartCandle = {
 };
 
 export async function getChartCandles(
-  symbol: string
+  symbol: string,
+  interval: BinanceInterval = "1h"
 ): Promise<ChartCandle[]> {
-  const klines = await fetchKlines(symbol, "1h", 250);
+  const klines = await fetchKlines(symbol, interval, 250);
 
   const closes = klines.map((candle) => Number(candle[4]));
 

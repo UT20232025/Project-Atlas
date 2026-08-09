@@ -373,6 +373,9 @@
     "empty": "No signal changes on your watched coins in the last 2 weeks. Add coins to a watchlist to get alerts here.",
     "count": "{count} recent signal changes on coins you follow"
   },
+  "TimeframeSelector": {
+    "label": "Timeframe"
+  },
   "TradeLevels": {
     "entry": "Entry",
     "stopLoss": "Stop-loss",

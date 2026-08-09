@@ -373,6 +373,9 @@
     "empty": "Keine Signaländerungen bei deinen Coins in den letzten 2 Wochen. Füge Coins zu einer Watchlist hinzu, um hier Alerts zu bekommen.",
     "count": "{count} aktuelle Signaländerungen bei Coins, denen du folgst"
   },
+  "TimeframeSelector": {
+    "label": "Zeitrahmen"
+  },
   "TradeLevels": {
     "entry": "Einstieg",
     "stopLoss": "Stop-Loss",

@@ -7,6 +7,9 @@ import KeyLevelsCard from "../../../components/analysis/KeyLevelsCard";
 import PositionSizeCalculator from "../../../components/analysis/PositionSizeCalculator";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
 import SignalHistoryCard from "../../../components/analysis/SignalHistoryCard";
+import TimeframeSelector, {
+  resolveTimeframe,
+} from "../../../components/analysis/TimeframeSelector";
 import CandlestickChart from "../../../components/CandlestickChart";
 import CoinHero from "../../../components/CoinHero";
 import Disclaimer from "../../../components/ui/Disclaimer";
@@ -43,10 +46,15 @@ type Props = {
   params: Promise<{
     symbol: string;
   }>;
+  searchParams: Promise<{
+    tf?: string | string[];
+  }>;
 };
 
-export default async function CoinPage({ params }: Props) {
+export default async function CoinPage({ params, searchParams }: Props) {
   const { symbol } = await params;
+  const { tf } = await searchParams;
+  const timeframe = resolveTimeframe(tf);
   const t = await getTranslations("CoinPage");
   const locale = await getLocale();
   const user = await getCurrentUser();
@@ -81,10 +89,10 @@ export default async function CoinPage({ params }: Props) {
     watchlists,
     recentTrades,
   ] = await Promise.all([
-    isStock ? Promise.resolve([]) : getChartCandles(symbol),
-    isStock ? Promise.resolve([]) : getRSIHistory(symbol),
-    isStock ? Promise.resolve([]) : getMACDHistory(symbol),
-    getAtlasDecision(marketSymbol),
+    isStock ? Promise.resolve([]) : getChartCandles(symbol, timeframe),
+    isStock ? Promise.resolve([]) : getRSIHistory(symbol, timeframe),
+    isStock ? Promise.resolve([]) : getMACDHistory(symbol, timeframe),
+    getAtlasDecision(marketSymbol, timeframe),
     isStock
       ? Promise.resolve([])
       : getSignalHistory(marketSymbol, 20),
@@ -229,6 +237,10 @@ export default async function CoinPage({ params }: Props) {
           score={decision.score}
           confidence={decision.confidence}
         />
+      </div>
+
+      <div className="mt-6">
+        <TimeframeSelector symbol={symbol} active={timeframe} />
       </div>
 
       <div className="mt-6">

@@ -1,5 +1,6 @@
 import { MACD } from "technicalindicators";
 import { fetchKlineCloses } from "../api/binance";
+import type { BinanceInterval } from "../services/binanceCandleService";
 
 export type MACDPoint = {
   macd: number;
@@ -8,9 +9,10 @@ export type MACDPoint = {
 };
 
 export async function getMACDHistory(
-  symbol: string
+  symbol: string,
+  interval: BinanceInterval = "1h"
 ): Promise<MACDPoint[]> {
-  const closes = await fetchKlineCloses(symbol, "1h", 250);
+  const closes = await fetchKlineCloses(symbol, interval, 250);
 
   return MACD.calculate({
     values: closes,

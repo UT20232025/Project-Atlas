@@ -373,6 +373,9 @@
     "empty": "Sem mudanças de sinal nas tuas moedas nas últimas 2 semanas. Adiciona moedas a uma watchlist para receber alertas aqui.",
     "count": "{count} mudanças de sinal recentes em moedas que segues"
   },
+  "TimeframeSelector": {
+    "label": "Período"
+  },
   "TradeLevels": {
     "entry": "Entrada",
     "stopLoss": "Stop-loss",

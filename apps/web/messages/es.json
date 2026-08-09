@@ -373,6 +373,9 @@
     "empty": "Sin cambios de señal en tus monedas en las últimas 2 semanas. Añade monedas a una lista para recibir alertas aquí.",
     "count": "{count} cambios de señal recientes en monedas que sigues"
   },
+  "TimeframeSelector": {
+    "label": "Marco temporal"
+  },
   "TradeLevels": {
     "entry": "Entrada",
     "stopLoss": "Stop-loss",
