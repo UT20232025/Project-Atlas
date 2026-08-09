@@ -14,12 +14,12 @@ const CONFIG: Record<
 > = {
   BULLISH: {
     src: "/mascots/bull.png",
-    fit: "cover",
+    fit: "contain",
     alt: "Oksemarked (bullish)",
   },
   BEARISH: {
     src: "/mascots/bear.png",
-    fit: "cover",
+    fit: "contain",
     alt: "Bjørnemarked (bearish)",
   },
   NEUTRAL: {
@@ -33,7 +33,7 @@ const styles = `
 .atlas-mascot {
   position: relative;
   width: 100%;
-  height: 170px;
+  height: 210px;
   margin-top: 8px;
   border-radius: 16px;
   overflow: hidden;
