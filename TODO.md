@@ -15,7 +15,7 @@ _Sist oppdatert: 2026-08-08_
 ## 🐞 Utbedre / bugs / polish
 
 - [ ] **RSI ser "jalla" ut.** Dagens RSI-visning må pusses opp — ser rotete/uferdig ut. Skal også kunne justeres på tidsramme (5–15 min, 1–4–12 t osv.), som resten av chartene.
-- [ ] **Okse & bjørn (markedshumør-maskoten) er ikke bra nok.** Christer er ikke fornøyd med dagens bull/bear-figur. Konklusjon: håndkodet SVG kan ikke matche de fotorealistiske rendersene — vi bruker Christers egne genererte bilder som asset i stedet. **VENTER PÅ:** Christer legger valgt okse + bjørn som `apps/web/public/mascots/bull.png` + `bear.png`. Så kobler Claude dem til `bias` (bull=bullish, bear=bearish, begge=neutral) med subtil glød. _(Komponent: `components/dashboard/MarketBiasMascot.tsx`)_
+- [x] **Okse & bjørn (markedshumør-maskoten).** Byttet til Christers kinematiske brand-key-art — klippet det tekstfrie dyre-båndet ut av kilde-renderen til bull/bear/faceoff-bilder. Bullish=okse, bearish=bjørn, neutral=face-off. — venter på deploy
 
 ## 💡 Ideer (kanskje senere)
 
