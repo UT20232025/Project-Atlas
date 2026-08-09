@@ -30,6 +30,7 @@
     "dashboard": "Dashboard",
     "scanner": "Scanner",
     "markets": "Märkte",
+    "compare": "Vergleichen",
     "alerts": "Warnungen",
     "watchlist": "Watchlist",
     "journal": "Journal",
@@ -372,6 +373,19 @@
     "subtitle": "Signaländerungen bei den Coins, denen du folgst, erscheinen hier.",
     "empty": "Keine Signaländerungen bei deinen Coins in den letzten 2 Wochen. Füge Coins zu einer Watchlist hinzu, um hier Alerts zu bekommen.",
     "count": "{count} aktuelle Signaländerungen bei Coins, denen du folgst"
+  },
+  "Compare": {
+    "title": "Zwei Assets vergleichen",
+    "subtitle": "Atlas' Einschätzung zu zwei Coins nebeneinander — um das stärkere zu wählen.",
+    "assetA": "Asset A",
+    "assetB": "Asset B",
+    "compareButton": "Vergleichen",
+    "verdictLabel": "Atlas' Urteil",
+    "verdictLeans": "Atlas tendiert zu {symbol}",
+    "verdictNeither": "Atlas sieht aktuell bei keinem einen klaren Vorteil.",
+    "confidence": "Konfidenz",
+    "score": "Score",
+    "rsi": "RSI"
   },
   "SwingSignals": {
     "title": "Swing-Signale (täglich)",

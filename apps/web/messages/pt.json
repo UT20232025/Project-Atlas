@@ -30,6 +30,7 @@
     "dashboard": "Painel",
     "scanner": "Scanner",
     "markets": "Mercados",
+    "compare": "Comparar",
     "alerts": "Alertas",
     "watchlist": "Lista de observação",
     "journal": "Diário",
@@ -372,6 +373,19 @@
     "subtitle": "As mudanças de sinal nas moedas que segues aparecem aqui.",
     "empty": "Sem mudanças de sinal nas tuas moedas nas últimas 2 semanas. Adiciona moedas a uma watchlist para receber alertas aqui.",
     "count": "{count} mudanças de sinal recentes em moedas que segues"
+  },
+  "Compare": {
+    "title": "Comparar dois ativos",
+    "subtitle": "A leitura da Atlas sobre duas moedas lado a lado — para escolher a mais forte.",
+    "assetA": "Ativo A",
+    "assetB": "Ativo B",
+    "compareButton": "Comparar",
+    "verdictLabel": "Veredito da Atlas",
+    "verdictLeans": "A Atlas inclina-se para {symbol}",
+    "verdictNeither": "A Atlas não vê uma vantagem clara em nenhuma agora.",
+    "confidence": "Confiança",
+    "score": "Pontuação",
+    "rsi": "RSI"
   },
   "SwingSignals": {
     "title": "Sinais de swing (diário)",

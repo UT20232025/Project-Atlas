@@ -27,6 +27,11 @@ export const menu = [
     icon: "📈",
   },
   {
+    key: "compare",
+    href: "/compare",
+    icon: "⚖️",
+  },
+  {
     key: "alerts",
     href: "/#alerts",
     icon: "🔔",
