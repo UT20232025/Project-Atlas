@@ -9,7 +9,7 @@ _Sist oppdatert: 2026-08-08_
 ## 🎯 Vil ha / bygge
 
 - [ ] **Velg tidsramme overalt.** ~~Coin-siden~~ har nå en tidsramme-velger (5m/15m/1t/4t/1d) som kjører hele analysen + RSI + MACD + candles på valgt ramme (server-side via URL). **Gjenstår:** samme velger på dashbordets charts/scanner hvis ønskelig, og evt. flere rammer (2t/12t krever utvidelse av intervall-typen).
-- [ ] **Long-term & swing-trading-signaler.** En egen Atlas Intelligens-modus/visning som gir signaler for lengre horisont (swing / posisjon), ikke bare kortsiktig. Trolig koblet til tidsramme-valget over (høyere timeframes = swing/long).
+- [x] **Long-term & swing-trading-signaler.** Egen «Swing-signaler (daglig)»-seksjon på dashbordet: Atlas kjører på 1d-ramme og viser de retningsbestemte kallene med TP/SL. — venter på deploy. _(Mulig utvidelse: velg swing-rammen (4t/1d/1u) og en dedikert /swing-side.)_
 - [ ] **Linktre til promo-kanaler.** Lenker til X, TikTok og Instagram, synlig et fornuftig sted (footer / landingsside / meny).
 
 ## 🐞 Utbedre / bugs / polish
