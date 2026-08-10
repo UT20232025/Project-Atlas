@@ -852,6 +852,8 @@
     "VWAP_PRICE_BELOW": "Der Preis handelt unter dem Tages-VWAP — bärische Tendenz.",
     "PREMIUM_DISCOUNT_DISCOUNT": "Der Preis ist in der Discount-Zone — günstig für Longs.",
     "PREMIUM_DISCOUNT_PREMIUM": "Der Preis ist in der Premium-Zone — günstig für Shorts.",
+    "LONG_INTO_PREMIUM": "Warnung: LONG in der Premium-Zone (teuer gekauft) — erhöhtes Rückschlagrisiko.",
+    "SHORT_INTO_DISCOUNT": "Warnung: SHORT in der Discount-Zone (billig verkauft) — erhöhtes Erholungsrisiko.",
     "SESSION_LONDON_KILLZONE": "Signal in der London-Killzone — Fenster hoher Liquidität.",
     "SESSION_NY_KILLZONE": "Signal in der New-York-Killzone — Fenster hoher Liquidität.",
     "FIB_GOLDEN_POCKET_LONG": "Der Preis retestet die Fibonacci-Golden-Pocket (0.618–0.786) — bullische Einstiegszone.",

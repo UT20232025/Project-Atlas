@@ -491,10 +491,16 @@ if (
 
 // ----- Premium / Discount -----
 
+// Smart-money location: long from discount, short from premium. Buying into
+// premium (chasing the top) or shorting into discount is a poor location, so
+// it doesn't just reward the opposite side — it actively penalizes the wrong
+// side. This is the AVAX-100%-LONG lesson: a strong LONG shouldn't fire right
+// under the range high.
 if (
   input.premiumDiscount.zone === "DISCOUNT"
 ) {
   bullishScore += 8;
+  bearishScore -= 6;
 
   bullishReasons.push({ code: "PREMIUM_DISCOUNT_DISCOUNT" });
 }
@@ -503,6 +509,7 @@ if (
   input.premiumDiscount.zone === "PREMIUM"
 ) {
   bearishScore += 8;
+  bullishScore -= 6;
 
   bearishReasons.push({ code: "PREMIUM_DISCOUNT_PREMIUM" });
 }
@@ -885,6 +892,22 @@ export function makeAtlasDecision(
     input.risk.validTrade &&
     confidence >=
       minimumConfidence;
+
+  // Transparency: if a directional call still fires against its ideal
+  // location (long in premium / short in discount), say so plainly.
+  if (
+    signal === "LONG" &&
+    input.premiumDiscount.zone === "PREMIUM"
+  ) {
+    warnings.push({ code: "LONG_INTO_PREMIUM" });
+  }
+
+  if (
+    signal === "SHORT" &&
+    input.premiumDiscount.zone === "DISCOUNT"
+  ) {
+    warnings.push({ code: "SHORT_INTO_DISCOUNT" });
+  }
 
   const strength =
     determineStrength(

@@ -852,6 +852,8 @@
     "VWAP_PRICE_BELOW": "El precio cotiza por debajo del VWAP diario — sesgo bajista.",
     "PREMIUM_DISCOUNT_DISCOUNT": "El precio está en la zona de descuento — favorable para largos.",
     "PREMIUM_DISCOUNT_PREMIUM": "El precio está en la zona premium — favorable para cortos.",
+    "LONG_INTO_PREMIUM": "Advertencia: LONG en la zona premium (comprar caro) — mayor riesgo de retroceso.",
+    "SHORT_INTO_DISCOUNT": "Advertencia: SHORT en la zona discount (vender barato) — mayor riesgo de rebote.",
     "SESSION_LONDON_KILLZONE": "Señal en la killzone de Londres — ventana de alta liquidez.",
     "SESSION_NY_KILLZONE": "Señal en la killzone de Nueva York — ventana de alta liquidez.",
     "FIB_GOLDEN_POCKET_LONG": "El precio está retesteando el golden pocket de Fibonacci (0.618–0.786) — zona de entrada alcista.",

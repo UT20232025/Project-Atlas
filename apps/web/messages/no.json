@@ -852,6 +852,8 @@
     "VWAP_PRICE_BELOW": "Prisen handles under daglig VWAP — bearish bias.",
     "PREMIUM_DISCOUNT_DISCOUNT": "Prisen er i discount-sonen — gunstig for LONG.",
     "PREMIUM_DISCOUNT_PREMIUM": "Prisen er i premium-sonen — gunstig for SHORT.",
+    "LONG_INTO_PREMIUM": "Advarsel: LONG kjøpt i premium-sonen (høyt) — økt risiko for tilbakefall.",
+    "SHORT_INTO_DISCOUNT": "Advarsel: SHORT i discount-sonen (lavt) — økt risiko for oppgang.",
     "SESSION_LONDON_KILLZONE": "Signalet kom i London-killzone — vindu med høy likviditet.",
     "SESSION_NY_KILLZONE": "Signalet kom i New York-killzone — vindu med høy likviditet.",
     "FIB_GOLDEN_POCKET_LONG": "Prisen retester Fibonacci golden pocket (0.618–0.786) — bullish inngangssone.",

@@ -852,6 +852,8 @@
     "VWAP_PRICE_BELOW": "Price is trading below the daily VWAP — bearish bias.",
     "PREMIUM_DISCOUNT_DISCOUNT": "Price is in the discount zone — favorable for longs.",
     "PREMIUM_DISCOUNT_PREMIUM": "Price is in the premium zone — favorable for shorts.",
+    "LONG_INTO_PREMIUM": "Warning: LONG taken in the premium zone (buying high) — elevated pullback risk.",
+    "SHORT_INTO_DISCOUNT": "Warning: SHORT taken in the discount zone (selling low) — elevated bounce risk.",
     "SESSION_LONDON_KILLZONE": "Signal fired during the London killzone — high-liquidity window.",
     "SESSION_NY_KILLZONE": "Signal fired during the New York killzone — high-liquidity window.",
     "FIB_GOLDEN_POCKET_LONG": "Price is retesting the Fibonacci golden pocket (0.618–0.786) — bullish entry zone.",
