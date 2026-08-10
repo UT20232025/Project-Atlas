@@ -39,6 +39,10 @@ _Sist oppdatert: 2026-08-09_
 - [x] Prisvarsel (in-app) — sett over/under-nivå på coin-siden, dashbord varsler når det treffes
 - [x] Ytelse per signaltype (LONG/SHORT) + konfidensnivå på track record-siden — venter på deploy _(NB: tidsramme-nedbrytning venter til vi evt. registrerer flere rammer enn 1t)_
 
+## 🩹 Fikset underveis
+
+- [x] **Confidence kappet til maks 95 %.** Et kringkastet «LONG AVAXUSDT · 100 %» bommet; 100 %-merkelapp som feiler ødelegger tillit. Ingen trade er sikker. — venter på deploy
+
 ## 🚫 Bestemt: ikke nå
 
 - Epost-varsler for signaler — **droppet** (ønskes ikke)
