@@ -680,6 +680,12 @@ function determineRawSignal(
   return "WAIT";
 }
 
+// Never claim certainty. A signal that displays "100% confidence" and then
+// loses destroys trust far more than the loss itself — so the top of the
+// scale is capped below 100%. The highest Atlas will ever show is very-high
+// conviction, not a guarantee.
+const MAX_CONFIDENCE = 95;
+
 function calculateDecisionConfidence(
   signal: AtlasTradeDirection,
   bullishScore: number,
@@ -747,7 +753,7 @@ function calculateDecisionConfidence(
   }
 
   return Math.round(
-    clamp(confidence, 0, 100)
+    clamp(confidence, 0, MAX_CONFIDENCE)
   );
 }
 
