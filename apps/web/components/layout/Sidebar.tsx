@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { SOCIAL_LINKS } from "@/lib/config/social";
+
 export const menu = [
   {
     key: "dashboard",
@@ -112,6 +114,18 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      <div className="border-t border-zinc-800 p-5">
+        <a
+          href={SOCIAL_LINKS.telegram}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 rounded-xl bg-[#229ED9] px-4 py-3 font-medium text-white transition hover:bg-[#1c8dc2]"
+        >
+          <span className="text-xl">📣</span>
+          <span>{t("joinTelegram")}</span>
+        </a>
+      </div>
     </aside>
   );
 }

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
+import { SOCIAL_LINKS } from "@/lib/config/social";
 import { menu } from "./Sidebar";
 
 export default function MobileNav() {
@@ -81,6 +82,19 @@ export default function MobileNav() {
                 );
               })}
             </nav>
+
+            <div className="border-t border-zinc-800 p-5">
+              <a
+                href={SOCIAL_LINKS.telegram}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 rounded-xl bg-[#229ED9] px-4 py-3 font-medium text-white transition hover:bg-[#1c8dc2]"
+              >
+                <span className="text-xl">📣</span>
+                <span>{t("joinTelegram")}</span>
+              </a>
+            </div>
           </aside>
         </div>
       )}
