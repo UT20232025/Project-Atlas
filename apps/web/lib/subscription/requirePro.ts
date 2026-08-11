@@ -30,6 +30,13 @@ function betaAllowsAccess(email: string | null | undefined): boolean {
   return allowlist.includes(email.toLowerCase());
 }
 
+/** True when this email's Pro access comes from the beta env, not Stripe. */
+export function isBetaAccessEmail(
+  email: string | null | undefined
+): boolean {
+  return betaAllowsAccess(email);
+}
+
 export function hasActiveSubscription(
   user: Pick<User, "subscriptionStatus" | "email">
 ): boolean {

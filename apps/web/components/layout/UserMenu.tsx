@@ -9,9 +9,10 @@ import { logout } from "@/lib/auth/actions";
 type UserMenuProps = {
   email?: string;
   isPro?: boolean;
+  isBeta?: boolean;
 };
 
-export default function UserMenu({ email, isPro }: UserMenuProps) {
+export default function UserMenu({ email, isPro, isBeta }: UserMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations("UserMenu");
 
@@ -40,8 +41,12 @@ export default function UserMenu({ email, isPro }: UserMenuProps) {
             {email}
           </span>
 
-          <span className="block text-xs text-zinc-500">
-            {isPro ? t("pro") : t("freeBeta")}
+          <span
+            className={`block text-xs ${
+              isBeta ? "font-semibold text-blue-400" : "text-zinc-500"
+            }`}
+          >
+            {isBeta ? t("beta") : isPro ? t("pro") : t("freeBeta")}
           </span>
         </span>
       </button>

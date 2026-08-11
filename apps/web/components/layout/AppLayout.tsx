@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { isBetaAccessEmail } from "@/lib/subscription/requirePro";
 import FeedbackButton from "../feedback/FeedbackButton";
 import SearchDialog from "../search/SearchDialog";
 import ShortcutsHelp from "../search/ShortcutsHelp";
@@ -30,6 +31,9 @@ export default function AppLayout({
   userEmail,
   isPro,
 }: AppLayoutProps) {
+  // Beta testers get comped Pro via env — badge them as BETA, not PRO.
+  const isBeta = Boolean(isPro) && isBetaAccessEmail(userEmail);
+
   return (
     <div className="min-h-screen text-white">
       <AmbientBackground />
@@ -43,7 +47,12 @@ export default function AppLayout({
         </div>
 
         <div className="min-w-0 flex-1">
-          <Topbar marketTicker={marketTicker} userEmail={userEmail} isPro={isPro} />
+          <Topbar
+            marketTicker={marketTicker}
+            userEmail={userEmail}
+            isPro={isPro}
+            isBeta={isBeta}
+          />
 
           <main className="p-6 md:p-8">{children}</main>
         </div>

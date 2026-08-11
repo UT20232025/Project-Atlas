@@ -21,9 +21,15 @@ type TopbarProps = {
   };
   userEmail?: string;
   isPro?: boolean;
+  isBeta?: boolean;
 };
 
-export default async function Topbar({ marketTicker, userEmail, isPro }: TopbarProps) {
+export default async function Topbar({
+  marketTicker,
+  userEmail,
+  isPro,
+  isBeta,
+}: TopbarProps) {
   const t = await getTranslations("Topbar");
 
   return (
@@ -74,7 +80,7 @@ export default async function Topbar({ marketTicker, userEmail, isPro }: TopbarP
 
           <ThemeToggle />
 
-          <UserMenu email={userEmail} isPro={isPro} />
+          <UserMenu email={userEmail} isPro={isPro} isBeta={isBeta} />
         </div>
       </div>
 
