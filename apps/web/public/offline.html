@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Genwelth AI — Offline</title>
+    <style>
+      html, body {
+        margin: 0;
+        height: 100%;
+        background: #0a0a0f;
+        color: #e4e4e7;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+      .wrap {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 24px;
+      }
+      img { width: 88px; height: 88px; border-radius: 20px; }
+      h1 { font-size: 20px; font-weight: 600; margin: 20px 0 8px; }
+      p { color: #a1a1aa; font-size: 15px; max-width: 320px; line-height: 1.5; }
+      button {
+        margin-top: 24px;
+        background: #2563eb;
+        color: #fff;
+        border: 0;
+        border-radius: 12px;
+        padding: 12px 22px;
+        font-size: 15px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <img src="/icons/icon-192.png" alt="Genwelth AI" />
+      <h1>You're offline</h1>
+      <p>Genwelth AI needs a connection to fetch live market data. Reconnect and try again.</p>
+      <button onclick="location.reload()">Retry</button>
+    </div>
+  </body>
+</html>
