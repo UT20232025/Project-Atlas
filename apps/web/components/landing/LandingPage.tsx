@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import Button from "@/components/ui/button";
 import Disclaimer from "@/components/ui/Disclaimer";
+import { SOCIAL_LINKS } from "@/lib/config/social";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import type { ScannerItem } from "@/lib/analysis/scanner";
 import type { TrackRecordSummary } from "@/lib/atlas/trackRecord";
@@ -124,7 +125,7 @@ export default async function LandingPage({
             </Link>
 
             <a
-              href="https://t.me/GenwelthAiSignals"
+              href={SOCIAL_LINKS.telegram}
               target="_blank"
               rel="noopener noreferrer"
             >
