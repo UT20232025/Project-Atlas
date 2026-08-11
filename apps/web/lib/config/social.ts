@@ -4,7 +4,7 @@
 export const SOCIAL_LINKS = {
   telegram: "https://t.me/GenwelthAiSignals",
   x: "https://x.com/Genwelth",
-  tiktok: "https://www.tiktok.com/@genwelth.ai.trading",
+  tiktok: "https://www.tiktok.com/@genwelt.ai.tradin",
   instagram: "https://www.instagram.com/genwelth.ai.trading",
 } as const;
 
