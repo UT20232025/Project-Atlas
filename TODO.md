@@ -10,9 +10,14 @@ _Sist oppdatert: 2026-08-09_
 
 - [ ] **«Del signal»-kort (bilde).** Auto-generert delbart bilde av et signal for sosiale medier — kobler på promo-kanalene når de er live. _(Godkjent.)_
 - [ ] **Tidsramme på dashbordet.** Coin-siden har velgeren; gjenstår samme på dashbordets scanner/charts (client-pollet, større jobb). Evt. flere rammer (2t/12t krever utvidelse av intervall-typen).
-- [ ] **Linktre til promo-kanaler.** Lenker til X, TikTok, Instagram (footer/landingsside/meny). Trenger faktiske URL-er fra Christer; X er på vent.
+- [x] **Linktre / følg oss.** Telegram + X + TikTok + Instagram som «Følg oss»-rad i landing-footer, + Telegram-knapp i app-menyen. Alt styrt fra `SOCIAL_LINKS`. — venter på deploy
 
 ## 🐞 Utbedre / polish
+
+- [x] **Signal-spam fikset.** Samme coin kringkastet 4× på 12 min (LONG-flapping). La til broadcast-cooldown per symbol+retning (default 120 min, `SIGNAL_BROADCAST_COOLDOWN_MINUTES`). Opptak til track record beholdes; kun kringkasting debounces. — venter på deploy
+- [x] **TP/SL i signalene.** Telegram + push viser nå SL/TP/R:R + «ikke finansiell rådgivning». — venter på deploy
+- [ ] **Exit-signaler.** Når Atlas ser at markedet snur mot en åpen posisjon: send «gå ut / flytt SL i profitt»-varsel. Krever å spore hvilke signaler som ble kringkastet + oppdage reversering. (Ønsket av Christer.)
+- [ ] **Confidence-uniformitet.** Etter 95%-capet klumper alle sterke signaler på nøyaktig 95%. Vurder mykere skalering på toppen (f.eks. 80–95-spenn) så tallet varierer mer. (Christer merket det.)
 
 - [ ] **RSI ser "jalla" ut.** RSI-visningen må pusses opp. Er nå tidsramme-styrt, men selve visningen kan bli bedre. Trenger at Christer beskriver hva som ser feil ut.
 
