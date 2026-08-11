@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import Button from "@/components/ui/button";
 import Disclaimer from "@/components/ui/Disclaimer";
+import SocialLinks from "@/components/social/SocialLinks";
 import { SOCIAL_LINKS } from "@/lib/config/social";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import type { ScannerItem } from "@/lib/analysis/scanner";
@@ -510,6 +511,9 @@ export default async function LandingPage({
       </main>
 
       <footer className="border-t border-zinc-800 px-6 py-8 text-center text-sm text-zinc-600">
+        <p className="mb-4 font-medium text-zinc-400">{t("followUs")}</p>
+        <SocialLinks className="mb-6" />
+
         <p>{t("footer")}</p>
         <Disclaimer className="mx-auto mt-3 max-w-2xl !text-zinc-600" />
       </footer>
