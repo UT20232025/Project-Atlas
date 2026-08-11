@@ -385,7 +385,17 @@
     "statusOn": "På",
     "statusOff": "Av",
     "unsupported": "Push-varsler støttes ikke i denne nettleseren.",
-    "notConfigured": "Push-varsler er ikke skrudd på ennå."
+    "notConfigured": "Push-varsler er ikke skrudd på ennå.",
+    "sendTest": "Send test-varsel",
+    "testSent": "Test sendt! ✓"
+  },
+  "InstallApp": {
+    "title": "Installer app-en",
+    "subtitle": "Legg Genwelth til på hjem-skjermen — fullskjerm, eget ikon, og påkrevd for push-varsler på iPhone.",
+    "button": "Installer app",
+    "installed": "App-en er installert ✓",
+    "iosHint": "På iPhone: åpne i Safari → trykk Del-ikonet (□↑) → «Legg til på Hjem-skjerm».",
+    "genericHint": "Åpne menyen i nettleseren og velg «Installer app» / «Legg til på startskjerm»."
   },
   "PriceAlerts": {
     "title": "Prisvarsel",

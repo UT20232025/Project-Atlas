@@ -385,7 +385,17 @@
     "statusOn": "On",
     "statusOff": "Off",
     "unsupported": "Push notifications aren't supported in this browser.",
-    "notConfigured": "Push notifications aren't switched on yet."
+    "notConfigured": "Push notifications aren't switched on yet.",
+    "sendTest": "Send test notification",
+    "testSent": "Test sent! ✓"
+  },
+  "InstallApp": {
+    "title": "Install the app",
+    "subtitle": "Add Genwelth to your home screen — fullscreen, its own icon, and required for push on iPhone.",
+    "button": "Install app",
+    "installed": "App is installed ✓",
+    "iosHint": "On iPhone: open in Safari → tap the Share icon (□↑) → 'Add to Home Screen'.",
+    "genericHint": "Open your browser menu and choose 'Install app' / 'Add to Home screen'."
   },
   "PriceAlerts": {
     "title": "Price alert",

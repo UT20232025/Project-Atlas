@@ -2,6 +2,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 
 import AppLayout from "@/components/layout/AppLayout";
+import InstallAppButton from "@/components/pwa/InstallAppButton";
 import PushToggle from "@/components/push/PushToggle";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/button";
@@ -18,6 +19,7 @@ export default async function SettingsPage() {
   const isPro = hasActiveSubscription(user);
   const t = await getTranslations("Settings");
   const tPush = await getTranslations("PushNotifications");
+  const tInstall = await getTranslations("InstallApp");
   const locale = await getLocale();
 
   return (
@@ -75,6 +77,19 @@ export default async function SettingsPage() {
                 </Link>
               </div>
             )}
+          </div>
+
+          <div className="atlas-subcard rounded-2xl p-6">
+            <h3 className="font-semibold text-white">
+              {tInstall("title")}
+            </h3>
+            <p className="mt-1 text-sm text-zinc-500">
+              {tInstall("subtitle")}
+            </p>
+
+            <div className="mt-4">
+              <InstallAppButton />
+            </div>
           </div>
 
           <div className="atlas-subcard rounded-2xl p-6">

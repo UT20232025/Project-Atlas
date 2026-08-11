@@ -27,6 +27,7 @@ export default function PushToggle() {
   const t = useTranslations("PushNotifications");
   const [state, setState] = useState<ToggleState>("loading");
   const [busy, setBusy] = useState(false);
+  const [testSent, setTestSent] = useState(false);
 
   useEffect(() => {
     if (
@@ -120,6 +121,17 @@ export default function PushToggle() {
     setBusy(false);
   }
 
+  async function sendTest() {
+    setTestSent(false);
+    try {
+      await fetch("/api/push/test", { method: "POST" });
+      setTestSent(true);
+      setTimeout(() => setTestSent(false), 4000);
+    } catch {
+      // ignore
+    }
+  }
+
   if (state === "loading") {
     return null;
   }
@@ -148,6 +160,16 @@ export default function PushToggle() {
       >
         {enabled ? t("disable") : t("enable")}
       </button>
+
+      {enabled && (
+        <button
+          type="button"
+          onClick={sendTest}
+          className="rounded-xl border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm font-medium text-zinc-300 transition hover:text-white"
+        >
+          {testSent ? t("testSent") : t("sendTest")}
+        </button>
+      )}
 
       <span className="text-sm text-zinc-500">
         {enabled ? t("statusOn") : t("statusOff")}

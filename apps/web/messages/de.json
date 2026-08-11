@@ -385,7 +385,17 @@
     "statusOn": "An",
     "statusOff": "Aus",
     "unsupported": "Push-Benachrichtigungen werden in diesem Browser nicht unterstützt.",
-    "notConfigured": "Push-Benachrichtigungen sind noch nicht aktiviert."
+    "notConfigured": "Push-Benachrichtigungen sind noch nicht aktiviert.",
+    "sendTest": "Test-Benachrichtigung senden",
+    "testSent": "Test gesendet! ✓"
+  },
+  "InstallApp": {
+    "title": "App installieren",
+    "subtitle": "Füge Genwelth zum Startbildschirm hinzu — Vollbild, eigenes Icon, und für Push auf dem iPhone erforderlich.",
+    "button": "App installieren",
+    "installed": "App ist installiert ✓",
+    "iosHint": "Auf dem iPhone: in Safari öffnen → Teilen-Symbol (□↑) → „Zum Home-Bildschirm“.",
+    "genericHint": "Öffne das Browser-Menü und wähle „App installieren“ / „Zum Startbildschirm hinzufügen“."
   },
   "PriceAlerts": {
     "title": "Preisalarm",

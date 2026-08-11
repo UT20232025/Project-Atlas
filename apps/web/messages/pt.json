@@ -385,7 +385,17 @@
     "statusOn": "Ligado",
     "statusOff": "Desligado",
     "unsupported": "As notificações push não são suportadas neste navegador.",
-    "notConfigured": "As notificações push ainda não estão ativadas."
+    "notConfigured": "As notificações push ainda não estão ativadas.",
+    "sendTest": "Enviar notificação de teste",
+    "testSent": "Teste enviado! ✓"
+  },
+  "InstallApp": {
+    "title": "Instala a app",
+    "subtitle": "Adiciona a Genwelth ao ecrã inicial — ecrã inteiro, ícone próprio, e necessário para push no iPhone.",
+    "button": "Instalar app",
+    "installed": "A app está instalada ✓",
+    "iosHint": "No iPhone: abre no Safari → toca no ícone Partilhar (□↑) → «Adicionar ao ecrã principal».",
+    "genericHint": "Abre o menu do navegador e escolhe «Instalar app» / «Adicionar ao ecrã inicial»."
   },
   "PriceAlerts": {
     "title": "Alerta de preço",
