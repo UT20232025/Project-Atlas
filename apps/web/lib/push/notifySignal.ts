@@ -6,6 +6,8 @@ type SignalDecision = {
   signal: AtlasTradeDirection;
   confidence: number;
   entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
 };
 
 const DEFAULT_MIN_CONFIDENCE = 70;
@@ -37,11 +39,14 @@ export async function notifyPushSignalChange(
   const display = symbol.replace(/USDT$/, "");
   const emoji = decision.signal === "LONG" ? "🟢" : "🔴";
 
+  const parts = [`confidence ${decision.confidence}%`];
+  if (decision.entry != null) parts.push(`entry ${decision.entry}`);
+  if (decision.stopLoss != null) parts.push(`SL ${decision.stopLoss}`);
+  if (decision.takeProfit != null) parts.push(`TP ${decision.takeProfit}`);
+
   await sendPushToAll({
     title: `${emoji} ${decision.signal} ${display}`,
-    body:
-      `Atlas · confidence ${decision.confidence}%` +
-      (decision.entry != null ? ` · entry ${decision.entry}` : ""),
+    body: parts.join(" · "),
     url: `/coin/${symbol}`,
     tag: `signal-${symbol}`,
   });

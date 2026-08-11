@@ -7,6 +7,7 @@ import { recordSignalIfChanged } from "@/lib/atlas/signalHistory";
 import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 import { notifyPushSignalChange } from "@/lib/push/notifySignal";
+import { shouldBroadcastSignal } from "@/lib/signals/broadcastCooldown";
 import { notifySignalChange } from "@/lib/telegram/notify";
 
 // Must exceed the dashboard's 30s poll interval (MarketProvider,
@@ -83,7 +84,13 @@ export function getCachedAtlasAnalysis(
         result.decision
       );
 
-      if (changed) {
+      // Record every change (above) for the track record, but debounce the
+      // BROADCASTS so a flapping signal can't spam the channel with the same
+      // coin+direction repeatedly.
+      if (
+        changed &&
+        shouldBroadcastSignal(symbol, result.decision.signal)
+      ) {
         void notifySignalChange(symbol, result.decision);
         void notifyPushSignalChange(symbol, result.decision);
       }

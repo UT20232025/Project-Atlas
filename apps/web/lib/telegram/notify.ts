@@ -5,6 +5,9 @@ type SignalDecision = {
   signal: AtlasTradeDirection;
   confidence: number;
   entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
+  riskRewardRatio: number | null;
 };
 
 const DEFAULT_MIN_CONFIDENCE = 70;
@@ -31,7 +34,23 @@ function formatMessage(
     lines.push(`Entry: ${decision.entry}`);
   }
 
-  lines.push("", "Genwelth AI");
+  if (decision.stopLoss != null) {
+    lines.push(`🛑 SL: ${decision.stopLoss}`);
+  }
+
+  if (decision.takeProfit != null) {
+    lines.push(`🎯 TP: ${decision.takeProfit}`);
+  }
+
+  if (decision.riskRewardRatio != null) {
+    lines.push(`R:R ${decision.riskRewardRatio.toFixed(2)}:1`);
+  }
+
+  lines.push(
+    "",
+    "⚠️ Not financial advice. Manage your own risk.",
+    "Genwelth AI"
+  );
 
   // Branded domain (not build-time NEXT_PUBLIC_APP_URL, which bakes to the
   // raw Compute URL).
