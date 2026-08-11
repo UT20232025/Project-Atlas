@@ -6,6 +6,7 @@ import {
 import { recordSignalIfChanged } from "@/lib/atlas/signalHistory";
 import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
+import { notifyPushSignalChange } from "@/lib/push/notifySignal";
 import { notifySignalChange } from "@/lib/telegram/notify";
 
 // Must exceed the dashboard's 30s poll interval (MarketProvider,
@@ -84,6 +85,7 @@ export function getCachedAtlasAnalysis(
 
       if (changed) {
         void notifySignalChange(symbol, result.decision);
+        void notifyPushSignalChange(symbol, result.decision);
       }
     });
   }

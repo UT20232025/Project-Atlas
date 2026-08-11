@@ -377,6 +377,16 @@
     "empty": "No signal changes on your watched coins in the last 2 weeks. Add coins to a watchlist to get alerts here.",
     "count": "{count} recent signal changes on coins you follow"
   },
+  "PushNotifications": {
+    "title": "Push notifications",
+    "subtitle": "Get signals straight to your phone. Install the app to your home screen first (especially on iPhone).",
+    "enable": "Enable notifications",
+    "disable": "Disable notifications",
+    "statusOn": "On",
+    "statusOff": "Off",
+    "unsupported": "Push notifications aren't supported in this browser.",
+    "notConfigured": "Push notifications aren't switched on yet."
+  },
   "PriceAlerts": {
     "title": "Price alert",
     "subtitle": "Get notified when {symbol} hits a level (in-app).",

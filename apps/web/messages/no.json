@@ -377,6 +377,16 @@
     "empty": "Ingen signalendringer på myntene dine de siste to ukene. Legg mynter i en overvåkningsliste for å få varsler her.",
     "count": "{count} nylige signalendringer på mynter du følger"
   },
+  "PushNotifications": {
+    "title": "Push-varsler",
+    "subtitle": "Få signaler rett på telefonen. Installer appen på hjem-skjermen først (spesielt på iPhone).",
+    "enable": "Skru på varsler",
+    "disable": "Skru av varsler",
+    "statusOn": "På",
+    "statusOff": "Av",
+    "unsupported": "Push-varsler støttes ikke i denne nettleseren.",
+    "notConfigured": "Push-varsler er ikke skrudd på ennå."
+  },
   "PriceAlerts": {
     "title": "Prisvarsel",
     "subtitle": "Få varsel når {symbol} treffer et nivå (in-app).",

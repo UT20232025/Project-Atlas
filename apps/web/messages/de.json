@@ -377,6 +377,16 @@
     "empty": "Keine Signaländerungen bei deinen Coins in den letzten 2 Wochen. Füge Coins zu einer Watchlist hinzu, um hier Alerts zu bekommen.",
     "count": "{count} aktuelle Signaländerungen bei Coins, denen du folgst"
   },
+  "PushNotifications": {
+    "title": "Push-Benachrichtigungen",
+    "subtitle": "Erhalte Signale direkt aufs Handy. Installiere die App zuerst auf dem Startbildschirm (besonders auf dem iPhone).",
+    "enable": "Benachrichtigungen aktivieren",
+    "disable": "Benachrichtigungen deaktivieren",
+    "statusOn": "An",
+    "statusOff": "Aus",
+    "unsupported": "Push-Benachrichtigungen werden in diesem Browser nicht unterstützt.",
+    "notConfigured": "Push-Benachrichtigungen sind noch nicht aktiviert."
+  },
   "PriceAlerts": {
     "title": "Preisalarm",
     "subtitle": "Werde benachrichtigt, wenn {symbol} ein Niveau erreicht (in-app).",

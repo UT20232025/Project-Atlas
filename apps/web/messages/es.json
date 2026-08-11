@@ -377,6 +377,16 @@
     "empty": "Sin cambios de señal en tus monedas en las últimas 2 semanas. Añade monedas a una lista para recibir alertas aquí.",
     "count": "{count} cambios de señal recientes en monedas que sigues"
   },
+  "PushNotifications": {
+    "title": "Notificaciones push",
+    "subtitle": "Recibe señales directamente en tu teléfono. Instala la app en tu pantalla de inicio primero (especialmente en iPhone).",
+    "enable": "Activar notificaciones",
+    "disable": "Desactivar notificaciones",
+    "statusOn": "Activado",
+    "statusOff": "Desactivado",
+    "unsupported": "Las notificaciones push no son compatibles con este navegador.",
+    "notConfigured": "Las notificaciones push aún no están activadas."
+  },
   "PriceAlerts": {
     "title": "Alerta de precio",
     "subtitle": "Recibe aviso cuando {symbol} alcance un nivel (in-app).",
