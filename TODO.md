@@ -41,7 +41,8 @@ _Sist oppdatert: 2026-08-09_
 
 ## 🩹 Fikset underveis
 
-- [x] **Confidence kappet til maks 95 %.** Et kringkastet «LONG AVAXUSDT · 100 %» bommet; 100 %-merkelapp som feiler ødelegger tillit. Ingen trade er sikker. — venter på deploy
+- [x] **Confidence kappet til maks 95 %.** Et kringkastet «LONG AVAXUSDT · 100 %» bommet; 100 %-merkelapp som feiler ødelegger tillit. Ingen trade er sikker.
+- [x] **Straff for LONG i premium / SHORT i discount.** Rotårsak til AVAX-bommen: scoringen var rent additiv, så et LONG kunne fyre rett under range-toppen uten straff. Nå straffes topp-jaging aktivt + advarsel vises. — venter på deploy
 
 ## 🚫 Bestemt: ikke nå
 
