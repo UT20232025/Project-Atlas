@@ -16,7 +16,7 @@ _Sist oppdatert: 2026-08-09_
 
 - [x] **Signal-spam fikset.** Samme coin kringkastet 4× på 12 min (LONG-flapping). La til broadcast-cooldown per symbol+retning (default 120 min, `SIGNAL_BROADCAST_COOLDOWN_MINUTES`). Opptak til track record beholdes; kun kringkasting debounces. — venter på deploy
 - [x] **TP/SL i signalene.** Telegram + push viser nå SL/TP/R:R + «ikke finansiell rådgivning». — venter på deploy
-- [ ] **Exit-signaler.** Når Atlas ser at markedet snur mot en åpen posisjon: send «gå ut / flytt SL i profitt»-varsel. Krever å spore hvilke signaler som ble kringkastet + oppdage reversering. (Ønsket av Christer.)
+- [x] **Exit-/reversal-signaler.** Når et kringkastet signal snur (LONG↔SHORT), sendes «gå ut / flytt SL i profitt»-varsel til Telegram + push. Sporer siste kringkastede retning per symbol; fyrer kun på ekte retningsvending. — venter på deploy
 - [ ] **Confidence-uniformitet.** Etter 95%-capet klumper alle sterke signaler på nøyaktig 95%. Vurder mykere skalering på toppen (f.eks. 80–95-spenn) så tallet varierer mer. (Christer merket det.)
 
 - [ ] **RSI ser "jalla" ut.** RSI-visningen må pusses opp. Er nå tidsramme-styrt, men selve visningen kan bli bedre. Trenger at Christer beskriver hva som ser feil ut.
