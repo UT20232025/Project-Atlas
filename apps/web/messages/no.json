@@ -642,6 +642,15 @@
     "signaled": "Signalisert",
     "confidence": "Konfidens"
   },
+  "SignalPage": {
+    "tagline": "AI-drevet krypto-analyse",
+    "eyebrow": "Live Atlas-signal",
+    "priceLabel": "Live pris",
+    "ctaSignup": "Få live signaler — registrer deg gratis",
+    "ctaTelegram": "Bli med i Telegram-kanalen",
+    "downloadCard": "Last ned signal-kortet",
+    "disclaimer": "Pedagogisk markedsanalyse — ikke finansiell rådgivning."
+  },
   "CoinPage": {
     "shareSignal": "Del signal-kort",
     "backToDashboard": "← Dashboard",

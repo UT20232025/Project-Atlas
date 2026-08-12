@@ -642,6 +642,15 @@
     "signaled": "Sinalizada",
     "confidence": "Confiança"
   },
+  "SignalPage": {
+    "tagline": "Inteligência de mercado cripto com IA",
+    "eyebrow": "Sinal Atlas ao vivo",
+    "priceLabel": "Preço ao vivo",
+    "ctaSignup": "Recebe sinais ao vivo — regista-te grátis",
+    "ctaTelegram": "Entra no canal de Telegram",
+    "downloadCard": "Descarregar o cartão",
+    "disclaimer": "Análise educativa — não é aconselhamento financeiro."
+  },
   "CoinPage": {
     "shareSignal": "Partilhar cartão",
     "backToDashboard": "← Painel",

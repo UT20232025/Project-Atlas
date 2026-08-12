@@ -266,7 +266,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
 
         {(MARKET_SYMBOLS as readonly string[]).includes(marketSymbol) && (
           <a
-            href={`/api/signal-card/${marketSymbol}`}
+            href={`/signal/${marketSymbol}`}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-lg border border-zinc-800 px-3 py-1.5 text-sm font-medium text-zinc-400 transition hover:border-blue-500 hover:text-white"

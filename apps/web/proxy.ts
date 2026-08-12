@@ -8,7 +8,10 @@ const PUBLIC_PATHS = ["/", "/login", "/signup"];
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (PUBLIC_PATHS.includes(pathname)) {
+  if (
+    PUBLIC_PATHS.includes(pathname) ||
+    pathname.startsWith("/signal/")
+  ) {
     return NextResponse.next();
   }
 

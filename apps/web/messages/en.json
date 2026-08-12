@@ -642,6 +642,15 @@
     "signaled": "Signaled",
     "confidence": "Confidence"
   },
+  "SignalPage": {
+    "tagline": "AI-powered crypto market intelligence",
+    "eyebrow": "Live Atlas signal",
+    "priceLabel": "Live price",
+    "ctaSignup": "Get live signals — sign up free",
+    "ctaTelegram": "Join the Telegram channel",
+    "downloadCard": "Download the signal card",
+    "disclaimer": "Educational market analysis — not financial advice."
+  },
   "CoinPage": {
     "shareSignal": "Share signal card",
     "backToDashboard": "← Dashboard",

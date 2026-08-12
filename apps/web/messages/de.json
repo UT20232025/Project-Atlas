@@ -642,6 +642,15 @@
     "signaled": "Signalisiert",
     "confidence": "Konfidenz"
   },
+  "SignalPage": {
+    "tagline": "KI-gestützte Krypto-Marktanalyse",
+    "eyebrow": "Live Atlas-Signal",
+    "priceLabel": "Live-Preis",
+    "ctaSignup": "Live-Signale erhalten — kostenlos registrieren",
+    "ctaTelegram": "Dem Telegram-Kanal beitreten",
+    "downloadCard": "Signal-Karte herunterladen",
+    "disclaimer": "Bildungsanalyse — keine Finanzberatung."
+  },
   "CoinPage": {
     "shareSignal": "Signal-Karte teilen",
     "backToDashboard": "← Dashboard",
