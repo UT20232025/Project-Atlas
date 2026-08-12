@@ -46,6 +46,7 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
+  try {
   const origin = new URL(request.url).origin;
   const [analysis, fonts] = await Promise.all([
     getCachedAtlasAnalysis(symbol),
@@ -93,9 +94,18 @@ export async function GET(
             alignItems: "center",
           }}
         >
-          <span style={{ color: "#ffffff", fontSize: 34, fontWeight: 700 }}>
-            GENWELTH <span style={{ color: "#2dd4bf" }}>AI</span>
-          </span>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+            <span
+              style={{ color: "#ffffff", fontSize: 34, fontWeight: 700 }}
+            >
+              GENWELTH
+            </span>
+            <span
+              style={{ color: "#2dd4bf", fontSize: 34, fontWeight: 700 }}
+            >
+              AI
+            </span>
+          </div>
           <span style={{ color: "#52525b", fontSize: 26 }}>
             Powered by Atlas
           </span>
@@ -172,4 +182,11 @@ export async function GET(
       ],
     }
   );
+  } catch (error) {
+    // Temporary: surface the real error so we can see why rendering failed.
+    return new Response(
+      `signal-card error: ${(error as Error).stack ?? String(error)}`,
+      { status: 500 }
+    );
+  }
 }
