@@ -263,7 +263,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        <TimeframeSelector symbol={symbol} active={timeframe} />
+        <TimeframeSelector hrefBase={`/coin/${symbol}`} active={timeframe} />
 
         {(MARKET_SYMBOLS as readonly string[]).includes(marketSymbol) && (
           <ShareSignalButton

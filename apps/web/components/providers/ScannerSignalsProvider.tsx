@@ -18,10 +18,13 @@ type ScannerSignalsMap = Record<string, AtlasSignalData>;
 const ScannerSignalsContext =
   createContext<ScannerSignalsMap | null>(null);
 
-async function loadScannerSignals(): Promise<ScannerSignalsMap> {
-  const response = await fetch("/api/atlas/scanner", {
-    cache: "no-store",
-  });
+async function loadScannerSignals(
+  interval: string
+): Promise<ScannerSignalsMap> {
+  const response = await fetch(
+    `/api/atlas/scanner?interval=${encodeURIComponent(interval)}`,
+    { cache: "no-store" }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to load scanner signals.");
@@ -49,8 +52,10 @@ async function loadScannerSignals(): Promise<ScannerSignalsMap> {
 
 export function ScannerSignalsProvider({
   children,
+  interval = "1h",
 }: {
   children: ReactNode;
+  interval?: string;
 }) {
   const [signals, setSignals] = useState<ScannerSignalsMap>(
     {}
@@ -61,7 +66,7 @@ export function ScannerSignalsProvider({
 
     async function refresh() {
       try {
-        const nextSignals = await loadScannerSignals();
+        const nextSignals = await loadScannerSignals(interval);
 
         if (!isCancelled) {
           setSignals(nextSignals);
@@ -73,15 +78,15 @@ export function ScannerSignalsProvider({
 
     void refresh();
 
-    const interval = window.setInterval(() => {
+    const timer = window.setInterval(() => {
       void refresh();
     }, 30_000);
 
     return () => {
       isCancelled = true;
-      window.clearInterval(interval);
+      window.clearInterval(timer);
     };
-  }, []);
+  }, [interval]);
 
   return (
     <ScannerSignalsContext.Provider value={signals}>

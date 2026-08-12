@@ -1,5 +1,6 @@
 import { getAtlasScanner } from "../analysis/scanner";
 import { getSignalHistory } from "../atlas/signalHistory";
+import type { BinanceInterval } from "../services/binanceCandleService";
 
 type FearGreedData = {
   value: number;
@@ -69,10 +70,12 @@ async function getBTCDominance(): Promise<number> {
   }
 }
 
-export async function getDashboardData() {
+export async function getDashboardData(
+  interval: BinanceInterval = "1h"
+) {
   const [scanner, fearGreed, btcDominance, recentSignalChanges] =
     await Promise.all([
-      getAtlasScanner(),
+      getAtlasScanner(interval),
       getFearGreed(),
       getBTCDominance(),
       getSignalHistory(undefined, 15),

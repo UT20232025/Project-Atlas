@@ -13,6 +13,9 @@ import RecentSignalChanges from "../components/dashboard/RecentSignalChanges";
 import { Suspense } from "react";
 import ScannerSection from "../components/dashboard/ScannerSection";
 import SwingSignalsSection from "../components/dashboard/SwingSignalsSection";
+import TimeframeSelector, {
+  resolveTimeframe,
+} from "../components/analysis/TimeframeSelector";
 import PriceAlertsSection from "../components/dashboard/PriceAlertsSection";
 import WatchlistAlerts from "../components/dashboard/WatchlistAlerts";
 import WatchlistSignalBoard from "../components/dashboard/WatchlistSignalBoard";
@@ -40,7 +43,11 @@ import {
   removeSymbolFromWatchlist,
 } from "./watchlists/actions";
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tf?: string | string[] }>;
+}) {
   const session = await getSession();
 
   if (!session) {
@@ -75,10 +82,12 @@ export default async function HomePage() {
   const user = await getCurrentUser();
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
+  const { tf } = await searchParams;
+  const timeframe = resolveTimeframe(tf);
 
   const [dashboard, watchlists, watchlistAlerts, watchlistBoard] =
     await Promise.all([
-      getDashboardData(),
+      getDashboardData(timeframe),
       isPro ? getWatchlists(userId) : Promise.resolve([]),
       isPro ? getWatchlistAlerts(userId) : Promise.resolve([]),
       isPro ? getWatchlistSignalBoard(userId) : Promise.resolve([]),
@@ -99,7 +108,7 @@ export default async function HomePage() {
 
   return (
     <MarketProvider>
-    <ScannerSignalsProvider>
+    <ScannerSignalsProvider interval={timeframe}>
     <AppLayout
       marketTicker={dashboard.marketTicker}
       userEmail={email}
@@ -107,8 +116,9 @@ export default async function HomePage() {
     >
       <DashboardHero />
 
-      <div className="mb-8">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
         <CoinSearch />
+        <TimeframeSelector hrefBase="/" active={timeframe} />
       </div>
 
       <Suspense fallback={null}>

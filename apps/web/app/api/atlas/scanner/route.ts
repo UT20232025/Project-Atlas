@@ -1,10 +1,18 @@
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 import { getAtlasScanner } from "@/lib/analysis/scanner";
+import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 
-export async function GET() {
+const INTERVALS = ["1m", "5m", "15m", "30m", "1h", "4h", "1d"];
+
+export async function GET(request: NextRequest) {
   try {
-    const items = await getAtlasScanner();
+    const raw = request.nextUrl.searchParams.get("interval");
+    const interval: BinanceInterval =
+      raw && INTERVALS.includes(raw) ? (raw as BinanceInterval) : "1h";
+
+    const items = await getAtlasScanner(interval);
 
     return NextResponse.json({
       items: items.map((item) => ({
