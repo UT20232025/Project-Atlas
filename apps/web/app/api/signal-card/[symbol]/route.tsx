@@ -3,27 +3,10 @@ import type { NextRequest } from "next/server";
 
 import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
 import { MARKET_SYMBOLS } from "@/lib/config/markets";
+import { robotoBold, robotoRegular } from "@/lib/fonts/roboto";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 
 export const runtime = "nodejs";
-
-let fontsCache: { bold: ArrayBuffer; regular: ArrayBuffer } | null = null;
-
-async function loadFonts(origin: string) {
-  if (fontsCache) {
-    return fontsCache;
-  }
-
-  const [bold, regular] = await Promise.all([
-    fetch(`${origin}/fonts/Roboto-Bold.woff`).then((r) => r.arrayBuffer()),
-    fetch(`${origin}/fonts/Roboto-Regular.woff`).then((r) =>
-      r.arrayBuffer()
-    ),
-  ]);
-
-  fontsCache = { bold, regular };
-  return fontsCache;
-}
 
 function fmt(value: number | null): string {
   return value == null || !Number.isFinite(value) ? "—" : String(value);
@@ -46,12 +29,7 @@ export async function GET(
     return new Response("Not found", { status: 404 });
   }
 
-  try {
-  const origin = new URL(request.url).origin;
-  const [analysis, fonts] = await Promise.all([
-    getCachedAtlasAnalysis(symbol),
-    loadFonts(origin),
-  ]);
+  const analysis = await getCachedAtlasAnalysis(symbol);
 
   const d = analysis.decision;
   const coin = symbol.replace(/USDT$/, "");
@@ -174,19 +152,17 @@ export async function GET(
       fonts: [
         {
           name: "Roboto",
-          data: fonts.regular,
+          data: robotoRegular,
           weight: 400,
           style: "normal",
         },
-        { name: "Roboto", data: fonts.bold, weight: 700, style: "normal" },
+        {
+          name: "Roboto",
+          data: robotoBold,
+          weight: 700,
+          style: "normal",
+        },
       ],
     }
   );
-  } catch (error) {
-    // Temporary: surface the real error so we can see why rendering failed.
-    return new Response(
-      `signal-card error: ${(error as Error).stack ?? String(error)}`,
-      { status: 500 }
-    );
-  }
 }
