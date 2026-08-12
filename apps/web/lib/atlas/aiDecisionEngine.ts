@@ -693,6 +693,28 @@ function determineRawSignal(
 // conviction, not a guarantee.
 const MAX_CONFIDENCE = 95;
 
+// Raw confidence for strong setups piles up above ~100 (several factors max
+// out), which made every strong signal display the same 95%. Soft-compress
+// the top: below the knee it's 1:1, and the raw band [knee, rawMax] is mapped
+// onto [knee, MAX_CONFIDENCE] — so strong signals spread across ~75–95 instead
+// of flatlining at the cap.
+const CONFIDENCE_KNEE = 75;
+const CONFIDENCE_RAW_MAX = 110;
+
+function softCapConfidence(raw: number): number {
+  const bounded = clamp(raw, 0, CONFIDENCE_RAW_MAX);
+
+  if (bounded <= CONFIDENCE_KNEE) {
+    return bounded;
+  }
+
+  const t =
+    (bounded - CONFIDENCE_KNEE) /
+    (CONFIDENCE_RAW_MAX - CONFIDENCE_KNEE);
+
+  return CONFIDENCE_KNEE + t * (MAX_CONFIDENCE - CONFIDENCE_KNEE);
+}
+
 function calculateDecisionConfidence(
   signal: AtlasTradeDirection,
   bullishScore: number,
@@ -759,9 +781,7 @@ function calculateDecisionConfidence(
     confidence += 3;
   }
 
-  return Math.round(
-    clamp(confidence, 0, MAX_CONFIDENCE)
-  );
+  return Math.round(softCapConfidence(confidence));
 }
 
 function determineStrength(
