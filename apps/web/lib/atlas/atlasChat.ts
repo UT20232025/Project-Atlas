@@ -5,6 +5,7 @@ import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
 import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
 import { resolveReasonText } from "@/lib/atlas/resolveReasonText";
 import { prisma } from "@/lib/db/client";
+import { getExchangeHoldings } from "@/lib/exchange/connection";
 import { searchCoins } from "@/lib/services/binanceUniverse";
 import {
   fetchSingleMarket,
@@ -283,15 +284,55 @@ const MAX_ACCOUNT_SYMBOLS = 10;
  * phrases it. Returns a clear "no positions" note (not null) so Atlas can still
  * answer helpfully.
  */
+/**
+ * Live, read-only holdings from a connected exchange (Binance), so Atlas can
+ * ground portfolio answers in the user's ACTUAL balances. Null when nothing is
+ * connected or the fetch fails.
+ */
+async function buildExchangeGrounding(
+  userId: string
+): Promise<string | null> {
+  const result = await getExchangeHoldings(userId);
+
+  if (!result.connected || "error" in result) {
+    return null;
+  }
+
+  if (result.holdings.length === 0) {
+    return null;
+  }
+
+  const lines = result.holdings
+    .slice(0, MAX_ACCOUNT_SYMBOLS)
+    .map(
+      (holding) =>
+        `- ${holding.asset}: ${holding.amount}${
+          holding.usdValue != null
+            ? ` (~$${holding.usdValue.toFixed(2)})`
+            : ""
+        }`
+    );
+
+  return `EXCHANGE HOLDINGS (Binance, live, read-only):\n${lines.join(
+    "\n"
+  )}\nTOTAL ~$${result.totalUsd.toFixed(2)}`;
+}
+
 async function buildPortfolioGrounding(userId: string): Promise<string> {
-  const positions = await prisma.position.findMany({
-    where: { userId },
-    orderBy: { openedAt: "desc" },
-    take: MAX_ACCOUNT_SYMBOLS,
-  });
+  const [positions, exchangeBlock] = await Promise.all([
+    prisma.position.findMany({
+      where: { userId },
+      orderBy: { openedAt: "desc" },
+      take: MAX_ACCOUNT_SYMBOLS,
+    }),
+    buildExchangeGrounding(userId),
+  ]);
 
   if (positions.length === 0) {
-    return "PORTFOLIO: The user has no open positions recorded in Genwelth AI.";
+    return (
+      exchangeBlock ??
+      "PORTFOLIO: The user has no open positions recorded and no exchange connected."
+    );
   }
 
   let totalPnl = 0;
@@ -355,9 +396,13 @@ async function buildPortfolioGrounding(userId: string): Promise<string> {
         }${totalPnl.toFixed(2)}`
       : "TOTAL unrealized P&L: n/a (live prices unavailable)";
 
-  return `PORTFOLIO (open positions: ${positions.length}):\n${lines.join(
+  const positionsBlock = `PORTFOLIO (open positions: ${positions.length}):\n${lines.join(
     "\n"
   )}\n${totalLine}`;
+
+  return exchangeBlock
+    ? `${positionsBlock}\n\n${exchangeBlock}`
+    : positionsBlock;
 }
 
 /**
@@ -391,7 +436,7 @@ You speak in the first person as Atlas. Your job is to explain your OWN read in 
 
 The ATLAS DATA block can take three shapes:
 - A single ASSET (a crypto coin or a stock — the ASSET line says which). Give your read on it.
-- The user's PORTFOLIO (their open positions with entry, size, current price, unrealized P&L, and my current signal per holding). Summarize how their positions are doing and what my current signal is on each — highlight the notable ones, mention the total unrealized P&L if present.
+- The user's PORTFOLIO — their manually tracked open positions (entry, size, current price, unrealized P&L, my current signal per holding) and/or live read-only holdings from a connected exchange (Binance) with USD values. Summarize how they're doing, what my current signal is on the relevant assets, and mention totals when present.
 - The user's WATCHLIST (my current signal, confidence, score, and headline reason per watched symbol). Summarize what I'm seeing across what they follow.
 
 Hard rules:
