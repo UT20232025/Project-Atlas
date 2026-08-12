@@ -7,7 +7,13 @@ import { recordSignalIfChanged } from "@/lib/atlas/signalHistory";
 import type { BinanceInterval } from "@/lib/services/binanceCandleService";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 import { notifyPushSignalChange } from "@/lib/push/notifySignal";
-import { shouldBroadcastSignal } from "@/lib/signals/broadcastCooldown";
+import {
+  getLastBroadcastDirection,
+  isBroadcastWorthy,
+  setLastBroadcastDirection,
+  shouldBroadcastSignal,
+} from "@/lib/signals/broadcastCooldown";
+import { notifyReversal } from "@/lib/signals/notifyReversal";
 import { notifySignalChange } from "@/lib/telegram/notify";
 
 // Must exceed the dashboard's 30s poll interval (MarketProvider,
@@ -87,12 +93,25 @@ export function getCachedAtlasAnalysis(
       // Record every change (above) for the track record, but debounce the
       // BROADCASTS so a flapping signal can't spam the channel with the same
       // coin+direction repeatedly.
+      const decision = result.decision;
+
       if (
         changed &&
-        shouldBroadcastSignal(symbol, result.decision.signal)
+        isBroadcastWorthy(decision.signal, decision.confidence) &&
+        shouldBroadcastSignal(symbol, decision.signal)
       ) {
-        void notifySignalChange(symbol, result.decision);
-        void notifyPushSignalChange(symbol, result.decision);
+        const direction = decision.signal as "LONG" | "SHORT";
+        const previous = getLastBroadcastDirection(symbol);
+
+        // An opposite-direction flip means anyone in the old trade should
+        // consider exiting / protecting profit.
+        if (previous && previous !== direction) {
+          void notifyReversal(symbol, previous, direction);
+        }
+
+        void notifySignalChange(symbol, decision);
+        void notifyPushSignalChange(symbol, decision);
+        setLastBroadcastDirection(symbol, direction);
       }
     });
   }
