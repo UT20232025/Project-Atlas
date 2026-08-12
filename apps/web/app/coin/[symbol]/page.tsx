@@ -36,6 +36,7 @@ import { analyzeWhaleActivity } from "../../../lib/atlas/whaleEngine";
 import { fetchRecentTrades } from "../../../lib/services/binanceTradeService";
 import {
   fetchSingleMarket,
+  MARKET_SYMBOLS,
   type MarketSymbol,
 } from "../../../lib/services/liveMarketService";
 import {
@@ -260,8 +261,19 @@ export default async function CoinPage({ params, searchParams }: Props) {
         />
       </div>
 
-      <div className="mt-6">
+      <div className="mt-6 flex flex-wrap items-center gap-3">
         <TimeframeSelector symbol={symbol} active={timeframe} />
+
+        {(MARKET_SYMBOLS as readonly string[]).includes(marketSymbol) && (
+          <a
+            href={`/api/signal-card/${marketSymbol}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg border border-zinc-800 px-3 py-1.5 text-sm font-medium text-zinc-400 transition hover:border-blue-500 hover:text-white"
+          >
+            {t("shareSignal")}
+          </a>
+        )}
       </div>
 
       <div className="mt-6">

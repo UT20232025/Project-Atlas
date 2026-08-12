@@ -643,6 +643,7 @@
     "confidence": "Konfidens"
   },
   "CoinPage": {
+    "shareSignal": "Del signal-kort",
     "backToDashboard": "← Dashboard",
     "upgradeForWatchlists": "💎 Oppgrader for overvåkningslister",
     "change24h": "24t endring",

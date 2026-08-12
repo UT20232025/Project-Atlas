@@ -643,6 +643,7 @@
     "confidence": "Confidence"
   },
   "CoinPage": {
+    "shareSignal": "Share signal card",
     "backToDashboard": "← Dashboard",
     "upgradeForWatchlists": "💎 Upgrade for watchlists",
     "change24h": "24h Change",

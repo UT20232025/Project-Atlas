@@ -1,0 +1,175 @@
+import { ImageResponse } from "next/og";
+import type { NextRequest } from "next/server";
+
+import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
+import { MARKET_SYMBOLS } from "@/lib/config/markets";
+import type { MarketSymbol } from "@/lib/services/liveMarketService";
+
+export const runtime = "nodejs";
+
+let fontsCache: { bold: ArrayBuffer; regular: ArrayBuffer } | null = null;
+
+async function loadFonts(origin: string) {
+  if (fontsCache) {
+    return fontsCache;
+  }
+
+  const [bold, regular] = await Promise.all([
+    fetch(`${origin}/fonts/Roboto-Bold.woff`).then((r) => r.arrayBuffer()),
+    fetch(`${origin}/fonts/Roboto-Regular.woff`).then((r) =>
+      r.arrayBuffer()
+    ),
+  ]);
+
+  fontsCache = { bold, regular };
+  return fontsCache;
+}
+
+function fmt(value: number | null): string {
+  return value == null || !Number.isFinite(value) ? "—" : String(value);
+}
+
+const SIGNAL_COLOR: Record<string, string> = {
+  LONG: "#22c55e",
+  SHORT: "#ef4444",
+  WAIT: "#eab308",
+};
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ symbol: string }> }
+) {
+  const { symbol: raw } = await params;
+  const symbol = raw.toUpperCase() as MarketSymbol;
+
+  if (!(MARKET_SYMBOLS as readonly string[]).includes(symbol)) {
+    return new Response("Not found", { status: 404 });
+  }
+
+  const origin = new URL(request.url).origin;
+  const [analysis, fonts] = await Promise.all([
+    getCachedAtlasAnalysis(symbol),
+    loadFonts(origin),
+  ]);
+
+  const d = analysis.decision;
+  const coin = symbol.replace(/USDT$/, "");
+  const color = SIGNAL_COLOR[d.signal] ?? "#eab308";
+
+  const stat = (label: string, value: string, valueColor = "#ffffff") => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 6,
+        flex: 1,
+      }}
+    >
+      <span style={{ color: "#71717a", fontSize: 26 }}>{label}</span>
+      <span style={{ color: valueColor, fontSize: 40, fontWeight: 700 }}>
+        {value}
+      </span>
+    </div>
+  );
+
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          background: "#0a0a0f",
+          padding: 64,
+          fontFamily: "Roboto",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span style={{ color: "#ffffff", fontSize: 34, fontWeight: 700 }}>
+            GENWELTH <span style={{ color: "#2dd4bf" }}>AI</span>
+          </span>
+          <span style={{ color: "#52525b", fontSize: 26 }}>
+            Powered by Atlas
+          </span>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+          <span style={{ color: "#ffffff", fontSize: 108, fontWeight: 700 }}>
+            {coin}
+          </span>
+          <span
+            style={{
+              display: "flex",
+              color: "#0a0a0f",
+              background: color,
+              fontSize: 44,
+              fontWeight: 700,
+              padding: "10px 30px",
+              borderRadius: 18,
+            }}
+          >
+            {d.signal}
+          </span>
+          <span
+            style={{
+              color,
+              fontSize: 64,
+              fontWeight: 700,
+              marginLeft: "auto",
+            }}
+          >
+            {d.confidence}%
+          </span>
+        </div>
+
+        <div style={{ display: "flex", gap: 24 }}>
+          {stat("Entry", fmt(d.entry))}
+          {stat("Stop-loss", fmt(d.stopLoss), "#f87171")}
+          {stat("Take-profit", fmt(d.takeProfit), "#4ade80")}
+          {stat(
+            "R:R",
+            d.riskRewardRatio == null
+              ? "—"
+              : `${d.riskRewardRatio.toFixed(2)}:1`
+          )}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <span style={{ color: "#52525b", fontSize: 24 }}>
+            Educational — not financial advice.
+          </span>
+          <span style={{ color: "#a1a1aa", fontSize: 26 }}>
+            www.genwelth.com
+          </span>
+        </div>
+      </div>
+    ),
+    {
+      width: 1200,
+      height: 630,
+      fonts: [
+        {
+          name: "Roboto",
+          data: fonts.regular,
+          weight: 400,
+          style: "normal",
+        },
+        { name: "Roboto", data: fonts.bold, weight: 700, style: "normal" },
+      ],
+    }
+  );
+}
