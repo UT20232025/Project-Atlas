@@ -405,6 +405,7 @@
     "noHoldings": "Ingen beholdninger funnet.",
     "colAsset": "Aktivum",
     "colAmount": "Antall",
+    "colAtlas": "Atlas-signal",
     "colValue": "Verdi (USD)",
     "readOnlyNote": "Kun lesetilgang — Genwelth kan aldri handle eller ta ut midler."
   },

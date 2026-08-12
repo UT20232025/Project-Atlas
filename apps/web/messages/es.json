@@ -405,6 +405,7 @@
     "noHoldings": "No se encontraron tenencias.",
     "colAsset": "Activo",
     "colAmount": "Cantidad",
+    "colAtlas": "Señal Atlas",
     "colValue": "Valor (USD)",
     "readOnlyNote": "Solo lectura — Genwelth nunca puede operar ni retirar."
   },

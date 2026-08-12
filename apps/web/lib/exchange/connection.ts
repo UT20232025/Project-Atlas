@@ -1,7 +1,13 @@
+import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
+import { MARKET_SYMBOLS } from "@/lib/config/markets";
 import { decryptSecret, isSecretBoxConfigured } from "@/lib/crypto/secretBox";
 import { prisma } from "@/lib/db/client";
 import { fetchBinancePrices } from "@/lib/exchange/binance";
 import { fetchExchangeBalances } from "@/lib/exchange/registry";
+import type { MarketSymbol } from "@/lib/services/liveMarketService";
+
+const CURATED = new Set<string>(MARKET_SYMBOLS as readonly string[]);
+const MAX_SIGNAL_LOOKUPS = 12;
 
 const STABLES = new Set([
   "USDT",
@@ -43,6 +49,10 @@ export type ExchangeHolding = {
   asset: string;
   amount: number;
   usdValue: number | null;
+  atlasSignal: {
+    signal: "LONG" | "SHORT" | "WAIT";
+    confidence: number;
+  } | null;
 };
 
 export type ExchangeHoldingsResult =
@@ -60,7 +70,8 @@ export type ExchangeHoldingsResult =
  * valued in USDT. Never trades or withdraws.
  */
 export async function getExchangeHoldings(
-  userId: string
+  userId: string,
+  options: { withSignals?: boolean } = {}
 ): Promise<ExchangeHoldingsResult> {
   const conn = await prisma.exchangeConnection.findUnique({
     where: { userId },
@@ -94,9 +105,38 @@ export async function getExchangeHoldings(
         if (usdValue != null) {
           totalUsd += usdValue;
         }
-        return { asset: balance.asset, amount, usdValue };
+        return {
+          asset: balance.asset,
+          amount,
+          usdValue,
+          atlasSignal: null as ExchangeHolding["atlasSignal"],
+        };
       })
       .sort((a, b) => (b.usdValue ?? 0) - (a.usdValue ?? 0));
+
+    // Attach Atlas's current signal to the top holdings that map to a curated
+    // pair — so the real portfolio shows what Atlas thinks of each coin.
+    if (options.withSignals) {
+      await Promise.all(
+        holdings.slice(0, MAX_SIGNAL_LOOKUPS).map(async (holding) => {
+          const pair = `${holding.asset}USDT`;
+          if (!CURATED.has(pair)) {
+            return;
+          }
+          try {
+            const analysis = await getCachedAtlasAnalysis(
+              pair as MarketSymbol
+            );
+            holding.atlasSignal = {
+              signal: analysis.decision.signal,
+              confidence: analysis.decision.confidence,
+            };
+          } catch {
+            // leave null on failure
+          }
+        })
+      );
+    }
 
     return {
       connected: true,

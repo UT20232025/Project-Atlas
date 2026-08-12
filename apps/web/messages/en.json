@@ -405,6 +405,7 @@
     "noHoldings": "No holdings found.",
     "colAsset": "Asset",
     "colAmount": "Amount",
+    "colAtlas": "Atlas signal",
     "colValue": "Value (USD)",
     "readOnlyNote": "Read-only — Genwelth can never trade or withdraw."
   },

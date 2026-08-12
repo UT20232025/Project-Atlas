@@ -80,7 +80,9 @@ export default async function PortfolioPage() {
     }
   });
 
-  const exchangeHoldings = await getExchangeHoldings(userId);
+  const exchangeHoldings = await getExchangeHoldings(userId, {
+    withSignals: true,
+  });
 
   return (
     <MarketProvider>

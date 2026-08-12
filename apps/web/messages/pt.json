@@ -405,6 +405,7 @@
     "noHoldings": "Sem posições encontradas.",
     "colAsset": "Ativo",
     "colAmount": "Quantidade",
+    "colAtlas": "Sinal Atlas",
     "colValue": "Valor (USD)",
     "readOnlyNote": "Só leitura — a Genwelth nunca pode negociar nem levantar."
   },

@@ -405,6 +405,7 @@
     "noHoldings": "Keine Bestände gefunden.",
     "colAsset": "Asset",
     "colAmount": "Menge",
+    "colAtlas": "Atlas-Signal",
     "colValue": "Wert (USD)",
     "readOnlyNote": "Nur lesen — Genwelth kann nie handeln oder abheben."
   },
