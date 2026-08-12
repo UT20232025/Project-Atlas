@@ -1,10 +1,12 @@
 import { getTranslations } from "next-intl/server";
 
 import AppLayout from "@/components/layout/AppLayout";
+import ExchangeHoldings from "@/components/exchange/ExchangeHoldings";
 import PortfolioView from "@/components/portfolio/PortfolioView";
 import { MarketProvider } from "@/components/providers/MarketProvider";
 import ProUpsell from "@/components/ui/ProUpsell";
 import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
+import { getExchangeHoldings } from "@/lib/exchange/connection";
 import { prisma } from "@/lib/db/client";
 import type {
   MarketSymbol,
@@ -78,9 +80,13 @@ export default async function PortfolioPage() {
     }
   });
 
+  const exchangeHoldings = await getExchangeHoldings(userId);
+
   return (
     <MarketProvider>
       <AppLayout userEmail={email} isPro>
+        <ExchangeHoldings result={exchangeHoldings} />
+
         <PortfolioView
           positions={positionViews}
           atlasSignals={atlasSignals}

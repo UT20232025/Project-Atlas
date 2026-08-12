@@ -2,9 +2,14 @@ import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 
 import AppLayout from "@/components/layout/AppLayout";
+import ExchangeCard from "@/components/exchange/ExchangeCard";
 import InstallAppButton from "@/components/pwa/InstallAppButton";
 import PushToggle from "@/components/push/PushToggle";
 import Badge from "@/components/ui/Badge";
+import {
+  getExchangeConnection,
+  isExchangeConfigured,
+} from "@/lib/exchange/connection";
 import Button from "@/components/ui/button";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 import Section from "@/components/ui/Section";
@@ -13,10 +18,16 @@ import { requireSession } from "@/lib/auth/session";
 import { createPortalSession } from "@/lib/stripe/actions";
 import { getCurrentUser, hasActiveSubscription } from "@/lib/subscription/requirePro";
 
-export default async function SettingsPage() {
-  const { email } = await requireSession();
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ exchange?: string }>;
+}) {
+  const { email, userId } = await requireSession();
   const user = await getCurrentUser();
   const isPro = hasActiveSubscription(user);
+  const { exchange: exchangeStatus } = await searchParams;
+  const exchangeConnection = await getExchangeConnection(userId);
   const t = await getTranslations("Settings");
   const tPush = await getTranslations("PushNotifications");
   const tInstall = await getTranslations("InstallApp");
@@ -78,6 +89,12 @@ export default async function SettingsPage() {
               </div>
             )}
           </div>
+
+          <ExchangeCard
+            configured={isExchangeConfigured()}
+            connection={exchangeConnection}
+            status={exchangeStatus}
+          />
 
           <div className="atlas-subcard rounded-2xl p-6">
             <h3 className="font-semibold text-white">

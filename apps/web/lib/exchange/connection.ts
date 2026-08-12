@@ -1,0 +1,107 @@
+import { decryptSecret, isSecretBoxConfigured } from "@/lib/crypto/secretBox";
+import { prisma } from "@/lib/db/client";
+import {
+  fetchBinanceAccount,
+  fetchBinancePrices,
+} from "@/lib/exchange/binance";
+
+const STABLES = new Set([
+  "USDT",
+  "USDC",
+  "BUSD",
+  "FDUSD",
+  "TUSD",
+  "DAI",
+]);
+
+/** The feature is available only when the encryption key is set. */
+export function isExchangeConfigured(): boolean {
+  return isSecretBoxConfigured();
+}
+
+export type ExchangeConnectionView = {
+  exchange: string;
+  createdAt: string;
+};
+
+export async function getExchangeConnection(
+  userId: string
+): Promise<ExchangeConnectionView | null> {
+  const conn = await prisma.exchangeConnection.findUnique({
+    where: { userId },
+  });
+
+  if (!conn) {
+    return null;
+  }
+
+  return {
+    exchange: conn.exchange,
+    createdAt: conn.createdAt.toISOString(),
+  };
+}
+
+export type ExchangeHolding = {
+  asset: string;
+  amount: number;
+  usdValue: number | null;
+};
+
+export type ExchangeHoldingsResult =
+  | { connected: false }
+  | { connected: true; error: string }
+  | {
+      connected: true;
+      holdings: ExchangeHolding[];
+      totalUsd: number;
+    };
+
+/**
+ * Reads the user's live balances from their connected exchange (read-only),
+ * valued in USDT. Never trades or withdraws.
+ */
+export async function getExchangeHoldings(
+  userId: string
+): Promise<ExchangeHoldingsResult> {
+  const conn = await prisma.exchangeConnection.findUnique({
+    where: { userId },
+  });
+
+  if (!conn) {
+    return { connected: false };
+  }
+
+  try {
+    const secret = decryptSecret(conn.secretCipher);
+    const [balances, prices] = await Promise.all([
+      fetchBinanceAccount(conn.apiKey, secret),
+      fetchBinancePrices(),
+    ]);
+
+    const priceOf = (asset: string): number | null => {
+      if (STABLES.has(asset)) {
+        return 1;
+      }
+      const price = prices.get(`${asset}USDT`);
+      return price != null && Number.isFinite(price) ? price : null;
+    };
+
+    let totalUsd = 0;
+    const holdings: ExchangeHolding[] = balances
+      .map((balance) => {
+        const amount = balance.free + balance.locked;
+        const price = priceOf(balance.asset);
+        const usdValue = price != null ? amount * price : null;
+        if (usdValue != null) {
+          totalUsd += usdValue;
+        }
+        return { asset: balance.asset, amount, usdValue };
+      })
+      .sort((a, b) => (b.usdValue ?? 0) - (a.usdValue ?? 0));
+
+    return { connected: true, holdings, totalUsd };
+  } catch (error) {
+    console.error("Exchange holdings fetch failed:", error);
+    return { connected: true, error: (error as Error).message };
+  }
+}
