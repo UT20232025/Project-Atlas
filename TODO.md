@@ -9,7 +9,7 @@ _Sist oppdatert: 2026-08-09_
 ## 🎯 Vil ha / bygge
 
 - [x] **Read-only børs-tilkobling (foreslått av beta-tester).** Binance **+ Bybit** med read-only-nøkkel → live saldo (USD-verdi) på Porteføljen + Atlas grunner porteføljesvar i ekte beholdning. AES-256-GCM-kryptert, verifisert, tilbakekallbar. — venter på deploy. _(Neste: Coinbase (JWT-auth), auto-P&L med kostpris.)_
-- [ ] **«Del signal»-kort (bilde).** Auto-generert delbart bilde av et signal for sosiale medier — kobler på promo-kanalene når de er live. _(Godkjent.)_
+- [x] **«Del signal»-kort (bilde).** `/api/signal-card/[symbol]` → 1200×630 PNG (coin, signal, confidence, entry/SL/TP/R:R, branding) via `next/og`. «Del signal-kort»-lenke på coin-siden. Fonter innbygd som base64 (self-fetch feilet i standalone). Verifisert live. — deployet
 - [ ] **Tidsramme på dashbordet.** Coin-siden har velgeren; gjenstår samme på dashbordets scanner/charts (client-pollet, større jobb). Evt. flere rammer (2t/12t krever utvidelse av intervall-typen).
 - [x] **Linktre / følg oss.** Telegram + X + TikTok + Instagram som «Følg oss»-rad i landing-footer, + Telegram-knapp i app-menyen. Alt styrt fra `SOCIAL_LINKS`. — venter på deploy
 
