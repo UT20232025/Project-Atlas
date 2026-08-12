@@ -643,6 +643,8 @@
     "confidence": "Confiança"
   },
   "SignalPage": {
+    "share": "Partilhar sinal",
+    "linkCopied": "Link copiado! ✓",
     "tagline": "Inteligência de mercado cripto com IA",
     "eyebrow": "Sinal Atlas ao vivo",
     "priceLabel": "Preço ao vivo",
@@ -653,6 +655,7 @@
   },
   "CoinPage": {
     "shareSignal": "Partilhar cartão",
+    "linkCopied": "Link copiado! ✓",
     "backToDashboard": "← Painel",
     "upgradeForWatchlists": "💎 Assine para listas de observação",
     "change24h": "Variação 24h",

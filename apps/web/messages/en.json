@@ -643,6 +643,8 @@
     "confidence": "Confidence"
   },
   "SignalPage": {
+    "share": "Share this signal",
+    "linkCopied": "Link copied! ✓",
     "tagline": "AI-powered crypto market intelligence",
     "eyebrow": "Live Atlas signal",
     "priceLabel": "Live price",
@@ -653,6 +655,7 @@
   },
   "CoinPage": {
     "shareSignal": "Share signal card",
+    "linkCopied": "Link copied! ✓",
     "backToDashboard": "← Dashboard",
     "upgradeForWatchlists": "💎 Upgrade for watchlists",
     "change24h": "24h Change",

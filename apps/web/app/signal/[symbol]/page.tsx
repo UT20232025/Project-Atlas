@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import TradeLevels from "@/components/dashboard/TradeLevels";
+import ShareSignalButton from "@/components/share/ShareSignalButton";
 import Badge from "@/components/ui/Badge";
 import Button from "@/components/ui/button";
 import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
@@ -156,6 +157,14 @@ export default async function SignalPage({ params }: Props) {
               {t("ctaTelegram")}
             </Button>
           </a>
+
+          <ShareSignalButton
+            path={`/signal/${resolved}`}
+            title={`${coin} ${d.signal} — Genwelth AI`}
+            label={t("share")}
+            copiedLabel={t("linkCopied")}
+            className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-5 py-2.5 text-sm font-medium text-zinc-300 transition hover:text-white"
+          />
 
           <a
             href={`/api/signal-card/${resolved}`}

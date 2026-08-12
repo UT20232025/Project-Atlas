@@ -643,6 +643,8 @@
     "confidence": "Konfidens"
   },
   "SignalPage": {
+    "share": "Del signalet",
+    "linkCopied": "Lenke kopiert! ✓",
     "tagline": "AI-drevet krypto-analyse",
     "eyebrow": "Live Atlas-signal",
     "priceLabel": "Live pris",
@@ -653,6 +655,7 @@
   },
   "CoinPage": {
     "shareSignal": "Del signal-kort",
+    "linkCopied": "Lenke kopiert! ✓",
     "backToDashboard": "← Dashboard",
     "upgradeForWatchlists": "💎 Oppgrader for overvåkningslister",
     "change24h": "24t endring",

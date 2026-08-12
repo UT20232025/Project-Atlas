@@ -7,6 +7,7 @@ import KeyLevelsCard from "../../../components/analysis/KeyLevelsCard";
 import PositionSizeCalculator from "../../../components/analysis/PositionSizeCalculator";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
 import SignalHistoryCard from "../../../components/analysis/SignalHistoryCard";
+import ShareSignalButton from "../../../components/share/ShareSignalButton";
 import TimeframeSelector, {
   resolveTimeframe,
 } from "../../../components/analysis/TimeframeSelector";
@@ -265,14 +266,12 @@ export default async function CoinPage({ params, searchParams }: Props) {
         <TimeframeSelector symbol={symbol} active={timeframe} />
 
         {(MARKET_SYMBOLS as readonly string[]).includes(marketSymbol) && (
-          <a
-            href={`/signal/${marketSymbol}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg border border-zinc-800 px-3 py-1.5 text-sm font-medium text-zinc-400 transition hover:border-blue-500 hover:text-white"
-          >
-            {t("shareSignal")}
-          </a>
+          <ShareSignalButton
+            path={`/signal/${marketSymbol}`}
+            title={`${coin} ${decision.signal} — Genwelth AI`}
+            label={t("shareSignal")}
+            copiedLabel={t("linkCopied")}
+          />
         )}
       </div>
 

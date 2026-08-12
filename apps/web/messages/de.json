@@ -643,6 +643,8 @@
     "confidence": "Konfidenz"
   },
   "SignalPage": {
+    "share": "Signal teilen",
+    "linkCopied": "Link kopiert! ✓",
     "tagline": "KI-gestützte Krypto-Marktanalyse",
     "eyebrow": "Live Atlas-Signal",
     "priceLabel": "Live-Preis",
@@ -653,6 +655,7 @@
   },
   "CoinPage": {
     "shareSignal": "Signal-Karte teilen",
+    "linkCopied": "Link kopiert! ✓",
     "backToDashboard": "← Dashboard",
     "upgradeForWatchlists": "💎 Upgrade für Watchlists",
     "change24h": "24h-Änderung",
