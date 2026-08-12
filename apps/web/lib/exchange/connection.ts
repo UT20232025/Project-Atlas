@@ -1,9 +1,7 @@
 import { decryptSecret, isSecretBoxConfigured } from "@/lib/crypto/secretBox";
 import { prisma } from "@/lib/db/client";
-import {
-  fetchBinanceAccount,
-  fetchBinancePrices,
-} from "@/lib/exchange/binance";
+import { fetchBinancePrices } from "@/lib/exchange/binance";
+import { fetchExchangeBalances } from "@/lib/exchange/registry";
 
 const STABLES = new Set([
   "USDT",
@@ -49,9 +47,10 @@ export type ExchangeHolding = {
 
 export type ExchangeHoldingsResult =
   | { connected: false }
-  | { connected: true; error: string }
+  | { connected: true; exchange: string; error: string }
   | {
       connected: true;
+      exchange: string;
       holdings: ExchangeHolding[];
       totalUsd: number;
     };
@@ -74,7 +73,7 @@ export async function getExchangeHoldings(
   try {
     const secret = decryptSecret(conn.secretCipher);
     const [balances, prices] = await Promise.all([
-      fetchBinanceAccount(conn.apiKey, secret),
+      fetchExchangeBalances(conn.exchange, conn.apiKey, secret),
       fetchBinancePrices(),
     ]);
 
@@ -99,9 +98,18 @@ export async function getExchangeHoldings(
       })
       .sort((a, b) => (b.usdValue ?? 0) - (a.usdValue ?? 0));
 
-    return { connected: true, holdings, totalUsd };
+    return {
+      connected: true,
+      exchange: conn.exchange,
+      holdings,
+      totalUsd,
+    };
   } catch (error) {
     console.error("Exchange holdings fetch failed:", error);
-    return { connected: true, error: (error as Error).message };
+    return {
+      connected: true,
+      exchange: conn.exchange,
+      error: (error as Error).message,
+    };
   }
 }

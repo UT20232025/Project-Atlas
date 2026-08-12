@@ -9,7 +9,10 @@ import {
   isSecretBoxConfigured,
 } from "@/lib/crypto/secretBox";
 import { prisma } from "@/lib/db/client";
-import { verifyBinanceKey } from "@/lib/exchange/binance";
+import {
+  isSupportedExchange,
+  verifyExchangeKey,
+} from "@/lib/exchange/registry";
 
 export async function connectExchange(formData: FormData) {
   const { userId } = await requireSession();
@@ -18,15 +21,16 @@ export async function connectExchange(formData: FormData) {
     redirect("/settings?exchange=notconfigured");
   }
 
+  const exchange = String(formData.get("exchange") ?? "binance").trim();
   const apiKey = String(formData.get("apiKey") ?? "").trim();
   const secret = String(formData.get("secret") ?? "").trim();
 
-  if (!apiKey || !secret) {
+  if (!apiKey || !secret || !isSupportedExchange(exchange)) {
     redirect("/settings?exchange=invalid");
   }
 
   // Verify the key works (read-only account read) before storing anything.
-  const verify = await verifyBinanceKey(apiKey, secret);
+  const verify = await verifyExchangeKey(exchange, apiKey, secret);
 
   if (!verify.ok) {
     redirect("/settings?exchange=failed");
@@ -36,8 +40,8 @@ export async function connectExchange(formData: FormData) {
 
   await prisma.exchangeConnection.upsert({
     where: { userId },
-    update: { exchange: "binance", apiKey, secretCipher },
-    create: { userId, exchange: "binance", apiKey, secretCipher },
+    update: { exchange, apiKey, secretCipher },
+    create: { userId, exchange, apiKey, secretCipher },
   });
 
   revalidatePath("/settings");

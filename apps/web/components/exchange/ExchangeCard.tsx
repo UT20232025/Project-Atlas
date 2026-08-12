@@ -6,6 +6,11 @@ import {
 } from "@/app/exchange/actions";
 import Button from "@/components/ui/button";
 import type { ExchangeConnectionView } from "@/lib/exchange/connection";
+import {
+  EXCHANGE_LABELS,
+  SUPPORTED_EXCHANGES,
+  exchangeLabel,
+} from "@/lib/exchange/registry";
 
 type ExchangeCardProps = {
   configured: boolean;
@@ -52,7 +57,9 @@ export default async function ExchangeCard({
           <div className="flex items-center gap-2">
             <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400" />
             <p className="text-zinc-200">
-              {t("connectedTo", { exchange: "Binance" })}
+              {t("connectedTo", {
+                exchange: exchangeLabel(connection.exchange),
+              })}
             </p>
           </div>
 
@@ -90,6 +97,23 @@ export default async function ExchangeCard({
             className="mt-4 space-y-3"
             autoComplete="off"
           >
+            <div>
+              <label className="text-xs text-zinc-500">
+                {t("exchangeLabel")}
+              </label>
+              <select
+                name="exchange"
+                defaultValue="binance"
+                className="mt-1 w-full rounded-xl border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-white outline-none focus:border-zinc-600"
+              >
+                {SUPPORTED_EXCHANGES.map((id) => (
+                  <option key={id} value={id}>
+                    {EXCHANGE_LABELS[id]}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label className="text-xs text-zinc-500">
                 {t("apiKey")}

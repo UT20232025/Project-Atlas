@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Link from "next/link";
 
 import type { ExchangeHoldingsResult } from "@/lib/exchange/connection";
+import { exchangeLabel } from "@/lib/exchange/registry";
 
 export default async function ExchangeHoldings({
   result,
@@ -15,11 +16,14 @@ export default async function ExchangeHoldings({
 
   const t = await getTranslations("Exchange");
   const locale = await getLocale();
+  const label = exchangeLabel(result.exchange);
 
   if ("error" in result) {
     return (
       <section className="atlas-card mb-8 rounded-2xl p-8">
-        <h2 className="text-2xl font-bold">{t("holdingsTitle")}</h2>
+        <h2 className="text-2xl font-bold">
+          {t("holdingsTitle", { exchange: label })}
+        </h2>
         <p className="mt-3 text-sm text-red-400">{t("holdingsError")}</p>
         <p className="mt-2 text-sm text-zinc-500">
           <Link href="/settings" className="underline">
@@ -43,7 +47,9 @@ export default async function ExchangeHoldings({
     <section className="atlas-card mb-8 rounded-2xl p-8">
       <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold">{t("holdingsTitle")}</h2>
+          <h2 className="text-2xl font-bold">
+            {t("holdingsTitle", { exchange: label })}
+          </h2>
           <p className="mt-1 text-sm text-zinc-500">
             {t("holdingsSubtitle")}
           </p>
