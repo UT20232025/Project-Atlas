@@ -31,9 +31,17 @@ export type ExchangeConnectionView = {
 export async function getExchangeConnection(
   userId: string
 ): Promise<ExchangeConnectionView | null> {
-  const conn = await prisma.exchangeConnection.findUnique({
-    where: { userId },
-  });
+  let conn;
+  try {
+    conn = await prisma.exchangeConnection.findUnique({
+      where: { userId },
+    });
+  } catch (error) {
+    // A missing table or transient DB error must never take down the
+    // whole settings page — degrade to "no connection".
+    console.error("getExchangeConnection failed:", error);
+    return null;
+  }
 
   if (!conn) {
     return null;
@@ -75,9 +83,15 @@ export async function getExchangeHoldings(
   userId: string,
   options: { withSignals?: boolean } = {}
 ): Promise<ExchangeHoldingsResult> {
-  const conn = await prisma.exchangeConnection.findUnique({
-    where: { userId },
-  });
+  let conn;
+  try {
+    conn = await prisma.exchangeConnection.findUnique({
+      where: { userId },
+    });
+  } catch (error) {
+    console.error("getExchangeHoldings connection lookup failed:", error);
+    return { connected: false };
+  }
 
   if (!conn) {
     return { connected: false };
