@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "vitest run"
+    "test": "vitest run",
+    "migrate": "prisma migrate deploy",
+    "ship": "prisma migrate deploy && prisma generate && npx @prisma/cli app deploy --app \"Genwelth AI\" --prod --yes"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.115.0",
