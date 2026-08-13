@@ -114,7 +114,8 @@ type SnapshotResult =
 async function resolveSnapshot(
   snapshot: Awaited<
     ReturnType<typeof prisma.signalSnapshot.findMany>
-  >[number]
+  >[number],
+  allowRemoteFetch: boolean
 ): Promise<SnapshotResult> {
   const symbol = snapshot.symbol as MarketSymbol;
   const interval = snapshot.interval as BinanceInterval;
@@ -124,7 +125,7 @@ async function resolveSnapshot(
 
   let entryPrice = snapshot.price;
 
-  if (entryPrice == null) {
+  if (entryPrice == null && allowRemoteFetch) {
     entryPrice = await fetchHistoricalClosePrice(
       symbol,
       interval,
@@ -164,7 +165,7 @@ async function resolveSnapshot(
 
   let exitPrice = snapshot.outcomePrice;
 
-  if (exitPrice == null) {
+  if (exitPrice == null && allowRemoteFetch) {
     exitPrice = await fetchHistoricalClosePrice(
       symbol,
       interval,
@@ -208,7 +209,18 @@ async function resolveSnapshot(
   };
 }
 
-export async function getTrackRecord(): Promise<TrackRecordSummary> {
+export async function getTrackRecord(options?: {
+  /**
+   * When true, missing entry/exit prices are back-filled from Binance
+   * (a slow, network-bound operation) and persisted. This MUST stay
+   * false on any user-facing render path — the anonymous landing page
+   * was taking ~10s because it performed these historical fetches on
+   * every visit. Background/cron jobs pass true to keep the DB filled.
+   */
+  allowRemoteFetch?: boolean;
+}): Promise<TrackRecordSummary> {
+  const allowRemoteFetch = options?.allowRemoteFetch ?? false;
+
   const snapshots = await prisma.signalSnapshot.findMany({
     where: {
       signal: { in: ["LONG", "SHORT"] },
@@ -217,7 +229,9 @@ export async function getTrackRecord(): Promise<TrackRecordSummary> {
   });
 
   const results = await Promise.all(
-    snapshots.map(resolveSnapshot)
+    snapshots.map((snapshot) =>
+      resolveSnapshot(snapshot, allowRemoteFetch)
+    )
   );
 
   const closedTrades: TrackRecordTrade[] = [];
@@ -321,5 +335,23 @@ export async function getTrackRecord(): Promise<TrackRecordSummary> {
     bySymbol,
     bySignal,
     byConfidence,
+  };
+}
+
+/**
+ * Back-fills any missing entry/exit prices from Binance and persists
+ * them, so the fetch-free render paths (landing page, track-record
+ * page) stay complete. Safe to run from a cron/background job; never
+ * from a user-facing request. Returns lightweight counters.
+ */
+export async function backfillTrackRecordOutcomes(): Promise<{
+  totalClosed: number;
+  openPositions: number;
+}> {
+  const summary = await getTrackRecord({ allowRemoteFetch: true });
+
+  return {
+    totalClosed: summary.totalClosed,
+    openPositions: summary.openPositions.length,
   };
 }

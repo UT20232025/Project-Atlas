@@ -155,6 +155,7 @@ export async function fetchHistoricalClosePrice(
       `${BINANCE_API_URL}?${searchParams.toString()}`,
       {
         cache: "force-cache",
+        signal: AbortSignal.timeout(BINANCE_REQUEST_TIMEOUT_MS),
       }
     );
 
