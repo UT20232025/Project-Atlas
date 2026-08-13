@@ -406,6 +406,8 @@
     "colAsset": "Asset",
     "colAmount": "Menge",
     "colAtlas": "Atlas-Signal",
+    "col24h": "24h",
+    "change24hLabel": "letzte 24h",
     "colValue": "Wert (USD)",
     "readOnlyNote": "Nur lesen — Genwelth kann nie handeln oder abheben."
   },

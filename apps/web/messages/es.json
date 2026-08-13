@@ -406,6 +406,8 @@
     "colAsset": "Activo",
     "colAmount": "Cantidad",
     "colAtlas": "Señal Atlas",
+    "col24h": "24h",
+    "change24hLabel": "últimas 24h",
     "colValue": "Valor (USD)",
     "readOnlyNote": "Solo lectura — Genwelth nunca puede operar ni retirar."
   },

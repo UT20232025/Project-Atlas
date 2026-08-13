@@ -406,6 +406,8 @@
     "colAsset": "Aktivum",
     "colAmount": "Antall",
     "colAtlas": "Atlas-signal",
+    "col24h": "24t",
+    "change24hLabel": "siste 24t",
     "colValue": "Verdi (USD)",
     "readOnlyNote": "Kun lesetilgang — Genwelth kan aldri handle eller ta ut midler."
   },

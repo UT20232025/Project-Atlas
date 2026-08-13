@@ -406,6 +406,8 @@
     "colAsset": "Asset",
     "colAmount": "Amount",
     "colAtlas": "Atlas signal",
+    "col24h": "24h",
+    "change24hLabel": "past 24h",
     "colValue": "Value (USD)",
     "readOnlyNote": "Read-only — Genwelth can never trade or withdraw."
   },

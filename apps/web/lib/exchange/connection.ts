@@ -2,7 +2,7 @@ import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
 import { MARKET_SYMBOLS } from "@/lib/config/markets";
 import { decryptSecret, isSecretBoxConfigured } from "@/lib/crypto/secretBox";
 import { prisma } from "@/lib/db/client";
-import { fetchBinancePrices } from "@/lib/exchange/binance";
+import { fetchBinanceTickers } from "@/lib/exchange/binance";
 import { fetchExchangeBalances } from "@/lib/exchange/registry";
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 
@@ -49,6 +49,7 @@ export type ExchangeHolding = {
   asset: string;
   amount: number;
   usdValue: number | null;
+  change24h: number | null;
   atlasSignal: {
     signal: "LONG" | "SHORT" | "WAIT";
     confidence: number;
@@ -63,6 +64,7 @@ export type ExchangeHoldingsResult =
       exchange: string;
       holdings: ExchangeHolding[];
       totalUsd: number;
+      change24hPct: number | null;
     };
 
 /**
@@ -83,36 +85,53 @@ export async function getExchangeHoldings(
 
   try {
     const secret = decryptSecret(conn.secretCipher);
-    const [balances, prices] = await Promise.all([
+    const [balances, tickers] = await Promise.all([
       fetchExchangeBalances(conn.exchange, conn.apiKey, secret),
-      fetchBinancePrices(),
+      fetchBinanceTickers(),
     ]);
 
-    const priceOf = (asset: string): number | null => {
+    const tickerOf = (
+      asset: string
+    ): { price: number; change24h: number } | null => {
       if (STABLES.has(asset)) {
-        return 1;
+        return { price: 1, change24h: 0 };
       }
-      const price = prices.get(`${asset}USDT`);
-      return price != null && Number.isFinite(price) ? price : null;
+      const ticker = tickers.get(`${asset}USDT`);
+      return ticker && Number.isFinite(ticker.price) ? ticker : null;
     };
 
     let totalUsd = 0;
+    let value24hAgo = 0;
+
     const holdings: ExchangeHolding[] = balances
       .map((balance) => {
         const amount = balance.free + balance.locked;
-        const price = priceOf(balance.asset);
-        const usdValue = price != null ? amount * price : null;
+        const ticker = tickerOf(balance.asset);
+        const usdValue = ticker ? amount * ticker.price : null;
+        const change24h = ticker ? ticker.change24h : null;
+
         if (usdValue != null) {
           totalUsd += usdValue;
+          value24hAgo +=
+            change24h != null
+              ? usdValue / (1 + change24h / 100)
+              : usdValue;
         }
+
         return {
           asset: balance.asset,
           amount,
           usdValue,
+          change24h,
           atlasSignal: null as ExchangeHolding["atlasSignal"],
         };
       })
       .sort((a, b) => (b.usdValue ?? 0) - (a.usdValue ?? 0));
+
+    const change24hPct =
+      value24hAgo > 0
+        ? ((totalUsd - value24hAgo) / value24hAgo) * 100
+        : null;
 
     // Attach Atlas's current signal to the top holdings that map to a curated
     // pair — so the real portfolio shows what Atlas thinks of each coin.
@@ -143,6 +162,7 @@ export async function getExchangeHoldings(
       exchange: conn.exchange,
       holdings,
       totalUsd,
+      change24hPct,
     };
   } catch (error) {
     console.error("Exchange holdings fetch failed:", error);

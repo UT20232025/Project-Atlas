@@ -43,7 +43,7 @@ export default async function ExchangeHoldings({
     );
   }
 
-  const { holdings, totalUsd } = result;
+  const { holdings, totalUsd, change24hPct } = result;
 
   const fmtUsd = (value: number) =>
     value.toLocaleString(locale, { maximumFractionDigits: 2 });
@@ -51,6 +51,8 @@ export default async function ExchangeHoldings({
     value.toLocaleString(locale, {
       maximumFractionDigits: value >= 1 ? 4 : 8,
     });
+  const fmtPct = (value: number) =>
+    `${value >= 0 ? "+" : ""}${value.toFixed(2)}%`;
 
   return (
     <section className="atlas-card mb-8 rounded-2xl p-8">
@@ -69,6 +71,15 @@ export default async function ExchangeHoldings({
           <p className="text-2xl font-bold text-white">
             ${fmtUsd(totalUsd)}
           </p>
+          {change24hPct != null && (
+            <p
+              className={`text-sm font-medium ${
+                change24hPct >= 0 ? "text-green-400" : "text-red-400"
+              }`}
+            >
+              {fmtPct(change24hPct)} {t("change24hLabel")}
+            </p>
+          )}
         </div>
       </div>
 
@@ -81,6 +92,7 @@ export default async function ExchangeHoldings({
               <tr className="text-xs text-zinc-500">
                 <th className="pb-3 font-medium">{t("colAsset")}</th>
                 <th className="pb-3 font-medium">{t("colAmount")}</th>
+                <th className="pb-3 font-medium">{t("col24h")}</th>
                 <th className="pb-3 font-medium">{t("colAtlas")}</th>
                 <th className="pb-3 text-right font-medium">
                   {t("colValue")}
@@ -98,6 +110,21 @@ export default async function ExchangeHoldings({
                   </td>
                   <td className="py-3 text-zinc-300">
                     {fmtAmount(holding.amount)}
+                  </td>
+                  <td className="py-3">
+                    {holding.change24h == null ? (
+                      <span className="text-zinc-600">—</span>
+                    ) : (
+                      <span
+                        className={
+                          holding.change24h >= 0
+                            ? "text-green-400"
+                            : "text-red-400"
+                        }
+                      >
+                        {fmtPct(holding.change24h)}
+                      </span>
+                    )}
                   </td>
                   <td className="py-3">
                     {holding.atlasSignal ? (

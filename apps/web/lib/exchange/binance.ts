@@ -65,25 +65,40 @@ export async function verifyBinanceKey(
   }
 }
 
-/** Public ticker prices (no auth) — used to value balances in USDT. */
-export async function fetchBinancePrices(): Promise<Map<string, number>> {
-  const response = await fetch(`${BASE_URL}/api/v3/ticker/price`, {
+export type BinanceTicker = { price: number; change24h: number };
+
+/**
+ * Public 24h tickers (no auth) — price + 24h % change per symbol, used to
+ * value balances in USDT and show daily movement. Fetches all symbols so an
+ * unknown holding pair just misses gracefully (a `symbols=` filter would 400
+ * the whole request on any invalid pair).
+ */
+export async function fetchBinanceTickers(): Promise<
+  Map<string, BinanceTicker>
+> {
+  const response = await fetch(`${BASE_URL}/api/v3/ticker/24hr`, {
     cache: "no-store",
-    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    signal: AbortSignal.timeout(15_000),
   });
 
+  const map = new Map<string, BinanceTicker>();
+
   if (!response.ok) {
-    return new Map();
+    return map;
   }
 
   const data = (await response.json()) as Array<{
     symbol: string;
-    price: string;
+    lastPrice: string;
+    priceChangePercent: string;
   }>;
 
-  const map = new Map<string, number>();
   for (const entry of data) {
-    map.set(entry.symbol, Number(entry.price));
+    map.set(entry.symbol, {
+      price: Number(entry.lastPrice),
+      change24h: Number(entry.priceChangePercent),
+    });
   }
+
   return map;
 }
