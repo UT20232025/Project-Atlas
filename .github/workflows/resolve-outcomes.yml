@@ -1,0 +1,23 @@
+name: Resolve signal outcomes
+
+# Back-fills missing entry/exit prices for the track record so the
+# fetch-free landing/track-record render paths stay complete without
+# doing slow Binance history fetches on user requests.
+# Requires a repository secret CRON_SECRET matching the app's CRON_SECRET env.
+
+on:
+  schedule:
+    # Every 30 minutes.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  resolve-outcomes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger resolve-outcomes endpoint
+        run: |
+          curl -fsS --max-time 300 \
+            "https://www.genwelth.com/api/cron/resolve-outcomes?key=${CRON_SECRET}"
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
