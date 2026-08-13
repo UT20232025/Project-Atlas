@@ -47,6 +47,8 @@ _Sist oppdatert: 2026-08-09_
 
 ## 🩹 Fikset underveis
 
+- [x] **Forsiden hang 10s («siden virker ikke nå»).** `getTrackRecord` hentet manglende inngangs-/utgangspriser fra Binance synkront på *hver* landing-render; hentingene hang ~10s på serveren og lagret aldri ved feil → hver visning kjørte dem på nytt. Render-stien er nå hentefri (rendrer kun fra priser i DB); pris-oppfylling flyttet til bakgrunn (throttlet fire-and-forget) + ny `/api/cron/resolve-outcomes` (CRON_SECRET). 10,5s → 0,5s. Track record intakt (56,3% / 394 signaler). — deployet
+
 - [x] **Confidence kappet til maks 95 %.** Et kringkastet «LONG AVAXUSDT · 100 %» bommet; 100 %-merkelapp som feiler ødelegger tillit. Ingen trade er sikker.
 - [x] **Straff for LONG i premium / SHORT i discount.** Rotårsak til AVAX-bommen: scoringen var rent additiv, så et LONG kunne fyre rett under range-toppen uten straff. Nå straffes topp-jaging aktivt + advarsel vises. — venter på deploy
 
