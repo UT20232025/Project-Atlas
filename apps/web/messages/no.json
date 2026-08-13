@@ -213,7 +213,11 @@
     "stopAtr": "ATR",
     "stopTight": "Tett",
     "stopWide": "Vid",
-    "stopRecommended": "Anbefalt"
+    "stopRecommended": "Anbefalt",
+    "takeProfit3": "Take-profit 3",
+    "tpTagConservative": "Konservativ",
+    "tpTagBase": "Base",
+    "tpTagRunner": "Løper"
   },
   "DashboardHero": {
     "eyebrow": "Drevet av Atlas Engine",

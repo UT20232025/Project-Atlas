@@ -12,6 +12,7 @@ type StopLossOption = {
   isPrimary: boolean;
   riskReward1: number | null;
   riskReward2: number | null;
+  riskReward3: number | null;
 };
 
 type TradeSetup = {
@@ -21,8 +22,10 @@ type TradeSetup = {
   stops: StopLossOption[];
   takeProfit1: number | null;
   takeProfit2: number | null;
+  takeProfit3: number | null;
   riskReward1: number | null;
   riskReward2: number | null;
+  riskReward3: number | null;
   quality: string;
   explanation: AtlasReasonCode[];
 };
@@ -143,6 +146,8 @@ function StopCard({
         {t("takeProfit1")}: {formatRiskReward(t, stop.riskReward1)}
         {" · "}
         {t("takeProfit2")}: {formatRiskReward(t, stop.riskReward2)}
+        {" · "}
+        {t("takeProfit3")}: {formatRiskReward(t, stop.riskReward3)}
       </p>
     </div>
   );
@@ -171,6 +176,7 @@ export default function AtlasTradeSetup({
               isPrimary: true,
               riskReward1: tradeSetup.riskReward1,
               riskReward2: tradeSetup.riskReward2,
+              riskReward3: tradeSetup.riskReward3,
             },
           ]
         : [];
@@ -262,11 +268,16 @@ export default function AtlasTradeSetup({
         </div>
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
         <div className="rounded-lg border border-zinc-800 p-4">
-          <p className="text-xs text-zinc-500">
-            {t("takeProfit1")}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-zinc-500">
+              {t("takeProfit1")}
+            </p>
+            <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] uppercase tracking-wide text-emerald-300">
+              {t("tpTagConservative")}
+            </span>
+          </div>
 
           <p className="mt-1 text-lg font-semibold text-emerald-400">
             {formatPrice(tradeSetup.takeProfit1, locale)}
@@ -278,9 +289,14 @@ export default function AtlasTradeSetup({
         </div>
 
         <div className="rounded-lg border border-zinc-800 p-4">
-          <p className="text-xs text-zinc-500">
-            {t("takeProfit2")}
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-zinc-500">
+              {t("takeProfit2")}
+            </p>
+            <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] uppercase tracking-wide text-emerald-300">
+              {t("tpTagBase")}
+            </span>
+          </div>
 
           <p className="mt-1 text-lg font-semibold text-emerald-400">
             {formatPrice(tradeSetup.takeProfit2, locale)}
@@ -288,6 +304,25 @@ export default function AtlasTradeSetup({
 
           <p className="mt-2 text-xs text-zinc-500">
             {formatRiskReward(t, tradeSetup.riskReward2)}
+          </p>
+        </div>
+
+        <div className="rounded-lg border border-zinc-800 p-4">
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-zinc-500">
+              {t("takeProfit3")}
+            </p>
+            <span className="rounded-full bg-cyan-500/15 px-2 py-0.5 text-[10px] uppercase tracking-wide text-cyan-300">
+              {t("tpTagRunner")}
+            </span>
+          </div>
+
+          <p className="mt-1 text-lg font-semibold text-emerald-400">
+            {formatPrice(tradeSetup.takeProfit3, locale)}
+          </p>
+
+          <p className="mt-2 text-xs text-zinc-500">
+            {formatRiskReward(t, tradeSetup.riskReward3)}
           </p>
         </div>
       </div>

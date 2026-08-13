@@ -24,6 +24,7 @@ export type StopLossOption = {
   isPrimary: boolean;
   riskReward1: number | null;
   riskReward2: number | null;
+  riskReward3: number | null;
 };
 
 export type AtlasTradeSetup = {
@@ -31,10 +32,13 @@ export type AtlasTradeSetup = {
   entry: number | null;
   stopLoss: number | null;
   stops: StopLossOption[];
+  // Three scale-out targets: TP1 (conservative), TP2 (base), TP3 (runner).
   takeProfit1: number | null;
   takeProfit2: number | null;
+  takeProfit3: number | null;
   riskReward1: number | null;
   riskReward2: number | null;
+  riskReward3: number | null;
   quality: "A" | "B" | "C" | "NO_TRADE";
   explanation: AtlasReasonCode[];
 };
@@ -61,8 +65,10 @@ type StopLossResult = {
 type TakeProfitResult = {
   takeProfit1: number;
   takeProfit2: number;
+  takeProfit3: number;
   firstTargetLimitedByStructure: boolean;
   secondTargetLimitedByStructure: boolean;
+  thirdTargetLimitedByStructure: boolean;
 };
 
 const MINIMUM_RISK_REWARD = 1.5;
@@ -190,6 +196,7 @@ function getTargetMultipliers(
     return {
       firstTarget: 1.75,
       secondTarget: 3,
+      thirdTarget: 4.5,
     };
   }
 
@@ -197,12 +204,14 @@ function getTargetMultipliers(
     return {
       firstTarget: 1.5,
       secondTarget: 2.5,
+      thirdTarget: 4,
     };
   }
 
   return {
     firstTarget: 1.5,
     secondTarget: 2,
+    thirdTarget: 3,
   };
 }
 
@@ -292,11 +301,13 @@ function buildStopOptions({
   stopResult,
   takeProfit1,
   takeProfit2,
+  takeProfit3,
 }: {
   entry: number;
   stopResult: StopLossResult;
   takeProfit1: number;
   takeProfit2: number;
+  takeProfit3: number;
 }): StopLossOption[] {
   const candidates: Array<{
     price: number;
@@ -349,6 +360,11 @@ function buildStopOptions({
         candidate.price,
         takeProfit2
       ),
+      riskReward3: calculateRiskReward(
+        entry,
+        candidate.price,
+        takeProfit3
+      ),
     })
   );
 
@@ -388,6 +404,9 @@ function getTakeProfits({
   const secondTargetDistance =
     riskDistance * targetMultipliers.secondTarget;
 
+  const thirdTargetDistance =
+    riskDistance * targetMultipliers.thirdTarget;
+
   let takeProfit1 =
     direction === "LONG"
       ? entry + firstTargetDistance
@@ -398,8 +417,14 @@ function getTakeProfits({
       ? entry + secondTargetDistance
       : entry - secondTargetDistance;
 
+  let takeProfit3 =
+    direction === "LONG"
+      ? entry + thirdTargetDistance
+      : entry - thirdTargetDistance;
+
   let firstTargetLimitedByStructure = false;
   let secondTargetLimitedByStructure = false;
+  let thirdTargetLimitedByStructure = false;
 
   const structureTarget =
     direction === "LONG"
@@ -413,8 +438,10 @@ function getTakeProfits({
     return {
       takeProfit1,
       takeProfit2,
+      takeProfit3,
       firstTargetLimitedByStructure,
       secondTargetLimitedByStructure,
+      thirdTargetLimitedByStructure,
     };
   }
 
@@ -427,11 +454,15 @@ function getTakeProfits({
     return {
       takeProfit1,
       takeProfit2,
+      takeProfit3,
       firstTargetLimitedByStructure,
       secondTargetLimitedByStructure,
+      thirdTargetLimitedByStructure,
     };
   }
 
+  // Clamp the first target that overshoots the nearest structure level to
+  // that level — price rarely sails cleanly through support/resistance.
   if (direction === "LONG") {
     if (structureTarget <= takeProfit1) {
       takeProfit1 = structureTarget;
@@ -439,6 +470,9 @@ function getTakeProfits({
     } else if (structureTarget < takeProfit2) {
       takeProfit2 = structureTarget;
       secondTargetLimitedByStructure = true;
+    } else if (structureTarget < takeProfit3) {
+      takeProfit3 = structureTarget;
+      thirdTargetLimitedByStructure = true;
     }
   } else {
     if (structureTarget >= takeProfit1) {
@@ -447,14 +481,19 @@ function getTakeProfits({
     } else if (structureTarget > takeProfit2) {
       takeProfit2 = structureTarget;
       secondTargetLimitedByStructure = true;
+    } else if (structureTarget > takeProfit3) {
+      takeProfit3 = structureTarget;
+      thirdTargetLimitedByStructure = true;
     }
   }
 
   return {
     takeProfit1,
     takeProfit2,
+    takeProfit3,
     firstTargetLimitedByStructure,
     secondTargetLimitedByStructure,
+    thirdTargetLimitedByStructure,
   };
 }
 
@@ -586,8 +625,10 @@ function createNoTradeSetup(
     stops: [],
     takeProfit1: null,
     takeProfit2: null,
+    takeProfit3: null,
     riskReward1: null,
     riskReward2: null,
+    riskReward3: null,
     quality: "NO_TRADE",
     explanation,
   };
@@ -678,6 +719,9 @@ export function createTradeSetup({
   const roundedTakeProfit2 = roundPrice(
     targetResult.takeProfit2
   );
+  const roundedTakeProfit3 = roundPrice(
+    targetResult.takeProfit3
+  );
 
   const riskReward1 = calculateRiskReward(
     roundedEntry,
@@ -689,6 +733,12 @@ export function createTradeSetup({
     roundedEntry,
     roundedStopLoss,
     roundedTakeProfit2
+  );
+
+  const riskReward3 = calculateRiskReward(
+    roundedEntry,
+    roundedStopLoss,
+    roundedTakeProfit3
   );
 
   if (
@@ -731,6 +781,7 @@ export function createTradeSetup({
     stopResult,
     takeProfit1: roundedTakeProfit1,
     takeProfit2: roundedTakeProfit2,
+    takeProfit3: roundedTakeProfit3,
   });
 
   return {
@@ -740,8 +791,10 @@ export function createTradeSetup({
     stops,
     takeProfit1: roundedTakeProfit1,
     takeProfit2: roundedTakeProfit2,
+    takeProfit3: roundedTakeProfit3,
     riskReward1,
     riskReward2,
+    riskReward3,
     quality: finalQuality,
     explanation: createExplanation({
       direction,

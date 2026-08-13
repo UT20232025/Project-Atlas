@@ -213,7 +213,11 @@
     "stopAtr": "ATR",
     "stopTight": "Eng",
     "stopWide": "Weit",
-    "stopRecommended": "Empfohlen"
+    "stopRecommended": "Empfohlen",
+    "takeProfit3": "Take Profit 3",
+    "tpTagConservative": "Konservativ",
+    "tpTagBase": "Basis",
+    "tpTagRunner": "Läufer"
   },
   "DashboardHero": {
     "eyebrow": "Angetrieben von Atlas Engine",

@@ -42,6 +42,7 @@ type StopLossOption = {
   isPrimary: boolean;
   riskReward1: number | null;
   riskReward2: number | null;
+  riskReward3: number | null;
 };
 
 type TradeSetup = {
@@ -51,8 +52,10 @@ type TradeSetup = {
   stops: StopLossOption[];
   takeProfit1: number | null;
   takeProfit2: number | null;
+  takeProfit3: number | null;
   riskReward1: number | null;
   riskReward2: number | null;
+  riskReward3: number | null;
   quality: "A" | "B" | "C" | "NO_TRADE";
   explanation: AtlasReasonCode[];
 };

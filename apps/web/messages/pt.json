@@ -213,7 +213,11 @@
     "stopAtr": "ATR",
     "stopTight": "Apertado",
     "stopWide": "Amplo",
-    "stopRecommended": "Recomendado"
+    "stopRecommended": "Recomendado",
+    "takeProfit3": "Take Profit 3",
+    "tpTagConservative": "Conservador",
+    "tpTagBase": "Base",
+    "tpTagRunner": "Extensão"
   },
   "DashboardHero": {
     "eyebrow": "Desenvolvido pelo Atlas Engine",
