@@ -392,6 +392,7 @@
     "guide": "Bei deiner Börse → API-Verwaltung → erstelle einen read-only Schlüssel (nach Möglichkeit IP-beschränkt).",
     "apiKey": "API-Schlüssel",
     "apiSecret": "API-Secret",
+    "secretHint": "Binance/Bybit: das API-Secret. Coinbase: der EC-Private-Key (vollständiger PEM-Block).",
     "connect": "Verbinden",
     "statusConnected": "Verbunden! Deine Guthaben erscheinen jetzt im Portfolio.",
     "statusDisconnected": "Getrennt. Der Schlüssel wurde gelöscht.",

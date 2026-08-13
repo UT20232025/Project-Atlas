@@ -392,6 +392,7 @@
     "guide": "On your exchange → API management → create a read-only key (IP-restricted if possible).",
     "apiKey": "API key",
     "apiSecret": "API secret",
+    "secretHint": "Binance/Bybit: the API secret. Coinbase: the EC private key (full PEM block).",
     "connect": "Connect",
     "statusConnected": "Connected! Your balances now show on the Portfolio.",
     "statusDisconnected": "Disconnected. The key was deleted.",

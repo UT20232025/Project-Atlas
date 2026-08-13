@@ -392,6 +392,7 @@
     "guide": "På børsen din → API-styring → lag en nøkkel med kun lesetilgang (gjerne IP-begrenset).",
     "apiKey": "API-nøkkel",
     "apiSecret": "API-hemmelighet (secret)",
+    "secretHint": "Binance/Bybit: API-hemmeligheten. Coinbase: EC-privatnøkkelen (hele PEM-blokken).",
     "connect": "Koble til",
     "statusConnected": "Tilkoblet! Saldoen din vises nå på Porteføljen.",
     "statusDisconnected": "Koblet fra. Nøkkelen er slettet.",

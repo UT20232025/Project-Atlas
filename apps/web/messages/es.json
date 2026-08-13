@@ -392,6 +392,7 @@
     "guide": "En tu exchange → gestión de API → crea una clave de solo lectura (con IP restringida si es posible).",
     "apiKey": "Clave API",
     "apiSecret": "Secreto API",
+    "secretHint": "Binance/Bybit: el secreto de API. Coinbase: la clave privada EC (bloque PEM completo).",
     "connect": "Conectar",
     "statusConnected": "¡Conectado! Tus saldos ya aparecen en la Cartera.",
     "statusDisconnected": "Desconectado. La clave se eliminó.",

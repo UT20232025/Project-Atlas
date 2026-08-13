@@ -4,13 +4,22 @@ import {
   type BinanceBalance,
 } from "@/lib/exchange/binance";
 import { fetchBybitAccount, verifyBybitKey } from "@/lib/exchange/bybit";
+import {
+  fetchCoinbaseAccount,
+  verifyCoinbaseKey,
+} from "@/lib/exchange/coinbase";
 
-export const SUPPORTED_EXCHANGES = ["binance", "bybit"] as const;
+export const SUPPORTED_EXCHANGES = [
+  "binance",
+  "bybit",
+  "coinbase",
+] as const;
 export type ExchangeId = (typeof SUPPORTED_EXCHANGES)[number];
 
 export const EXCHANGE_LABELS: Record<ExchangeId, string> = {
   binance: "Binance",
   bybit: "Bybit",
+  coinbase: "Coinbase",
 };
 
 export function isSupportedExchange(value: string): value is ExchangeId {
@@ -28,9 +37,9 @@ export async function verifyExchangeKey(
   apiKey: string,
   secret: string
 ): Promise<{ ok: boolean; error?: string }> {
-  return exchange === "bybit"
-    ? verifyBybitKey(apiKey, secret)
-    : verifyBinanceKey(apiKey, secret);
+  if (exchange === "bybit") return verifyBybitKey(apiKey, secret);
+  if (exchange === "coinbase") return verifyCoinbaseKey(apiKey, secret);
+  return verifyBinanceKey(apiKey, secret);
 }
 
 export async function fetchExchangeBalances(
@@ -38,7 +47,8 @@ export async function fetchExchangeBalances(
   apiKey: string,
   secret: string
 ): Promise<BinanceBalance[]> {
-  return exchange === "bybit"
-    ? fetchBybitAccount(apiKey, secret)
-    : fetchBinanceAccount(apiKey, secret);
+  if (exchange === "bybit") return fetchBybitAccount(apiKey, secret);
+  if (exchange === "coinbase")
+    return fetchCoinbaseAccount(apiKey, secret);
+  return fetchBinanceAccount(apiKey, secret);
 }
