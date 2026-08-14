@@ -6,6 +6,7 @@ const PLATFORMS: Array<{
   emoji: string;
 }> = [
   { key: "telegram", label: "Telegram", emoji: "📣" },
+  { key: "telegramChat", label: "Community", emoji: "💬" },
   { key: "x", label: "X", emoji: "𝕏" },
   { key: "tiktok", label: "TikTok", emoji: "🎵" },
   { key: "instagram", label: "Instagram", emoji: "📸" },

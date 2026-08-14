@@ -115,7 +115,7 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="border-t border-zinc-800 p-5">
+      <div className="space-y-2 border-t border-zinc-800 p-5">
         <a
           href={SOCIAL_LINKS.telegram}
           target="_blank"
@@ -124,6 +124,16 @@ export default function Sidebar() {
         >
           <span className="text-xl">📣</span>
           <span>{t("joinTelegram")}</span>
+        </a>
+
+        <a
+          href={SOCIAL_LINKS.telegramChat}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-3 rounded-xl border border-zinc-800 px-4 py-3 font-medium text-zinc-300 transition hover:border-zinc-600 hover:text-white"
+        >
+          <span className="text-xl">💬</span>
+          <span>{t("joinChat")}</span>
         </a>
       </div>
     </aside>
