@@ -8,6 +8,11 @@ type SignalDecision = {
   stopLoss: number | null;
   takeProfit: number | null;
   riskRewardRatio: number | null;
+  // Optional scale-out ladder from the trade-setup engine. When present,
+  // the message shows TP1/TP2/TP3 instead of the single takeProfit above.
+  takeProfit1?: number | null;
+  takeProfit2?: number | null;
+  takeProfit3?: number | null;
 };
 
 const DEFAULT_MIN_CONFIDENCE = 70;
@@ -38,7 +43,22 @@ function formatMessage(
     lines.push(`🛑 SL: ${decision.stopLoss}`);
   }
 
-  if (decision.takeProfit != null) {
+  const hasLadder =
+    decision.takeProfit1 != null ||
+    decision.takeProfit2 != null ||
+    decision.takeProfit3 != null;
+
+  if (hasLadder) {
+    if (decision.takeProfit1 != null) {
+      lines.push(`🎯 TP1: ${decision.takeProfit1}`);
+    }
+    if (decision.takeProfit2 != null) {
+      lines.push(`🎯 TP2: ${decision.takeProfit2}`);
+    }
+    if (decision.takeProfit3 != null) {
+      lines.push(`🎯 TP3: ${decision.takeProfit3}`);
+    }
+  } else if (decision.takeProfit != null) {
     lines.push(`🎯 TP: ${decision.takeProfit}`);
   }
 

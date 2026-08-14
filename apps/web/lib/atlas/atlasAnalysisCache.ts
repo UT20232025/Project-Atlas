@@ -109,8 +109,26 @@ export function getCachedAtlasAnalysis(
           void notifyReversal(symbol, previous, direction);
         }
 
-        void notifySignalChange(symbol, decision);
-        void notifyPushSignalChange(symbol, decision);
+        // When the trade-setup engine produced a valid scale-out ladder,
+        // broadcast all three targets (with its coherent entry/SL/R:R)
+        // instead of the single decision take-profit.
+        const tradeSetup = result.tradeSetup;
+        const broadcastDecision =
+          tradeSetup && tradeSetup.takeProfit1 != null
+            ? {
+                ...decision,
+                entry: tradeSetup.entry ?? decision.entry,
+                stopLoss: tradeSetup.stopLoss ?? decision.stopLoss,
+                riskRewardRatio:
+                  tradeSetup.riskReward2 ?? decision.riskRewardRatio,
+                takeProfit1: tradeSetup.takeProfit1,
+                takeProfit2: tradeSetup.takeProfit2,
+                takeProfit3: tradeSetup.takeProfit3,
+              }
+            : decision;
+
+        void notifySignalChange(symbol, broadcastDecision);
+        void notifyPushSignalChange(symbol, broadcastDecision);
         setLastBroadcastDirection(symbol, direction);
       }
     });

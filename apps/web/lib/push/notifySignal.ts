@@ -8,6 +8,9 @@ type SignalDecision = {
   entry: number | null;
   stopLoss: number | null;
   takeProfit: number | null;
+  takeProfit1?: number | null;
+  takeProfit2?: number | null;
+  takeProfit3?: number | null;
 };
 
 const DEFAULT_MIN_CONFIDENCE = 70;
@@ -42,7 +45,20 @@ export async function notifyPushSignalChange(
   const parts = [`confidence ${decision.confidence}%`];
   if (decision.entry != null) parts.push(`entry ${decision.entry}`);
   if (decision.stopLoss != null) parts.push(`SL ${decision.stopLoss}`);
-  if (decision.takeProfit != null) parts.push(`TP ${decision.takeProfit}`);
+
+  const ladder = [
+    decision.takeProfit1,
+    decision.takeProfit2,
+    decision.takeProfit3,
+  ].filter((tp): tp is number => tp != null);
+
+  if (ladder.length > 0) {
+    parts.push(
+      `TP ${ladder.map((tp) => tp).join(" / ")}`
+    );
+  } else if (decision.takeProfit != null) {
+    parts.push(`TP ${decision.takeProfit}`);
+  }
 
   await sendPushToAll({
     title: `${emoji} ${decision.signal} ${display}`,
