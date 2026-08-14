@@ -1126,6 +1126,9 @@
     "WHALE_BULLISH_DOMINANCE": "Aggressive kjøp dominerer: {buyVolume} i store kjøp mot {sellVolume} i store salg.",
     "WHALE_BEARISH_DOMINANCE": "Aggressive salg dominerer: {sellVolume} i store salg mot {buyVolume} i store kjøp.",
     "WHALE_BALANCED": "Store kjøps- og salgsvolum er omtrent balansert.",
-    "FAIR_VALUE_GAP_SUMMARY": "{bullishCount} bullish og {bearishCount} bearish ufylte fair value gaps funnet."
+    "FAIR_VALUE_GAP_SUMMARY": "{bullishCount} bullish og {bearishCount} bearish ufylte fair value gaps funnet.",
+    "REGIME_GATE_CHOP": "Høyere tidsramme går i sideleie — Atlas står over til en tydelig trend dannes.",
+    "REGIME_GATE_COUNTER_TREND_LONG": "Hopper over long — høyere tidsramme peker ned, og Atlas kjemper ikke mot den rådende trenden.",
+    "REGIME_GATE_COUNTER_TREND_SHORT": "Hopper over short — høyere tidsramme peker opp, og Atlas kjemper ikke mot den rådende trenden."
   }
 }

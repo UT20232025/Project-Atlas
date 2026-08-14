@@ -24,6 +24,12 @@ import {
 } from "@/lib/atlas/aiDecisionEngine";
 
 import {
+  applyRegimeGate,
+  getRegimeGateConfig,
+  readRegime,
+} from "@/lib/atlas/regimeGate";
+
+import {
   analyzeLiquidity,
   type LiquidityResult,
 } from "@/lib/atlas/liquidityEngine";
@@ -525,7 +531,7 @@ export function computeAtlasAnalysis(
         requestedSnapshot.liquidity,
     });
 
-const decision =
+const rawDecision =
   makeAtlasDecision({
     proposedSignal,
 
@@ -575,6 +581,30 @@ const decision =
 
     risk,
   });
+
+  // Regime gate: refuse to fight the higher-timeframe trend. A directional
+  // call that opposes the prevailing regime (or fires in chop) is downgraded
+  // to WAIT — the biggest lever on win rate per the track-record analysis.
+  const regimeGate = applyRegimeGate(
+    rawDecision.signal,
+    readRegime(multiTimeframe),
+    getRegimeGateConfig()
+  );
+
+  const decision: AtlasDecisionEngineResult = regimeGate.gated
+    ? {
+        ...rawDecision,
+        signal: "WAIT",
+        entry: null,
+        stopLoss: null,
+        takeProfit: null,
+        riskRewardRatio: null,
+        explanation: regimeGate.reason ?? rawDecision.explanation,
+        warnings: regimeGate.reason
+          ? [...rawDecision.warnings, regimeGate.reason]
+          : rawDecision.warnings,
+      }
+    : rawDecision;
 
   const primarySnapshot =
     getSnapshot(

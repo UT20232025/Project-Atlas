@@ -1126,6 +1126,9 @@
     "WHALE_BULLISH_DOMINANCE": "Aggressive Käufe dominieren: {buyVolume} in großen Käufen gegenüber {sellVolume} in großen Verkäufen.",
     "WHALE_BEARISH_DOMINANCE": "Aggressive Verkäufe dominieren: {sellVolume} in großen Verkäufen gegenüber {buyVolume} in großen Käufen.",
     "WHALE_BALANCED": "Großes Kauf- und Verkaufsvolumen sind ungefähr ausgeglichen.",
-    "FAIR_VALUE_GAP_SUMMARY": "{bullishCount} bullische und {bearishCount} bearische ungefüllte Fair Value Gaps gefunden."
+    "FAIR_VALUE_GAP_SUMMARY": "{bullishCount} bullische und {bearishCount} bearische ungefüllte Fair Value Gaps gefunden.",
+    "REGIME_GATE_CHOP": "Der höhere Zeitrahmen bewegt sich seitwärts — Atlas hält sich zurück, bis sich ein klarer Trend bildet.",
+    "REGIME_GATE_COUNTER_TREND_LONG": "Long wird ausgelassen — der Trend im höheren Zeitrahmen ist abwärts, und Atlas kämpft nicht gegen den vorherrschenden Trend.",
+    "REGIME_GATE_COUNTER_TREND_SHORT": "Short wird ausgelassen — der Trend im höheren Zeitrahmen ist aufwärts, und Atlas kämpft nicht gegen den vorherrschenden Trend."
   }
 }
