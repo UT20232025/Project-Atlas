@@ -826,7 +826,7 @@
   },
   "RSIChart": {
     "title": "RSI History",
-    "subtitle": "RSI 14 · 1-hour candles",
+    "subtitle": "RSI 14 · {timeframe} candles",
     "currentRsi": "Current RSI",
     "oversoldBelow": "Oversold below 30",
     "overboughtAbove": "Overbought above 70"

@@ -826,7 +826,7 @@
   },
   "RSIChart": {
     "title": "RSI-historikk",
-    "subtitle": "RSI 14 · 1-timers candler",
+    "subtitle": "RSI 14 · {timeframe}-candler",
     "currentRsi": "Nåværende RSI",
     "oversoldBelow": "Oversolgt under 30",
     "overboughtAbove": "Overkjøpt over 70"

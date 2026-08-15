@@ -423,7 +423,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
           </div>
 
           <div className="mt-8">
-            <RSIChart values={rsiHistory} />
+            <RSIChart values={rsiHistory} timeframe={timeframe} />
           </div>
 
           <div className="mt-8">

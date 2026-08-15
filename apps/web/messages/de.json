@@ -826,7 +826,7 @@
   },
   "RSIChart": {
     "title": "RSI-Verlauf",
-    "subtitle": "RSI 14 · 1-Stunden-Kerzen",
+    "subtitle": "RSI 14 · {timeframe}-Kerzen",
     "currentRsi": "Aktueller RSI",
     "oversoldBelow": "Überverkauft unter 30",
     "overboughtAbove": "Überkauft über 70"
