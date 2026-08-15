@@ -35,6 +35,14 @@ import {
 } from "@/lib/atlas/tradeChecklist";
 
 import {
+  applyMacroBlackout,
+  getMacroBlackoutConfig,
+  readMacroBlackout,
+} from "@/lib/atlas/macroBlackout";
+
+import type { AtlasReasonCode } from "@/lib/atlas/reasonCode";
+
+import {
   analyzeLiquidity,
   type LiquidityResult,
 } from "@/lib/atlas/liquidityEngine";
@@ -589,29 +597,45 @@ const rawDecision =
     risk,
   });
 
-  // Regime gate: refuse to fight the higher-timeframe trend. A directional
-  // call that opposes the prevailing regime (or fires in chop) is downgraded
-  // to WAIT — the biggest lever on win rate per the track-record analysis.
+  // Two guards, each of which downgrades a directional call to WAIT:
+  //  1. Regime gate — don't fight the higher-timeframe trend or trade chop.
+  //  2. Macro blackout — stand aside around high-impact events (FOMC/CPI/NFP).
+  const toWait = (
+    base: AtlasDecisionEngineResult,
+    reason: AtlasReasonCode
+  ): AtlasDecisionEngineResult => ({
+    ...base,
+    signal: "WAIT",
+    entry: null,
+    stopLoss: null,
+    takeProfit: null,
+    riskRewardRatio: null,
+    explanation: reason,
+    warnings: [...base.warnings, reason],
+  });
+
   const regimeGate = applyRegimeGate(
     rawDecision.signal,
     readRegime(multiTimeframe),
     getRegimeGateConfig()
   );
 
-  const decision: AtlasDecisionEngineResult = regimeGate.gated
-    ? {
-        ...rawDecision,
-        signal: "WAIT",
-        entry: null,
-        stopLoss: null,
-        takeProfit: null,
-        riskRewardRatio: null,
-        explanation: regimeGate.reason ?? rawDecision.explanation,
-        warnings: regimeGate.reason
-          ? [...rawDecision.warnings, regimeGate.reason]
-          : rawDecision.warnings,
-      }
-    : rawDecision;
+  const afterRegime =
+    regimeGate.gated && regimeGate.reason
+      ? toWait(rawDecision, regimeGate.reason)
+      : rawDecision;
+
+  const macroConfig = getMacroBlackoutConfig();
+  const macroGate = applyMacroBlackout(
+    afterRegime.signal,
+    readMacroBlackout(macroConfig),
+    macroConfig
+  );
+
+  const decision: AtlasDecisionEngineResult =
+    macroGate.gated && macroGate.reason
+      ? toWait(afterRegime, macroGate.reason)
+      : afterRegime;
 
   const checklist = buildTradeChecklist({
     signal: decision.signal,

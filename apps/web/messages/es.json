@@ -1129,7 +1129,8 @@
     "FAIR_VALUE_GAP_SUMMARY": "Se encontraron {bullishCount} fair value gaps alcistas y {bearishCount} bajistas sin llenar.",
     "REGIME_GATE_CHOP": "La temporalidad superior está en rango — Atlas se mantiene al margen hasta que se forme una tendencia clara.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Se omite el largo — la tendencia de temporalidad superior es bajista, y Atlas no lucha contra la tendencia dominante.",
-    "REGIME_GATE_COUNTER_TREND_SHORT": "Se omite el corto — la tendencia de temporalidad superior es alcista, y Atlas no lucha contra la tendencia dominante."
+    "REGIME_GATE_COUNTER_TREND_SHORT": "Se omite el corto — la tendencia de temporalidad superior es alcista, y Atlas no lucha contra la tendencia dominante.",
+    "MACRO_BLACKOUT": "Al margen — un evento macro de alto impacto ({event}) es inminente. El precio suele moverse de forma errática a su alrededor."
   },
   "TradeChecklist": {
     "title": "Preparación del trade",

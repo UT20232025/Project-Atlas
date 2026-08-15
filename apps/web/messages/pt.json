@@ -1129,7 +1129,8 @@
     "FAIR_VALUE_GAP_SUMMARY": "Foram encontrados {bullishCount} fair value gaps de alta e {bearishCount} de baixa não preenchidos.",
     "REGIME_GATE_CHOP": "O tempo gráfico maior está em range — a Atlas fica de fora até surgir uma tendência clara.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Ignorando a compra — a tendência do tempo gráfico maior é de baixa, e a Atlas não luta contra a tendência dominante.",
-    "REGIME_GATE_COUNTER_TREND_SHORT": "Ignorando a venda — a tendência do tempo gráfico maior é de alta, e a Atlas não luta contra a tendência dominante."
+    "REGIME_GATE_COUNTER_TREND_SHORT": "Ignorando a venda — a tendência do tempo gráfico maior é de alta, e a Atlas não luta contra a tendência dominante.",
+    "MACRO_BLACKOUT": "De fora — um evento macro de alto impacto ({event}) está próximo. O preço costuma oscilar de forma imprevisível ao redor."
   },
   "TradeChecklist": {
     "title": "Prontidão do trade",

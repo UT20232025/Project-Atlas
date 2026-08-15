@@ -1129,7 +1129,8 @@
     "FAIR_VALUE_GAP_SUMMARY": "{bullishCount} bullische und {bearishCount} bearische ungefüllte Fair Value Gaps gefunden.",
     "REGIME_GATE_CHOP": "Der höhere Zeitrahmen bewegt sich seitwärts — Atlas hält sich zurück, bis sich ein klarer Trend bildet.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Long wird ausgelassen — der Trend im höheren Zeitrahmen ist abwärts, und Atlas kämpft nicht gegen den vorherrschenden Trend.",
-    "REGIME_GATE_COUNTER_TREND_SHORT": "Short wird ausgelassen — der Trend im höheren Zeitrahmen ist aufwärts, und Atlas kämpft nicht gegen den vorherrschenden Trend."
+    "REGIME_GATE_COUNTER_TREND_SHORT": "Short wird ausgelassen — der Trend im höheren Zeitrahmen ist aufwärts, und Atlas kämpft nicht gegen den vorherrschenden Trend.",
+    "MACRO_BLACKOUT": "Abwarten — ein Makro-Ereignis mit hoher Wirkung ({event}) steht bevor. Der Kurs schwankt darum herum oft unberechenbar."
   },
   "TradeChecklist": {
     "title": "Trade-Bereitschaft",

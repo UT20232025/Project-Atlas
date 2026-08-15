@@ -1129,7 +1129,8 @@
     "FAIR_VALUE_GAP_SUMMARY": "{bullishCount} bullish og {bearishCount} bearish ufylte fair value gaps funnet.",
     "REGIME_GATE_CHOP": "Høyere tidsramme går i sideleie — Atlas står over til en tydelig trend dannes.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Hopper over long — høyere tidsramme peker ned, og Atlas kjemper ikke mot den rådende trenden.",
-    "REGIME_GATE_COUNTER_TREND_SHORT": "Hopper over short — høyere tidsramme peker opp, og Atlas kjemper ikke mot den rådende trenden."
+    "REGIME_GATE_COUNTER_TREND_SHORT": "Hopper over short — høyere tidsramme peker opp, og Atlas kjemper ikke mot den rådende trenden.",
+    "MACRO_BLACKOUT": "Står over — en høyimpact makrohendelse ({event}) er nært forestående. Prisen svinger ofte uforutsigbart rundt slike."
   },
   "TradeChecklist": {
     "title": "Trade-sjekkliste",
