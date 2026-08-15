@@ -1,13 +1,17 @@
+import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 
 type RSIChartProps = {
   values: number[];
   timeframe: string;
+  // Optional candle-timeframe selector rendered in the card.
+  controls?: ReactNode;
 };
 
 export default async function RSIChart({
   values,
   timeframe,
+  controls,
 }: RSIChartProps) {
   const t = await getTranslations("RSIChart");
   const width = 1000;
@@ -59,6 +63,10 @@ export default async function RSIChart({
           </p>
         </div>
       </div>
+
+      {controls && (
+        <div className="mb-4 flex justify-end">{controls}</div>
+      )}
 
       <div className="overflow-hidden rounded-xl bg-zinc-950">
         <svg

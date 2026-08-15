@@ -28,14 +28,21 @@ export function resolveTimeframe(
 }
 
 type TimeframeSelectorProps = {
-  // Base path the ?tf= param is appended to, e.g. "/coin/BTCUSDT" or "/".
+  // Base path the timeframe param is appended to, e.g. "/coin/BTCUSDT" or "/".
   hrefBase: string;
   active: BinanceInterval;
+  // Query-param name to drive (default "tf"); pass e.g. "rsiTf" for an
+  // independent selector on the same page.
+  param?: string;
+  // Optional label override; falls back to the shared "Timeframe" label.
+  label?: string;
 };
 
 export default async function TimeframeSelector({
   hrefBase,
   active,
+  param = "tf",
+  label,
 }: TimeframeSelectorProps) {
   const t = await getTranslations("TimeframeSelector");
   const sep = hrefBase.includes("?") ? "&" : "?";
@@ -43,7 +50,7 @@ export default async function TimeframeSelector({
   return (
     <div className="flex flex-wrap items-center gap-2">
       <span className="mr-1 text-xs font-medium uppercase tracking-widest text-zinc-500">
-        {t("label")}
+        {label ?? t("label")}
       </span>
 
       {TIMEFRAME_OPTIONS.map((option) => {
@@ -52,7 +59,7 @@ export default async function TimeframeSelector({
         return (
           <Link
             key={option}
-            href={`${hrefBase}${sep}tf=${option}`}
+            href={`${hrefBase}${sep}${param}=${option}`}
             scroll={false}
             aria-current={isActive ? "true" : undefined}
             className={

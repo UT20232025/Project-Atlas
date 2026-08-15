@@ -58,13 +58,18 @@ type Props = {
   }>;
   searchParams: Promise<{
     tf?: string | string[];
+    rsiTf?: string | string[];
   }>;
 };
 
 export default async function CoinPage({ params, searchParams }: Props) {
   const { symbol } = await params;
-  const { tf } = await searchParams;
+  const { tf, rsiTf } = await searchParams;
   const timeframe = resolveTimeframe(tf);
+  // The RSI chart has its own candle selector; default it to the main
+  // timeframe until the user picks a different one.
+  const rsiTimeframe =
+    rsiTf != null ? resolveTimeframe(rsiTf) : timeframe;
   const t = await getTranslations("CoinPage");
   const locale = await getLocale();
   const user = await getCurrentUser();
@@ -102,7 +107,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
     priceAlerts,
   ] = await Promise.all([
     isStock ? Promise.resolve([]) : getChartCandles(symbol, timeframe),
-    isStock ? Promise.resolve([]) : getRSIHistory(symbol, timeframe),
+    isStock ? Promise.resolve([]) : getRSIHistory(symbol, rsiTimeframe),
     isStock ? Promise.resolve([]) : getMACDHistory(symbol, timeframe),
     getAtlasDecision(marketSymbol, timeframe),
     isStock
@@ -423,7 +428,17 @@ export default async function CoinPage({ params, searchParams }: Props) {
           </div>
 
           <div className="mt-8">
-            <RSIChart values={rsiHistory} timeframe={timeframe} />
+            <RSIChart
+              values={rsiHistory}
+              timeframe={rsiTimeframe}
+              controls={
+                <TimeframeSelector
+                  hrefBase={`/coin/${symbol}?tf=${timeframe}`}
+                  active={rsiTimeframe}
+                  param="rsiTf"
+                />
+              }
+            />
           </div>
 
           <div className="mt-8">
