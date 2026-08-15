@@ -47,13 +47,28 @@ export async function GET(
   const preview =
     previewRaw === "LONG" || previewRaw === "SHORT" ? previewRaw : null;
 
+  const previewPrice = analysis.indicators.ema20;
+  const previewLong = preview === "LONG";
+  const roundPreview = (v: number) =>
+    v >= 1000
+      ? Math.round(v * 100) / 100
+      : v >= 1
+        ? Math.round(v * 10000) / 10000
+        : Math.round(v * 1000000) / 1000000;
+
   const d = preview
     ? {
         signal: preview,
         confidence: 82,
-        entry: analysis.decision.entry,
-        stopLoss: analysis.decision.stopLoss,
-        takeProfit: analysis.decision.takeProfit,
+        entry: previewPrice != null ? roundPreview(previewPrice) : null,
+        stopLoss:
+          previewPrice != null
+            ? roundPreview(previewPrice * (previewLong ? 0.97 : 1.03))
+            : null,
+        takeProfit:
+          previewPrice != null
+            ? roundPreview(previewPrice * (previewLong ? 1.06 : 0.94))
+            : null,
         riskRewardRatio: 2.5,
       }
     : analysis.decision;
