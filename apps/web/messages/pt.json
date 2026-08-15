@@ -1130,5 +1130,24 @@
     "REGIME_GATE_CHOP": "O tempo gráfico maior está em range — a Atlas fica de fora até surgir uma tendência clara.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Ignorando a compra — a tendência do tempo gráfico maior é de baixa, e a Atlas não luta contra a tendência dominante.",
     "REGIME_GATE_COUNTER_TREND_SHORT": "Ignorando a venda — a tendência do tempo gráfico maior é de alta, e a Atlas não luta contra a tendência dominante."
+  },
+  "TradeChecklist": {
+    "title": "Prontidão do trade",
+    "progress": "{met}/{total} confirmados",
+    "ready": "Todas as condições atendidas — o setup está pronto",
+    "waitingMore": "Aguardando mais confirmação antes de operar",
+    "setupLong": "Setup LONG",
+    "setupShort": "Setup SHORT",
+    "metLabel": "Confirmado",
+    "trendTitle": "Tendência do tempo gráfico maior",
+    "trendWaiting": "Aguardando a tendência de 4h confirmar esta direção",
+    "timeframesTitle": "Tempos gráficos alinhados",
+    "timeframesWaiting": "15m, 1h e 4h ainda não apontam na mesma direção",
+    "structureTitle": "Estrutura de mercado",
+    "structureWaiting": "Ainda sem rompimento de estrutura confirmando o movimento",
+    "liquidityTitle": "Captura de liquidez",
+    "liquidityWaiting": "Ainda sem varredura de liquidez para pegar o outro lado",
+    "momentumTitle": "Momentum (RSI)",
+    "momentumWaiting": "O RSI ainda não cruzou nesta direção"
   }
 }

@@ -123,6 +123,9 @@ risk:
       tradeSetup:
         result.tradeSetup,
 
+      checklist:
+        result.checklist,
+
       generatedAt:
         new Date().toISOString(),
     });

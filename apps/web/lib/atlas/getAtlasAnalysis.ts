@@ -30,6 +30,11 @@ import {
 } from "@/lib/atlas/regimeGate";
 
 import {
+  buildTradeChecklist,
+  type TradeChecklist,
+} from "@/lib/atlas/tradeChecklist";
+
+import {
   analyzeLiquidity,
   type LiquidityResult,
 } from "@/lib/atlas/liquidityEngine";
@@ -184,6 +189,8 @@ volumeProfile: VolumeProfileResult;
   tradeSetup: ReturnType<
     typeof createTradeSetup
   >;
+
+  checklist: TradeChecklist;
 };
 
 const MTF_TIMEFRAMES: AtlasTimeframe[] = [
@@ -606,6 +613,14 @@ const rawDecision =
       }
     : rawDecision;
 
+  const checklist = buildTradeChecklist({
+    signal: decision.signal,
+    multiTimeframe,
+    priceAction: requestedSnapshot.priceAction,
+    liquidity: requestedSnapshot.liquidity,
+    rawRsi: requestedSnapshot.indicators.rawRsi,
+  });
+
   const primarySnapshot =
     getSnapshot(
       snapshots,
@@ -717,6 +732,7 @@ risk,
 decision,
 
 tradeSetup,
+checklist,
   };
 }
 

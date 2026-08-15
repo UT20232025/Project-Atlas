@@ -8,6 +8,9 @@ import FairValueGapCard from "@/components/dashboard/FairValueGapCard";
 import MarketStructureCard from "@/components/dashboard/MarketStructureCard";
 import AtlasFactorCard from "@/components/dashboard/AtlasFactorCard";
 import AtlasTradeSetup from "@/components/dashboard/AtlasTradeSetup";
+import TradeChecklist, {
+  type TradeChecklistData,
+} from "@/components/dashboard/TradeChecklist";
 import LiquidityCard from "@/components/dashboard/LiquidityCard";
 import PriceActionCard from "@/components/dashboard/PriceActionCard";
 import TrendEngineCard from "@/components/dashboard/TrendEngineCard";
@@ -106,6 +109,7 @@ fairValueGaps: FairValueGapResult;
 multiTimeframe: AtlasMtfResult;
   decision: AtlasDecision;
   tradeSetup: TradeSetup;
+  checklist: TradeChecklistData;
   generatedAt: string;
 };
 
@@ -1025,6 +1029,8 @@ export default function AtlasLiveAnalysis() {
          <AtlasTradeSetup
   tradeSetup={data.tradeSetup}
 />
+
+<TradeChecklist checklist={data.checklist} />
 
 <TrendEngineCard
   trend={data.trend}

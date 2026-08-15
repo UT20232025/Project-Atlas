@@ -1130,5 +1130,24 @@
     "REGIME_GATE_CHOP": "La temporalidad superior está en rango — Atlas se mantiene al margen hasta que se forme una tendencia clara.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Se omite el largo — la tendencia de temporalidad superior es bajista, y Atlas no lucha contra la tendencia dominante.",
     "REGIME_GATE_COUNTER_TREND_SHORT": "Se omite el corto — la tendencia de temporalidad superior es alcista, y Atlas no lucha contra la tendencia dominante."
+  },
+  "TradeChecklist": {
+    "title": "Preparación del trade",
+    "progress": "{met}/{total} confirmados",
+    "ready": "Todas las condiciones cumplidas — el setup está listo",
+    "waitingMore": "Esperando más confirmación antes de operar",
+    "setupLong": "Setup LONG",
+    "setupShort": "Setup SHORT",
+    "metLabel": "Confirmado",
+    "trendTitle": "Tendencia de temporalidad superior",
+    "trendWaiting": "Esperando que la tendencia de 4h confirme esta dirección",
+    "timeframesTitle": "Temporalidades alineadas",
+    "timeframesWaiting": "15m, 1h y 4h aún no apuntan en la misma dirección",
+    "structureTitle": "Estructura de mercado",
+    "structureWaiting": "Aún no hay ruptura de estructura que confirme el movimiento",
+    "liquidityTitle": "Toma de liquidez",
+    "liquidityWaiting": "Aún no hay barrido de liquidez que atrape al otro lado",
+    "momentumTitle": "Momentum (RSI)",
+    "momentumWaiting": "El RSI aún no ha cruzado en esta dirección"
   }
 }

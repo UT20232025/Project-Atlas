@@ -1130,5 +1130,24 @@
     "REGIME_GATE_CHOP": "Høyere tidsramme går i sideleie — Atlas står over til en tydelig trend dannes.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Hopper over long — høyere tidsramme peker ned, og Atlas kjemper ikke mot den rådende trenden.",
     "REGIME_GATE_COUNTER_TREND_SHORT": "Hopper over short — høyere tidsramme peker opp, og Atlas kjemper ikke mot den rådende trenden."
+  },
+  "TradeChecklist": {
+    "title": "Trade-sjekkliste",
+    "progress": "{met}/{total} bekreftet",
+    "ready": "Alle vilkår oppfylt — oppsettet er klart",
+    "waitingMore": "Venter på mer bekreftelse før dette er en trade",
+    "setupLong": "LONG-oppsett",
+    "setupShort": "SHORT-oppsett",
+    "metLabel": "Bekreftet",
+    "trendTitle": "Høyere tidsramme-trend",
+    "trendWaiting": "Venter på at 4t-trenden bekrefter retningen",
+    "timeframesTitle": "Tidsrammer samstemte",
+    "timeframesWaiting": "15m, 1t og 4t peker ikke samme vei ennå",
+    "structureTitle": "Markedsstruktur",
+    "structureWaiting": "Ingen strukturbrudd som bekrefter bevegelsen ennå",
+    "liquidityTitle": "Likviditetsgrep",
+    "liquidityWaiting": "Ingen likviditets-sweep som feller motsatt side ennå",
+    "momentumTitle": "Momentum (RSI)",
+    "momentumWaiting": "RSI har ikke krysset i denne retningen ennå"
   }
 }

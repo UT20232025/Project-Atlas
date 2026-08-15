@@ -1130,5 +1130,24 @@
     "REGIME_GATE_CHOP": "The higher timeframe is ranging — Atlas is standing aside until a clear trend forms.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Skipping the long — the higher-timeframe trend is down, and Atlas won’t fight the prevailing trend.",
     "REGIME_GATE_COUNTER_TREND_SHORT": "Skipping the short — the higher-timeframe trend is up, and Atlas won’t fight the prevailing trend."
+  },
+  "TradeChecklist": {
+    "title": "Trade readiness",
+    "progress": "{met}/{total} confirmed",
+    "ready": "All conditions met — the setup is ready",
+    "waitingMore": "Waiting for more confirmation before this is a trade",
+    "setupLong": "LONG setup",
+    "setupShort": "SHORT setup",
+    "metLabel": "Confirmed",
+    "trendTitle": "Higher-timeframe trend",
+    "trendWaiting": "Waiting for the 4h trend to confirm this direction",
+    "timeframesTitle": "Timeframes aligned",
+    "timeframesWaiting": "15m, 1h and 4h aren’t pointing the same way yet",
+    "structureTitle": "Market structure",
+    "structureWaiting": "No break of structure confirming the move yet",
+    "liquidityTitle": "Liquidity grab",
+    "liquidityWaiting": "No liquidity sweep to trap the other side yet",
+    "momentumTitle": "Momentum (RSI)",
+    "momentumWaiting": "RSI hasn’t crossed in this direction yet"
   }
 }

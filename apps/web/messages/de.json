@@ -1130,5 +1130,24 @@
     "REGIME_GATE_CHOP": "Der höhere Zeitrahmen bewegt sich seitwärts — Atlas hält sich zurück, bis sich ein klarer Trend bildet.",
     "REGIME_GATE_COUNTER_TREND_LONG": "Long wird ausgelassen — der Trend im höheren Zeitrahmen ist abwärts, und Atlas kämpft nicht gegen den vorherrschenden Trend.",
     "REGIME_GATE_COUNTER_TREND_SHORT": "Short wird ausgelassen — der Trend im höheren Zeitrahmen ist aufwärts, und Atlas kämpft nicht gegen den vorherrschenden Trend."
+  },
+  "TradeChecklist": {
+    "title": "Trade-Bereitschaft",
+    "progress": "{met}/{total} bestätigt",
+    "ready": "Alle Bedingungen erfüllt — das Setup ist bereit",
+    "waitingMore": "Warte auf weitere Bestätigung, bevor das ein Trade ist",
+    "setupLong": "LONG-Setup",
+    "setupShort": "SHORT-Setup",
+    "metLabel": "Bestätigt",
+    "trendTitle": "Trend im höheren Zeitrahmen",
+    "trendWaiting": "Warte darauf, dass der 4h-Trend diese Richtung bestätigt",
+    "timeframesTitle": "Zeitrahmen im Einklang",
+    "timeframesWaiting": "15m, 1h und 4h zeigen noch nicht in dieselbe Richtung",
+    "structureTitle": "Marktstruktur",
+    "structureWaiting": "Noch kein Strukturbruch, der die Bewegung bestätigt",
+    "liquidityTitle": "Liquiditätsgriff",
+    "liquidityWaiting": "Noch kein Liquidity-Sweep, der die Gegenseite fängt",
+    "momentumTitle": "Momentum (RSI)",
+    "momentumWaiting": "Der RSI hat noch nicht in diese Richtung gekreuzt"
   }
 }
