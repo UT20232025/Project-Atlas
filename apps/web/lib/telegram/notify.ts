@@ -98,6 +98,40 @@ export async function notifySignalChange(
     return;
   }
 
+  const caption = formatMessage(symbol, decision);
+
+  // Lead with the branded signal card (image sells harder than plain text),
+  // with the full signal as its caption. Fall back to a text message so a
+  // signal is never dropped if the card can't be sent.
+  const cardUrl = `https://www.genwelth.com/api/signal-card/${symbol}`;
+
+  try {
+    const photoResponse = await fetch(
+      `https://api.telegram.org/bot${token}/sendPhoto`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: channel,
+          photo: cardUrl,
+          caption,
+        }),
+      }
+    );
+
+    if (photoResponse.ok) {
+      return;
+    }
+
+    console.error(
+      "Telegram sendPhoto failed, falling back to text:",
+      photoResponse.status,
+      await photoResponse.text()
+    );
+  } catch (error) {
+    console.error("Telegram sendPhoto failed, falling back to text:", error);
+  }
+
   try {
     const response = await fetch(
       `https://api.telegram.org/bot${token}/sendMessage`,
@@ -106,7 +140,7 @@ export async function notifySignalChange(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: channel,
-          text: formatMessage(symbol, decision),
+          text: caption,
         }),
       }
     );

@@ -18,6 +18,14 @@ const SIGNAL_COLOR: Record<string, string> = {
   WAIT: "#eab308",
 };
 
+// Directional glow — tints the whole card the trade's colour so a LONG reads
+// green and a SHORT reads red at a glance.
+const SIGNAL_GLOW: Record<string, string> = {
+  LONG: "rgba(34,197,94,0.22)",
+  SHORT: "rgba(239,68,68,0.22)",
+  WAIT: "rgba(234,179,8,0.12)",
+};
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ symbol: string }> }
@@ -31,9 +39,28 @@ export async function GET(
 
   const analysis = await getCachedAtlasAnalysis(symbol);
 
-  const d = analysis.decision;
+  // Preview override (marketing/design only) — force a LONG/SHORT look with
+  // sample levels so the card can be previewed off a live directional signal.
+  const previewRaw = request.nextUrl.searchParams
+    .get("preview")
+    ?.toUpperCase();
+  const preview =
+    previewRaw === "LONG" || previewRaw === "SHORT" ? previewRaw : null;
+
+  const d = preview
+    ? {
+        signal: preview,
+        confidence: 82,
+        entry: analysis.decision.entry,
+        stopLoss: analysis.decision.stopLoss,
+        takeProfit: analysis.decision.takeProfit,
+        riskRewardRatio: 2.5,
+      }
+    : analysis.decision;
+
   const coin = symbol.replace(/USDT$/, "");
   const color = SIGNAL_COLOR[d.signal] ?? "#eab308";
+  const glow = SIGNAL_GLOW[d.signal] ?? SIGNAL_GLOW.WAIT;
 
   const stat = (label: string, value: string, valueColor = "#ffffff") => (
     <div
@@ -61,6 +88,7 @@ export async function GET(
           flexDirection: "column",
           justifyContent: "space-between",
           background: "#0a0a0f",
+          backgroundImage: `radial-gradient(900px 600px at 82% 18%, ${glow}, transparent 70%)`,
           padding: 64,
           fontFamily: "Roboto",
         }}
