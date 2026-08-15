@@ -16,11 +16,13 @@ import {
 import { notifyReversal } from "@/lib/signals/notifyReversal";
 import { notifySignalChange } from "@/lib/telegram/notify";
 
-// Must exceed the dashboard's 30s poll interval (MarketProvider,
+// Must comfortably exceed the dashboard's 30s poll interval (MarketProvider,
 // ScannerSignalsProvider), otherwise every poll hits a cold cache and
 // re-triggers a full recompute (~60 concurrent Binance calls across
-// 20 symbols x 3 timeframes) instead of reusing the cached result.
-const CACHE_TTL_MS = 35_000;
+// 20 symbols x 3 timeframes) instead of reusing the cached result. Set well
+// above the poll so most polls reuse the cache — live prices still come
+// straight from Binance via MarketProvider; only the Atlas read is cached.
+const CACHE_TTL_MS = 90_000;
 
 // Higher timeframes barely move intraday, so cache them far longer — this
 // keeps the daily swing scanner (20 symbols x 1d) from cold-recomputing on
