@@ -6,6 +6,8 @@ import PortfolioView from "@/components/portfolio/PortfolioView";
 import { MarketProvider } from "@/components/providers/MarketProvider";
 import ProUpsell from "@/components/ui/ProUpsell";
 import { getCachedAtlasAnalysis } from "@/lib/atlas/atlasAnalysisCache";
+import { getTradingStyle } from "@/lib/preferences/getTradingStyle";
+import { STYLE_TIMEFRAME } from "@/lib/preferences/tradingStyle";
 import { getExchangeHoldings } from "@/lib/exchange/connection";
 import { prisma } from "@/lib/db/client";
 import type {
@@ -68,8 +70,13 @@ export default async function PortfolioPage() {
     new Set(positionViews.map((position) => position.symbol))
   );
 
+  // Judge open positions on the timeframe that matches the customer's style:
+  // swing holds are followed on the daily, intraday on 1h.
+  const style = await getTradingStyle();
   const analyses = await Promise.allSettled(
-    heldSymbols.map((symbol) => getCachedAtlasAnalysis(symbol))
+    heldSymbols.map((symbol) =>
+      getCachedAtlasAnalysis(symbol, STYLE_TIMEFRAME[style])
+    )
   );
 
   const atlasSignals: Record<string, "LONG" | "SHORT" | "WAIT"> = {};

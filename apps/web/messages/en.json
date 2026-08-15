@@ -1170,5 +1170,15 @@
     "intraday": "Intraday",
     "swingHint": "Multi-day swing trades — the marathon",
     "intradayHint": "Short intraday trades — the sprint"
+  },
+  "PortfolioGuidance": {
+    "hold": "HOLD",
+    "consider": "CONSIDER EXIT",
+    "exit": "EXIT — MARKET TURNED",
+    "aligned": "Atlas still backs your {direction} — hold and let it run.",
+    "noRead": "Holding — no fresh read on this coin right now.",
+    "flipped": "Atlas flipped to {signal}. The market turned against your {direction} — consider closing.",
+    "protectProfit": "The thesis cooled while you’re in profit — consider trailing your stop to lock it in.",
+    "noConviction": "No fresh conviction — hold with your stop; don’t add here."
   }
 }

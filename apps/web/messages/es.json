@@ -1170,5 +1170,15 @@
     "intraday": "Intradía",
     "swingHint": "Swing de varios días — el maratón",
     "intradayHint": "Operaciones intradía cortas — el sprint"
+  },
+  "PortfolioGuidance": {
+    "hold": "MANTENER",
+    "consider": "CONSIDERAR SALIR",
+    "exit": "SALIR — EL MERCADO GIRÓ",
+    "aligned": "Atlas sigue respaldando tu {direction} — mantén y déjala correr.",
+    "noRead": "Manteniendo — sin lectura reciente de esta moneda ahora.",
+    "flipped": "Atlas giró a {signal}. El mercado se volvió contra tu {direction} — considera cerrar.",
+    "protectProfit": "La tesis se enfrió estando en ganancia — considera mover el stop para asegurarla.",
+    "noConviction": "Sin convicción nueva — mantén con tu stop; no añadas aquí."
   }
 }

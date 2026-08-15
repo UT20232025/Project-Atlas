@@ -1170,5 +1170,15 @@
     "intraday": "Intraday",
     "swingHint": "Mehrtägige Swing-Trades — der Marathon",
     "intradayHint": "Kurze Intraday-Trades — der Sprint"
+  },
+  "PortfolioGuidance": {
+    "hold": "HALTEN",
+    "consider": "AUSSTIEG PRÜFEN",
+    "exit": "RAUS — MARKT GEDREHT",
+    "aligned": "Atlas stützt deine {direction} weiterhin — halten und laufen lassen.",
+    "noRead": "Halten — aktuell keine frische Einschätzung zu dieser Coin.",
+    "flipped": "Atlas drehte auf {signal}. Der Markt lief gegen deine {direction} — Schließen erwägen.",
+    "protectProfit": "Die These kühlte ab, während du im Gewinn bist — Stop nachziehen, um ihn zu sichern.",
+    "noConviction": "Keine frische Überzeugung — mit Stop halten; hier nicht nachlegen."
   }
 }

@@ -1170,5 +1170,15 @@
     "intraday": "Intradiário",
     "swingHint": "Swing de vários dias — a maratona",
     "intradayHint": "Operações intradiárias curtas — o sprint"
+  },
+  "PortfolioGuidance": {
+    "hold": "MANTER",
+    "consider": "CONSIDERAR SAIR",
+    "exit": "SAIR — O MERCADO VIROU",
+    "aligned": "A Atlas ainda apoia sua {direction} — mantenha e deixe correr.",
+    "noRead": "Mantendo — sem leitura recente desta moeda agora.",
+    "flipped": "A Atlas virou para {signal}. O mercado virou contra sua {direction} — considere fechar.",
+    "protectProfit": "A tese esfriou enquanto você está no lucro — considere mover o stop para garantir.",
+    "noConviction": "Sem convicção nova — mantenha com seu stop; não adicione aqui."
   }
 }

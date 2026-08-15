@@ -25,6 +25,19 @@ import {
   calculatePnl,
   type PortfolioPositionView,
 } from "@/lib/trading/pnl";
+import { getPositionGuidance } from "@/lib/trading/positionGuidance";
+
+const GUIDANCE_STYLES: Record<string, string> = {
+  HOLD: "border-emerald-500/25 bg-emerald-500/5 text-emerald-300",
+  CONSIDER: "border-amber-500/25 bg-amber-500/5 text-amber-300",
+  EXIT: "border-red-500/25 bg-red-500/5 text-red-300",
+};
+
+const GUIDANCE_LABEL_KEY: Record<string, string> = {
+  HOLD: "hold",
+  CONSIDER: "consider",
+  EXIT: "exit",
+};
 
 type AtlasSignal = "LONG" | "SHORT" | "WAIT";
 
@@ -107,15 +120,7 @@ function PortfolioPositionRow({
   t,
 }: PortfolioPositionRowProps) {
   const priceFlash = usePriceFlash(currentPrice ?? 0);
-
-  // Compare Atlas's current read with the direction the user is holding, so a
-  // position that's gone against the engine surfaces immediately.
-  const alignment =
-    atlasSignal === undefined || atlasSignal === "WAIT"
-      ? { variant: "yellow" as const, label: t("atlasNeutral") }
-      : atlasSignal === position.direction
-        ? { variant: "green" as const, label: t("atlasAgree") }
-        : { variant: "red" as const, label: t("atlasDisagree") };
+  const tGuide = useTranslations("PortfolioGuidance");
 
   const unrealized =
     currentPrice !== undefined
@@ -126,6 +131,13 @@ function PortfolioPositionRow({
           position.quantity
         )
       : null;
+
+  // Live follow-up: does Atlas still back the trade, or has the market turned?
+  const guidance = getPositionGuidance({
+    direction: position.direction,
+    atlasSignal,
+    pnlPercent: unrealized ? unrealized.pnlPercent : null,
+  });
 
   return (
     <div className="atlas-subcard rounded-xl p-4">
@@ -141,10 +153,6 @@ function PortfolioPositionRow({
             }
           >
             {position.direction}
-          </Badge>
-
-          <Badge variant={alignment.variant}>
-            {alignment.label}
           </Badge>
         </div>
 
@@ -172,6 +180,20 @@ function PortfolioPositionRow({
             </button>
           </form>
         </div>
+      </div>
+
+      <div
+        className={`mt-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-lg border px-3 py-2 ${GUIDANCE_STYLES[guidance.verdict]}`}
+      >
+        <span className="text-xs font-bold uppercase tracking-wide">
+          {tGuide(GUIDANCE_LABEL_KEY[guidance.verdict])}
+        </span>
+        <span className="text-sm text-zinc-300">
+          {tGuide(guidance.reasonKey, {
+            direction: position.direction,
+            signal: atlasSignal ?? "",
+          })}
+        </span>
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
