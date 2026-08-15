@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
+import TradeChecklist from "../../../components/dashboard/TradeChecklist";
 import KeyLevelsCard from "../../../components/analysis/KeyLevelsCard";
 import PositionSizeCalculator from "../../../components/analysis/PositionSizeCalculator";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
@@ -289,6 +290,10 @@ export default async function CoinPage({ params, searchParams }: Props) {
         />
 
         <Disclaimer className="mt-3 px-1" />
+      </div>
+
+      <div className="mt-6">
+        <TradeChecklist checklist={decisionAnalysis.checklist} />
       </div>
 
       {decision.entry !== null &&
