@@ -11,6 +11,7 @@ import AtlasTradeSetup from "@/components/dashboard/AtlasTradeSetup";
 import TradeChecklist, {
   type TradeChecklistData,
 } from "@/components/dashboard/TradeChecklist";
+import TradeManagementPlan from "@/components/dashboard/TradeManagementPlan";
 import LiquidityCard from "@/components/dashboard/LiquidityCard";
 import PriceActionCard from "@/components/dashboard/PriceActionCard";
 import TrendEngineCard from "@/components/dashboard/TrendEngineCard";
@@ -1031,6 +1032,8 @@ export default function AtlasLiveAnalysis() {
 />
 
 <TradeChecklist checklist={data.checklist} />
+
+<TradeManagementPlan setup={data.tradeSetup} />
 
 <TrendEngineCard
   trend={data.trend}

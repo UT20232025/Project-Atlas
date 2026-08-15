@@ -1150,5 +1150,18 @@
     "liquidityWaiting": "Ingen likviditets-sweep som feller motsatt side ennå",
     "momentumTitle": "Momentum (RSI)",
     "momentumWaiting": "RSI har ikke krysset i denne retningen ennå"
+  },
+  "TradeManagement": {
+    "title": "Maraton-plan",
+    "subtitle": "Trading er ingen sprint, det er et maraton — flytt stoppen oppover mens traden løper.",
+    "entryTitle": "Inngang & beskyttelse",
+    "entryDesc": "Gå inn nær {entry} · første stop {stop}",
+    "breakevenTitle": "Bli risikofri",
+    "breakevenDesc": "Pris treffer {trigger} → flytt stop til {stop} (breakeven)",
+    "lockTitle": "Lås inn profitt",
+    "lockDesc": "Pris treffer {trigger} → flytt stop til {stop}",
+    "trailTitle": "La den løpe",
+    "trailDesc": "Pris treffer {trigger} → stop til {stop}, deretter tråler du hver ny sving og lar en stor bevegelse bli en stor gevinst",
+    "noSetup": "Ingen aktiv trade — Atlas er på WAIT. Planen dukker opp når et oppsett er live."
   }
 }

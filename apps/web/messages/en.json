@@ -1150,5 +1150,18 @@
     "liquidityWaiting": "No liquidity sweep to trap the other side yet",
     "momentumTitle": "Momentum (RSI)",
     "momentumWaiting": "RSI hasn’t crossed in this direction yet"
+  },
+  "TradeManagement": {
+    "title": "Marathon plan",
+    "subtitle": "Trading is a marathon, not a sprint — walk your stop up as the trade runs.",
+    "entryTitle": "Enter & protect",
+    "entryDesc": "Enter near {entry} · initial stop {stop}",
+    "breakevenTitle": "Go risk-free",
+    "breakevenDesc": "Price hits {trigger} → move stop to {stop} (breakeven)",
+    "lockTitle": "Lock in profit",
+    "lockDesc": "Price hits {trigger} → move stop to {stop}",
+    "trailTitle": "Let it run",
+    "trailDesc": "Price hits {trigger} → stop to {stop}, then trail each new swing and let a big move become a big win",
+    "noSetup": "No active trade — Atlas is on WAIT. The plan appears when a setup is live."
   }
 }

@@ -1150,5 +1150,18 @@
     "liquidityWaiting": "Noch kein Liquidity-Sweep, der die Gegenseite fängt",
     "momentumTitle": "Momentum (RSI)",
     "momentumWaiting": "Der RSI hat noch nicht in diese Richtung gekreuzt"
+  },
+  "TradeManagement": {
+    "title": "Marathon-Plan",
+    "subtitle": "Trading ist ein Marathon, kein Sprint — ziehe deinen Stop nach, während der Trade läuft.",
+    "entryTitle": "Einstieg & Schutz",
+    "entryDesc": "Einstieg nahe {entry} · Anfangs-Stop {stop}",
+    "breakevenTitle": "Risikofrei werden",
+    "breakevenDesc": "Kurs erreicht {trigger} → Stop auf {stop} (Break-even)",
+    "lockTitle": "Gewinn sichern",
+    "lockDesc": "Kurs erreicht {trigger} → Stop auf {stop}",
+    "trailTitle": "Laufen lassen",
+    "trailDesc": "Kurs erreicht {trigger} → Stop auf {stop}, dann jedem neuen Swing folgen",
+    "noSetup": "Kein aktiver Trade — Atlas ist auf WAIT. Der Plan erscheint, sobald ein Setup live ist."
   }
 }

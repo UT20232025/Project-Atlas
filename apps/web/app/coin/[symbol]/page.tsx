@@ -4,6 +4,7 @@ import Link from "next/link";
 import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
 import TradeChecklist from "../../../components/dashboard/TradeChecklist";
+import TradeManagementPlan from "../../../components/dashboard/TradeManagementPlan";
 import KeyLevelsCard from "../../../components/analysis/KeyLevelsCard";
 import PositionSizeCalculator from "../../../components/analysis/PositionSizeCalculator";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
@@ -299,6 +300,10 @@ export default async function CoinPage({ params, searchParams }: Props) {
 
       <div className="mt-6">
         <TradeChecklist checklist={decisionAnalysis.checklist} />
+      </div>
+
+      <div className="mt-6">
+        <TradeManagementPlan setup={decisionAnalysis.tradeSetup} />
       </div>
 
       {decision.entry !== null &&
