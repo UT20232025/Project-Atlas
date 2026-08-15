@@ -1,0 +1,21 @@
+name: Watch open positions
+
+# Pushes an EXIT alert to a position's owner when Atlas flips against it.
+# Requires a repository secret CRON_SECRET matching the app's CRON_SECRET env.
+
+on:
+  schedule:
+    # Every 30 minutes.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  watch-positions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger watch-positions endpoint
+        run: |
+          curl -fsS --max-time 120 \
+            "https://www.genwelth.com/api/cron/watch-positions?key=${CRON_SECRET}"
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}

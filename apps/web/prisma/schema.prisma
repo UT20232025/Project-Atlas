@@ -24,14 +24,17 @@ model User {
 }
 
 model Position {
-  id         String   @id @default(cuid())
-  userId     String?
-  symbol     String
-  direction  String
-  entryPrice Float
-  quantity   Float
-  note       String?
-  openedAt   DateTime @default(now())
+  id          String   @id @default(cuid())
+  userId      String?
+  symbol      String
+  direction   String
+  entryPrice  Float
+  quantity    Float
+  note        String?
+  openedAt    DateTime @default(now())
+  // Last follow-up verdict seen by the position watcher (HOLD/CONSIDER/EXIT),
+  // so an EXIT alert fires only on the flip, not on every check.
+  lastVerdict String?
 
   @@index([userId])
 }
