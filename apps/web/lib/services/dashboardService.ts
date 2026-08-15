@@ -1,6 +1,10 @@
 import { getAtlasScanner } from "../analysis/scanner";
 import { getSignalHistory } from "../atlas/signalHistory";
 import type { BinanceInterval } from "../services/binanceCandleService";
+import {
+  fetchLiveMarketData,
+  type MarketSymbol,
+} from "../services/liveMarketService";
 
 type FearGreedData = {
   value: number;
@@ -68,6 +72,40 @@ async function getBTCDominance(): Promise<number> {
 
     return 0;
   }
+}
+
+// Cheap data for the top ticker + shell: just three prices plus the
+// hour-cached Fear & Greed / dominance. Lets the dashboard shell render
+// instantly instead of waiting on the full 20-coin scanner (which streams
+// in the body), so the page can't time out on a cold cache.
+export async function getMarketTicker() {
+  const [market, fearGreed, btcDominance] = await Promise.all([
+    fetchLiveMarketData([
+      "BTCUSDT",
+      "ETHUSDT",
+      "SOLUSDT",
+    ] as MarketSymbol[]),
+    getFearGreed(),
+    getBTCDominance(),
+  ]);
+
+  const find = (symbol: string) =>
+    market.find((item) => item.symbol === symbol);
+
+  const btc = find("BTCUSDT");
+  const eth = find("ETHUSDT");
+  const sol = find("SOLUSDT");
+
+  return {
+    btc: btc?.price ?? 0,
+    btcChange: btc?.change24h ?? 0,
+    eth: eth?.price ?? 0,
+    ethChange: eth?.change24h ?? 0,
+    sol: sol?.price ?? 0,
+    solChange: sol?.change24h ?? 0,
+    fearGreed: fearGreed.value,
+    btcDominance,
+  };
 }
 
 export async function getDashboardData(
