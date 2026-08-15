@@ -1163,5 +1163,12 @@
     "trailTitle": "Déjala correr",
     "trailDesc": "El precio llega a {trigger} → stop a {stop}, luego sigue cada nuevo swing",
     "noSetup": "Sin operación activa — Atlas está en WAIT. El plan aparece cuando hay un setup en vivo."
+  },
+  "TradingStyle": {
+    "label": "Estilo de trading",
+    "swing": "Swing",
+    "intraday": "Intradía",
+    "swingHint": "Swing de varios días — el maratón",
+    "intradayHint": "Operaciones intradía cortas — el sprint"
   }
 }

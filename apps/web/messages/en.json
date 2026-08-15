@@ -1163,5 +1163,12 @@
     "trailTitle": "Let it run",
     "trailDesc": "Price hits {trigger} → stop to {stop}, then trail each new swing and let a big move become a big win",
     "noSetup": "No active trade — Atlas is on WAIT. The plan appears when a setup is live."
+  },
+  "TradingStyle": {
+    "label": "Trading style",
+    "swing": "Swing",
+    "intraday": "Intraday",
+    "swingHint": "Multi-day swing trades — the marathon",
+    "intradayHint": "Short intraday trades — the sprint"
   }
 }

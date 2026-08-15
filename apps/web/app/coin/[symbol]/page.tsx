@@ -5,6 +5,9 @@ import AtlasScoreCard from "../../../components/AtlasScoreCard";
 import AtlasExplain from "../../../components/analysis/AtlasExplain";
 import TradeChecklist from "../../../components/dashboard/TradeChecklist";
 import TradeManagementPlan from "../../../components/dashboard/TradeManagementPlan";
+import TradingStyleToggle from "../../../components/TradingStyleToggle";
+import { getTradingStyle } from "../../../lib/preferences/getTradingStyle";
+import { STYLE_TIMEFRAME } from "../../../lib/preferences/tradingStyle";
 import KeyLevelsCard from "../../../components/analysis/KeyLevelsCard";
 import PositionSizeCalculator from "../../../components/analysis/PositionSizeCalculator";
 import AtlasScoreBreakdownCard from "../../../components/analysis/AtlasScoreBreakdown";
@@ -66,7 +69,11 @@ type Props = {
 export default async function CoinPage({ params, searchParams }: Props) {
   const { symbol } = await params;
   const { tf, rsiTf } = await searchParams;
-  const timeframe = resolveTimeframe(tf);
+  // The trading style sets the default candle timeframe (swing → 1d,
+  // intraday → 1h) until the user picks an explicit one on the page.
+  const style = await getTradingStyle();
+  const timeframe =
+    tf != null ? resolveTimeframe(tf) : STYLE_TIMEFRAME[style];
   // The RSI chart has its own candle selector; default it to the main
   // timeframe until the user picks a different one.
   const rsiTimeframe =
@@ -270,6 +277,8 @@ export default async function CoinPage({ params, searchParams }: Props) {
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
+        <TradingStyleToggle active={style} />
+
         <TimeframeSelector hrefBase={`/coin/${symbol}`} active={timeframe} />
 
         {(MARKET_SYMBOLS as readonly string[]).includes(marketSymbol) && (

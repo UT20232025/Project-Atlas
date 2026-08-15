@@ -16,6 +16,9 @@ import SwingSignalsSection from "../components/dashboard/SwingSignalsSection";
 import TimeframeSelector, {
   resolveTimeframe,
 } from "../components/analysis/TimeframeSelector";
+import TradingStyleToggle from "../components/TradingStyleToggle";
+import { getTradingStyle } from "../lib/preferences/getTradingStyle";
+import { STYLE_TIMEFRAME } from "../lib/preferences/tradingStyle";
 import PriceAlertsSection from "../components/dashboard/PriceAlertsSection";
 import WatchlistAlerts from "../components/dashboard/WatchlistAlerts";
 import WatchlistSignalBoard from "../components/dashboard/WatchlistSignalBoard";
@@ -83,7 +86,9 @@ export default async function HomePage({
   const { id: userId, email } = user;
   const isPro = hasActiveSubscription(user);
   const { tf } = await searchParams;
-  const timeframe = resolveTimeframe(tf);
+  const style = await getTradingStyle();
+  const timeframe =
+    tf != null ? resolveTimeframe(tf) : STYLE_TIMEFRAME[style];
 
   const [dashboard, watchlists, watchlistAlerts, watchlistBoard] =
     await Promise.all([
@@ -118,7 +123,10 @@ export default async function HomePage({
 
       <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
         <CoinSearch />
-        <TimeframeSelector hrefBase="/" active={timeframe} />
+        <div className="flex flex-wrap items-center gap-3">
+          <TradingStyleToggle active={style} />
+          <TimeframeSelector hrefBase="/" active={timeframe} />
+        </div>
       </div>
 
       <Suspense fallback={null}>

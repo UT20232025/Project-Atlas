@@ -1163,5 +1163,12 @@
     "trailTitle": "La den løpe",
     "trailDesc": "Pris treffer {trigger} → stop til {stop}, deretter tråler du hver ny sving og lar en stor bevegelse bli en stor gevinst",
     "noSetup": "Ingen aktiv trade — Atlas er på WAIT. Planen dukker opp når et oppsett er live."
+  },
+  "TradingStyle": {
+    "label": "Handelsstil",
+    "swing": "Swing",
+    "intraday": "Intradag",
+    "swingHint": "Flerdagers swing-trades — maratonet",
+    "intradayHint": "Korte intradag-trades — sprinten"
   }
 }
