@@ -27,6 +27,7 @@ export async function fetchTicker(
     `${BINANCE_API_URL}/ticker/24hr?symbol=${symbol}`,
     {
       next: { revalidate: 10 },
+      signal: AbortSignal.timeout(8000),
     }
   );
 
@@ -53,6 +54,7 @@ export async function fetchKlines(
     `${BINANCE_API_URL}/klines?symbol=${symbol}&interval=${interval}&limit=${limit}`,
     {
       next: { revalidate: 300 },
+      signal: AbortSignal.timeout(8000),
     }
   );
 

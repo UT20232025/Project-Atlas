@@ -78,7 +78,7 @@ export async function fetchBinanceTickers(): Promise<
 > {
   const response = await fetch(`${BASE_URL}/api/v3/ticker/24hr`, {
     cache: "no-store",
-    signal: AbortSignal.timeout(15_000),
+    signal: AbortSignal.timeout(8000),
   });
 
   const map = new Map<string, BinanceTicker>();

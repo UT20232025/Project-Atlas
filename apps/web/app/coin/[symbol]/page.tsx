@@ -114,15 +114,23 @@ export default async function CoinPage({ params, searchParams }: Props) {
     pdLevels,
     priceAlerts,
   ] = await Promise.all([
-    isStock ? Promise.resolve([]) : getChartCandles(symbol, timeframe),
-    isStock ? Promise.resolve([]) : getRSIHistory(symbol, rsiTimeframe),
-    isStock ? Promise.resolve([]) : getMACDHistory(symbol, timeframe),
+    isStock
+      ? Promise.resolve([])
+      : getChartCandles(symbol, timeframe).catch(() => []),
+    isStock
+      ? Promise.resolve([])
+      : getRSIHistory(symbol, rsiTimeframe).catch(() => []),
+    isStock
+      ? Promise.resolve([])
+      : getMACDHistory(symbol, timeframe).catch(() => []),
     getAtlasDecision(marketSymbol, timeframe),
     isStock
       ? Promise.resolve([])
       : getSignalHistory(marketSymbol, 20),
     isPro ? getWatchlists(userId) : Promise.resolve([]),
-    isStock ? Promise.resolve([]) : fetchRecentTrades(marketSymbol),
+    isStock
+      ? Promise.resolve([])
+      : fetchRecentTrades(marketSymbol).catch(() => []),
     getPreviousDayLevels(marketSymbol),
     getPriceAlertsForSymbol(userId, marketSymbol),
   ]);

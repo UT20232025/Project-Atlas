@@ -87,9 +87,10 @@ export default async function PortfolioPage() {
     }
   });
 
+  // A slow/failing exchange fetch must never take down the portfolio page.
   const exchangeHoldings = await getExchangeHoldings(userId, {
     withSignals: true,
-  });
+  }).catch(() => ({ connected: false as const }));
 
   return (
     <MarketProvider>
