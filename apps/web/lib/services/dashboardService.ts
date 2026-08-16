@@ -17,6 +17,9 @@ async function getFearGreed(): Promise<FearGreedData> {
       next: {
         revalidate: 3600,
       },
+      // Never let a hanging upstream block the dashboard render — fail fast
+      // to the fallback below.
+      signal: AbortSignal.timeout(4000),
     });
 
     if (!response.ok) {
@@ -52,6 +55,9 @@ async function getBTCDominance(): Promise<number> {
         next: {
           revalidate: 3600,
         },
+        // CoinGecko frequently throttles/blocks datacenter IPs; a hang here
+        // must not stall the dashboard, so fail fast to the fallback.
+        signal: AbortSignal.timeout(4000),
       }
     );
 
@@ -80,11 +86,10 @@ async function getBTCDominance(): Promise<number> {
 // in the body), so the page can't time out on a cold cache.
 export async function getMarketTicker() {
   const [market, fearGreed, btcDominance] = await Promise.all([
-    fetchLiveMarketData([
-      "BTCUSDT",
-      "ETHUSDT",
-      "SOLUSDT",
-    ] as MarketSymbol[]),
+    fetchLiveMarketData(
+      ["BTCUSDT", "ETHUSDT", "SOLUSDT"] as MarketSymbol[],
+      AbortSignal.timeout(5000)
+    ).catch(() => []),
     getFearGreed(),
     getBTCDominance(),
   ]);
