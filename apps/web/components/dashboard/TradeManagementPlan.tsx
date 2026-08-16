@@ -1,4 +1,6 @@
-import { getLocale, getTranslations } from "next-intl/server";
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
 import { Flag, Lock, Rocket, Shield } from "lucide-react";
 
 import {
@@ -42,13 +44,13 @@ function fmt(value: number | null, locale: string): string {
   return value.toLocaleString(locale, { maximumFractionDigits: 5 });
 }
 
-export default async function TradeManagementPlan({
+export default function TradeManagementPlan({
   setup,
 }: {
   setup: TradeManagementInput;
 }) {
-  const t = await getTranslations("TradeManagement");
-  const locale = await getLocale();
+  const t = useTranslations("TradeManagement");
+  const locale = useLocale();
 
   const plan = buildStopPlan(setup);
 
