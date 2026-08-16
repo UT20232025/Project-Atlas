@@ -67,6 +67,10 @@ model SignalSnapshot {
   outcomePrice Float?
   outcomeAt    DateTime?
   createdAt    DateTime  @default(now())
+  // JSON snapshot of the reason/warning codes behind this signal, so we can
+  // later correlate which factors actually predict wins and recalibrate the
+  // confidence score. { reasons: string[], warnings: string[] }.
+  factors      String?
 
   @@index([symbol, interval, createdAt])
 }

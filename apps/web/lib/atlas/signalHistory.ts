@@ -18,6 +18,10 @@ type SignalDecision = {
   confidence: number;
   score: number;
   entry: number | null;
+  // Factors behind the call — stored so we can later correlate them with
+  // outcomes and recalibrate confidence. Optional so other callers still work.
+  reasons?: { code: string }[];
+  warnings?: { code: string }[];
 };
 
 export async function recordSignalIfChanged(
@@ -43,6 +47,10 @@ export async function recordSignalIfChanged(
         confidence: decision.confidence,
         score: decision.score,
         price: decision.entry,
+        factors: JSON.stringify({
+          reasons: (decision.reasons ?? []).map((r) => r.code),
+          warnings: (decision.warnings ?? []).map((w) => w.code),
+        }),
       },
     });
 
