@@ -113,12 +113,26 @@ export async function getMarketTicker() {
   };
 }
 
+// Resolve to a fallback if a promise takes too long, so a slow scanner (many
+// cold Binance calls) can never stall the whole dashboard render — the page
+// ships with what it has and the client poll fills in the rest.
+function withTimeout<T>(
+  promise: Promise<T>,
+  ms: number,
+  fallback: T
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ]);
+}
+
 export async function getDashboardData(
   interval: BinanceInterval = "1h"
 ) {
   const [scanner, fearGreed, btcDominance, recentSignalChanges] =
     await Promise.all([
-      getAtlasScanner(interval),
+      withTimeout(getAtlasScanner(interval), 6000, []),
       getFearGreed(),
       getBTCDominance(),
       getSignalHistory(undefined, 15),

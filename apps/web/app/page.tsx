@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import DashboardHero from "../components/dashboard/DashboardHero";
 import DashboardBody from "../components/dashboard/DashboardBody";
 import TimeframeSelector, {
@@ -85,20 +83,11 @@ export default async function HomePage({
         </div>
       </div>
 
-      <Suspense
-        fallback={
-          <div className="space-y-8">
-            <div className="atlas-card h-40 animate-pulse rounded-2xl" />
-            <div className="atlas-card h-64 animate-pulse rounded-2xl" />
-          </div>
-        }
-      >
-        <DashboardBody
-          timeframe={timeframe}
-          userId={userId}
-          isPro={isPro}
-        />
-      </Suspense>
+      <DashboardBody
+        timeframe={timeframe}
+        userId={userId}
+        isPro={isPro}
+      />
     </AppLayout>
     </ScannerSignalsProvider>
     </MarketProvider>
