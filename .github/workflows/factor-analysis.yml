@@ -18,6 +18,7 @@ jobs:
       - name: Fetch and summarize the factor analysis
         run: |
           json=$(curl -fsS --max-time 120 \
+            --retry 3 --retry-delay 20 --retry-all-errors --retry-connrefused \
             "https://www.genwelth.com/api/cron/factor-analysis?key=${CRON_SECRET}")
           echo "$json" | jq -r '
             if .resolvedFactoredSignals == 0 then

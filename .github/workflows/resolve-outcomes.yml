@@ -17,7 +17,8 @@ jobs:
     steps:
       - name: Trigger resolve-outcomes endpoint
         run: |
-          curl -fsS --max-time 300 \
+          curl -fsS --max-time 200 \
+            --retry 2 --retry-delay 20 --retry-all-errors --retry-connrefused \
             "https://www.genwelth.com/api/cron/resolve-outcomes?key=${CRON_SECRET}"
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
