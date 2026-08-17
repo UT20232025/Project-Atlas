@@ -15,21 +15,20 @@ jobs:
   warm-stocks:
     runs-on: ubuntu-latest
     steps:
-      - name: Warm stock cards one at a time
+      - name: Warm each stock card
         run: |
-          # Curated list is 15 tickers; loop a touch beyond that in case one
-          # request fails and needs a retry. The endpoint warms the stalest
-          # ticker each call and returns {"done":true} once all are fresh.
-          for i in $(seq 1 18); do
-            # No -f: we want the response body printed even on 4xx/5xx so a
-            # failing warm is diagnosable. Append the HTTP status too.
+          # Warm every ticker explicitly via ?ticker=, which calls the write path
+          # directly and always refreshes the row — no dependence on the
+          # stalest/freshness heuristic. 30s between calls keeps us inside Twelve
+          # Data's free tier (~2 stocks/min · 4 credits each = 8/min). Keep this
+          # list in sync with STOCK_SCANNER_SYMBOLS in lib/stocks/stockScanner.ts.
+          TICKERS="AAPL MSFT NVDA TSLA AMZN GOOGL META AMD NFLX AVGO COIN PLTR JPM V WMT"
+          for t in $TICKERS; do
+            # No -f: print the body even on 4xx/5xx so a failing warm is visible.
             body=$(curl -sS -w "|HTTP:%{http_code}" --max-time 90 \
               --retry 3 --retry-delay 20 --retry-all-errors --retry-connrefused \
-              "https://www.genwelth.com/api/cron/warm-stocks?key=${CRON_SECRET}") || true
-            echo "warm-stocks[$i]: $body"
-            case "$body" in
-              *'"done":true'*) echo "All stocks fresh — stopping."; break ;;
-            esac
+              "https://www.genwelth.com/api/cron/warm-stocks?key=${CRON_SECRET}&ticker=${t}") || true
+            echo "warm-stocks[$t]: $body"
             sleep 30
           done
         env:
