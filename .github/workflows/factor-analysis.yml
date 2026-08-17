@@ -1,0 +1,31 @@
+name: Confidence factor analysis
+
+# Weekly confidence-calibration check: ranks each signal factor by its win-rate
+# edge vs baseline, so we can see which factors are predictive vs noise and
+# re-weight the confidence formula. Result is printed in this run's log.
+# Requires a repository secret CRON_SECRET matching the app's CRON_SECRET env.
+
+on:
+  schedule:
+    # Every Thursday at 08:00 UTC.
+    - cron: "0 8 * * 4"
+  workflow_dispatch: {}
+
+jobs:
+  factor-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch and summarize the factor analysis
+        run: |
+          json=$(curl -fsS --max-time 120 \
+            "https://www.genwelth.com/api/cron/factor-analysis?key=${CRON_SECRET}")
+          echo "$json" | jq -r '
+            if .resolvedFactoredSignals == 0 then
+              "No resolved factored signals yet — still collecting."
+            else
+              "Resolved factored signals: \(.resolvedFactoredSignals)  ·  baseline win \(.baselineWinRate)%\n\nedge   win    n   factor",
+              (.factors[] | "  \(if .edge>=0 then "+" else "" end)\(.edge)   \(.winRate)%  \(.n)   \(.code)")
+            end
+          '
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
