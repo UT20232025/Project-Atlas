@@ -1,0 +1,34 @@
+name: Warm stock cards
+
+# Refreshes the curated /stocks cards into the DB (StockSnapshot), one ticker at
+# a time with a pause between, so we stay inside Twelve Data's free tier
+# (~8 credits/min · 800/day; each stock costs 4). The /stocks page reads only the
+# DB, so this is what keeps it populated. Requires repo secret CRON_SECRET.
+
+on:
+  schedule:
+    # Every 3 hours — daily-frame stock signals barely move intraday.
+    - cron: "0 */3 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  warm-stocks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Warm stock cards one at a time
+        run: |
+          # Curated list is 15 tickers; loop a touch beyond that in case one
+          # request fails and needs a retry. The endpoint warms the stalest
+          # ticker each call and returns {"done":true} once all are fresh.
+          for i in $(seq 1 18); do
+            body=$(curl -fsS --max-time 90 \
+              --retry 3 --retry-delay 20 --retry-all-errors --retry-connrefused \
+              "https://www.genwelth.com/api/cron/warm-stocks?key=${CRON_SECRET}") || true
+            echo "warm-stocks: $body"
+            case "$body" in
+              *'"done":true'*) echo "All stocks fresh — stopping."; break ;;
+            esac
+            sleep 30
+          done
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}

@@ -75,6 +75,20 @@ model SignalSnapshot {
   @@index([symbol, interval, createdAt])
 }
 
+// Latest Atlas card for a curated stock, refreshed by the warm-stocks cron.
+// One row per ticker (upserted). The /stocks page reads only from here so the
+// render path never touches Twelve Data — the free tier is far too rate-limited
+// to analyse a dozen stocks on page load. `checklist` is the JSON card payload
+// { direction, metCount, total, ready, pending: string[] }.
+model StockSnapshot {
+  ticker     String   @id
+  signal     String
+  confidence Int
+  price      Float?
+  checklist  String
+  updatedAt  DateTime @updatedAt
+}
+
 model Feedback {
   id        String   @id @default(cuid())
   userId    String?

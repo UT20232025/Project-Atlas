@@ -1191,7 +1191,7 @@
   "Stocks": {
     "title": "Stocks",
     "subtitle": "Atlas on the market’s biggest stocks — the signal and how close each is to a setup.",
-    "empty": "Loading stock signals… (the data provider is rate-limiting — refresh in a moment).",
+    "empty": "Stock cards refresh in the background — they’ll appear here shortly (the first refresh can take a few minutes).",
     "waitingFor": "Waiting for:",
     "footnote": "A curated set of mega-caps on the daily frame. Tap a stock for the full analysis."
   }

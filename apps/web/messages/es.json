@@ -1191,7 +1191,7 @@
   "Stocks": {
     "title": "Acciones",
     "subtitle": "Atlas en las mayores acciones del mercado — la señal y qué tan cerca está cada una de un setup.",
-    "empty": "Cargando señales de acciones… (el proveedor de datos limita las peticiones — actualiza en un momento).",
+    "empty": "Las tarjetas de acciones se actualizan en segundo plano — aparecerán aquí en breve (la primera actualización puede tardar unos minutos).",
     "waitingFor": "Esperando:",
     "footnote": "Un conjunto curado de megacaps en temporalidad diaria. Toca una acción para el análisis completo."
   }

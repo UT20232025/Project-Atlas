@@ -1191,7 +1191,7 @@
   "Stocks": {
     "title": "Aktien",
     "subtitle": "Atlas auf den größten Aktien des Marktes — das Signal und wie nah jede an einem Setup ist.",
-    "empty": "Lade Aktiensignale… (der Datenanbieter drosselt — in einem Moment aktualisieren).",
+    "empty": "Die Aktienkarten werden im Hintergrund aktualisiert — sie erscheinen gleich hier (die erste Aktualisierung kann einige Minuten dauern).",
     "waitingFor": "Warten auf:",
     "footnote": "Eine kuratierte Auswahl an Mega-Caps im Tageschart. Tippe auf eine Aktie für die vollständige Analyse."
   }

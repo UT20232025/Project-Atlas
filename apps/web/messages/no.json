@@ -1191,7 +1191,7 @@
   "Stocks": {
     "title": "Aksjer",
     "subtitle": "Atlas på markedets største aksjer — signalet og hvor nær hver er et oppsett.",
-    "empty": "Laster aksje-signaler… (dataleverandøren rate-limiter — oppdater om et øyeblikk).",
+    "empty": "Aksje-kortene oppdateres i bakgrunnen — de dukker opp her straks (første oppdatering kan ta noen minutter).",
     "waitingFor": "Venter på:",
     "footnote": "Et kuratert utvalg mega-caps på daglig ramme. Trykk på en aksje for full analyse."
   }

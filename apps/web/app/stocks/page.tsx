@@ -5,7 +5,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import Badge from "@/components/ui/Badge";
 import { requireSession } from "@/lib/auth/session";
 import { getMarketTicker } from "@/lib/services/dashboardService";
-import { getStockScanner } from "@/lib/stocks/stockScanner";
+import { getStockScannerFromDb } from "@/lib/stocks/stockScanner";
 import {
   getCurrentUser,
   hasActiveSubscription,
@@ -36,7 +36,7 @@ export default async function StocksPage() {
 
   const [ticker, stocks] = await Promise.all([
     getMarketTicker(),
-    getStockScanner(),
+    getStockScannerFromDb(),
   ]);
 
   return (
