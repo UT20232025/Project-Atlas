@@ -98,13 +98,13 @@ export async function warmStockSnapshot(
       ticker,
       signal: analysis.decision.signal,
       confidence: analysis.decision.confidence,
-      price: analysis.decision.entry,
+      price: analysis.currentPrice,
       checklist: JSON.stringify(checklist),
     },
     update: {
       signal: analysis.decision.signal,
       confidence: analysis.decision.confidence,
-      price: analysis.decision.entry,
+      price: analysis.currentPrice,
       checklist: JSON.stringify(checklist),
     },
   });

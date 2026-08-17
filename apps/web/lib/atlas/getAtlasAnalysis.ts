@@ -172,6 +172,10 @@ export type AtlasAnalysisResponse = {
   takeProfit: number | null;
   riskRewardRatio: number | null;
 
+  // Latest traded price (last candle close), set regardless of signal — unlike
+  // `entry`, which the engine only fills for directional LONG/SHORT calls.
+  currentPrice: number;
+
   analysis: AtlasAnalysis;
   indicators: AtlasIndicatorResult;
 
@@ -701,6 +705,8 @@ const rawDecision =
 
     riskRewardRatio:
       decision.riskRewardRatio,
+
+    currentPrice,
 
     analysis:
       requestedSnapshot.analysis,
