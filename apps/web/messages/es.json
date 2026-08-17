@@ -40,7 +40,8 @@
     "settings": "Configuración",
     "joinTelegram": "Únete en Telegram",
     "logoAlt": "Genwelth AI — Con tecnología de Atlas",
-    "joinChat": "Únete al chat"
+    "joinChat": "Únete al chat",
+    "stocks": "Acciones"
   },
   "Topbar": {
     "eyebrow": "Centro de operaciones",
@@ -1186,5 +1187,12 @@
     "subtitle": "Las monedas más cerca de un setup válido — y qué está esperando Atlas.",
     "waitingFor": "Esperando:",
     "none": "Aún no hay setups cerca — el mercado está tranquilo y Atlas está en WAIT en todo."
+  },
+  "Stocks": {
+    "title": "Acciones",
+    "subtitle": "Atlas en las mayores acciones del mercado — la señal y qué tan cerca está cada una de un setup.",
+    "empty": "Cargando señales de acciones… (el proveedor de datos limita las peticiones — actualiza en un momento).",
+    "waitingFor": "Esperando:",
+    "footnote": "Un conjunto curado de megacaps en temporalidad diaria. Toca una acción para el análisis completo."
   }
 }

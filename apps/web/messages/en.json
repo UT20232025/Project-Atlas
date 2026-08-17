@@ -40,7 +40,8 @@
     "settings": "Settings",
     "joinTelegram": "Join on Telegram",
     "logoAlt": "Genwelth AI — Powered by Atlas",
-    "joinChat": "Join the chat"
+    "joinChat": "Join the chat",
+    "stocks": "Stocks"
   },
   "Topbar": {
     "eyebrow": "Trading Command Center",
@@ -1186,5 +1187,12 @@
     "subtitle": "The coins closest to a valid setup — and what Atlas is still waiting for.",
     "waitingFor": "Waiting for:",
     "none": "No setups close yet — the market is quiet and Atlas is on WAIT across the board."
+  },
+  "Stocks": {
+    "title": "Stocks",
+    "subtitle": "Atlas on the market’s biggest stocks — the signal and how close each is to a setup.",
+    "empty": "Loading stock signals… (the data provider is rate-limiting — refresh in a moment).",
+    "waitingFor": "Waiting for:",
+    "footnote": "A curated set of mega-caps on the daily frame. Tap a stock for the full analysis."
   }
 }

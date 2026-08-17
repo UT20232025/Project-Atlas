@@ -40,7 +40,8 @@
     "settings": "Einstellungen",
     "joinTelegram": "Auf Telegram beitreten",
     "logoAlt": "Genwelth AI — Angetrieben von Atlas",
-    "joinChat": "Zum Chat"
+    "joinChat": "Zum Chat",
+    "stocks": "Aktien"
   },
   "Topbar": {
     "eyebrow": "Trading-Kommandozentrale",
@@ -1186,5 +1187,12 @@
     "subtitle": "Die Coins, die einem gültigen Setup am nächsten sind — und worauf Atlas noch wartet.",
     "waitingFor": "Warten auf:",
     "none": "Noch keine Setups in Reichweite — der Markt ist ruhig und Atlas steht überall auf WAIT."
+  },
+  "Stocks": {
+    "title": "Aktien",
+    "subtitle": "Atlas auf den größten Aktien des Marktes — das Signal und wie nah jede an einem Setup ist.",
+    "empty": "Lade Aktiensignale… (der Datenanbieter drosselt — in einem Moment aktualisieren).",
+    "waitingFor": "Warten auf:",
+    "footnote": "Eine kuratierte Auswahl an Mega-Caps im Tageschart. Tippe auf eine Aktie für die vollständige Analyse."
   }
 }
