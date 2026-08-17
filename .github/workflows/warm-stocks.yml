@@ -21,10 +21,12 @@ jobs:
           # request fails and needs a retry. The endpoint warms the stalest
           # ticker each call and returns {"done":true} once all are fresh.
           for i in $(seq 1 18); do
-            body=$(curl -fsS --max-time 90 \
+            # No -f: we want the response body printed even on 4xx/5xx so a
+            # failing warm is diagnosable. Append the HTTP status too.
+            body=$(curl -sS -w "|HTTP:%{http_code}" --max-time 90 \
               --retry 3 --retry-delay 20 --retry-all-errors --retry-connrefused \
               "https://www.genwelth.com/api/cron/warm-stocks?key=${CRON_SECRET}") || true
-            echo "warm-stocks: $body"
+            echo "warm-stocks[$i]: $body"
             case "$body" in
               *'"done":true'*) echo "All stocks fresh — stopping."; break ;;
             esac
