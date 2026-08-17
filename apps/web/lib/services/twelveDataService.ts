@@ -154,6 +154,38 @@ export function isStocksConfigured(): boolean {
   return Boolean(process.env.TWELVEDATA_API_KEY);
 }
 
+// Gold + major FX, also from Twelve Data. Stored internally slash-free
+// (XAUUSD, EURUSD…) so they're URL-safe like the crypto BTCUSDT symbols; the
+// slash Twelve Data expects (XAU/USD) is inserted only at the fetch boundary.
+export const FOREX_SYMBOLS = [
+  "XAUUSD",
+  "EURUSD",
+  "GBPUSD",
+  "USDJPY",
+] as const;
+
+const FOREX_SET = new Set<string>(FOREX_SYMBOLS);
+
+export function isForexSymbol(symbol: string): boolean {
+  return FOREX_SET.has(symbol.toUpperCase());
+}
+
+// True for anything Twelve Data serves (stocks, gold, FX) — i.e. everything the
+// engine should NOT route to Binance.
+export function isTwelveDataSymbol(symbol: string): boolean {
+  return isStockSymbol(symbol) || isForexSymbol(symbol);
+}
+
+// Converts an internal symbol to the exact string Twelve Data's API expects:
+// forex/metal pairs get a slash (EURUSD → EUR/USD), stocks pass through.
+export function toTwelveDataSymbol(symbol: string): string {
+  const upper = symbol.toUpperCase();
+  if (FOREX_SET.has(upper)) {
+    return `${upper.slice(0, 3)}/${upper.slice(3)}`;
+  }
+  return upper;
+}
+
 // Map the engine's (Binance-flavored) interval names to Twelve Data's.
 const INTERVAL_MAP: Record<BinanceInterval, string> = {
   "1m": "1min",
@@ -201,7 +233,7 @@ export async function fetchStockCandles(
   }
 
   const params = new URLSearchParams({
-    symbol: symbol.toUpperCase(),
+    symbol: toTwelveDataSymbol(symbol),
     interval: INTERVAL_MAP[interval],
     outputsize: String(Math.min(Math.max(limit, 50), 5000)),
     order: "ASC",
@@ -296,7 +328,7 @@ export async function fetchStockQuote(
   }
 
   const params = new URLSearchParams({
-    symbol: symbol.toUpperCase(),
+    symbol: toTwelveDataSymbol(symbol),
     apikey: apiKey,
   });
 

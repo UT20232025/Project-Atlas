@@ -6,11 +6,11 @@ import {
 import type { MarketSymbol } from "@/lib/services/liveMarketService";
 import {
   fetchStockCandles,
-  isStockSymbol,
+  isTwelveDataSymbol,
 } from "@/lib/services/twelveDataService";
 
 /**
- * Single candle source the Atlas engine calls — routes stock tickers to
+ * Single candle source the Atlas engine calls — routes stocks, gold and FX to
  * Twelve Data and everything else to Binance. Both return `AtlasCandle[]`
  * in the same shape, so the engine is asset-agnostic.
  */
@@ -19,7 +19,7 @@ export function fetchMarketCandles(
   interval: BinanceInterval = "1h",
   limit = 100
 ): Promise<AtlasCandle[]> {
-  if (isStockSymbol(symbol)) {
+  if (isTwelveDataSymbol(symbol)) {
     return fetchStockCandles(symbol, interval, limit);
   }
 

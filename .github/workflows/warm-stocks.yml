@@ -22,7 +22,7 @@ jobs:
           # stalest/freshness heuristic. 30s between calls keeps us inside Twelve
           # Data's free tier (~2 stocks/min · 4 credits each = 8/min). Keep this
           # list in sync with STOCK_SCANNER_SYMBOLS in lib/stocks/stockScanner.ts.
-          TICKERS="AAPL MSFT NVDA TSLA AMZN GOOGL META AMD NFLX AVGO COIN PLTR JPM V WMT"
+          TICKERS="AAPL MSFT NVDA TSLA AMZN GOOGL META AMD NFLX AVGO COIN PLTR JPM V WMT XAUUSD EURUSD GBPUSD USDJPY"
           for t in $TICKERS; do
             # No -f: print the body even on 4xx/5xx so a failing warm is visible.
             body=$(curl -sS -w "|HTTP:%{http_code}" --max-time 90 \

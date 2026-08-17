@@ -41,7 +41,8 @@
     "joinTelegram": "Auf Telegram beitreten",
     "logoAlt": "Genwelth AI — Angetrieben von Atlas",
     "joinChat": "Zum Chat",
-    "stocks": "Aktien"
+    "stocks": "Aktien",
+    "goldForex": "Gold & Forex"
   },
   "Topbar": {
     "eyebrow": "Trading-Kommandozentrale",
@@ -1194,5 +1195,12 @@
     "empty": "Die Aktienkarten werden im Hintergrund aktualisiert — sie erscheinen gleich hier (die erste Aktualisierung kann einige Minuten dauern).",
     "waitingFor": "Warten auf:",
     "footnote": "Eine kuratierte Auswahl an Mega-Caps im Tageschart. Tippe auf eine Aktie für die vollständige Analyse."
+  },
+  "GoldForex": {
+    "title": "Gold & Forex",
+    "subtitle": "Atlas auf Gold und den wichtigsten Währungspaaren — das Signal und wie nah jedes an einem Setup ist.",
+    "empty": "Die Gold- und Forex-Karten werden im Hintergrund aktualisiert — sie erscheinen gleich hier (die erste Aktualisierung kann einige Minuten dauern).",
+    "waitingFor": "Warten auf:",
+    "footnote": "Gold und die wichtigsten Währungspaare im Tageschart. Tippe auf eines für die vollständige Analyse."
   }
 }

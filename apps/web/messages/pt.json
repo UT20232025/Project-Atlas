@@ -41,7 +41,8 @@
     "joinTelegram": "Entrar no Telegram",
     "logoAlt": "Genwelth AI — Desenvolvido pelo Atlas",
     "joinChat": "Entrar no chat",
-    "stocks": "Ações"
+    "stocks": "Ações",
+    "goldForex": "Ouro e Forex"
   },
   "Topbar": {
     "eyebrow": "Central de operações",
@@ -1194,5 +1195,12 @@
     "empty": "Os cartões de ações são atualizados em segundo plano — aparecerão aqui em breve (a primeira atualização pode levar alguns minutos).",
     "waitingFor": "Aguardando:",
     "footnote": "Um conjunto curado de megacaps no tempo gráfico diário. Toque numa ação para a análise completa."
+  },
+  "GoldForex": {
+    "title": "Ouro e Forex",
+    "subtitle": "A Atlas no ouro e nos principais pares de moedas — o sinal e quão perto cada um está de um setup.",
+    "empty": "Os cartões de ouro e forex são atualizados em segundo plano — aparecerão aqui em breve (a primeira atualização pode levar alguns minutos).",
+    "waitingFor": "Aguardando:",
+    "footnote": "Ouro e os principais pares de moedas no tempo gráfico diário. Toque num deles para a análise completa."
   }
 }

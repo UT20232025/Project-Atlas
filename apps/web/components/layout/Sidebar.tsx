@@ -34,6 +34,11 @@ export const menu = [
     icon: "🏦",
   },
   {
+    key: "goldForex",
+    href: "/gold-forex",
+    icon: "🥇",
+  },
+  {
     key: "compare",
     href: "/compare",
     icon: "⚖️",

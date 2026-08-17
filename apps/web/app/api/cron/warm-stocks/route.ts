@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
 import {
-  warmNextStaleStock,
-  warmStockSnapshot,
-  STOCK_SCANNER_SYMBOLS,
+  warmNextStaleAsset,
+  warmAssetSnapshot,
+  ALL_ASSET_SYMBOLS,
 } from "@/lib/stocks/stockScanner";
 
 function isAuthorized(request: Request): boolean {
@@ -19,10 +19,10 @@ function isAuthorized(request: Request): boolean {
   return provided === secret;
 }
 
-// Warm the curated stock cards into StockSnapshot, one ticker per request so the
-// Twelve Data credits stay paced by the cron loop (which sleeps between calls).
-// With no ?ticker, warms the stalest ticker and returns { done: true } once
-// every ticker is fresh, so the loop can stop early.
+// Warm the curated asset cards (stocks + gold/FX) into StockSnapshot, one ticker
+// per request so the Twelve Data credits stay paced by the cron loop (which
+// sleeps between calls). With no ?ticker, warms the stalest and returns
+// { done: true } once every asset is fresh, so the loop can stop early.
 export async function GET(request: Request) {
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -33,17 +33,17 @@ export async function GET(request: Request) {
 
   try {
     if (ticker) {
-      if (!STOCK_SCANNER_SYMBOLS.includes(ticker)) {
+      if (!ALL_ASSET_SYMBOLS.includes(ticker)) {
         return NextResponse.json(
           { error: `Unknown ticker: ${ticker}` },
           { status: 400 }
         );
       }
-      const item = await warmStockSnapshot(ticker);
+      const item = await warmAssetSnapshot(ticker);
       return NextResponse.json({ warmed: item.ticker, signal: item.signal });
     }
 
-    const item = await warmNextStaleStock();
+    const item = await warmNextStaleAsset();
     if (!item) {
       return NextResponse.json({ done: true });
     }

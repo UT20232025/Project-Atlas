@@ -16,11 +16,29 @@ export type RegimeGateConfig = {
   minRegimeStrength: number;
 };
 
-export function getRegimeGateConfig(): RegimeGateConfig {
+export type RegimeAssetClass = "crypto" | "other";
+
+// The 60 chop threshold was tuned on the crypto track record. Stocks, gold and
+// FX have no such history yet, and that high a bar left every non-crypto card
+// stuck on WAIT — so they get a softer default (still blocking counter-trend
+// and true chop, just not demanding a crypto-grade trend). Both are env-tunable
+// once we have per-asset outcome data.
+export function getRegimeGateConfig(
+  assetClass: RegimeAssetClass = "crypto"
+): RegimeGateConfig {
   const enabled = process.env.ATLAS_REGIME_GATE !== "off";
 
-  const raw = Number(process.env.ATLAS_REGIME_MIN_STRENGTH);
-  const minRegimeStrength = Number.isFinite(raw) ? raw : 60;
+  const cryptoRaw = Number(process.env.ATLAS_REGIME_MIN_STRENGTH);
+  const otherRaw = Number(process.env.ATLAS_REGIME_MIN_STRENGTH_OTHER);
+
+  const minRegimeStrength =
+    assetClass === "crypto"
+      ? Number.isFinite(cryptoRaw)
+        ? cryptoRaw
+        : 60
+      : Number.isFinite(otherRaw)
+        ? otherRaw
+        : 35;
 
   return { enabled, minRegimeStrength };
 }

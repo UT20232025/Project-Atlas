@@ -29,6 +29,8 @@ import {
   readRegime,
 } from "@/lib/atlas/regimeGate";
 
+import { isTwelveDataSymbol } from "@/lib/services/twelveDataService";
+
 import {
   buildTradeChecklist,
   type TradeChecklist,
@@ -475,7 +477,8 @@ export function computeAtlasAnalysis(
     BinanceInterval,
     AtlasTimeframeSnapshot
   >,
-  interval: BinanceInterval = "1h"
+  interval: BinanceInterval = "1h",
+  symbol = ""
 ): AtlasAnalysisResponse {
   const requestedSnapshot =
     getSnapshot(
@@ -621,7 +624,9 @@ const rawDecision =
   const regimeGate = applyRegimeGate(
     rawDecision.signal,
     readRegime(multiTimeframe),
-    getRegimeGateConfig()
+    getRegimeGateConfig(
+      isTwelveDataSymbol(symbol) ? "other" : "crypto"
+    )
   );
 
   const afterRegime =
@@ -809,6 +814,7 @@ export async function getAtlasAnalysis(
 
   return computeAtlasAnalysis(
     snapshots,
-    interval
+    interval,
+    symbol
   );
 }

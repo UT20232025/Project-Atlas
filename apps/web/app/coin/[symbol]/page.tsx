@@ -47,7 +47,7 @@ import {
 } from "../../../lib/services/liveMarketService";
 import {
   fetchStockQuote,
-  isStockSymbol,
+  isTwelveDataSymbol,
 } from "../../../lib/services/twelveDataService";
 import { getCurrentUser, hasActiveSubscription } from "../../../lib/subscription/requirePro";
 import { getWatchlists } from "../../../lib/watchlists/queries";
@@ -87,7 +87,8 @@ export default async function CoinPage({ params, searchParams }: Props) {
   const marketSymbol =
     symbol.toUpperCase() as MarketSymbol;
 
-  const isStock = isStockSymbol(marketSymbol);
+  // Stocks, gold and FX all come from Twelve Data (no Binance chart/order-flow).
+  const isStock = isTwelveDataSymbol(marketSymbol);
 
   // Validate the symbol first so an unknown asset 404s cleanly instead of
   // throwing downstream fetches. Stocks come from Twelve Data, everything

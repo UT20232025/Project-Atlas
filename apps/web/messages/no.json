@@ -41,7 +41,8 @@
     "joinTelegram": "Bli med på Telegram",
     "logoAlt": "Genwelth AI — Drevet av Atlas",
     "joinChat": "Bli med i chatten",
-    "stocks": "Aksjer"
+    "stocks": "Aksjer",
+    "goldForex": "Gull & Valuta"
   },
   "Topbar": {
     "eyebrow": "Handelssenter",
@@ -1194,5 +1195,12 @@
     "empty": "Aksje-kortene oppdateres i bakgrunnen — de dukker opp her straks (første oppdatering kan ta noen minutter).",
     "waitingFor": "Venter på:",
     "footnote": "Et kuratert utvalg mega-caps på daglig ramme. Trykk på en aksje for full analyse."
+  },
+  "GoldForex": {
+    "title": "Gull & Valuta",
+    "subtitle": "Atlas på gull og de største valutaparene — signalet og hvor nær hver er et oppsett.",
+    "empty": "Gull- og valutakortene oppdateres i bakgrunnen — de dukker opp her straks (første oppdatering kan ta noen minutter).",
+    "waitingFor": "Venter på:",
+    "footnote": "Gull og de største valutaparene på daglig ramme. Trykk på ett for full analyse."
   }
 }

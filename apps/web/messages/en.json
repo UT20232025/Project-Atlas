@@ -41,7 +41,8 @@
     "joinTelegram": "Join on Telegram",
     "logoAlt": "Genwelth AI — Powered by Atlas",
     "joinChat": "Join the chat",
-    "stocks": "Stocks"
+    "stocks": "Stocks",
+    "goldForex": "Gold & Forex"
   },
   "Topbar": {
     "eyebrow": "Trading Command Center",
@@ -1194,5 +1195,12 @@
     "empty": "Stock cards refresh in the background — they’ll appear here shortly (the first refresh can take a few minutes).",
     "waitingFor": "Waiting for:",
     "footnote": "A curated set of mega-caps on the daily frame. Tap a stock for the full analysis."
+  },
+  "GoldForex": {
+    "title": "Gold & Forex",
+    "subtitle": "Atlas on gold and the major currency pairs — the signal and how close each is to a setup.",
+    "empty": "Gold & forex cards refresh in the background — they’ll appear here shortly (the first refresh can take a few minutes).",
+    "waitingFor": "Waiting for:",
+    "footnote": "Gold and major FX pairs on the daily frame. Tap one for the full analysis."
   }
 }
