@@ -1180,5 +1180,11 @@
     "flipped": "Atlas flipped to {signal}. The market turned against your {direction} — consider closing.",
     "protectProfit": "The thesis cooled while you’re in profit — consider trailing your stop to lock it in.",
     "noConviction": "No fresh conviction — hold with your stop; don’t add here."
+  },
+  "NextTrade": {
+    "title": "Next in sight",
+    "subtitle": "The coins closest to a valid setup — and what Atlas is still waiting for.",
+    "waitingFor": "Waiting for:",
+    "none": "No setups close yet — the market is quiet and Atlas is on WAIT across the board."
   }
 }

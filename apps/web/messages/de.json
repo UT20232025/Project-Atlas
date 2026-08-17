@@ -1180,5 +1180,11 @@
     "flipped": "Atlas drehte auf {signal}. Der Markt lief gegen deine {direction} — Schließen erwägen.",
     "protectProfit": "Die These kühlte ab, während du im Gewinn bist — Stop nachziehen, um ihn zu sichern.",
     "noConviction": "Keine frische Überzeugung — mit Stop halten; hier nicht nachlegen."
+  },
+  "NextTrade": {
+    "title": "Als Nächstes im Blick",
+    "subtitle": "Die Coins, die einem gültigen Setup am nächsten sind — und worauf Atlas noch wartet.",
+    "waitingFor": "Warten auf:",
+    "none": "Noch keine Setups in Reichweite — der Markt ist ruhig und Atlas steht überall auf WAIT."
   }
 }

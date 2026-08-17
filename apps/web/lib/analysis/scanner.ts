@@ -6,6 +6,15 @@ import type { AtlasTrendStatus } from "../atlas/atlasIndicators";
 import type { AtlasReasonCode } from "../atlas/reasonCode";
 import { fetchLiveMarketData } from "../services/liveMarketService";
 
+export type ScannerChecklist = {
+  direction: "LONG" | "SHORT";
+  metCount: number;
+  total: number;
+  ready: boolean;
+  // Keys of the conditions still unmet (trend/timeframes/structure/…).
+  pending: string[];
+};
+
 export type ScannerItem = {
   coin: string;
   price: number;
@@ -21,6 +30,8 @@ export type ScannerItem = {
   stopLoss: number | null;
   takeProfit: number | null;
   riskRewardRatio: number | null;
+  // How close this coin is to a valid setup + what it's still waiting for.
+  checklist: ScannerChecklist;
 };
 
 function mapTrendStatus(
@@ -78,6 +89,15 @@ export async function getAtlasScanner(
       stopLoss: analysis.decision.stopLoss,
       takeProfit: analysis.decision.takeProfit,
       riskRewardRatio: analysis.decision.riskRewardRatio,
+      checklist: {
+        direction: analysis.checklist.direction,
+        metCount: analysis.checklist.metCount,
+        total: analysis.checklist.total,
+        ready: analysis.checklist.ready,
+        pending: analysis.checklist.items
+          .filter((item) => !item.met)
+          .map((item) => item.key),
+      },
     };
   });
 

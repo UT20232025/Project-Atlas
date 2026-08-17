@@ -1180,5 +1180,11 @@
     "flipped": "A Atlas virou para {signal}. O mercado virou contra sua {direction} — considere fechar.",
     "protectProfit": "A tese esfriou enquanto você está no lucro — considere mover o stop para garantir.",
     "noConviction": "Sem convicção nova — mantenha com seu stop; não adicione aqui."
+  },
+  "NextTrade": {
+    "title": "Próximo à vista",
+    "subtitle": "As moedas mais perto de um setup válido — e o que a Atlas ainda espera.",
+    "waitingFor": "Aguardando:",
+    "none": "Ainda sem setups próximos — o mercado está calmo e a Atlas está em WAIT em tudo."
   }
 }

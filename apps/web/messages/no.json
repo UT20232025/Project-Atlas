@@ -1180,5 +1180,11 @@
     "flipped": "Atlas snudde til {signal}. Markedet gikk mot din {direction} — vurder å lukke.",
     "protectProfit": "Tesen har kjølnet mens du er i profitt — vurder å tråle stoppen for å låse den.",
     "noConviction": "Ingen fersk overbevisning — hold med stoppen; ikke øk her."
+  },
+  "NextTrade": {
+    "title": "Nærmest en trade",
+    "subtitle": "Coinene som er nærmest et gyldig oppsett — og hva Atlas fortsatt venter på.",
+    "waitingFor": "Venter på:",
+    "none": "Ingen oppsett nær ennå — markedet er rolig og Atlas er på WAIT over hele linja."
   }
 }

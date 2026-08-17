@@ -9,6 +9,7 @@ import MacroEventsCard from "@/components/dashboard/MacroEventsCard";
 import MarketAlerts from "@/components/dashboard/MarketAlerts";
 import MarketHeatmap from "@/components/dashboard/MarketHeatmap";
 import MarketStats from "@/components/dashboard/MarketStats";
+import NextTradeCard from "@/components/dashboard/NextTradeCard";
 import OpportunityCard from "@/components/dashboard/OpportunityCard";
 import PriceAlertsSection from "@/components/dashboard/PriceAlertsSection";
 import RecentSignalChanges from "@/components/dashboard/RecentSignalChanges";
@@ -67,6 +68,10 @@ export default async function DashboardBody({
       <Suspense fallback={null}>
         <PriceAlertsSection userId={userId} />
       </Suspense>
+
+      <div className="mb-8">
+        <NextTradeCard items={dashboard.scanner} />
+      </div>
 
       {isPro && (
         <div className="mb-8">
