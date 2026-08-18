@@ -1,0 +1,25 @@
+name: Scan signals
+
+# Runs the crypto scanner every 30 min so SignalSnapshot keeps accumulating
+# signal changes (with their reason/warning factors) regardless of site traffic.
+# This is the data the confidence calibration and regime-gate measurement rely
+# on — previously signals were only recorded when someone loaded the dashboard.
+# Requires repo secret CRON_SECRET matching the app's CRON_SECRET env.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  scan-signals:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger scan-signals endpoint
+        run: |
+          body=$(curl -sS -w "|HTTP:%{http_code}" --max-time 120 \
+            --retry 3 --retry-delay 20 --retry-all-errors --retry-connrefused \
+            "https://www.genwelth.com/api/cron/scan-signals?key=${CRON_SECRET}") || true
+          echo "scan-signals: $body"
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
