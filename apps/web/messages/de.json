@@ -1202,5 +1202,9 @@
     "empty": "Die Gold- und Forex-Karten werden im Hintergrund aktualisiert — sie erscheinen gleich hier (die erste Aktualisierung kann einige Minuten dauern).",
     "waitingFor": "Warten auf:",
     "footnote": "Gold und die wichtigsten Währungspaare im Tageschart. Tippe auf eines für die vollständige Analyse."
+  },
+  "SignalAlert": {
+    "on": "Alarm an — wir melden uns, wenn es ein Trade wird",
+    "off": "Benachrichtige mich, wenn dies ein Trade wird"
   }
 }

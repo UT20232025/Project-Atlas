@@ -1202,5 +1202,9 @@
     "empty": "Gull- og valutakortene oppdateres i bakgrunnen — de dukker opp her straks (første oppdatering kan ta noen minutter).",
     "waitingFor": "Venter på:",
     "footnote": "Gull og de største valutaparene på daglig ramme. Trykk på ett for full analyse."
+  },
+  "SignalAlert": {
+    "on": "Varsel på — vi sier fra når den blir en trade",
+    "off": "Varsle meg når denne blir en trade"
   }
 }

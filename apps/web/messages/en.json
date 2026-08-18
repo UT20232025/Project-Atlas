@@ -1202,5 +1202,9 @@
     "empty": "Gold & forex cards refresh in the background — they’ll appear here shortly (the first refresh can take a few minutes).",
     "waitingFor": "Waiting for:",
     "footnote": "Gold and major FX pairs on the daily frame. Tap one for the full analysis."
+  },
+  "SignalAlert": {
+    "on": "Alert on — we’ll ping you when it becomes a trade",
+    "off": "Notify me when this becomes a trade"
   }
 }

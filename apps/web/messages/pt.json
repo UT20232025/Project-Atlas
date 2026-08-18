@@ -1202,5 +1202,9 @@
     "empty": "Os cartões de ouro e forex são atualizados em segundo plano — aparecerão aqui em breve (a primeira atualização pode levar alguns minutos).",
     "waitingFor": "Aguardando:",
     "footnote": "Ouro e os principais pares de moedas no tempo gráfico diário. Toque num deles para a análise completa."
+  },
+  "SignalAlert": {
+    "on": "Alerta ativado — avisamos quando virar uma operação",
+    "off": "Avise-me quando isto virar uma operação"
   }
 }

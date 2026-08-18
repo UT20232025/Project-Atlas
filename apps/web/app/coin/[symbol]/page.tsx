@@ -22,6 +22,8 @@ import Disclaimer from "../../../components/ui/Disclaimer";
 import EMACard from "../../../components/EMACard";
 import AppLayout from "../../../components/layout/AppLayout";
 import WatchlistButton from "../../../components/watchlist/WatchlistButton";
+import SignalAlertToggle from "../../../components/coin/SignalAlertToggle";
+import { isSignalAlertOn } from "../../../app/alerts/actions";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
 import RSIChart from "../../../components/RSIChart";
@@ -114,6 +116,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
     recentTrades,
     pdLevels,
     priceAlerts,
+    signalAlertOn,
   ] = await Promise.all([
     isStock
       ? Promise.resolve([])
@@ -134,6 +137,9 @@ export default async function CoinPage({ params, searchParams }: Props) {
       : fetchRecentTrades(marketSymbol).catch(() => []),
     getPreviousDayLevels(marketSymbol),
     getPriceAlertsForSymbol(userId, marketSymbol),
+    isPro
+      ? isSignalAlertOn(marketSymbol)
+      : Promise.resolve(false),
   ]);
 
   const whaleActivity = analyzeWhaleActivity(recentTrades);
@@ -255,16 +261,22 @@ export default async function CoinPage({ params, searchParams }: Props) {
   </Link>
 
   {isPro ? (
-    <WatchlistButton
-      symbol={
-        symbol.toUpperCase() as MarketSymbol
-      }
-      watchlists={watchlists}
-      addSymbolToWatchlistAction={addSymbolToWatchlist}
-      removeSymbolFromWatchlistAction={
-        removeSymbolFromWatchlist
-      }
-    />
+    <div className="space-y-3">
+      <WatchlistButton
+        symbol={
+          symbol.toUpperCase() as MarketSymbol
+        }
+        watchlists={watchlists}
+        addSymbolToWatchlistAction={addSymbolToWatchlist}
+        removeSymbolFromWatchlistAction={
+          removeSymbolFromWatchlist
+        }
+      />
+      <SignalAlertToggle
+        symbol={symbol.toUpperCase()}
+        initialOn={signalAlertOn}
+      />
+    </div>
   ) : (
     <Link
       href="/pricing"

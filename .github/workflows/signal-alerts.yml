@@ -1,0 +1,24 @@
+name: Signal alerts
+
+# Pushes "your asset just became a trade" alerts to users who asked to be
+# notified (SignalAlert). Reads current signals from the DB the scan-signals and
+# warm-stocks crons keep fresh, so it makes no market API calls.
+# Requires repo secret CRON_SECRET matching the app's CRON_SECRET env.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  signal-alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger signal-alerts endpoint
+        run: |
+          body=$(curl -sS -w "|HTTP:%{http_code}" --max-time 90 \
+            --retry 3 --retry-delay 20 --retry-all-errors --retry-connrefused \
+            "https://www.genwelth.com/api/cron/signal-alerts?key=${CRON_SECRET}") || true
+          echo "signal-alerts: $body"
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}

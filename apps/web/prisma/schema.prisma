@@ -133,6 +133,23 @@ model PushSubscription {
   @@index([userId])
 }
 
+// "Notify me when this becomes a trade" — a per-user, per-symbol standing
+// request to be pushed the moment an asset (crypto/stock/FX) flips to a
+// directional LONG/SHORT setup. lastSignal tracks the last state we notified on
+// so a signal that stays directional doesn't re-alert, and a flip back to a new
+// direction does. The signal-alerts cron reads current signals from the DB
+// (SignalSnapshot / StockSnapshot) so it makes no extra market API calls.
+model SignalAlert {
+  id         String   @id @default(cuid())
+  userId     String
+  symbol     String
+  lastSignal String   @default("WAIT")
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, symbol])
+  @@index([symbol])
+}
+
 model Watchlist {
   id        String            @id @default(cuid())
   userId    String?
