@@ -117,6 +117,15 @@ export async function warmAssetSnapshot(
       .map((item) => item.key),
   };
 
+  // Persist the decision's primary reason + warnings alongside the checklist
+  // (extra JSON keys the page ignores) so we can see *why* an asset is WAIT —
+  // e.g. REGIME_GATE_CHOP vs counter-trend — and tune the gate on evidence.
+  const checklistJson = JSON.stringify({
+    ...checklist,
+    signalReason: analysis.decision.explanation?.code ?? null,
+    warnings: analysis.decision.warnings.map((w) => w.code),
+  });
+
   const record = await prisma.stockSnapshot.upsert({
     where: { ticker },
     create: {
@@ -124,13 +133,13 @@ export async function warmAssetSnapshot(
       signal: analysis.decision.signal,
       confidence: analysis.decision.confidence,
       price: analysis.currentPrice,
-      checklist: JSON.stringify(checklist),
+      checklist: checklistJson,
     },
     update: {
       signal: analysis.decision.signal,
       confidence: analysis.decision.confidence,
       price: analysis.currentPrice,
-      checklist: JSON.stringify(checklist),
+      checklist: checklistJson,
     },
   });
 
