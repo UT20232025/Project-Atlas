@@ -22,7 +22,10 @@ export default async function SignupPage({
     invalid_invite_code: t("errorInvalidInviteCode"),
   };
   const errorMessage = error ? ERROR_MESSAGES[error] : undefined;
-  const inviteCodeRequired = Boolean(process.env.BETA_INVITE_CODE);
+  // Open public beta — no invite code. To re-gate later, restore:
+  //   const inviteCodeRequired = Boolean(process.env.BETA_INVITE_CODE);
+  // and the matching check in signup/actions.ts.
+  const inviteCodeRequired = false;
 
   return (
     <div
