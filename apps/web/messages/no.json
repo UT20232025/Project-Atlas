@@ -1206,5 +1206,13 @@
   "SignalAlert": {
     "on": "Varsel på — vi sier fra når den blir en trade",
     "off": "Varsle meg når denne blir en trade"
+  },
+  "Breakout": {
+    "title": "Breakout oppdaget",
+    "longLabel": "Bullish 🟢",
+    "shortLabel": "Bearish 🔴",
+    "strength": "Styrke",
+    "note": "En stor ekspansjonscandle brøt spennet ({expansion}× normal størrelse) på en {volume}× volum-spike — momentum fyrer akkurat nå.",
+    "riskNote": "Momentum-signal — høyere risiko. Skilt fra det konservative Atlas-signalet og ikke en del av den verifiserte track record-en."
   }
 }

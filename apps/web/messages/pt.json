@@ -1206,5 +1206,13 @@
   "SignalAlert": {
     "on": "Alerta ativado — avisamos quando virar uma operação",
     "off": "Avise-me quando isto virar uma operação"
+  },
+  "Breakout": {
+    "title": "Rompimento detetado",
+    "longLabel": "Alta 🟢",
+    "shortLabel": "Baixa 🔴",
+    "strength": "Força",
+    "note": "Uma grande vela de expansão rompeu o intervalo ({expansion}× o tamanho normal) num aumento de volume de {volume}× — o momentum está a disparar agora.",
+    "riskNote": "Sinal de momentum — risco mais alto. Separado do sinal conservador da Atlas e não faz parte do histórico verificado."
   }
 }

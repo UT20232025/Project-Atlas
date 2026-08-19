@@ -30,6 +30,10 @@ import {
 } from "@/lib/atlas/regimeGate";
 
 import { isTwelveDataSymbol } from "@/lib/services/twelveDataService";
+import {
+  detectBreakout,
+  type BreakoutResult,
+} from "@/lib/atlas/breakoutEngine";
 
 import {
   buildTradeChecklist,
@@ -177,6 +181,9 @@ export type AtlasAnalysisResponse = {
   // Latest traded price (last candle close), set regardless of signal — unlike
   // `entry`, which the engine only fills for directional LONG/SHORT calls.
   currentPrice: number;
+
+  // Momentum/breakout detector, independent of the conservative decision.signal.
+  breakout: BreakoutResult;
 
   analysis: AtlasAnalysis;
   indicators: AtlasIndicatorResult;
@@ -528,6 +535,10 @@ export function computeAtlasAnalysis(
       requestedSnapshot.candles
     );
 
+  const breakout = detectBreakout(
+    requestedSnapshot.candles
+  );
+
   const atr =
     calculateAtr(
       requestedSnapshot.candles
@@ -712,6 +723,8 @@ const rawDecision =
       decision.riskRewardRatio,
 
     currentPrice,
+
+    breakout,
 
     analysis:
       requestedSnapshot.analysis,

@@ -120,6 +120,9 @@ risk:
       decision:
         result.decision,
 
+      breakout:
+        result.breakout,
+
       tradeSetup:
         result.tradeSetup,
 

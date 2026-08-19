@@ -23,6 +23,7 @@ import EMACard from "../../../components/EMACard";
 import AppLayout from "../../../components/layout/AppLayout";
 import WatchlistButton from "../../../components/watchlist/WatchlistButton";
 import SignalAlertToggle from "../../../components/coin/SignalAlertToggle";
+import BreakoutCard from "../../../components/analysis/BreakoutCard";
 import { isSignalAlertOn } from "../../../app/alerts/actions";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
@@ -295,6 +296,10 @@ export default async function CoinPage({ params, searchParams }: Props) {
           score={decision.score}
           confidence={decision.confidence}
         />
+      </div>
+
+      <div className="mt-6">
+        <BreakoutCard breakout={decisionAnalysis.breakout} />
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">

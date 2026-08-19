@@ -1206,5 +1206,13 @@
   "SignalAlert": {
     "on": "Alarm an — wir melden uns, wenn es ein Trade wird",
     "off": "Benachrichtige mich, wenn dies ein Trade wird"
+  },
+  "Breakout": {
+    "title": "Ausbruch erkannt",
+    "longLabel": "Bullisch 🟢",
+    "shortLabel": "Bärisch 🔴",
+    "strength": "Stärke",
+    "note": "Eine große Expansionskerze durchbrach die Spanne ({expansion}× normale Größe) bei einem {volume}× Volumenanstieg — das Momentum feuert gerade jetzt.",
+    "riskNote": "Momentum-Signal — höheres Risiko. Getrennt vom konservativen Atlas-Signal und nicht Teil der verifizierten Erfolgsbilanz."
   }
 }

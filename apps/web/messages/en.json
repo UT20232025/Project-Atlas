@@ -1206,5 +1206,13 @@
   "SignalAlert": {
     "on": "Alert on — we’ll ping you when it becomes a trade",
     "off": "Notify me when this becomes a trade"
+  },
+  "Breakout": {
+    "title": "Breakout detected",
+    "longLabel": "Bullish 🟢",
+    "shortLabel": "Bearish 🔴",
+    "strength": "Strength",
+    "note": "A large expansion candle broke the recent range ({expansion}× normal size) on a {volume}× volume surge — momentum is firing right now.",
+    "riskNote": "Momentum signal — higher risk. Separate from the conservative Atlas signal and not part of the verified track record."
   }
 }
