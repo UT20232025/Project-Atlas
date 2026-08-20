@@ -743,9 +743,12 @@
     "trackRecord": "Check the track record",
     "trackRecordDesc": "See the verified win rate behind the signals.",
     "telegram": "Follow on Telegram",
-    "telegramDesc": "Get the strongest signals straight to your pocket.",
+    "telegramDesc": "Get the strongest signals and breakout alerts straight to your pocket.",
     "upgrade": "Unlock Pro",
-    "upgradeDesc": "Portfolio, journal, watchlists, and the full history."
+    "upgradeDesc": "Portfolio, journal, watchlists, and the full history.",
+    "intro": "Atlas waits until the setup is strong enough — most markets sit on WAIT most of the time, on purpose. Patience is the feature. Open a coin and turn on the 🔔 alert, and we’ll tell you the moment a trade or a breakout forms.",
+    "markets": "Explore the markets",
+    "marketsDesc": "Crypto, stocks, gold and forex — all analysed by Atlas."
   },
   "PositionSize": {
     "eyebrow": "Risk management",

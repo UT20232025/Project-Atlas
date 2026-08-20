@@ -743,9 +743,12 @@
     "trackRecord": "Track Record ansehen",
     "trackRecordDesc": "Sieh die verifizierte Trefferquote hinter den Signalen.",
     "telegram": "Auf Telegram folgen",
-    "telegramDesc": "Erhalte die stärksten Signale direkt aufs Handy.",
+    "telegramDesc": "Erhalte die stärksten Signale und Ausbruch-Alarme direkt aufs Handy.",
     "upgrade": "Pro freischalten",
-    "upgradeDesc": "Portfolio, Journal, Watchlists und die komplette Historie."
+    "upgradeDesc": "Portfolio, Journal, Watchlists und die komplette Historie.",
+    "intro": "Atlas wartet, bis das Setup stark genug ist — die meisten Märkte stehen die meiste Zeit auf WARTEN, ganz bewusst. Geduld ist das Feature. Öffne einen Coin und aktiviere den 🔔 Alarm, und wir melden uns, sobald sich ein Trade oder Ausbruch bildet.",
+    "markets": "Märkte erkunden",
+    "marketsDesc": "Krypto, Aktien, Gold und Forex — alles von Atlas analysiert."
   },
   "PositionSize": {
     "eyebrow": "Risikomanagement",

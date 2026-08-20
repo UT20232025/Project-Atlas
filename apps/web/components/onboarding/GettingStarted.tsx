@@ -4,15 +4,9 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
-type GettingStartedProps = {
-  isPro: boolean;
-};
-
 const STORAGE_KEY = "genwelth-onboarding-dismissed";
 
-export default function GettingStarted({
-  isPro,
-}: GettingStartedProps) {
+export default function GettingStarted() {
   const t = useTranslations("Onboarding");
 
   // Starts hidden so the server and first client render match; the real
@@ -50,6 +44,11 @@ export default function GettingStarted({
       description: t("seeAnalysisDesc"),
     },
     {
+      href: "/stocks",
+      title: t("markets"),
+      description: t("marketsDesc"),
+    },
+    {
       href: "/track-record",
       title: t("trackRecord"),
       description: t("trackRecordDesc"),
@@ -61,14 +60,6 @@ export default function GettingStarted({
       external: true,
     },
   ];
-
-  if (!isPro) {
-    steps.push({
-      href: "/pricing",
-      title: t("upgrade"),
-      description: t("upgradeDesc"),
-    });
-  }
 
   return (
     <section className="relative rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 sm:p-6">
@@ -89,7 +80,11 @@ export default function GettingStarted({
         {t("heading")}
       </h2>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <p className="mt-3 max-w-3xl text-sm leading-6 text-zinc-400">
+        {t("intro")}
+      </p>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step) => (
           <Link
             key={step.href}

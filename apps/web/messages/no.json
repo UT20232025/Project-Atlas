@@ -743,9 +743,12 @@
     "trackRecord": "Sjekk track record",
     "trackRecordDesc": "Se den verifiserte treffprosenten bak signalene.",
     "telegram": "Følg på Telegram",
-    "telegramDesc": "Få de sterkeste signalene rett i lomma.",
+    "telegramDesc": "Få de sterkeste signalene og breakout-varsler rett i lomma.",
     "upgrade": "Lås opp Pro",
-    "upgradeDesc": "Portefølje, journal, watchlists og full historikk."
+    "upgradeDesc": "Portefølje, journal, watchlists og full historikk.",
+    "intro": "Atlas venter til oppsettet er sterkt nok — de fleste markeder står på VENT det meste av tiden, helt med vilje. Tålmodighet er funksjonen. Åpne en coin og slå på 🔔 varsel, så sier vi fra i det en trade eller et breakout former seg.",
+    "markets": "Utforsk markedene",
+    "marketsDesc": "Krypto, aksjer, gull og valuta — alt analysert av Atlas."
   },
   "PositionSize": {
     "eyebrow": "Risikostyring",

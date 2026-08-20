@@ -82,7 +82,7 @@ export default async function DashboardBody({
       {isPro && <WatchlistBoardSection userId={userId} />}
 
       <div className="mb-8">
-        <GettingStarted isPro={isPro} />
+        <GettingStarted />
       </div>
 
       <MacroEventsCard events={upcomingMacroEvents} />

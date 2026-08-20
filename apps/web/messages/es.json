@@ -743,9 +743,12 @@
     "trackRecord": "Consulta el track record",
     "trackRecordDesc": "Mira el win rate verificado detrás de las señales.",
     "telegram": "Sigue en Telegram",
-    "telegramDesc": "Recibe las señales más fuertes en tu bolsillo.",
+    "telegramDesc": "Recibe las señales más fuertes y alertas de ruptura en tu bolsillo.",
     "upgrade": "Desbloquea Pro",
-    "upgradeDesc": "Portafolio, diario, watchlists y el historial completo."
+    "upgradeDesc": "Portafolio, diario, watchlists y el historial completo.",
+    "intro": "Atlas espera hasta que el setup sea lo bastante fuerte — la mayoría de los mercados están en ESPERA casi siempre, a propósito. La paciencia es la función. Abre una moneda y activa la alerta 🔔, y te avisaremos en cuanto se forme una operación o una ruptura.",
+    "markets": "Explora los mercados",
+    "marketsDesc": "Cripto, acciones, oro y forex — todo analizado por Atlas."
   },
   "PositionSize": {
     "eyebrow": "Gestión de riesgo",
