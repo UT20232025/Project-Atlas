@@ -7,14 +7,23 @@ import type { User } from "@/lib/generated/prisma/client";
 const ACTIVE_STATUSES = ["trialing", "active"];
 
 /**
- * Beta access: grant full Pro without Stripe, controlled by env so the owner
- * flips it on/off without a code change.
- *   BETA_OPEN_ACCESS=1        → every logged-in user gets Pro (open beta)
- *   BETA_ACCESS_EMAILS=a,b,c  → only these emails get Pro (invited beta)
+ * Beta access: grant full Pro without Stripe.
+ *   OPEN_BETA (code default below) → every logged-in user gets Pro (free beta)
+ *   BETA_OPEN_ACCESS="0"/"off"     → force-close the beta without a deploy
+ *   BETA_ACCESS_EMAILS=a,b,c       → only these emails get Pro (invited beta)
  */
+
+// Open free public beta — everyone gets Pro without Stripe. A CODE default (not
+// just an env var) so it can't be silently undone by a flaky console. To start
+// charging later, flip this to false and redeploy → Stripe gating takes over.
+const OPEN_BETA = true;
+
 function betaAllowsAccess(email: string | null | undefined): boolean {
   const openFlag = process.env.BETA_OPEN_ACCESS;
-  if (openFlag === "1" || openFlag === "true") {
+  const envClosed =
+    openFlag === "0" || openFlag === "off" || openFlag === "false";
+
+  if (!envClosed && (OPEN_BETA || openFlag === "1" || openFlag === "true")) {
     return true;
   }
 
