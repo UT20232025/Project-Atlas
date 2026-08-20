@@ -16,6 +16,7 @@ import {
 import { notifyReversal } from "@/lib/signals/notifyReversal";
 import { notifySignalChange } from "@/lib/telegram/notify";
 import { notifyBreakout } from "@/lib/signals/notifyBreakout";
+import { recordBreakout } from "@/lib/atlas/breakoutTrackRecord";
 
 // Must comfortably exceed the dashboard's 30s poll interval (MarketProvider,
 // ScannerSignalsProvider), otherwise every poll hits a cold cache and
@@ -145,6 +146,7 @@ export function getCachedAtlasAnalysis(
         shouldBroadcastSignal(symbol, `BREAKOUT_${breakout.direction}`)
       ) {
         void notifyBreakout(symbol, breakout);
+        void recordBreakout(symbol, breakout);
       }
     });
   }

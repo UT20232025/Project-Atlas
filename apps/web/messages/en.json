@@ -1220,5 +1220,15 @@
     "riskNote": "Momentum signal — higher risk. Separate from the conservative Atlas signal and not part of the verified track record.",
     "coilingTitle": "Charging up",
     "coilingNote": "Volatility is contracting into a tight coil — a breakout often follows. Atlas is watching for the expansion."
+  },
+  "BreakoutTrackRecord": {
+    "title": "Breakout signals",
+    "subtitle": "Momentum breakouts, measured the same 24h way — kept separate from the conservative track record.",
+    "winRate": "Win rate",
+    "signals": "Signals",
+    "long": "Long",
+    "short": "Short",
+    "empty": "No resolved breakouts yet — each is measured 24 hours after it fires, so this fills in as momentum signals play out.",
+    "footnote": "Higher-risk momentum signals. Evaluated 24h after firing; not part of the verified conservative track record."
   }
 }

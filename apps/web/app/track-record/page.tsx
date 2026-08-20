@@ -3,6 +3,8 @@ import { getTranslations } from "next-intl/server";
 
 import AppLayout from "@/components/layout/AppLayout";
 import TrackRecordView from "@/components/track-record/TrackRecordView";
+import BreakoutTrackRecordCard from "@/components/track-record/BreakoutTrackRecordCard";
+import { getBreakoutTrackRecord } from "@/lib/atlas/breakoutTrackRecord";
 import Button from "@/components/ui/button";
 import Disclaimer from "@/components/ui/Disclaimer";
 import Section from "@/components/ui/Section";
@@ -19,9 +21,13 @@ export default async function TrackRecordPage() {
 
   // Pro: the full, detailed track record.
   if (isPro) {
+    const breakoutRecord = await getBreakoutTrackRecord();
     return (
       <AppLayout userEmail={user.email} isPro>
         <TrackRecordView trackRecord={trackRecord} />
+        <div className="mt-8">
+          <BreakoutTrackRecordCard record={breakoutRecord} />
+        </div>
       </AppLayout>
     );
   }

@@ -1220,5 +1220,15 @@
     "riskNote": "Señal de momentum — mayor riesgo. Separada de la señal conservadora de Atlas y no forma parte del historial verificado.",
     "coilingTitle": "Cargando",
     "coilingNote": "La volatilidad se contrae en un resorte tenso — a menudo sigue una ruptura. Atlas vigila la expansión."
+  },
+  "BreakoutTrackRecord": {
+    "title": "Señales de ruptura",
+    "subtitle": "Rupturas de momentum, medidas del mismo modo a 24h — separadas del historial conservador.",
+    "winRate": "Tasa de acierto",
+    "signals": "Señales",
+    "long": "Long",
+    "short": "Short",
+    "empty": "Aún no hay rupturas resueltas — cada una se mide 24 horas después de dispararse, así que esto se irá llenando.",
+    "footnote": "Señales de momentum de mayor riesgo. Evaluadas 24h después; no forman parte del historial conservador verificado."
   }
 }

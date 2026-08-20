@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { backfillTrackRecordOutcomes } from "@/lib/atlas/trackRecord";
+import { resolveBreakoutOutcomes } from "@/lib/atlas/breakoutTrackRecord";
 
 function isAuthorized(request: Request): boolean {
   const secret = process.env.CRON_SECRET;
@@ -34,10 +35,12 @@ export async function GET(request: Request) {
 
   try {
     const result = await backfillTrackRecordOutcomes();
+    const breakout = await resolveBreakoutOutcomes();
 
     return NextResponse.json({
       ok: true,
       ...result,
+      ...breakout,
       resolvedAt: new Date().toISOString(),
     });
   } catch (error) {

@@ -1220,5 +1220,15 @@
     "riskNote": "Momentum-signal — høyere risiko. Skilt fra det konservative Atlas-signalet og ikke en del av den verifiserte track record-en.",
     "coilingTitle": "Lader opp",
     "coilingNote": "Volatiliteten trekker seg sammen til en stram spiral — et breakout følger ofte. Atlas følger med på ekspansjonen."
+  },
+  "BreakoutTrackRecord": {
+    "title": "Breakout-signaler",
+    "subtitle": "Momentum-breakouts, målt på samme 24t-måte — holdt adskilt fra det konservative track record-et.",
+    "winRate": "Treffprosent",
+    "signals": "Signaler",
+    "long": "Long",
+    "short": "Short",
+    "empty": "Ingen løste breakouts ennå — hvert måles 24 timer etter det fyrer, så dette fylles inn etter hvert som momentum-signalene spiller seg ut.",
+    "footnote": "Momentum-signaler med høyere risiko. Evalueres 24t etter de fyrer; ikke en del av det verifiserte konservative track record-et."
   }
 }

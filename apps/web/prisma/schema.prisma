@@ -169,3 +169,22 @@ model WatchlistSymbol {
 
   @@unique([watchlistId, symbol])
 }
+
+// A recorded breakout broadcast, resolved 24h later like the conservative track
+// record — so we actually know whether the momentum signals we send are
+// profitable. Kept SEPARATE from SignalSnapshot so it never pollutes the
+// verified conservative track record.
+model BreakoutSignal {
+  id           String    @id @default(cuid())
+  symbol       String
+  direction    String // LONG / SHORT
+  strength     Int
+  entryPrice   Float
+  stopLoss     Float?
+  takeProfit   Float?
+  createdAt    DateTime  @default(now())
+  outcomePrice Float?
+  outcomeAt    DateTime?
+
+  @@index([symbol, createdAt])
+}

@@ -1220,5 +1220,15 @@
     "riskNote": "Momentum-Signal — höheres Risiko. Getrennt vom konservativen Atlas-Signal und nicht Teil der verifizierten Erfolgsbilanz.",
     "coilingTitle": "Lädt auf",
     "coilingNote": "Die Volatilität zieht sich zu einer engen Spirale zusammen — oft folgt ein Ausbruch. Atlas achtet auf die Expansion."
+  },
+  "BreakoutTrackRecord": {
+    "title": "Ausbruch-Signale",
+    "subtitle": "Momentum-Ausbrüche, gleich auf 24h gemessen — getrennt von der konservativen Erfolgsbilanz.",
+    "winRate": "Trefferquote",
+    "signals": "Signale",
+    "long": "Long",
+    "short": "Short",
+    "empty": "Noch keine aufgelösten Ausbrüche — jeder wird 24 Stunden nach dem Auslösen gemessen, das füllt sich also mit der Zeit.",
+    "footnote": "Momentum-Signale mit höherem Risiko. 24h nach Auslösen bewertet; nicht Teil der verifizierten konservativen Erfolgsbilanz."
   }
 }
