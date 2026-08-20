@@ -1213,6 +1213,8 @@
     "shortLabel": "Bearish 🔴",
     "strength": "Styrke",
     "note": "En stor ekspansjonscandle brøt spennet ({expansion}× normal størrelse) på en {volume}× volum-spike — momentum fyrer akkurat nå.",
-    "riskNote": "Momentum-signal — høyere risiko. Skilt fra det konservative Atlas-signalet og ikke en del av den verifiserte track record-en."
+    "riskNote": "Momentum-signal — høyere risiko. Skilt fra det konservative Atlas-signalet og ikke en del av den verifiserte track record-en.",
+    "coilingTitle": "Lader opp",
+    "coilingNote": "Volatiliteten trekker seg sammen til en stram spiral — et breakout følger ofte. Atlas følger med på ekspansjonen."
   }
 }

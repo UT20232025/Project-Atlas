@@ -15,6 +15,7 @@ import {
 } from "@/lib/signals/broadcastCooldown";
 import { notifyReversal } from "@/lib/signals/notifyReversal";
 import { notifySignalChange } from "@/lib/telegram/notify";
+import { notifyBreakout } from "@/lib/signals/notifyBreakout";
 
 // Must comfortably exceed the dashboard's 30s poll interval (MarketProvider,
 // ScannerSignalsProvider), otherwise every poll hits a cold cache and
@@ -132,6 +133,18 @@ export function getCachedAtlasAnalysis(
         void notifySignalChange(symbol, broadcastDecision);
         void notifyPushSignalChange(symbol, broadcastDecision);
         setLastBroadcastDirection(symbol, direction);
+      }
+
+      // Breakout broadcast — fires independently of decision.signal (which sits
+      // on WAIT through a fast move), debounced per symbol+direction like a
+      // signal so a persistent breakout doesn't re-alert.
+      const breakout = result.breakout;
+      if (
+        breakout.detected &&
+        breakout.direction &&
+        shouldBroadcastSignal(symbol, `BREAKOUT_${breakout.direction}`)
+      ) {
+        void notifyBreakout(symbol, breakout);
       }
     });
   }

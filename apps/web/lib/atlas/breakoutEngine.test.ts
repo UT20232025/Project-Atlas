@@ -12,6 +12,7 @@ const config: BreakoutConfig = {
   minRangeExpansion: 2.2,
   minVolumeSurge: 2,
   minBodyRatio: 0.6,
+  coilRatio: 0.6,
 };
 
 // A calm baseline: 22 tight candles oscillating in a narrow range.

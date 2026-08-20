@@ -16,6 +16,9 @@ export type BreakoutResult = {
   reasons: string[];
   rangeExpansion: number; // latest candle range ÷ recent average range
   volumeSurge: number | null; // latest volume ÷ recent average (null: no volume, e.g. FX)
+  // Volatility is contracting (recent candles much tighter than the baseline) —
+  // a coil that often precedes a breakout. Shown as "⚡ charging up".
+  coiling: boolean;
 };
 
 export type BreakoutConfig = {
@@ -24,6 +27,7 @@ export type BreakoutConfig = {
   minRangeExpansion: number;
   minVolumeSurge: number;
   minBodyRatio: number;
+  coilRatio: number; // recent-5 avg range ÷ baseline below this = coiling
 };
 
 function numEnv(name: string, fallback: number): number {
@@ -38,6 +42,7 @@ export function getBreakoutConfig(): BreakoutConfig {
     minRangeExpansion: numEnv("ATLAS_BREAKOUT_MIN_EXPANSION", 2.2),
     minVolumeSurge: numEnv("ATLAS_BREAKOUT_MIN_VOLUME", 2),
     minBodyRatio: numEnv("ATLAS_BREAKOUT_MIN_BODY", 0.6),
+    coilRatio: numEnv("ATLAS_BREAKOUT_COIL_RATIO", 0.6),
   };
 }
 
@@ -48,6 +53,7 @@ const EMPTY: BreakoutResult = {
   reasons: [],
   rangeExpansion: 0,
   volumeSurge: null,
+  coiling: false,
 };
 
 function mean(values: number[]): number {
@@ -70,6 +76,12 @@ export function detectBreakout(
 
   const avgRange = mean(recent.map((c) => c.high - c.low));
   if (avgRange <= 0) return EMPTY;
+
+  // Coiling: the most recent stretch is much tighter than the baseline.
+  const shortRange = mean(
+    recent.slice(-5).map((c) => c.high - c.low)
+  );
+  const coiling = shortRange < config.coilRatio * avgRange;
 
   const lastRange = last.high - last.low;
   const lastBody = Math.abs(last.close - last.open);
@@ -97,7 +109,7 @@ export function detectBreakout(
     volumeOk;
 
   if (!detected) {
-    return { ...EMPTY, rangeExpansion, volumeSurge };
+    return { ...EMPTY, rangeExpansion, volumeSurge, coiling };
   }
 
   const reasons = ["RANGE_EXPANSION"];
@@ -125,5 +137,6 @@ export function detectBreakout(
     reasons,
     rangeExpansion,
     volumeSurge,
+    coiling: false,
   };
 }

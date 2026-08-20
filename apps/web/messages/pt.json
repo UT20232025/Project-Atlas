@@ -1213,6 +1213,8 @@
     "shortLabel": "Baixa 🔴",
     "strength": "Força",
     "note": "Uma grande vela de expansão rompeu o intervalo ({expansion}× o tamanho normal) num aumento de volume de {volume}× — o momentum está a disparar agora.",
-    "riskNote": "Sinal de momentum — risco mais alto. Separado do sinal conservador da Atlas e não faz parte do histórico verificado."
+    "riskNote": "Sinal de momentum — risco mais alto. Separado do sinal conservador da Atlas e não faz parte do histórico verificado.",
+    "coilingTitle": "A carregar",
+    "coilingNote": "A volatilidade contrai-se numa mola tensa — muitas vezes segue-se um rompimento. A Atlas vigia a expansão."
   }
 }

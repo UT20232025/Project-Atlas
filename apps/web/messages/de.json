@@ -1213,6 +1213,8 @@
     "shortLabel": "Bärisch 🔴",
     "strength": "Stärke",
     "note": "Eine große Expansionskerze durchbrach die Spanne ({expansion}× normale Größe) bei einem {volume}× Volumenanstieg — das Momentum feuert gerade jetzt.",
-    "riskNote": "Momentum-Signal — höheres Risiko. Getrennt vom konservativen Atlas-Signal und nicht Teil der verifizierten Erfolgsbilanz."
+    "riskNote": "Momentum-Signal — höheres Risiko. Getrennt vom konservativen Atlas-Signal und nicht Teil der verifizierten Erfolgsbilanz.",
+    "coilingTitle": "Lädt auf",
+    "coilingNote": "Die Volatilität zieht sich zu einer engen Spirale zusammen — oft folgt ein Ausbruch. Atlas achtet auf die Expansion."
   }
 }

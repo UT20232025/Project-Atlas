@@ -9,11 +9,23 @@ export default async function BreakoutCard({
 }: {
   breakout: BreakoutResult;
 }) {
+  const t = await getTranslations("Breakout");
+
+  // Pre-breakout: volatility is coiling. A subtler "charging up" heads-up.
   if (!breakout.detected || breakout.direction === null) {
+    if (breakout.coiling) {
+      return (
+        <div className="rounded-2xl border border-amber-500/30 bg-amber-500/5 p-4">
+          <p className="text-sm font-semibold text-amber-300">
+            ⚡ {t("coilingTitle")}
+          </p>
+          <p className="mt-1 text-xs text-zinc-400">{t("coilingNote")}</p>
+        </div>
+      );
+    }
     return null;
   }
 
-  const t = await getTranslations("Breakout");
   const isLong = breakout.direction === "LONG";
 
   return (

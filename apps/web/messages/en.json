@@ -1213,6 +1213,8 @@
     "shortLabel": "Bearish 🔴",
     "strength": "Strength",
     "note": "A large expansion candle broke the recent range ({expansion}× normal size) on a {volume}× volume surge — momentum is firing right now.",
-    "riskNote": "Momentum signal — higher risk. Separate from the conservative Atlas signal and not part of the verified track record."
+    "riskNote": "Momentum signal — higher risk. Separate from the conservative Atlas signal and not part of the verified track record.",
+    "coilingTitle": "Charging up",
+    "coilingNote": "Volatility is contracting into a tight coil — a breakout often follows. Atlas is watching for the expansion."
   }
 }
