@@ -13,6 +13,7 @@ const config: BreakoutConfig = {
   minVolumeSurge: 2,
   minBodyRatio: 0.6,
   coilRatio: 0.6,
+  riskReward: 2,
 };
 
 // A calm baseline: 22 tight candles oscillating in a narrow range.
@@ -56,6 +57,28 @@ describe("detectBreakout", () => {
     expect(result.strength).toBeGreaterThan(0);
     expect(result.reasons).toContain("BROKE_RANGE_HIGH");
     expect(result.reasons).toContain("VOLUME_SURGE");
+  });
+
+  it("produces coherent trade levels (LONG: SL below entry, TP above, 2:1)", () => {
+    const candles = baseline();
+    candles.push({
+      open: 101,
+      high: 121,
+      low: 100.5,
+      close: 120,
+      volume: 6000,
+    });
+
+    const result = detectBreakout(candles, config);
+    expect(result.entry).toBe(120);
+    expect(result.stopLoss).not.toBeNull();
+    expect(result.takeProfit).not.toBeNull();
+    expect(result.stopLoss as number).toBeLessThan(result.entry as number);
+    expect(result.takeProfit as number).toBeGreaterThan(result.entry as number);
+    // TP distance ≈ 2× SL distance.
+    const risk = (result.entry as number) - (result.stopLoss as number);
+    const reward = (result.takeProfit as number) - (result.entry as number);
+    expect(reward / risk).toBeCloseTo(2, 5);
   });
 
   it("fires SHORT on a large bearish breakdown", () => {

@@ -11,6 +11,13 @@ export default async function BreakoutCard({
 }) {
   const t = await getTranslations("Breakout");
 
+  // Keep levels readable across BTC-scale and PEPE-scale prices.
+  const fmt = (v: number): string => {
+    if (v >= 1000) return String(Math.round(v * 100) / 100);
+    if (v >= 1) return String(Math.round(v * 10000) / 10000);
+    return String(Math.round(v * 100000000) / 100000000);
+  };
+
   // Pre-breakout: volatility is coiling. A subtler "charging up" heads-up.
   if (!breakout.detected || breakout.direction === null) {
     if (breakout.coiling) {
@@ -53,6 +60,32 @@ export default async function BreakoutCard({
           {t("strength")}: {breakout.strength}
         </span>
       </div>
+
+      {breakout.entry != null && (
+        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm">
+          <span className="text-zinc-400">
+            Entry <span className="font-semibold text-white">{fmt(breakout.entry)}</span>
+          </span>
+          {breakout.stopLoss != null && (
+            <span className="text-zinc-400">
+              SL <span className="font-semibold text-red-300">{fmt(breakout.stopLoss)}</span>
+            </span>
+          )}
+          {breakout.takeProfit != null && (
+            <span className="text-zinc-400">
+              TP <span className="font-semibold text-emerald-300">{fmt(breakout.takeProfit)}</span>
+            </span>
+          )}
+          {breakout.riskReward != null && (
+            <span className="text-zinc-400">
+              R:R{" "}
+              <span className="font-semibold text-white">
+                {breakout.riskReward.toFixed(2)}:1
+              </span>
+            </span>
+          )}
+        </div>
+      )}
 
       <p className="mt-3 text-sm text-zinc-300">
         {t("note", {

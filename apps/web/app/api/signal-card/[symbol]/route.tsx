@@ -56,22 +56,40 @@ export async function GET(
         ? Math.round(v * 10000) / 10000
         : Math.round(v * 1000000) / 1000000;
 
-  const d = preview
+  // Breakout override — the caller (notifyBreakout) passes real breakout levels
+  // so the card renders the momentum signal instead of the (WAIT) decision.
+  const boRaw = request.nextUrl.searchParams.get("bo")?.toUpperCase();
+  const bo = boRaw === "LONG" || boRaw === "SHORT" ? boRaw : null;
+  const numParam = (key: string): number | null => {
+    const value = Number(request.nextUrl.searchParams.get(key));
+    return Number.isFinite(value) ? value : null;
+  };
+
+  const d = bo
     ? {
-        signal: preview,
-        confidence: 82,
-        entry: previewPrice != null ? roundPreview(previewPrice) : null,
-        stopLoss:
-          previewPrice != null
-            ? roundPreview(previewPrice * (previewLong ? 0.97 : 1.03))
-            : null,
-        takeProfit:
-          previewPrice != null
-            ? roundPreview(previewPrice * (previewLong ? 1.06 : 0.94))
-            : null,
-        riskRewardRatio: 2.5,
+        signal: bo,
+        confidence: numParam("conf") ?? 0,
+        entry: numParam("entry"),
+        stopLoss: numParam("sl"),
+        takeProfit: numParam("tp"),
+        riskRewardRatio: numParam("rr"),
       }
-    : analysis.decision;
+    : preview
+      ? {
+          signal: preview,
+          confidence: 82,
+          entry: previewPrice != null ? roundPreview(previewPrice) : null,
+          stopLoss:
+            previewPrice != null
+              ? roundPreview(previewPrice * (previewLong ? 0.97 : 1.03))
+              : null,
+          takeProfit:
+            previewPrice != null
+              ? roundPreview(previewPrice * (previewLong ? 1.06 : 0.94))
+              : null,
+          riskRewardRatio: 2.5,
+        }
+      : analysis.decision;
 
   const coin = symbol.replace(/USDT$/, "");
   const color = SIGNAL_COLOR[d.signal] ?? "#eab308";

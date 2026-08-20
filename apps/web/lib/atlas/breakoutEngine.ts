@@ -19,6 +19,12 @@ export type BreakoutResult = {
   // Volatility is contracting (recent candles much tighter than the baseline) —
   // a coil that often precedes a breakout. Shown as "⚡ charging up".
   coiling: boolean;
+  // Trade levels for a detected breakout, so it can be sent as a full signal
+  // (entry/SL/TP) like the conservative one. Null when not detected.
+  entry: number | null;
+  stopLoss: number | null;
+  takeProfit: number | null;
+  riskReward: number | null;
 };
 
 export type BreakoutConfig = {
@@ -28,6 +34,7 @@ export type BreakoutConfig = {
   minVolumeSurge: number;
   minBodyRatio: number;
   coilRatio: number; // recent-5 avg range ÷ baseline below this = coiling
+  riskReward: number; // take-profit distance ÷ stop distance
 };
 
 function numEnv(name: string, fallback: number): number {
@@ -43,6 +50,7 @@ export function getBreakoutConfig(): BreakoutConfig {
     minVolumeSurge: numEnv("ATLAS_BREAKOUT_MIN_VOLUME", 2),
     minBodyRatio: numEnv("ATLAS_BREAKOUT_MIN_BODY", 0.6),
     coilRatio: numEnv("ATLAS_BREAKOUT_COIL_RATIO", 0.6),
+    riskReward: numEnv("ATLAS_BREAKOUT_RR", 2),
   };
 }
 
@@ -54,6 +62,10 @@ const EMPTY: BreakoutResult = {
   rangeExpansion: 0,
   volumeSurge: null,
   coiling: false,
+  entry: null,
+  stopLoss: null,
+  takeProfit: null,
+  riskReward: null,
 };
 
 function mean(values: number[]): number {
@@ -130,6 +142,16 @@ export function detectBreakout(
     Math.min(100, 100 * (0.6 * expansionScore + 0.4 * volumeScore))
   );
 
+  // Trade levels: enter at the breakout close, invalidate at roughly the middle
+  // of the breakout candle (a fall back into it means the break failed), target
+  // at the configured R multiple.
+  const entry = last.close;
+  const risk = 0.5 * lastRange;
+  const stopLoss = bullish ? entry - risk : entry + risk;
+  const takeProfit = bullish
+    ? entry + config.riskReward * risk
+    : entry - config.riskReward * risk;
+
   return {
     detected: true,
     direction: bullish ? "LONG" : "SHORT",
@@ -138,5 +160,9 @@ export function detectBreakout(
     rangeExpansion,
     volumeSurge,
     coiling: false,
+    entry,
+    stopLoss,
+    takeProfit,
+    riskReward: config.riskReward,
   };
 }
