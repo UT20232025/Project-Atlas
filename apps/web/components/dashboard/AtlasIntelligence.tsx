@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 import Badge from "@/components/ui/Badge";
 import Progress from "@/components/ui/Progress";
@@ -176,9 +177,16 @@ export default async function AtlasIntelligence({
               {t("strongestCoin")}
             </p>
 
-            <p className="mt-2 text-2xl font-bold text-white">
-              {strongestCoin?.coin ?? "N/A"}
-            </p>
+            {strongestCoin ? (
+              <Link
+                href={`/coin/${strongestCoin.coin}`}
+                className="mt-2 block text-2xl font-bold text-white underline-offset-4 hover:underline"
+              >
+                {strongestCoin.coin}
+              </Link>
+            ) : (
+              <p className="mt-2 text-2xl font-bold text-white">N/A</p>
+            )}
 
             <p className="mt-1 text-sm text-green-400">
               {t("atlasScore", { score: strongestCoin?.score ?? 0 })}
@@ -203,9 +211,16 @@ export default async function AtlasIntelligence({
               {t("weakestCoin")}
             </p>
 
-            <p className="mt-2 text-2xl font-bold text-white">
-              {weakestCoin?.coin ?? "N/A"}
-            </p>
+            {weakestCoin ? (
+              <Link
+                href={`/coin/${weakestCoin.coin}`}
+                className="mt-2 block text-2xl font-bold text-white underline-offset-4 hover:underline"
+              >
+                {weakestCoin.coin}
+              </Link>
+            ) : (
+              <p className="mt-2 text-2xl font-bold text-white">N/A</p>
+            )}
 
             <p className="mt-1 text-sm text-red-400">
               {t("atlasScore", { score: weakestCoin?.score ?? 0 })}
@@ -230,9 +245,16 @@ export default async function AtlasIntelligence({
               {t("biggestMove")}
             </p>
 
-            <p className="mt-2 text-2xl font-bold text-white">
-              {biggestMover?.coin ?? "N/A"}
-            </p>
+            {biggestMover ? (
+              <Link
+                href={`/coin/${biggestMover.coin}`}
+                className="mt-2 block text-2xl font-bold text-white underline-offset-4 hover:underline"
+              >
+                {biggestMover.coin}
+              </Link>
+            ) : (
+              <p className="mt-2 text-2xl font-bold text-white">N/A</p>
+            )}
 
             <p
               className={

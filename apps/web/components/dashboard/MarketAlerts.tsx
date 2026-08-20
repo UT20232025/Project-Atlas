@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 import type { ScannerItem } from "../../lib/analysis/scanner";
 
@@ -95,13 +96,14 @@ export default async function MarketAlerts({
       ) : (
         <div className="grid gap-3 md:grid-cols-2">
           {alerts.map((alert, index) => (
-            <div
+            <Link
               key={`${alert.coin}-${index}`}
-              className={`rounded-xl border p-4 ${toneClasses[alert.tone]}`}
+              href={`/coin/${alert.coin}`}
+              className={`block rounded-xl border p-4 transition hover:brightness-125 ${toneClasses[alert.tone]}`}
             >
               <p className="font-bold">{alert.coin}</p>
               <p className="mt-1 text-sm">{t(alert.key, alert.values)}</p>
-            </div>
+            </Link>
           ))}
         </div>
       )}

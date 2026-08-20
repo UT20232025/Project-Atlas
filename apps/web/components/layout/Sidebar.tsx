@@ -29,6 +29,11 @@ export const menu = [
     icon: "📈",
   },
   {
+    key: "crypto",
+    href: "/#scanner",
+    icon: "🪙",
+  },
+  {
     key: "stocks",
     href: "/stocks",
     icon: "🏦",
