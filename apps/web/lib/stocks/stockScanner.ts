@@ -26,6 +26,7 @@ export const STOCK_SCANNER_SYMBOLS = [
   "JPM",
   "V",
   "WMT",
+  "HOOD",
 ];
 
 // Gold + major FX — same Twelve Data pipeline as stocks, shown on their own
