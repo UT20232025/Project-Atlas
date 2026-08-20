@@ -1,4 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 import Badge from "@/components/ui/Badge";
 import { formatMarketSymbol } from "@/lib/services/liveMarketService";
@@ -41,9 +42,10 @@ export default async function RecentSignalChanges({
       ) : (
         <div className="space-y-3">
           {items.map((item) => (
-            <div
+            <Link
               key={item.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950/30 p-4"
+              href={`/coin/${item.symbol}`}
+              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-zinc-800 bg-zinc-950/30 p-4 transition hover:border-zinc-600"
             >
               <div className="flex items-center gap-3">
                 <p className="font-bold">
@@ -62,7 +64,7 @@ export default async function RecentSignalChanges({
               <span className="text-xs text-zinc-600">
                 {new Date(item.createdAt).toLocaleString(locale)}
               </span>
-            </div>
+            </Link>
           ))}
         </div>
       )}

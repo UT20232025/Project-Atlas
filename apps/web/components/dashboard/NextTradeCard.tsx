@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Link from "next/link";
 
 import Badge from "@/components/ui/Badge";
 import type { ScannerItem } from "@/lib/analysis/scanner";
@@ -54,10 +55,11 @@ export default async function NextTradeCard({
               .filter((label): label is string => label !== null);
 
             return (
-              <li
-                key={item.coin}
-                className="rounded-xl border border-zinc-800 bg-zinc-950/40 p-4"
-              >
+              <li key={item.coin}>
+                <Link
+                  href={`/coin/${item.coin}`}
+                  className="block rounded-xl border border-zinc-800 bg-zinc-950/40 p-4 transition hover:border-zinc-600"
+                >
                 <div className="flex flex-wrap items-center gap-3">
                   {index === 0 && (
                     <span className="rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-black">
@@ -90,6 +92,7 @@ export default async function NextTradeCard({
                     {pending.join(" · ")}
                   </p>
                 )}
+                </Link>
               </li>
             );
           })}
