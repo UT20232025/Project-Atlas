@@ -4,6 +4,7 @@ import { getCachedAtlasAnalysis } from "../atlas/atlasAnalysisCache";
 import type { BinanceInterval } from "../services/binanceCandleService";
 import type { AtlasTrendStatus } from "../atlas/atlasIndicators";
 import type { AtlasReasonCode } from "../atlas/reasonCode";
+import type { BreakoutResult } from "../atlas/breakoutEngine";
 import { fetchLiveMarketData } from "../services/liveMarketService";
 
 export type ScannerChecklist = {
@@ -32,6 +33,8 @@ export type ScannerItem = {
   riskRewardRatio: number | null;
   // How close this coin is to a valid setup + what it's still waiting for.
   checklist: ScannerChecklist;
+  // Live momentum breakout on this scan (independent of the signal above).
+  breakout: BreakoutResult;
 };
 
 function mapTrendStatus(
@@ -98,6 +101,7 @@ export async function getAtlasScanner(
           .filter((item) => !item.met)
           .map((item) => item.key),
       },
+      breakout: analysis.breakout,
     };
   });
 

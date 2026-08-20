@@ -1230,5 +1230,9 @@
     "short": "Short",
     "empty": "Ainda sem rompimentos resolvidos — cada um é medido 24 horas após disparar, por isso isto vai preenchendo.",
     "footnote": "Sinais de momentum de risco mais alto. Avaliados 24h depois; não fazem parte do histórico conservador verificado."
+  },
+  "BreakingOutNow": {
+    "title": "Rompendo agora",
+    "subtitle": "Momentum a disparar agora mesmo — sinais de rompimento de risco mais alto, ao vivo."
   }
 }

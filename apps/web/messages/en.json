@@ -1230,5 +1230,9 @@
     "short": "Short",
     "empty": "No resolved breakouts yet — each is measured 24 hours after it fires, so this fills in as momentum signals play out.",
     "footnote": "Higher-risk momentum signals. Evaluated 24h after firing; not part of the verified conservative track record."
+  },
+  "BreakingOutNow": {
+    "title": "Breaking out now",
+    "subtitle": "Momentum firing right now — higher-risk breakout signals, live."
   }
 }

@@ -1230,5 +1230,9 @@
     "short": "Short",
     "empty": "Noch keine aufgelösten Ausbrüche — jeder wird 24 Stunden nach dem Auslösen gemessen, das füllt sich also mit der Zeit.",
     "footnote": "Momentum-Signale mit höherem Risiko. 24h nach Auslösen bewertet; nicht Teil der verifizierten konservativen Erfolgsbilanz."
+  },
+  "BreakingOutNow": {
+    "title": "Bricht gerade aus",
+    "subtitle": "Momentum feuert gerade jetzt — Ausbruch-Signale mit höherem Risiko, live."
   }
 }

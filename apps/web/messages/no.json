@@ -1230,5 +1230,9 @@
     "short": "Short",
     "empty": "Ingen løste breakouts ennå — hvert måles 24 timer etter det fyrer, så dette fylles inn etter hvert som momentum-signalene spiller seg ut.",
     "footnote": "Momentum-signaler med høyere risiko. Evalueres 24t etter de fyrer; ikke en del av det verifiserte konservative track record-et."
+  },
+  "BreakingOutNow": {
+    "title": "Bryter ut nå",
+    "subtitle": "Momentum fyrer akkurat nå — breakout-signaler med høyere risiko, live."
   }
 }
