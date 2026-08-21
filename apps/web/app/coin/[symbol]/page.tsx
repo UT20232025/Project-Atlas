@@ -24,6 +24,9 @@ import AppLayout from "../../../components/layout/AppLayout";
 import WatchlistButton from "../../../components/watchlist/WatchlistButton";
 import SignalAlertToggle from "../../../components/coin/SignalAlertToggle";
 import BreakoutCard from "../../../components/analysis/BreakoutCard";
+import LongTermCard from "../../../components/analysis/LongTermCard";
+import { computeLongTermSignal } from "../../../lib/atlas/longTermSignal";
+import { fetchMarketCandles } from "../../../lib/services/marketCandles";
 import { isSignalAlertOn } from "../../../app/alerts/actions";
 import MACDChart from "../../../components/MACDChart";
 import RSICard from "../../../components/RSICard";
@@ -118,6 +121,7 @@ export default async function CoinPage({ params, searchParams }: Props) {
     pdLevels,
     priceAlerts,
     signalAlertOn,
+    longTermCandles,
   ] = await Promise.all([
     isStock
       ? Promise.resolve([])
@@ -141,7 +145,10 @@ export default async function CoinPage({ params, searchParams }: Props) {
     isPro
       ? isSignalAlertOn(marketSymbol)
       : Promise.resolve(false),
+    fetchMarketCandles(marketSymbol, "1d", 1000).catch(() => []),
   ]);
+
+  const longTermSignal = computeLongTermSignal(longTermCandles);
 
   const whaleActivity = analyzeWhaleActivity(recentTrades);
 
@@ -300,6 +307,10 @@ export default async function CoinPage({ params, searchParams }: Props) {
 
       <div className="mt-6">
         <BreakoutCard breakout={decisionAnalysis.breakout} />
+      </div>
+
+      <div className="mt-6">
+        <LongTermCard signal={longTermSignal} />
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3">

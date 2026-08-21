@@ -1254,5 +1254,23 @@
     "footnote": "Not a prediction. A read of how dangerous conditions are — tighten stops and size when it climbs.",
     "funding": "Funding rates",
     "reasonFunding": "High funding — over-leveraged longs"
+  },
+  "LongTerm": {
+    "title": "Long-term view",
+    "subtitle": "Position-trading read from the 200-day trend — for buy-and-hold, not intraday.",
+    "stanceAccumulate": "ACCUMULATE",
+    "stanceHold": "HOLD",
+    "stanceReduce": "REDUCE / AVOID",
+    "vs200": "vs 200-day",
+    "cross": "50/200",
+    "golden": "Golden ✅",
+    "death": "Death ⚠️",
+    "trend200": "200-day trend",
+    "rising": "Rising",
+    "falling": "Falling",
+    "holdTarget": "Hold target (prior high)",
+    "upside": "upside",
+    "blueSky": "At new highs — blue sky, no overhead resistance",
+    "footnote": "Long-horizon trend read, not a timed trade. Based on the 200-day SMA + 50/200 cross over ~2-3 years of history."
   }
 }

@@ -1254,5 +1254,23 @@
     "footnote": "Keine Prognose. Eine Lesart, wie gefährlich die Lage ist — Stopps und Größe straffen, wenn es steigt.",
     "funding": "Funding-Raten",
     "reasonFunding": "Hohe Funding-Raten — überhebelte Longs"
+  },
+  "LongTerm": {
+    "title": "Langfrist-Sicht",
+    "subtitle": "Position-Trading-Lesart aus dem 200-Tage-Trend — für Kaufen-und-Halten, nicht Intraday.",
+    "stanceAccumulate": "AKKUMULIEREN",
+    "stanceHold": "HALTEN",
+    "stanceReduce": "REDUZIEREN / MEIDEN",
+    "vs200": "vs 200-Tage",
+    "cross": "50/200",
+    "golden": "Golden ✅",
+    "death": "Death ⚠️",
+    "trend200": "200-Tage-Trend",
+    "rising": "Steigend",
+    "falling": "Fallend",
+    "holdTarget": "Halte-Ziel (vorheriges Hoch)",
+    "upside": "Potenzial",
+    "blueSky": "Auf neuen Hochs — freie Sicht, kein Widerstand darüber",
+    "footnote": "Langfrist-Trendlesart, kein getimter Trade. Basiert auf 200-Tage-SMA + 50/200-Kreuzung über ~2-3 Jahre."
   }
 }

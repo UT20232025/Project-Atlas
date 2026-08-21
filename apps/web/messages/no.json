@@ -1254,5 +1254,23 @@
     "footnote": "Ikke en spådom. En avlesning av hvor farlige forholdene er — stram stopp og størrelse når den stiger.",
     "funding": "Funding rates",
     "reasonFunding": "Høye funding rates — overbelånte longs"
+  },
+  "LongTerm": {
+    "title": "Langsiktig visning",
+    "subtitle": "Posisjonshandel-avlesning fra 200-dagers trend — for kjøp-og-hold, ikke intraday.",
+    "stanceAccumulate": "AKKUMULER",
+    "stanceHold": "HOLD",
+    "stanceReduce": "REDUSER / UNNGÅ",
+    "vs200": "vs 200-dager",
+    "cross": "50/200",
+    "golden": "Golden ✅",
+    "death": "Death ⚠️",
+    "trend200": "200-dagers trend",
+    "rising": "Stigende",
+    "falling": "Fallende",
+    "holdTarget": "Hold-mål (forrige topp)",
+    "upside": "oppside",
+    "blueSky": "På nye topper — blå himmel, ingen motstand over",
+    "footnote": "Langsiktig trend-avlesning, ikke en tidsatt trade. Basert på 200-dagers snitt + 50/200-kryss over ~2-3 år historikk."
   }
 }

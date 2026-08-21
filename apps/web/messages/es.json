@@ -1254,5 +1254,23 @@
     "footnote": "No es una predicción. Una lectura de cuán peligrosas son las condiciones — ajusta stops y tamaño cuando sube.",
     "funding": "Tasas de financiación",
     "reasonFunding": "Financiación alta — longs sobreapalancados"
+  },
+  "LongTerm": {
+    "title": "Visión a largo plazo",
+    "subtitle": "Lectura de trading de posición desde la tendencia de 200 días — para comprar y mantener.",
+    "stanceAccumulate": "ACUMULAR",
+    "stanceHold": "MANTENER",
+    "stanceReduce": "REDUCIR / EVITAR",
+    "vs200": "vs 200 días",
+    "cross": "50/200",
+    "golden": "Golden ✅",
+    "death": "Death ⚠️",
+    "trend200": "Tendencia 200 días",
+    "rising": "Subiendo",
+    "falling": "Bajando",
+    "holdTarget": "Objetivo (máximo previo)",
+    "upside": "potencial",
+    "blueSky": "En nuevos máximos — cielo despejado, sin resistencia",
+    "footnote": "Lectura de tendencia a largo plazo, no una operación con tiempo. Basada en la SMA de 200 días + cruce 50/200."
   }
 }
