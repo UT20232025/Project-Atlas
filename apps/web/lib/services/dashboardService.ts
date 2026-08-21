@@ -1,4 +1,5 @@
 import { getAtlasScanner } from "../analysis/scanner";
+import { computeRiskRadar, type RiskRadar } from "../atlas/riskRadar";
 import { getSignalHistory } from "../atlas/signalHistory";
 import type { BinanceInterval } from "../services/binanceCandleService";
 import {
@@ -211,4 +212,21 @@ export async function getDashboardData(
       btcDominance,
     },
   };
+}
+
+// Computes the crash Risk Radar on its own — for the crash-alert cron, which
+// has no dashboard render to piggyback on. Scanner analyses are cached, so this
+// is cheap right after a scan-signals run.
+export async function getRiskRadarNow(): Promise<RiskRadar> {
+  const [scanner, fearGreed, fundingRate] = await Promise.all([
+    getAtlasScanner("1h"),
+    getFearGreed(),
+    getFundingRate(),
+  ]);
+
+  return computeRiskRadar({
+    scanner,
+    fearGreedValue: fearGreed.value,
+    fundingRate,
+  });
 }

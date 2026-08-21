@@ -1,0 +1,23 @@
+name: Crash alert
+
+# Checks the crash Risk Radar every 30 min and broadcasts a HIGH alert
+# (push + Telegram) when the regime turns dangerous — the downside counterpart
+# to breakout alerts. Debounced server-side. Requires repo secret CRON_SECRET.
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}
+
+jobs:
+  crash-alert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger crash-alert endpoint
+        run: |
+          body=$(curl -sS -w "|HTTP:%{http_code}" --max-time 90 \
+            --retry 3 --retry-delay 20 --retry-all-errors --retry-connrefused \
+            "https://www.genwelth.com/api/cron/crash-alert?key=${CRON_SECRET}") || true
+          echo "crash-alert: $body"
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
