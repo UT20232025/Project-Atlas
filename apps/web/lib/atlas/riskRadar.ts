@@ -17,13 +17,15 @@ export type RiskRadar = {
   compression: number;
   breakdown: number;
   btcWeakness: number;
+  funding: number;
 };
 
 export function computeRiskRadar(params: {
   scanner: ScannerItem[];
   fearGreedValue: number;
+  fundingRate: number | null;
 }): RiskRadar {
-  const { scanner, fearGreedValue } = params;
+  const { scanner, fearGreedValue, fundingRate } = params;
   const total = Math.max(1, scanner.length);
 
   // Euphoria precedes crashes — only the greed side loads crash risk.
@@ -50,8 +52,22 @@ export function computeRiskRadar(params: {
         : 0
     : 40;
 
+  // Funding: over-leveraged longs = crash fuel. Normal ~0.01%/8h; 0.1%+ is hot.
+  // Only positive funding (longs paying) loads crash risk.
+  const funding =
+    fundingRate != null && fundingRate > 0.0001
+      ? Math.min(
+          100,
+          Math.round(((fundingRate - 0.0001) / (0.001 - 0.0001)) * 100)
+        )
+      : 0;
+
   const score = Math.round(
-    0.35 * breakdown + 0.25 * greed + 0.2 * compression + 0.2 * btcWeakness
+    0.3 * breakdown +
+      0.2 * greed +
+      0.2 * funding +
+      0.15 * compression +
+      0.15 * btcWeakness
   );
 
   const level: RiskLevel =
@@ -60,6 +76,7 @@ export function computeRiskRadar(params: {
   // Rank the contributing reasons by severity for the "why".
   const scored: Array<{ code: string; value: number }> = [
     { code: "BREAKDOWN", value: breakdown },
+    { code: "FUNDING", value: funding },
     { code: "GREED", value: greed },
     { code: "COMPRESSION", value: compression },
     { code: "BTC_BEARISH", value: btcWeakness >= 100 ? 100 : 0 },
@@ -69,5 +86,14 @@ export function computeRiskRadar(params: {
     .sort((a, b) => b.value - a.value)
     .map((entry) => entry.code);
 
-  return { score, level, reasons, greed, compression, breakdown, btcWeakness };
+  return {
+    score,
+    level,
+    reasons,
+    greed,
+    compression,
+    breakdown,
+    btcWeakness,
+    funding,
+  };
 }

@@ -1251,6 +1251,8 @@
     "reasonCompression": "Volatility coiling market-wide",
     "reasonBtcBearish": "BTC trend turning down",
     "calmNote": "Conditions look calm — no major risk factors elevated.",
-    "footnote": "Not a prediction. A read of how dangerous conditions are — tighten stops and size when it climbs."
+    "footnote": "Not a prediction. A read of how dangerous conditions are — tighten stops and size when it climbs.",
+    "funding": "Funding rates",
+    "reasonFunding": "High funding — over-leveraged longs"
   }
 }

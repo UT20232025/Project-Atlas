@@ -1251,6 +1251,8 @@
     "reasonCompression": "Volatiliteten coiler markedsbredt",
     "reasonBtcBearish": "BTC-trenden snur ned",
     "calmNote": "Forholdene ser rolige ut — ingen store risikofaktorer forhøyet.",
-    "footnote": "Ikke en spådom. En avlesning av hvor farlige forholdene er — stram stopp og størrelse når den stiger."
+    "footnote": "Ikke en spådom. En avlesning av hvor farlige forholdene er — stram stopp og størrelse når den stiger.",
+    "funding": "Funding rates",
+    "reasonFunding": "Høye funding rates — overbelånte longs"
   }
 }

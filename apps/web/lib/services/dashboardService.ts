@@ -80,6 +80,36 @@ async function getBTCDominance(): Promise<number> {
   }
 }
 
+// Average perpetual funding rate across a few majors. High positive funding =
+// over-leveraged longs paying to stay in — the classic fuel for a liquidation
+// cascade, so it feeds the Risk Radar. One Binance call (all symbols) with a
+// fast timeout and a null fallback so it can never stall the render.
+async function getFundingRate(): Promise<number | null> {
+  try {
+    const response = await fetch(
+      "https://fapi.binance.com/fapi/v1/premiumIndex",
+      { next: { revalidate: 300 }, signal: AbortSignal.timeout(4000) }
+    );
+    if (!response.ok) {
+      throw new Error(`Binance premiumIndex ${response.status}`);
+    }
+    const data = (await response.json()) as Array<{
+      symbol: string;
+      lastFundingRate: string;
+    }>;
+    const majors = ["BTCUSDT", "ETHUSDT", "SOLUSDT"];
+    const rates = data
+      .filter((entry) => majors.includes(entry.symbol))
+      .map((entry) => Number(entry.lastFundingRate))
+      .filter((rate) => Number.isFinite(rate));
+    if (rates.length === 0) return null;
+    return rates.reduce((sum, rate) => sum + rate, 0) / rates.length;
+  } catch (error) {
+    console.error("Funding rate fetch failed:", error);
+    return null;
+  }
+}
+
 // Cheap data for the top ticker + shell: just three prices plus the
 // hour-cached Fear & Greed / dominance. Lets the dashboard shell render
 // instantly instead of waiting on the full 20-coin scanner (which streams
@@ -130,13 +160,19 @@ function withTimeout<T>(
 export async function getDashboardData(
   interval: BinanceInterval = "1h"
 ) {
-  const [scanner, fearGreed, btcDominance, recentSignalChanges] =
-    await Promise.all([
-      withTimeout(getAtlasScanner(interval), 6000, []),
-      getFearGreed(),
-      getBTCDominance(),
-      getSignalHistory(undefined, 15),
-    ]);
+  const [
+    scanner,
+    fearGreed,
+    btcDominance,
+    recentSignalChanges,
+    fundingRate,
+  ] = await Promise.all([
+    withTimeout(getAtlasScanner(interval), 6000, []),
+    getFearGreed(),
+    getBTCDominance(),
+    getSignalHistory(undefined, 15),
+    getFundingRate(),
+  ]);
 
   const bullish = scanner.filter(
     (item) => item.trend === "BULLISH"
@@ -158,6 +194,7 @@ export async function getDashboardData(
     scanner,
     fearGreed,
     btcDominance,
+    fundingRate,
     bullish,
     bearish,
     neutral,

@@ -1251,6 +1251,8 @@
     "reasonCompression": "Volatilität zieht sich marktweit zusammen",
     "reasonBtcBearish": "BTC-Trend dreht nach unten",
     "calmNote": "Die Lage wirkt ruhig — keine großen Risikofaktoren erhöht.",
-    "footnote": "Keine Prognose. Eine Lesart, wie gefährlich die Lage ist — Stopps und Größe straffen, wenn es steigt."
+    "footnote": "Keine Prognose. Eine Lesart, wie gefährlich die Lage ist — Stopps und Größe straffen, wenn es steigt.",
+    "funding": "Funding-Raten",
+    "reasonFunding": "Hohe Funding-Raten — überhebelte Longs"
   }
 }

@@ -25,6 +25,7 @@ const LEVEL_STYLE: Record<
 
 const REASON_KEY: Record<string, string> = {
   BREAKDOWN: "reasonBreakdown",
+  FUNDING: "reasonFunding",
   GREED: "reasonGreed",
   COMPRESSION: "reasonCompression",
   BTC_BEARISH: "reasonBtcBearish",
@@ -46,6 +47,7 @@ export default async function RiskRadarCard({
 
   const bars: Array<{ label: string; value: number }> = [
     { label: t("breakdown"), value: radar.breakdown },
+    { label: t("funding"), value: radar.funding },
     { label: t("greed"), value: radar.greed },
     { label: t("compression"), value: radar.compression },
     { label: t("btcWeakness"), value: radar.btcWeakness },

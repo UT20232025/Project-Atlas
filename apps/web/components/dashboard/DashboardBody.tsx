@@ -69,6 +69,7 @@ export default async function DashboardBody({
   const riskRadar = computeRiskRadar({
     scanner: dashboard.scanner,
     fearGreedValue: dashboard.fearGreed.value,
+    fundingRate: dashboard.fundingRate,
   });
 
   return (

@@ -1251,6 +1251,8 @@
     "reasonCompression": "Volatilidade a comprimir em todo o mercado",
     "reasonBtcBearish": "Tendência do BTC a virar para baixo",
     "calmNote": "As condições parecem calmas — sem fatores de risco elevados.",
-    "footnote": "Não é uma previsão. Uma leitura de quão perigosas são as condições — aperta stops e tamanho quando sobe."
+    "footnote": "Não é uma previsão. Uma leitura de quão perigosas são as condições — aperta stops e tamanho quando sobe.",
+    "funding": "Taxas de financiamento",
+    "reasonFunding": "Financiamento alto — longs sobrealavancados"
   }
 }
