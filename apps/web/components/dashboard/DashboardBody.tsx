@@ -10,7 +10,9 @@ import MarketAlerts from "@/components/dashboard/MarketAlerts";
 import MarketHeatmap from "@/components/dashboard/MarketHeatmap";
 import MarketStats from "@/components/dashboard/MarketStats";
 import BreakingOutNow from "@/components/dashboard/BreakingOutNow";
+import RiskRadarCard from "@/components/dashboard/RiskRadarCard";
 import NextTradeCard from "@/components/dashboard/NextTradeCard";
+import { computeRiskRadar } from "@/lib/atlas/riskRadar";
 import OpportunityCard from "@/components/dashboard/OpportunityCard";
 import PriceAlertsSection from "@/components/dashboard/PriceAlertsSection";
 import RecentSignalChanges from "@/components/dashboard/RecentSignalChanges";
@@ -64,6 +66,11 @@ export default async function DashboardBody({
     score: item.score,
   }));
 
+  const riskRadar = computeRiskRadar({
+    scanner: dashboard.scanner,
+    fearGreedValue: dashboard.fearGreed.value,
+  });
+
   return (
     <>
       <Suspense fallback={null}>
@@ -71,6 +78,10 @@ export default async function DashboardBody({
       </Suspense>
 
       <BreakingOutNow items={dashboard.scanner} />
+
+      <div className="mb-8">
+        <RiskRadarCard radar={riskRadar} />
+      </div>
 
       <div className="mb-8">
         <NextTradeCard items={dashboard.scanner} />

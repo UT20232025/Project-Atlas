@@ -1234,5 +1234,23 @@
   "BreakingOutNow": {
     "title": "Bryter ut nå",
     "subtitle": "Momentum fyrer akkurat nå — breakout-signaler med høyere risiko, live."
+  },
+  "RiskRadar": {
+    "title": "Risiko-radar",
+    "subtitle": "Hvor ladet kruttet er akkurat nå — ikke en timing-spådom, en avlesning av regimet.",
+    "levelLow": "Lav",
+    "levelElevated": "Forhøyet",
+    "levelHigh": "Høy",
+    "breakdown": "Markedsfall",
+    "greed": "Grådighet",
+    "compression": "Kompresjon",
+    "btcWeakness": "BTC-svakhet",
+    "whyLabel": "Hvorfor:",
+    "reasonBreakdown": "Coins bryter ned samtidig",
+    "reasonGreed": "Ekstrem grådighet (eufori)",
+    "reasonCompression": "Volatiliteten coiler markedsbredt",
+    "reasonBtcBearish": "BTC-trenden snur ned",
+    "calmNote": "Forholdene ser rolige ut — ingen store risikofaktorer forhøyet.",
+    "footnote": "Ikke en spådom. En avlesning av hvor farlige forholdene er — stram stopp og størrelse når den stiger."
   }
 }

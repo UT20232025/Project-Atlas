@@ -1234,5 +1234,23 @@
   "BreakingOutNow": {
     "title": "Bricht gerade aus",
     "subtitle": "Momentum feuert gerade jetzt — Ausbruch-Signale mit höherem Risiko, live."
+  },
+  "RiskRadar": {
+    "title": "Risiko-Radar",
+    "subtitle": "Wie geladen das Pulver gerade ist — keine Zeitprognose, eine Lesart des Regimes.",
+    "levelLow": "Niedrig",
+    "levelElevated": "Erhöht",
+    "levelHigh": "Hoch",
+    "breakdown": "Markteinbruch",
+    "greed": "Gier",
+    "compression": "Kompression",
+    "btcWeakness": "BTC-Schwäche",
+    "whyLabel": "Warum:",
+    "reasonBreakdown": "Coins brechen gemeinsam ein",
+    "reasonGreed": "Extreme Gier (Euphorie)",
+    "reasonCompression": "Volatilität zieht sich marktweit zusammen",
+    "reasonBtcBearish": "BTC-Trend dreht nach unten",
+    "calmNote": "Die Lage wirkt ruhig — keine großen Risikofaktoren erhöht.",
+    "footnote": "Keine Prognose. Eine Lesart, wie gefährlich die Lage ist — Stopps und Größe straffen, wenn es steigt."
   }
 }

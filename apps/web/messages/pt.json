@@ -1234,5 +1234,23 @@
   "BreakingOutNow": {
     "title": "Rompendo agora",
     "subtitle": "Momentum a disparar agora mesmo — sinais de rompimento de risco mais alto, ao vivo."
+  },
+  "RiskRadar": {
+    "title": "Radar de risco",
+    "subtitle": "Quão carregada está a pólvora agora — não é uma previsão de tempo, é uma leitura do regime.",
+    "levelLow": "Baixo",
+    "levelElevated": "Elevado",
+    "levelHigh": "Alto",
+    "breakdown": "Queda do mercado",
+    "greed": "Ganância",
+    "compression": "Compressão",
+    "btcWeakness": "Fraqueza do BTC",
+    "whyLabel": "Porquê:",
+    "reasonBreakdown": "Moedas a cair em conjunto",
+    "reasonGreed": "Ganância extrema (euforia)",
+    "reasonCompression": "Volatilidade a comprimir em todo o mercado",
+    "reasonBtcBearish": "Tendência do BTC a virar para baixo",
+    "calmNote": "As condições parecem calmas — sem fatores de risco elevados.",
+    "footnote": "Não é uma previsão. Uma leitura de quão perigosas são as condições — aperta stops e tamanho quando sobe."
   }
 }

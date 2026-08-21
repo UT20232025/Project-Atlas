@@ -1234,5 +1234,23 @@
   "BreakingOutNow": {
     "title": "Breaking out now",
     "subtitle": "Momentum firing right now — higher-risk breakout signals, live."
+  },
+  "RiskRadar": {
+    "title": "Risk Radar",
+    "subtitle": "How loaded the powder is right now — not a timing call, a read of the regime.",
+    "levelLow": "Low",
+    "levelElevated": "Elevated",
+    "levelHigh": "High",
+    "breakdown": "Market breakdown",
+    "greed": "Greed",
+    "compression": "Compression",
+    "btcWeakness": "BTC weakness",
+    "whyLabel": "Why:",
+    "reasonBreakdown": "Coins breaking down together",
+    "reasonGreed": "Extreme greed (euphoria)",
+    "reasonCompression": "Volatility coiling market-wide",
+    "reasonBtcBearish": "BTC trend turning down",
+    "calmNote": "Conditions look calm — no major risk factors elevated.",
+    "footnote": "Not a prediction. A read of how dangerous conditions are — tighten stops and size when it climbs."
   }
 }
